@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="main_badge_size">25dp</dimen>
+    <dimen name="main_badge_margin_left">32dp</dimen>
+    <dimen name="main_badge_margin_top">9dp</dimen>
+    <dimen name="main_badge_padding">5dp</dimen>
+</resources>

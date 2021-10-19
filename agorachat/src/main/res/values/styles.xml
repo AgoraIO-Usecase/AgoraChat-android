@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="sign_edit_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:background">@drawable/sign_input_bg</item>
+    </style>
+
+    <style name="main_bottom_view_normal">
+        <item name="android:textColor">@color/main_color_tab_normal</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="main_bottom_view_selected">
+        <item name="android:textColor">@color/main_color_tab_selected</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!--指定Dialog的主题-->
+    <style name="Dialog.Light" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="main_badge_tv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/main_badge_margin_top</item>
+        <item name="android:layout_marginLeft">@dimen/main_badge_margin_left</item>
+        <item name="android:layout_marginStart">@dimen/main_badge_margin_left</item>
+        <item name="android:background">@drawable/main_unread_count_bg</item>
+        <item name="android:paddingStart">@dimen/main_badge_padding</item>
+        <item name="android:paddingEnd">@dimen/main_badge_padding</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center</item>
+    </style>
+</resources>

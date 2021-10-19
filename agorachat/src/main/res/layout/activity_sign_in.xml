@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/text_agorachat"/>
+
+    <TextView
+        android:id="@+id/tv_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="63dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"/>
+
+    <EditText
+        android:id="@+id/et_agora_id"
+        android:hint="@string/ease_sign_agora_id"
+        android:layout_marginTop="12dp"
+        style="@style/sign_edit_style"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp" />
+
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_marginTop="18dp"
+        android:hint="@string/ease_sign_nickname"
+        style="@style/sign_edit_style"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/ease_sign_login"
+        android:textColor="@color/white"
+        android:background="@drawable/sign_button_bg"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.6"/>
+
+</LinearLayout>

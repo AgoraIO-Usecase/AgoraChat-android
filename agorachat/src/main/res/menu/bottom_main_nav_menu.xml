@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_nav_home"
+        android:icon="@drawable/main_tab_conversation_selector"
+        android:title="@string/main_title_home" />
+
+    <item
+        android:id="@+id/main_nav_contacts"
+        android:icon="@drawable/main_tab_friends_selector"
+        android:title="@string/main_title_contacts" />
+
+    <item
+        android:id="@+id/main_nav_me"
+        android:icon="@drawable/main_tab_me_selector"
+        android:title="@string/main_title_me" />
+
+</menu>

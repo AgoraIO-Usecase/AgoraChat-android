@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">AgoraChat</string>
+
+    <string name="loading">Loading&#8230;</string>
+
+    <string name="ease_sign_agora_id">AgoraID</string>
+    <string name="ease_sign_nickname">Nickname</string>
+    <string name="ease_sign_login">Log In</string>
+    <string name="sign_error_illegal_character">Latin letters and numbers only.</string>
+    <string name="sign_error_not_id">Please Enter a AgoraID.</string>
+
+    <string name="error_network_error">当前网络不可用</string>
+    <string name="error_not_login">未登录过环信</string>
+    <string name="error_parse_error">解析错误</string>
+    <string name="error_err_unknown">网络问题请稍后重试</string>
+    <string name="err_image_android_min_version">上传图片只支持4.4版本以上</string>
+    <string name="err_file_not_exist">文件不存在</string>
+    <string name="error_add_self">不能添加自己</string>
+    <string name="error_already_friend">此用户已是你的好友</string>
+    <string name="error_already_friend_but_in_black">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
+    <string name="error_delete_not_exist_msg">删除失败或不存在该消息</string>
+    <string name="error_group_no_members">没有群组成员</string>
+    <string name="error_user_already_exist">注册用户名已存在，请重新输入</string>
+    <string name="error_delete_conversation">删除失败或不存在该对话</string>
+
+    <string name="dialog_default_title">提示</string>
+
+    <string name="main_title_home">Chats</string>
+    <string name="main_title_contacts">Contacts</string>
+    <string name="main_title_me">Me</string>
+
+</resources>

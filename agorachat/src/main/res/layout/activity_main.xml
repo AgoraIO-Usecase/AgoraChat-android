@@ -5,19 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <io.agora.chat.uikit.widget.EaseTitleBar
-        android:id="@+id/toolbar_actionbar"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fl_main_fragment"
-        android:layout_marginTop="30dp"
-        app:titleBarTitle="@string/main_title_home"
-        app:titleBarTitleTextColor="@color/main_title_color"
-        app:titleBarDisplayHomeAsUpEnabled="false"/>
-
     <FrameLayout
         android:id="@+id/fl_main_fragment"
         android:layout_width="0dp"
@@ -25,7 +12,7 @@
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_actionbar" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"

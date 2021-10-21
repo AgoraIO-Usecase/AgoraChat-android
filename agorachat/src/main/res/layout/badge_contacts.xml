@@ -9,6 +9,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/main_badge_tv" />
+        style="@style/main_badge_tv"
+        android:background="@drawable/main_unread_hint_bg"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="25dp"
+        android:textSize="2sp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

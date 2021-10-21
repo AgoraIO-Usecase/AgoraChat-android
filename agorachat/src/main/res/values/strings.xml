@@ -29,4 +29,25 @@
     <string name="main_title_contacts">Contacts</string>
     <string name="main_title_me">Me</string>
 
+    <string name="contact_tab_title_friends">Friends</string>
+    <string name="contact_tab_title_groups">Groups</string>
+    <string name="contact_tab_title_requests">Requests</string>
+
+    <string name="group_member_add_admin">%1$s已成为新的管理员</string>
+    <string name="group_member_remove_admin">%1$s已被移出管理员</string>
+    <string name="group_member_add_black">%1$s已被添加至黑名单</string>
+    <string name="group_member_remove_black">%1$s已被移出黑名单</string>
+    <string name="group_member_mute">%1$s已被禁言</string>
+    <string name="group_member_remove_mute">%1$s已被解除禁言</string>
+    <string name="group_member_remove">%1$s已被移除</string>
+    <string name="group_member_invite">已向%1$s发出入群邀请</string>
+    <string name="group_destroy">群组已删除</string>
+    <string name="group_role_owner">Group Owner</string>
+    <string name="group_role_admin">Admin</string>
+    <string name="group_permission_mute">Admin/Mute</string>
+    <string name="group_admin_muted">Admin/Mute</string>
+
+    <string name="contact_detail_block_contact">Block Contact</string>
+    <string name="contact_detail_delete_contact">Delete Contact</string>
+
 </resources>

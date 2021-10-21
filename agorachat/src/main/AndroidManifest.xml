@@ -27,6 +27,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.HyphenateDemoAndroid">
 
         <activity android:name=".main.MainActivity"/>
@@ -42,6 +43,9 @@
         </activity>
         <!--Sign in-->
         <activity android:name=".sign.SignInActivity"
+            android:screenOrientation="portrait"/>
+        <!--Contact detail-->
+        <activity android:name=".contact.ContactDetailActivity"
             android:screenOrientation="portrait"/>
 
         <!-- IM SDK required start-->

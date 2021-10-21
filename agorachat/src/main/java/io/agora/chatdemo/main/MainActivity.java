@@ -1,33 +1,33 @@
 package io.agora.chatdemo.main;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import io.agora.chat.uikit.widget.EaseTitleBar;
+import io.agora.chat.ChatClient;
+import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
-import io.agora.chatdemo.contact.ContactListFragment;
+import io.agora.chatdemo.contact.ContactFragment;
 import io.agora.chatdemo.conversation.ConversationListFragment;
+import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.me.AboutMeFragment;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
-    private EaseTitleBar mTitleBar;
-    private Fragment mConversationListFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
+    private Fragment mConversationListFragment, mFriendsFragment, mAboutMeFragment;
     private Fragment mCurrentFragment;
     private TextView mTvMainHomeMsg, mTvMainContactsMsg;
     private int[] badgeIds = {R.layout.badge_home, R.layout.badge_contacts};
@@ -45,7 +45,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     private void initView(Bundle savedInstanceState) {
         navView = findViewById(R.id.nav_view);
-        mTitleBar = findViewById(R.id.toolbar_actionbar);
         //navView.setItemIconTintList(null);
         switchToHome();
         checkIfShowSavedFragment(savedInstanceState);
@@ -57,8 +56,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     }
 
     private void initData() {
-        mTvMainHomeMsg.setText("99+");
-        mTvMainHomeMsg.setVisibility(View.VISIBLE);
+        DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
     }
 
     private void switchToHome() {
@@ -68,9 +66,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         replace(mConversationListFragment, "conversation");
     }
 
-    private void switchToFriends() {
+    private void switchToContacts() {
         if(mFriendsFragment == null) {
-            mFriendsFragment = new ContactListFragment();
+            mFriendsFragment = new ContactFragment();
         }
         replace(mFriendsFragment, "contact");
     }
@@ -143,27 +141,36 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        mTitleBar.setVisibility(View.VISIBLE);
         boolean showNavigation = false;
         switch (menuItem.getItemId()) {
             case R.id.main_nav_home:
                 switchToHome();
-                mTitleBar.setTitle(getResources().getString(R.string.main_title_home));
                 showNavigation = true;
                 break;
             case R.id.main_nav_contacts:
-                switchToFriends();
-                mTitleBar.setTitle(getResources().getString(R.string.main_title_contacts));
+                switchToContacts();
                 showNavigation = true;
                 invalidateOptionsMenu();
                 break;
             case R.id.main_nav_me:
                 switchToAboutMe();
-                mTitleBar.setTitle(getResources().getString(R.string.main_title_me));
                 showNavigation = true;
                 break;
         }
         invalidateOptionsMenu();
         return showNavigation;
+    }
+
+    private void showMainUnReadMsg(String unReadCount) {
+        if(!TextUtils.isEmpty(unReadCount)) {
+            mTvMainHomeMsg.setVisibility(View.VISIBLE);
+            mTvMainHomeMsg.setText(unReadCount);
+        }else {
+            mTvMainHomeMsg.setVisibility(View.GONE);
+        }
+    }
+
+    private void showContactUnReadIcon(boolean isShow) {
+        mTvMainContactsMsg.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/toolbar_contact_detail"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/avatar_big_size"
+        android:layout_height="@dimen/avatar_big_size"
+        android:src="@drawable/ease_default_avatar"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_big_20"
+        android:textColor="@color/color_main_text"
+        android:layout_marginTop="10dp"
+        tools:text="Maria Troncatti"/>
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/color_second_text"
+        android:layout_marginTop="5dp"
+        tools:text="AgoraID: supercalifragilisticexpialidocious"/>
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/iv_chat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ease_default_avatar"
+        android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/color_main_text"
+        android:layout_marginTop="5dp"
+        tools:text="Chat"/>
+    
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="32dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarSrc="@drawable/block"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/contact_detail_block_contact"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarSrc="@drawable/delete"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/contact_detail_delete_contact"/>
+
+</LinearLayout>

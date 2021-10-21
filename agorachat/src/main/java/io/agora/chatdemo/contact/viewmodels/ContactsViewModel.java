@@ -21,6 +21,7 @@ public class ContactsViewModel extends AndroidViewModel {
     private MediatorLiveData<Resource<List<EaseUser>>> blackObservable;
     private SingleSourceLiveData<Resource<Boolean>> blackResultObservable;
     private SingleSourceLiveData<Resource<Boolean>> deleteObservable;
+    private SingleSourceLiveData<Resource<List<EaseUser>>> searchObservable;
 
     public ContactsViewModel(@NonNull Application application) {
         super(application);
@@ -29,6 +30,7 @@ public class ContactsViewModel extends AndroidViewModel {
         blackObservable = new MediatorLiveData<>();
         blackResultObservable = new SingleSourceLiveData<>();
         deleteObservable = new SingleSourceLiveData<>();
+        searchObservable = new SingleSourceLiveData<>();
     }
 
     public LiveData<Resource<List<EaseUser>>> blackObservable() {
@@ -47,6 +49,9 @@ public class ContactsViewModel extends AndroidViewModel {
         contactObservable.setSource(mRepository.getContactList(fetchServer));
     }
 
+    public void searchContact(String key) {
+        searchObservable.setSource(mRepository.getSearchContacts(key));
+    }
 
     public LiveData<Resource<List<EaseUser>>> getContactObservable() {
         return contactObservable;
@@ -58,6 +63,10 @@ public class ContactsViewModel extends AndroidViewModel {
 
     public LiveData<Resource<Boolean>> deleteObservable() {
         return deleteObservable;
+    }
+
+    public LiveData<Resource<List<EaseUser>>> getSearchObservable() {
+        return searchObservable;
     }
 
     public void deleteContact(String username) {

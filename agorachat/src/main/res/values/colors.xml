@@ -21,6 +21,7 @@
     <color name="color_action_text">#114EFF</color>
     <color name="color_title_text">#000000</color>
     <color name="color_alert">#FF14CC</color>
+    <color name="color_search_bg">#F2F2F2</color>
 
     <color name="sign_edit_text_bg">#F2F2F2</color>
     <color name="sign_btn_bg">#FF114EFF</color>

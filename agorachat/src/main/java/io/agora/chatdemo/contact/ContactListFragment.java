@@ -1,5 +1,7 @@
 package io.agora.chatdemo.contact;
 
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -15,6 +17,13 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     private ContactsViewModel mViewModel;
+    private List<EaseUser> mData;
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        etSearch.setVisibility(View.VISIBLE);
+    }
 
     @Override
     protected void initViewModel() {
@@ -25,12 +34,14 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
                     srlContactRefresh.setRefreshing(false);
-                    mListAdapter.setData(data);
+                    mData = data;
+                    checkSearchContent(etSearch.getText().toString().trim());
                 }
 
                 @Override
                 public void onLoading(@Nullable List<EaseUser> data) {
                     super.onLoading(data);
+                    mData = data;
                     mListAdapter.setData(data);
                 }
 
@@ -55,6 +66,15 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onSuccess(Boolean data) {
                     mViewModel.loadContactList(false);
+                }
+            });
+        });
+
+        mViewModel.getSearchObservable().observe(getViewLifecycleOwner(), result -> {
+            parseResource(result, new OnResourceParseCallback<List<EaseUser>>() {
+                @Override
+                public void onSuccess(@Nullable List<EaseUser> data) {
+                    mListAdapter.setData(data);
                 }
             });
         });
@@ -124,4 +144,19 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
         ContactDetailActivity.actionStart(mContext, mListAdapter.getData().get(position).getUsername());
     }
 
+    @Override
+    protected void searchText(String content) {
+        checkSearchContent(content);
+    }
+    private void checkSearchContent(String content) {
+        if(TextUtils.isEmpty(content)) {
+            mListAdapter.setData(mData);
+            sideBarContact.setVisibility(View.VISIBLE);
+            srlContactRefresh.setEnabled(true);
+        }else {
+            mViewModel.searchContact(content);
+            sideBarContact.setVisibility(View.GONE);
+            srlContactRefresh.setEnabled(false);
+        }
+    }
 }

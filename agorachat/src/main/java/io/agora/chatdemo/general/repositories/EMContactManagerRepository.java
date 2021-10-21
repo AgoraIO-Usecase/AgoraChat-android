@@ -84,7 +84,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
             protected LiveData<List<EaseUser>> loadFromDb() {
                 return Transformations.map(getUserDao().loadUsers(), result -> {
                     if(result != null) {
-                        sortList(result);
+                        sortData(result);
                     }
                     return result;
                 });
@@ -128,31 +128,6 @@ public class EMContactManagerRepository extends BaseEMRepository{
             }
 
         }.asLiveData();
-    }
-
-    /**
-     * 排序
-     * @param list
-     */
-    private void sortList(List<EaseUser> list) {
-        if(list == null || list.isEmpty()) {
-            return;
-        }
-        Collections.sort(list, new Comparator<EaseUser>() {
-            @Override
-            public int compare(EaseUser lhs, EaseUser rhs) {
-                if(lhs.getInitialLetter().equals(rhs.getInitialLetter())){
-                    return lhs.getNickname().compareTo(rhs.getNickname());
-                }else{
-                    if("#".equals(lhs.getInitialLetter())){
-                        return 1;
-                    }else if("#".equals(rhs.getInitialLetter())){
-                        return -1;
-                    }
-                    return lhs.getInitialLetter().compareTo(rhs.getInitialLetter());
-                }
-            }
-        });
     }
 
     /**
@@ -495,6 +470,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
                                 list.add(user);
                             }
                         }
+                    }
+                    if(list != null && list.size() > 1) {
+                        sortData(list);
                     }
                     callBack.onSuccess(createLiveData(list));
                 });

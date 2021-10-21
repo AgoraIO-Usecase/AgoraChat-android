@@ -5,6 +5,8 @@
     <string name="ok">Enter</string>
     <string name="Network_error">Network error</string>
 
+    <string name="search_text_hint">Search</string>
+
     <string name="ease_sign_agora_id">AgoraID</string>
     <string name="ease_sign_nickname">Nickname</string>
     <string name="ease_sign_login">Log In</string>

@@ -1,6 +1,8 @@
 package io.agora.chatdemo.contact;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,12 +12,14 @@ import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseListFragment;
 import io.agora.chatdemo.general.manager.SidebarPresenter;
+import io.agora.chatdemo.general.widget.EaseSearchEditText;
 import io.agora.chatdemo.general.widget.EaseSidebar;
 
 public abstract class BaseContactListFragment<T> extends BaseListFragment<T> implements SwipeRefreshLayout.OnRefreshListener {
     protected SwipeRefreshLayout srlContactRefresh;
-    private EaseSidebar sideBarContact;
+    protected EaseSidebar sideBarContact;
     private TextView floatingHeader;
+    protected EaseSearchEditText etSearch;
 
     private SidebarPresenter sidebarPresenter;
 
@@ -32,6 +36,7 @@ public abstract class BaseContactListFragment<T> extends BaseListFragment<T> imp
         srlContactRefresh = findViewById(R.id.srl_contact_refresh);
         sideBarContact = findViewById(R.id.side_bar_contact);
         floatingHeader = findViewById(R.id.floating_header);
+        etSearch = findViewById(R.id.et_search);
 
         srlContactRefresh.setEnabled(canUseRefresh);
 
@@ -55,7 +60,26 @@ public abstract class BaseContactListFragment<T> extends BaseListFragment<T> imp
     protected void initListener() {
         super.initListener();
         srlContactRefresh.setOnRefreshListener(this);
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String searchContent = s.toString().trim();
+                searchText(searchContent);
+            }
+        });
     }
+
+    protected void searchText(String content) {}
 
     @Override
     public void onRefresh() {

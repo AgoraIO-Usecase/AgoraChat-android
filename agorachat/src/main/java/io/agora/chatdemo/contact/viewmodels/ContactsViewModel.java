@@ -1,4 +1,4 @@
-package io.agora.chatdemo.contact;
+package io.agora.chatdemo.contact.viewmodels;
 
 import android.app.Application;
 

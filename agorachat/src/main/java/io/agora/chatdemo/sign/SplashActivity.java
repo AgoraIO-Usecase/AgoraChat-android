@@ -18,7 +18,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(R.layout.activity_splash);
-        if (ChatClient.getInstance().isLoggedInBefore()) {
+        if (ChatClient.getInstance().isSdkInited() && ChatClient.getInstance().isLoggedInBefore()) {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         } else {

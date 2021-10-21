@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 
 import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chatdemo.contact.viewmodels.ContactsViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
@@ -120,7 +121,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
 
     @Override
     public void onItemClick(View view, int position) {
-        ContactDetailActivity.actionStart(mContext);
+        ContactDetailActivity.actionStart(mContext, mListAdapter.getData().get(position).getUsername());
     }
 
 }

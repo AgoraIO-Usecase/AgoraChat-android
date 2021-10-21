@@ -545,22 +545,15 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void saveCallResult(EaseUser item) {
-                if(mIsFriend) {
-                    getUserDao().insert(EmUserEntity.parseParent(item));
-                }
+                getUserDao().insert(EmUserEntity.parseParent(item));
             }
         }.asLiveData();
     }
 
     private EaseUser transformEMUserInfo(UserInfo info) {
         if(info != null){
-            List<EaseUser> users = getUserDao().loadUserByUserId(info.getUserId());
-            EaseUser user = null;
-            if(users != null && users.size() > 0) {
-                user = users.get(0);
-            }
             EaseUser userEntity = new EaseUser();
-            userEntity.setUsername(user != null ? user.getUsername() : info.getUserId());
+            userEntity.setUsername(info.getUserId());
             userEntity.setNickname(info.getNickName());
             userEntity.setEmail(info.getEmail());
             userEntity.setAvatar(info.getAvatarUrl());
@@ -569,7 +562,11 @@ public class EMContactManagerRepository extends BaseEMRepository{
             userEntity.setExt(info.getExt());
             userEntity.setSign(info.getSignature());
             EaseUtils.setUserInitialLetter(userEntity);
-            userEntity.setContact(user != null ? user.getContact() : 0);
+            try {
+                userEntity.setContact(getUserDao().getUserContactById(info.getUserId()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return userEntity;
         }
         return null;

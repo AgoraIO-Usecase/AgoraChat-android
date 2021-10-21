@@ -42,7 +42,7 @@
         android:id="@+id/iv_chat"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ease_default_avatar"
+        android:src="@drawable/contact_start_chat"
         android:layout_marginTop="25dp"/>
 
     <TextView
@@ -51,9 +51,10 @@
         android:textSize="@dimen/text_size_small"
         android:textColor="@color/color_main_text"
         android:layout_marginTop="5dp"
-        tools:text="Chat"/>
+        android:text="@string/contact_detail_start_chat"/>
     
     <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_block_contact"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginTop="32dp"
@@ -62,9 +63,11 @@
         app:arrowItemAvatarHeight="32dp"
         app:arrowItemAvatarWidth="32dp"
         app:arrowItemShowArrow="false"
-        app:arrowItemTitle="@string/contact_detail_block_contact"/>
+        app:arrowItemTitle="@string/contact_detail_block_contact"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
 
     <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_delete_block"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         app:arrowItemShowAvatar="true"
@@ -72,6 +75,7 @@
         app:arrowItemAvatarHeight="32dp"
         app:arrowItemAvatarWidth="32dp"
         app:arrowItemShowArrow="false"
-        app:arrowItemTitle="@string/contact_detail_delete_contact"/>
+        app:arrowItemTitle="@string/contact_detail_delete_contact"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
 
 </LinearLayout>

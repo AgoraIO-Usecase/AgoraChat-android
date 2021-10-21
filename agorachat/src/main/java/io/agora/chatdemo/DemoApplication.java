@@ -20,11 +20,13 @@ public class DemoApplication extends Application {
         super.onCreate();
         instance = this;
         registerActivityLifecycleCallbacks();
-        ChatOptions options = new ChatOptions();
-        options.setAppKey( getString(R.string.ease_configure_app_key));
-        ChatClient.getInstance().init(this, options);
+        initAgoraChatSDK();
 
         closeAndroidPDialog();
+    }
+
+    private void initAgoraChatSDK() {
+        DemoHelper.getInstance().init(this);
     }
 
     public static DemoApplication getInstance() {

@@ -27,6 +27,9 @@ public interface EmUserDao {
     @Query("select * from em_users where username = :arg0")
     List<EaseUser> loadUserByUserId(String arg0);
 
+    @Query("select contact from em_users where username = :arg0")
+    int getUserContactById(String arg0);
+
     @Query("select * from em_users where contact = 0")
     LiveData<List<EaseUser>> loadUsers();
 

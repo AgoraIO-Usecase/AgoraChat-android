@@ -156,7 +156,6 @@ public class DemoHelper {
     }
 
     /**
-     * ChatPresenter中添加了网络连接状态监听，多端登录监听，群组监听，联系人监听，聊天室监听
      * @param context
      */
     private void initEaseUI(Context context) {
@@ -169,11 +168,12 @@ public class DemoHelper {
                         return getUserInfo(username);
                     }
 
-                });
+                })
+                .setAvatarOptions(getAvatarOptions());
     }
 
     /**
-     * 统一配置头像
+     * Unified Profile Picture Configuration
      * @return
      */
     private EaseAvatarOptions getAvatarOptions() {
@@ -201,27 +201,28 @@ public class DemoHelper {
 
 
     /**
-     * 根据自己的需要进行配置
+     * Custom settings
      * @param context
      * @return
      */
     private ChatOptions initChatOptions(Context context){
-        Log.d(TAG, "init HuanXin Options");
+        Log.d(TAG, "init Agora Chat Options");
 
         ChatOptions options = new ChatOptions();
-        // 设置是否自动接受加好友邀请,默认是true
+        options.setAppKey( context.getString(R.string.ease_configure_app_key));
+        // Sets whether to automatically accept friend invitations. Default is true
         options.setAcceptInvitationAlways(false);
-        // 设置是否需要接受方已读确认
+        // Set whether read confirmation is required by the recipient
         options.setRequireAck(true);
-        // 设置是否需要接受方送达确认,默认false
+        // Set whether confirmation of delivery is required by the recipient. Default: false
         options.setRequireDeliveryAck(false);
 
         /**
-         * NOTE:你需要设置自己申请的账号来使用三方推送功能，详见集成文档
+         * NOTE:You need to set up your own account to use the three-way push function, see the integration documentation
          */
         PushConfig.Builder builder = new PushConfig.Builder(context);
 
-        builder.enableFCM("921300338324");
+        builder.enableFCM("142290967082");
         options.setPushConfig(builder.build());
 
         // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息

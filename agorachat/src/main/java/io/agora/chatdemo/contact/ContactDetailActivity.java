@@ -11,9 +11,10 @@ import io.agora.chatdemo.base.BaseActivity;
 
 public class ContactDetailActivity extends BaseActivity {
 
-    public static void actionStart(Context context) {
-        Intent starter = new Intent(context, ContactDetailActivity.class);
-        context.startActivity(starter);
+    public static void actionStart(Context context, String username) {
+        Intent intent = new Intent(context, ContactDetailActivity.class);
+        intent.putExtra("username", username);
+        context.startActivity(intent);
     }
 
     @Override

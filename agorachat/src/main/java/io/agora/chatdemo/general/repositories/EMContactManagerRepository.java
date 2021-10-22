@@ -22,6 +22,7 @@ import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
+import io.agora.chatdemo.general.db.dao.EmUserDao;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
@@ -110,7 +111,8 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         if(ids != null && !ids.isEmpty()) {
                             usernames.addAll(ids);
                         }
-                        callBack.onSuccess(createLiveData(EmUserEntity.parse(usernames)));
+
+                        callBack.onSuccess(createLiveData(updateData(usernames)));
 
                     } catch (ChatException e) {
                         e.printStackTrace();
@@ -506,9 +508,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(Map<String, UserInfo> value) {
                         if(callBack != null) {
-                            if(mIsFriend) {
-                                callBack.onSuccess(createLiveData(transformEMUserInfo(value.get(finalUserId))));
-                            }
+                            callBack.onSuccess(createLiveData(transformEMUserInfo(value.get(finalUserId))));
                         }
                     }
 
@@ -524,6 +524,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void saveCallResult(EaseUser item) {
                 getUserDao().insert(EmUserEntity.parseParent(item));
+                DemoHelper.getInstance().updateContactList();
             }
         }.asLiveData();
     }
@@ -548,5 +549,26 @@ public class EMContactManagerRepository extends BaseEMRepository{
             return userEntity;
         }
         return null;
+    }
+
+    private List<EaseUser> updateData(List<String> data) {
+        if(data == null || data.isEmpty() ) {
+            return new ArrayList<>();
+        }
+        EmUserDao userDao = getUserDao();
+        if(userDao == null) {
+            return EmUserEntity.parse(data);
+        }
+        List<EaseUser> users = new ArrayList<>();
+        for(int i = 0; i < data.size(); i++) {
+            String username = data.get(i);
+            List<EaseUser> easeUsers = userDao.loadUserByUserId(username);
+            if(easeUsers != null && !easeUsers.isEmpty()) {
+                users.add(easeUsers.get(0));
+            }else {
+                users.add(new EaseUser(username));
+            }
+        }
+        return users;
     }
 }

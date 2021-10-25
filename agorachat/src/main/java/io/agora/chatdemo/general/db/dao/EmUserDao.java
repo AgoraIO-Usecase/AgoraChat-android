@@ -6,10 +6,9 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-
 import java.util.List;
 
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
 
 @Dao

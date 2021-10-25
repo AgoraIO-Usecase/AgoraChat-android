@@ -8,7 +8,8 @@ import androidx.room.Index;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
+
 
 @Entity(tableName = "em_users", primaryKeys = {"username"},
         indices = {@Index(value = {"username"}, unique = true)})

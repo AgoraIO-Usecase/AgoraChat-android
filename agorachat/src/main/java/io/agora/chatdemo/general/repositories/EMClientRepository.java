@@ -9,7 +9,7 @@ import java.util.List;
 import io.agora.CallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.general.callbacks.DemoCallBack;

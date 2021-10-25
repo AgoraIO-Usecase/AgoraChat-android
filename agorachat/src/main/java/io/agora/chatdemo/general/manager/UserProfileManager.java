@@ -2,11 +2,8 @@ package io.agora.chatdemo.general.manager;
 
 import android.content.Context;
 
-import java.util.List;
-
 import io.agora.chat.ChatClient;
-import io.agora.chat.uikit.domain.EaseUser;
-import io.agora.chatdemo.DemoHelper;
+import io.agora.chat.uikit.models.EaseUser;
 
 public class UserProfileManager {
 

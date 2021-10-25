@@ -22,7 +22,7 @@ import io.agora.chat.ContactManager;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.options.EaseAvatarOptions;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chatdemo.general.db.DemoDbHelper;

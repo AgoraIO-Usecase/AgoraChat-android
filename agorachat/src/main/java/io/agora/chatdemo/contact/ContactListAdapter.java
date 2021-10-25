@@ -18,7 +18,7 @@ import java.util.List;
 
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;

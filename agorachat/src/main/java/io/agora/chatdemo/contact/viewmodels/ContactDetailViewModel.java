@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.repositories.EMContactManagerRepository;

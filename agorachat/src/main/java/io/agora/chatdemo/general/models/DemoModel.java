@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.agora.chat.ChatRoom;
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.db.dao.EmUserDao;

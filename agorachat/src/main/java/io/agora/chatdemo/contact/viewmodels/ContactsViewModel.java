@@ -9,7 +9,7 @@ import androidx.lifecycle.MediatorLiveData;
 
 import java.util.List;
 
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;

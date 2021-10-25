@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
-import io.agora.chat.uikit.domain.EaseUser;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.general.widget.EaseSidebar;
 
 public class SidebarPresenter implements EaseSidebar.OnTouchEventListener{

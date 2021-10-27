@@ -17,6 +17,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.uikit.conversation.EaseConversationListFragment;
+import io.agora.chat.uikit.conversation.model.EaseConversationSetStyle;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
@@ -61,7 +63,14 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     private void switchToHome() {
         if(mConversationListFragment == null) {
-            mConversationListFragment = new ConversationListFragment();
+            mConversationListFragment = new EaseConversationListFragment.Builder()
+                                            .setCustomFragment(new ConversationListFragment())
+                                            .setUseHeader(true)
+                                            .setHeaderTitle(getString(R.string.main_title_contacts))
+                                            .setHeaderEnableBack(true)
+                                            .setUnreadPosition(EaseConversationSetStyle.UnreadDotPosition.RIGHT)
+                                            .setUnreadStyle(EaseConversationSetStyle.UnreadStyle.DOT)
+                                            .build();
         }
         replace(mConversationListFragment, "conversation");
     }

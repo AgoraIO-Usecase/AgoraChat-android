@@ -168,18 +168,6 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     }
 
     private boolean isContains(List<String> data, String username) {
-        if(data != null) {
-            if(data.contains(username)) {
-                try {
-                    int index = data.indexOf(username);
-                    if(index != -1) {
-                        return true;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return false;
+        return data != null && data.contains(username);
     }
 }

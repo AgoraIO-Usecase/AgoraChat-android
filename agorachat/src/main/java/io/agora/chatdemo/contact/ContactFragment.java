@@ -14,16 +14,20 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
+import io.agora.chatdemo.base.BaseListFragment;
 
 public class ContactFragment extends BaseInitFragment {
     private EaseTitleBar toolbar_contact;
     private TabLayout tab_layout;
     private ViewPager2 vp_fragment;
     private int[] titles = {R.string.contact_tab_title_friends, R.string.contact_tab_title_groups, R.string.contact_tab_title_requests};
+    private ArrayList<BaseListFragment> fragments=new ArrayList();
 
     @Override
     protected int getLayoutId() {
@@ -36,7 +40,16 @@ public class ContactFragment extends BaseInitFragment {
         toolbar_contact = findViewById(R.id.toolbar_contact);
         tab_layout = findViewById(R.id.tab_layout);
         vp_fragment = findViewById(R.id.vp_fragment);
+        toolbar_contact.setRightImageResource(R.drawable.add);
 
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        fragments.add(new ContactListFragment());
+        fragments.add(new ContactListFragment());
+        fragments.add(new ContactListFragment());
         setupWithViewPager();
     }
 
@@ -106,12 +119,7 @@ public class ContactFragment extends BaseInitFragment {
         vp_fragment.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                if(position == 0) {
-                    toolbar_contact.setRightImageResource(R.drawable.add);
-                    toolbar_contact.setVisibility(View.VISIBLE);
-                }else {
-                    toolbar_contact.setRightLayoutVisibility(View.GONE);
-                }
+                toolbar_contact.setVisibility(View.VISIBLE);
             }
         });
     }

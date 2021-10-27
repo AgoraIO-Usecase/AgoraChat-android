@@ -45,7 +45,9 @@ public abstract class BaseListFragment<T> extends BaseInitFragment implements On
      * Can add header adapters
      * @param adapter
      */
-    public void addHeader(ConcatAdapter adapter) {}
+    public void addHeader(ConcatAdapter adapter) {
+//        concatAdapter.addAdapter(0,adapter);
+    }
 
     /**
      * Can change the RecyclerView's orientation

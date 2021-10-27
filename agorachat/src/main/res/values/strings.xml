@@ -49,7 +49,11 @@
     <string name="group_role_owner">Group Owner</string>
     <string name="group_role_admin">Admin</string>
     <string name="group_permission_mute">Admin/Mute</string>
-    <string name="group_admin_muted">Admin/Mute</string>
+    <string name="group_admin_muted">group_admin_muted</string>
+    <string name="group_new_group">New Group</string>
+    <string name="group_join_a_group">Join a Group</string>
+    <string name="group_public_group_list">Public Group List</string>
+    <string name="group_add_contacts">Add Contacts</string>
 
     <string name="contact_detail_block_contact">Block Contact</string>
     <string name="contact_detail_delete_contact">Delete Contact</string>

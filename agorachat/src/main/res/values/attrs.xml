@@ -11,6 +11,7 @@
         <attr name="arrowItemShowArrow" format="boolean"/>
         <attr name="arrowItemShowAvatar" format="boolean"/>
         <attr name="arrowItemAvatarSrc" format="reference"/>
+        <attr name="arrowItemArrowSrc" format="reference"/>
         <attr name="arrowItemAvatarHeight" format="dimension|reference"/>
         <attr name="arrowItemAvatarWidth" format="dimension|reference"/>
     </declare-styleable>

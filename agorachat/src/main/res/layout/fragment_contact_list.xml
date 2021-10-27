@@ -22,7 +22,7 @@
         android:layout_below="@id/et_search"
         android:layout_marginTop="5dp">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <io.agora.chat.uikit.widget.EaseRecyclerView
             android:id="@+id/contact_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

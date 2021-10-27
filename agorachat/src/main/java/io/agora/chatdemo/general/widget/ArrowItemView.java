@@ -104,6 +104,11 @@ public class ArrowItemView extends ConstraintLayout {
         boolean showAvatar = a.getBoolean(R.styleable.ArrowItemView_arrowItemShowAvatar, false);
         avatar.setVisibility(showAvatar ? VISIBLE : GONE);
 
+        int arrowSrcResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarSrc, -1);
+        if(arrowSrcResourceId != -1) {
+            ivArrow.setImageResource(arrowSrcResourceId);
+        }
+
         int avatarSrcResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarSrc, -1);
         if(avatarSrcResourceId != -1) {
             avatar.setImageResource(avatarSrcResourceId);
@@ -138,6 +143,50 @@ public class ArrowItemView extends ConstraintLayout {
 
     public EaseImageView getAvatar() { return avatar; }
 
+
+
+
+    public void setTitle(String title) {
+        tvTitle.setText(title);
+    }
+
+    public void setContent(String content) {
+        tvContent.setText(content);
+    }
+
+    public void setArrow(int resourceId) {
+        ivArrow.setImageResource(resourceId);
+    }
+
+    public void setAvatar(int resourceId) {
+        avatar.setImageResource(resourceId);
+    }
+
+    public void setAvatarHeight(int height){
+        ViewGroup.LayoutParams params = avatar.getLayoutParams();
+        params.height=height;
+    }
+    public void setAvatarWidth(int width){
+        ViewGroup.LayoutParams params = avatar.getLayoutParams();
+        params.width=width;
+    }
+
+    public void setTitleColor(int titleColor) {
+        tvTitle.setTextColor(titleColor);
+    }
+
+    public void setContentColor(int contentColor) {
+        tvContent.setTextColor(contentColor);
+    }
+
+    public void setTitleSize(float titleSize) {
+        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSize);
+    }
+
+
+    public void setContentSize(float contentSize) {
+        tvContent.setTextSize(contentSize);
+    }
     /**
      * sp to px
      * @param context

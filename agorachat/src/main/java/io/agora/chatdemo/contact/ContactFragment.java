@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -78,7 +77,8 @@ public class ContactFragment extends BaseInitFragment {
         toolbar_contact.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
             @Override
             public void onRightClick(View view) {
-
+                //测试代码
+                //new GroupContainerFragment().show(getChildFragmentManager(),"GroupContainerFragment");
             }
         });
         tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

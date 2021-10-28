@@ -66,10 +66,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             mConversationListFragment = new EaseConversationListFragment.Builder()
                                             .setCustomFragment(new ConversationListFragment())
                                             .setUseHeader(true)
-                                            .setHeaderTitle(getString(R.string.main_title_contacts))
-                                            .setHeaderEnableBack(true)
+                                            .setHeaderTitle(getString(R.string.main_title_home))
                                             .setUnreadPosition(EaseConversationSetStyle.UnreadDotPosition.RIGHT)
-                                            .setUnreadStyle(EaseConversationSetStyle.UnreadStyle.DOT)
+                                            .setUnreadStyle(EaseConversationSetStyle.UnreadStyle.NUM)
                                             .build();
         }
         replace(mConversationListFragment, "conversation");

@@ -91,7 +91,7 @@
             android:singleLine="true"
             android:textColor="@color/color_second_text"
             android:textSize="16sp"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:text="label"/>
 
         <TextView

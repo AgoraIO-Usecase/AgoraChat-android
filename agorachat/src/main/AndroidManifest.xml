@@ -47,6 +47,7 @@
         <!--Contact detail-->
         <activity android:name=".contact.ContactDetailActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".chat.ChatActivity" />
 
         <!-- IM SDK required start-->
         <!-- SDK service -->

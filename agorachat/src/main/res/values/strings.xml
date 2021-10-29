@@ -172,4 +172,5 @@
 
     <string name="has_been_send">已发送</string>
     <string name="group_create_title">Create</string>
+    <string name="group_next">Next</string>
 </resources>

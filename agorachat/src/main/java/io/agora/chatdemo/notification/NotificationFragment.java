@@ -8,5 +8,5 @@ import io.agora.chatdemo.base.BaseListFragment;
  * qq:1550540124
  * 热爱生活每一天！
  */
-class NotificationFragment extends BaseListFragment<EaseNotificationMsgManager> {
+public abstract class NotificationFragment extends BaseListFragment<EaseNotificationMsgManager> {
 }

@@ -8,8 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import io.agora.chatdemo.general.db.dao.EmUserDao;
-import io.agora.chatdemo.general.db.dao.InviteMessageDao;
-import io.agora.chatdemo.general.db.dao.MsgTypeManageDao;
 import io.agora.chatdemo.general.utils.MD5;
 import io.agora.util.EMLog;
 
@@ -81,22 +79,6 @@ public class DemoDbHelper {
             return mDatabase.userDao();
         }
         EMLog.i(TAG, "get userDao failed, should init db first");
-        return null;
-    }
-
-    public InviteMessageDao getInviteMessageDao() {
-        if(mDatabase != null) {
-            return mDatabase.inviteMessageDao();
-        }
-        EMLog.i(TAG, "get inviteMessageDao failed, should init db first");
-        return null;
-    }
-
-    public MsgTypeManageDao getMsgTypeManageDao() {
-        if(mDatabase != null) {
-            return mDatabase.msgTypeManageDao();
-        }
-        EMLog.i(TAG, "get msgTypeManageDao failed, should init db first");
         return null;
     }
 

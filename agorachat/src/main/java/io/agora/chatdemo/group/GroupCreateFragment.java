@@ -3,6 +3,8 @@ package io.agora.chatdemo.group;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -31,26 +33,29 @@ public class GroupCreateFragment extends ContactListFragment {
     @Override
     protected void initData() {
         super.initData();
-        datas.add(new Pair(R.drawable.add, R.string.group_new_group));
-        datas.add(new Pair(R.drawable.add, R.string.group_join_a_group));
-        datas.add(new Pair(R.drawable.add, R.string.group_public_group_list));
-        datas.add(new Pair(R.drawable.add, R.string.group_add_contacts));
+        datas.add(new Pair(R.drawable.new_group, R.string.group_add_contacts));
+        datas.add(new Pair(R.drawable.join_a_group, R.string.group_join_a_group));
+        datas.add(new Pair(R.drawable.public_group, R.string.group_public_group_list));
+        datas.add(new Pair(R.drawable.group_add_contacts, R.string.group_add_contacts));
 
+        AbsListView.LayoutParams headviewParams=new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout headView = new LinearLayout(mContext);
         headView.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) CommonUtils.getDimen(mContext,R.dimen.common_arrow_item_view_height));
         for (Pair<Integer, Integer> data : datas) {
             ArrowItemView itemView = new ArrowItemView(mContext);
             itemView.setAvatar(data.first);
-            itemView.setAvatarHeight(UIUtils.dp2px(mContext, (int) CommonUtils.getDimen(mContext, R.dimen.common_arrow_item_avatar_height)));
-            itemView.setAvatarWidth(UIUtils.dp2px(mContext, (int) CommonUtils.getDimen(mContext, R.dimen.common_arrow_item_avatar_height)));
+            itemView.setAvatarVisiablity(View.VISIBLE);
+            itemView.setAvatarMargin(UIUtils.dp2px(mContext,0),UIUtils.dp2px(mContext,7),UIUtils.dp2px(mContext,6),UIUtils.dp2px(mContext,7));
+            itemView.setAvatarHeight(UIUtils.dp2px(mContext,40));
+            itemView.setAvatarWidth(UIUtils.dp2px(mContext, 40));
             itemView.setTitle(CommonUtils.getString(mContext, data.second));
             itemView.setTitleSize(UIUtils.px2dp(mContext, (int) CommonUtils.getDimen(mContext, R.dimen.text_size_big)));
             itemView.setArrow(R.drawable.arrow_right);
             itemView.setLayoutParams(params);
             headView.addView(itemView);
         }
-
+        headView.setLayoutParams(headviewParams);
         ((EaseRecyclerView)mRecyclerView).addHeaderView(headView);
 
         mRecyclerView.setNestedScrollingEnabled(false);

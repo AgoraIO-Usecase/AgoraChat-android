@@ -207,7 +207,7 @@ public class EventsMonitor extends EaseChatPresenter {
                 EaseAtMessageHelper.get().removeAtMeGroup(msg.getTo());
             }
             ChatMessage msgNotification = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
-            TextMessageBody txtBody = new TextMessageBody(String.format(context.getString(R.string.msg_recall_by_user), msg.getFrom()));
+            TextMessageBody txtBody = new TextMessageBody(String.format(context.getString(R.string.ease_msg_recall_by_user), msg.getFrom()));
             msgNotification.addBody(txtBody);
             msgNotification.setFrom(msg.getFrom());
             msgNotification.setTo(msg.getTo());

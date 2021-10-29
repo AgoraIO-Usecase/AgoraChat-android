@@ -37,6 +37,8 @@
     <string name="contact_tab_title_groups">Groups</string>
     <string name="contact_tab_title_requests">Requests</string>
 
+    <string name="contact_request_notification_accept">Accept</string>
+
     <string name="group_member_add_admin">%1$s已成为新的管理员</string>
     <string name="group_member_remove_admin">%1$s已被移出管理员</string>
     <string name="group_member_add_black">%1$s已被添加至黑名单</string>

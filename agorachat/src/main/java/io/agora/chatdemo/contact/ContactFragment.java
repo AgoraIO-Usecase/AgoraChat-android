@@ -21,8 +21,10 @@ import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.base.BaseListFragment;
+import io.agora.chatdemo.group.GroupContainerFragment;
+import io.agora.chatdemo.notification.NotificationMsgFragment;
 
-public class ContactFragment extends BaseInitFragment {
+public class ContactFragment extends BaseInitFragment implements EaseTitleBar.OnRightClickListener {
     private EaseTitleBar toolbar_contact;
     private TabLayout tab_layout;
     private ViewPager2 vp_fragment;
@@ -49,7 +51,7 @@ public class ContactFragment extends BaseInitFragment {
         super.initData();
         fragments.add(new ContactListFragment());
         fragments.add(new ContactListFragment());
-        fragments.add(new ContactListFragment());
+        fragments.add(new NotificationMsgFragment());
         setupWithViewPager();
     }
 
@@ -60,7 +62,7 @@ public class ContactFragment extends BaseInitFragment {
             @NonNull
             @Override
             public Fragment createFragment(int position) {
-                return new ContactListFragment();
+                return fragments.get(position);
             }
 
             @Override
@@ -87,13 +89,8 @@ public class ContactFragment extends BaseInitFragment {
     @Override
     protected void initListener() {
         super.initListener();
-        toolbar_contact.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
-            @Override
-            public void onRightClick(View view) {
-                //测试代码
-                //new GroupContainerFragment().show(getChildFragmentManager(),"GroupContainerFragment");
-            }
-        });
+        toolbar_contact.setOnRightClickListener(this);
+        //new GroupContainerFragment().show(getChildFragmentManager(),"GroupContainerFragment");
         tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -104,6 +101,8 @@ public class ContactFragment extends BaseInitFragment {
                     layoutParams.height = (int) EaseUtils.dip2px(mContext, 28);
                     title.setGravity(Gravity.CENTER);
                 }
+
+
             }
 
             @Override
@@ -122,5 +121,18 @@ public class ContactFragment extends BaseInitFragment {
                 toolbar_contact.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public void onRightClick(View view) {
+        switch (tab_layout.getSelectedTabPosition()) {
+            case  0:
+                break;
+            case  1:
+                new GroupContainerFragment().show(getChildFragmentManager(),"GroupContainerFragment");
+                break;
+            case  2:
+                break;
+        }
     }
 }

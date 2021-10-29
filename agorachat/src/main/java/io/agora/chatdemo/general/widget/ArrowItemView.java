@@ -161,14 +161,24 @@ public class ArrowItemView extends ConstraintLayout {
     public void setAvatar(int resourceId) {
         avatar.setImageResource(resourceId);
     }
+    public void setAvatarVisiablity(int visiablity){
+        avatar.setVisibility(visiablity);
+    }
+
+    public void setAvatarMargin(int left, int top, int right, int bottom){
+        ConstraintLayout.LayoutParams params = (LayoutParams) avatar.getLayoutParams();
+        params.setMargins(left, top, right, bottom);
+    }
 
     public void setAvatarHeight(int height){
         ViewGroup.LayoutParams params = avatar.getLayoutParams();
         params.height=height;
+        avatar.setLayoutParams(params);
     }
     public void setAvatarWidth(int width){
         ViewGroup.LayoutParams params = avatar.getLayoutParams();
         params.width=width;
+        avatar.setLayoutParams(params);
     }
 
     public void setTitleColor(int titleColor) {

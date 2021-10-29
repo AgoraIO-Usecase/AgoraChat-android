@@ -21,13 +21,13 @@ import io.agora.chat.uikit.conversation.EaseConversationListFragment;
 import io.agora.chat.uikit.conversation.model.EaseConversationSetStyle;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BaseActivity;
+import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.contact.ContactFragment;
 import io.agora.chatdemo.conversation.ConversationListFragment;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.me.AboutMeFragment;
 
-public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
     private Fragment mConversationListFragment, mFriendsFragment, mAboutMeFragment;
     private Fragment mCurrentFragment;
@@ -35,17 +35,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private int[] badgeIds = {R.layout.badge_home, R.layout.badge_contacts};
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_contacts_msg};
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView(savedInstanceState);
-        initListener();
-        initData();
+    protected int getLayoutId() {
+        return R.layout.activity_main;
     }
 
-    private void initView(Bundle savedInstanceState) {
+    public void initView(Bundle savedInstanceState) {
         navView = findViewById(R.id.nav_view);
         //navView.setItemIconTintList(null);
         switchToHome();
@@ -53,11 +48,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         addTabBadge();
     }
 
-    private void initListener() {
+    public void initListener() {
         navView.setOnNavigationItemSelectedListener(this);
     }
 
-    private void initData() {
+    public void initData() {
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
     }
 

@@ -1,6 +1,7 @@
 package io.agora.chatdemo.notification;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,12 @@ class NotaficationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
             super(itemBinding.getRoot());
             this.itemBinding=itemBinding;
         }
+
+        @Override
+        public void initView(View itemView) {
+
+        }
+
         @Override
         public void setData(ChatMessage msg, int position) {
             try {

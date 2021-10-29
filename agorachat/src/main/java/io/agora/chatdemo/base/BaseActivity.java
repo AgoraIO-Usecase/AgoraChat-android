@@ -275,7 +275,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme
      */
     public void setFitSystemForTheme(boolean fitSystemForTheme) {
-        setFitSystemForTheme(fitSystemForTheme, R.color.white);
+        setFitSystemForTheme(fitSystemForTheme, "#FeFFFFFF");
         setStatusBarTextColor(false);
     }
 

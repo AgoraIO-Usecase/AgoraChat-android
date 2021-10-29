@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 
+import io.agora.chat.ChatClient;
+import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
@@ -132,6 +134,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.iv_chat :
                 showToast("聊天");
+                sendMessage();
                 break;
             case R.id.item_block_contact :
                 //viewModel.addUserToBlackList(username, true);
@@ -140,5 +143,10 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
                 //viewModel.deleteContact(username);
                 break;
         }
+    }
+
+    private void sendMessage() {
+        ChatMessage mes = ChatMessage.createTxtSendMessage("Hello", username);
+        ChatClient.getInstance().chatManager().sendMessage(mes);
     }
 }

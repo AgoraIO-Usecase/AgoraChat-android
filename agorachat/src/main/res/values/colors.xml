@@ -22,6 +22,9 @@
     <color name="color_title_text">#000000</color>
     <color name="color_alert">#FF14CC</color>
     <color name="color_search_bg">#F2F2F2</color>
+    <color name="color_text_hint">#ffcccccc</color>
+    <color name="color_window_bg">@color/white</color>
+    <color name="color_divider">#fff2f2f2</color>
 
     <color name="sign_edit_text_bg">#F2F2F2</color>
     <color name="sign_btn_bg">#FF114EFF</color>

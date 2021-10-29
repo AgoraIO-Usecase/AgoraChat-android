@@ -7,5 +7,15 @@
         <item name="colorOnPrimary">@color/colorAccent</item>
         <item name="textAllCaps">false</item>
         <!-- Customize your theme here. -->
+        <!-- Customize EditText text color -->
+        <item name="android:editTextColor">@color/black</item>
+        <!-- Customize text cursor -->
+        <item name="android:textCursorDrawable">@drawable/demo_text_cursor_drawable</item>
+        <!-- Customize text color hint -->
+        <item name="android:textColorHint">@color/color_text_hint</item>
+        <item name="android:windowBackground">@color/color_window_bg</item>
+        <item name="android:divider">@drawable/demo_default_divider_list</item>
+        <!-- remove button default shadow effect -->
+        <item name="android:buttonStyle">@style/Button.BorderLess</item>
     </style>
 </resources>

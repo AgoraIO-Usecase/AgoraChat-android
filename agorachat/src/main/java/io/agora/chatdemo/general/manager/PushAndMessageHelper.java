@@ -18,7 +18,6 @@ import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.constant.DemoConstant;
-import io.agora.chatdemo.general.db.entity.InviteMessage;
 import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
@@ -84,66 +83,6 @@ public class PushAndMessageHelper {
         return null;
     }
 
-    /**
-     * 获取系统消息内容
-     * @param msg
-     * @return
-     */
-    public static String getSystemMessage(InviteMessage msg) {
-        InviteMessageStatus status = msg.getStatusEnum();
-        if(status == null) {
-            return "";
-        }
-        String messge;
-        Context context = DemoApplication.getInstance();
-        StringBuilder builder = new StringBuilder(context.getString(status.getMsgContent()));
-        switch (status) {
-            case BEINVITEED:
-            case AGREED:
-            case BEREFUSED:
-                messge = String.format(builder.toString(), msg.getFrom());
-                break;
-            case BEAGREED:
-                messge = builder.toString();
-                break;
-            case BEAPPLYED:
-            case GROUPINVITATION:
-                messge = String.format(builder.toString(), msg.getFrom(), msg.getGroupName());
-                break;
-            case GROUPINVITATION_ACCEPTED:
-            case GROUPINVITATION_DECLINED:
-            case MULTI_DEVICE_GROUP_APPLY_ACCEPT:
-            case MULTI_DEVICE_GROUP_APPLY_DECLINE:
-            case MULTI_DEVICE_GROUP_INVITE:
-            case MULTI_DEVICE_GROUP_INVITE_ACCEPT:
-            case MULTI_DEVICE_GROUP_INVITE_DECLINE:
-            case MULTI_DEVICE_GROUP_KICK:
-            case MULTI_DEVICE_GROUP_BAN:
-            case MULTI_DEVICE_GROUP_ALLOW:
-            case MULTI_DEVICE_GROUP_ASSIGN_OWNER:
-            case MULTI_DEVICE_GROUP_ADD_ADMIN:
-            case MULTI_DEVICE_GROUP_REMOVE_ADMIN:
-            case MULTI_DEVICE_GROUP_ADD_MUTE:
-            case MULTI_DEVICE_GROUP_REMOVE_MUTE:
-                messge = String.format(builder.toString(), msg.getGroupInviter());
-                break;
-            case MULTI_DEVICE_CONTACT_ADD:
-            case MULTI_DEVICE_CONTACT_BAN:
-            case MULTI_DEVICE_CONTACT_ALLOW:
-            case MULTI_DEVICE_CONTACT_ACCEPT:
-            case MULTI_DEVICE_CONTACT_DECLINE:
-                messge = String.format(builder.toString(), msg.getFrom());
-                break;
-            case REFUSED:
-            case MULTI_DEVICE_GROUP_APPLY:
-                messge = builder.toString();
-                break;
-            default:
-                messge = "";
-                break;
-        }
-        return messge;
-    }
 
     /**
      * 获取系统消息内容

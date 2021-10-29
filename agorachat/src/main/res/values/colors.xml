@@ -34,4 +34,8 @@
     <color name="contact_color_item_header_bg">#fff2f2f2</color>
     <color name="contact_color_item_title">#ff333333</color>
     <color name="contact_base_color_divider">#fff2f2f2</color>
+    <color name="color_light_gray_999999">#999999</color>
+
+
+    <color name="group_blue_154dfe">#154dfe</color>
 </resources>

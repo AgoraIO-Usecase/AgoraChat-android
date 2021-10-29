@@ -6,26 +6,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.databinding.FragmentGroupBaseBinding;
+import io.agora.chatdemo.general.utils.CommonUtils;
 
 /**
  * 底部弹出fragment基类，封装弹出、隐藏逻辑
  */
-public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
+public abstract class BaseBottomSheetFragment extends BottomSheetDialogFragment  {
     /**
      * 顶部向下偏移量
      */
     private int topOffset = 0;
     private BottomSheetBehavior mBehavior;
-    private View dialogView;
+    protected FragmentGroupBaseBinding baseBinding;
+    protected TextView titlebarRightText;
 
     @NonNull
     @Override
@@ -38,18 +43,55 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        dialogView = inflater.inflate(R.layout.fragment_group_base, container, false);
-        return dialogView;
+        baseBinding = FragmentGroupBaseBinding.inflate(LayoutInflater.from(requireContext()), container, false);
+        return baseBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initView();
+        initData();
+        initListener();
+    }
+
+    private void initData() {
+        titlebarRightText.setText(R.string.cancel);
+        titlebarRightText.setTextColor(ContextCompat.getColor(requireContext(), R.color.group_blue_154dfe));
+        baseBinding.titlebar.setTitle(getTitle());
+    }
+
+    /**
+     * 设置标题时子类重写这个方法
+     * @return
+     */
+    protected abstract String getTitle();
+
+    private void initListener() {
+        titlebarRightText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hide();
+            }
+        });
+    }
+
+    private void initView() {
+        titlebarRightText = baseBinding.titlebar.getRightText();
+        baseBinding.titlebar.setRightLayoutVisibility(View.VISIBLE);
+        baseBinding.titlebar.setLeftLayoutVisibility(View.GONE);
+        titlebarRightText.setTextSize(CommonUtils.getSpDimen(requireContext(), R.dimen.text_size_big));
+        baseBinding.titlebar.setTitleSize(CommonUtils.getSpDimen(requireContext(),R.dimen.text_size_big_18));
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (dialogView != null) {
+        if (baseBinding.getRoot() != null) {
             getDialog().setCanceledOnTouchOutside(true);
-            ViewGroup.LayoutParams layoutParams = dialogView.getLayoutParams();
+            ViewGroup.LayoutParams layoutParams = baseBinding.getRoot().getLayoutParams();
             layoutParams.height = getHeight();
-            mBehavior = BottomSheetBehavior.from((View) dialogView.getParent());
+            mBehavior = BottomSheetBehavior.from((View) baseBinding.getRoot().getParent());
             mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
@@ -61,19 +103,19 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
         return getResources().getDisplayMetrics().heightPixels - getTopOffset();
     }
 
-    public int getTopOffset() {
+    protected int getTopOffset() {
         return topOffset;
     }
 
-    public void setTopOffset(int topOffset) {
+    protected void setTopOffset(int topOffset) {
         this.topOffset = topOffset;
     }
 
-    public BottomSheetBehavior<FrameLayout> getBehavior() {
+    protected BottomSheetBehavior<FrameLayout> getBehavior() {
         return mBehavior;
     }
 
-    public void hide() {
+    protected void hide() {
         if (mBehavior != null) {
             mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }

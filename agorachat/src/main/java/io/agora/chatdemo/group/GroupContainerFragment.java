@@ -8,13 +8,9 @@ import androidx.annotation.Nullable;
 
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
+import io.agora.chatdemo.general.utils.CommonUtils;
 
-/**
- * Created by 许成谱 on 2021/10/25 0025 19:21.
- * qq:1550540124
- * 热爱生活每一天！
- */
-public class GroupContainerFragment extends BaseBottomSheetFragment {
+public  class GroupContainerFragment extends BaseBottomSheetFragment {
 
     @Override
     public void onViewCreated(@NonNull  View view, @Nullable  Bundle savedInstanceState) {
@@ -26,6 +22,10 @@ public class GroupContainerFragment extends BaseBottomSheetFragment {
                 .addToBackStack("GroupCreateFragment")
                 .commit();
         setTopOffset(300);
+    }
+    @Override
+    protected String getTitle() {
+        return CommonUtils.getString(requireContext(),R.string.group_create_title);
     }
 
 }

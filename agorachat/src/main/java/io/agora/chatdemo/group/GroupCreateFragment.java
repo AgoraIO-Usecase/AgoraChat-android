@@ -1,11 +1,16 @@
 package io.agora.chatdemo.group;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
@@ -28,6 +33,7 @@ public class GroupCreateFragment extends ContactListFragment {
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         etSearch.setVisibility(View.VISIBLE);
+        sideBarContact.setVisibility(View.GONE);
     }
 
     @Override
@@ -41,7 +47,7 @@ public class GroupCreateFragment extends ContactListFragment {
         AbsListView.LayoutParams headviewParams=new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout headView = new LinearLayout(mContext);
         headView.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) CommonUtils.getDimen(mContext,R.dimen.common_arrow_item_view_height));
+        LinearLayout.LayoutParams itemViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) CommonUtils.getAbsDimen(mContext,R.dimen.common_arrow_item_view_height));
         for (Pair<Integer, Integer> data : datas) {
             ArrowItemView itemView = new ArrowItemView(mContext);
             itemView.setAvatar(data.first);
@@ -50,14 +56,31 @@ public class GroupCreateFragment extends ContactListFragment {
             itemView.setAvatarHeight(UIUtils.dp2px(mContext,40));
             itemView.setAvatarWidth(UIUtils.dp2px(mContext, 40));
             itemView.setTitle(CommonUtils.getString(mContext, data.second));
-            itemView.setTitleSize(UIUtils.px2dp(mContext, (int) CommonUtils.getDimen(mContext, R.dimen.text_size_big)));
+            itemView.setTitleSize(UIUtils.px2dp(mContext, (int) CommonUtils.getAbsDimen(mContext, R.dimen.text_size_big)));
             itemView.setArrow(R.drawable.arrow_right);
-            itemView.setLayoutParams(params);
+            itemView.setLayoutParams(itemViewParams);
             headView.addView(itemView);
         }
         headView.setLayoutParams(headviewParams);
+
+        LinearLayout.LayoutParams contactsParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView contacts=new TextView(mContext);
+        contacts.setText(R.string.group_contacts);
+        contacts.setLayoutParams(contactsParams);
+        contacts.setGravity(Gravity.LEFT);
+        contacts.setTextSize(CommonUtils.getSpDimen(mContext,R.dimen.text_size_small));
+        contacts.setPadding((int)CommonUtils.getAbsDimen(mContext,R.dimen.margin_15),(int)CommonUtils.getAbsDimen(mContext,R.dimen.margin_2),(int)CommonUtils.getAbsDimen(mContext,R.dimen.margin_15),(int)CommonUtils.getAbsDimen(mContext,R.dimen.margin_2));
+        contacts.setTextColor(ContextCompat.getColor(mContext,R.color.color_light_gray_999999));
+        headView.addView(contacts);
         ((EaseRecyclerView)mRecyclerView).addHeaderView(headView);
 
         mRecyclerView.setNestedScrollingEnabled(false);
+    }
+    protected void checkSearchContent(String content) {
+        if(TextUtils.isEmpty(content)) {
+            srlContactRefresh.setEnabled(true);
+        }else {
+            srlContactRefresh.setEnabled(false);
+        }
     }
 }

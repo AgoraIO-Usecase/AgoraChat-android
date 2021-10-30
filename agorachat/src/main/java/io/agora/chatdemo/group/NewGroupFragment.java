@@ -89,8 +89,7 @@ public class NewGroupFragment extends BaseInitFragment implements BottomSheetChi
 
     @Override
     public Fragment getBottomSheetContainerFragment() {
-        Fragment parentFragment = getParentFragment();
-        return parentFragment;
+        return getParentFragment();
     }
 
     private void checkGroupInfo() {

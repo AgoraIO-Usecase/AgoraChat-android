@@ -64,6 +64,17 @@
     <string name="group_no_more_than">No More Than 2000</string>
     <string name="group_allow_members_to_invite">Allow Members to Invite</string>
 
+    <string name="em_public_group_information">公开群资料</string>
+    <string name="group_owner">群主</string>
+    <string name="em_public_group_introduce">简介</string>
+    <string name="em_public_group_introduce_hint">暂无简介</string>
+    <string name="em_public_group_verification_information">填写验证信息</string>
+    <string name="em_public_group_request_to_join">请求加入</string>
+    <string name="em_public_group_add">加入群聊</string>
+    <string name="send_the_request_is">发送请求成功，等待群主同意</string>
+    <string name="Join_the_group_chat">加入群聊成功</string>
+
+
     <string name="contact_detail_block_contact">Block Contact</string>
     <string name="contact_detail_delete_contact">Delete Contact</string>
     <string name="contact_detail_show_id">AgoraID: %1$s</string>

@@ -7,9 +7,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import io.agora.chatdemo.DemoApplication;
 
-/**
- * 与UI相关的工具类
- */
 
 public class UIUtils {
 
@@ -25,6 +22,10 @@ public class UIUtils {
     public static int px2dp(Context context, int px) {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (px / density + 0.5);
+    }
+    public static int px2sp(Context context, int px) {
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (px / scaledDensity + 0.5);
     }
 
     public static void hideKeyboard(View view){

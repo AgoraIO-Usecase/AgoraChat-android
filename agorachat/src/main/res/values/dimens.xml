@@ -12,6 +12,7 @@
     <dimen name="text_size_big_20">20sp</dimen>
 
     <dimen name="avatar_big_size">140dp</dimen>
+    <dimen name="margin_2">2dp</dimen>
     <dimen name="margin_12">12dp</dimen>
     <dimen name="margin_15">15dp</dimen>
     <dimen name="margin_10">10dp</dimen>
@@ -23,5 +24,7 @@
     <dimen name="common_serch_text_height">32dp</dimen>
     <dimen name="common_arrow_item_avatar_height">40dp</dimen>
     <dimen name="common_arrow_item_view_height">54dp</dimen>
+
+    <dimen name="common_item_height">54dp</dimen>
 
 </resources>

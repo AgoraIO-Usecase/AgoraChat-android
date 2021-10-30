@@ -9,8 +9,7 @@ import io.agora.chatdemo.general.db.dao.EmUserDao;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
 
 
-@Database(entities = {EmUserEntity.class
-        },
+@Database(entities = {EmUserEntity.class},
         version = 1)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {

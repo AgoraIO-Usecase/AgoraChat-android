@@ -143,8 +143,9 @@ public class ArrowItemView extends ConstraintLayout {
 
     public EaseImageView getAvatar() { return avatar; }
 
-
-
+    public String getTitle(){
+        return tvTitle.getText().toString().trim();
+    }
 
     public void setTitle(String title) {
         tvTitle.setText(title);

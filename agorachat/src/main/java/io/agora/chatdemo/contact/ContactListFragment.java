@@ -148,7 +148,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     protected void searchText(String content) {
         checkSearchContent(content);
     }
-    private void checkSearchContent(String content) {
+    protected void checkSearchContent(String content) {
         if(TextUtils.isEmpty(content)) {
             mListAdapter.setData(mData);
             sideBarContact.setVisibility(View.VISIBLE);

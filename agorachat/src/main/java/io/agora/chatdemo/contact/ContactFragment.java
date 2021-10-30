@@ -20,7 +20,7 @@ import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
-import io.agora.chatdemo.base.BaseListFragment;
+import io.agora.chatdemo.group.GroupContactManageFragment;
 import io.agora.chatdemo.group.GroupContainerFragment;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
 
@@ -29,7 +29,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     private TabLayout tab_layout;
     private ViewPager2 vp_fragment;
     private int[] titles = {R.string.contact_tab_title_friends, R.string.contact_tab_title_groups, R.string.contact_tab_title_requests};
-    private ArrayList<BaseListFragment> fragments=new ArrayList();
+    private ArrayList<BaseInitFragment> fragments=new ArrayList();
 
     @Override
     protected int getLayoutId() {
@@ -50,7 +50,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     protected void initData() {
         super.initData();
         fragments.add(new ContactListFragment());
-        fragments.add(new ContactListFragment());
+        fragments.add(new GroupContactManageFragment());
         fragments.add(new NotificationMsgFragment());
         setupWithViewPager();
     }

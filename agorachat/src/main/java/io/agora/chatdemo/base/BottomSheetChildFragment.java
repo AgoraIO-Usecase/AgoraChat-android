@@ -2,6 +2,7 @@ package io.agora.chatdemo.base;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
 
 import io.agora.chatdemo.R;
 
@@ -33,5 +34,14 @@ public interface BottomSheetChildFragment {
 
     default boolean isShowTitlebarLeftLayout() {
         return false;
+    }
+
+    Fragment getBottomSheetContainerFragment();
+
+    default void startFrament(Fragment fragment, String tag) {
+        Fragment parentFragment = getBottomSheetContainerFragment();
+        if (parentFragment != null && parentFragment instanceof BottomSheetContainerFragment) {
+            ((BottomSheetContainerFragment) parentFragment).startFragment(fragment, tag);
+        }
     }
 }

@@ -35,7 +35,7 @@ public class GroupContainerFragment extends BaseBottomSheetFragment implements B
         }
         getChildFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fl_container, fragment.getClass(), null, tag)
+                .replace(R.id.fl_container, fragment,  tag)
                 .addToBackStack(null)
                 .commit();
         fragmentStack.add((BottomSheetChildFragment) fragment);
@@ -50,7 +50,7 @@ public class GroupContainerFragment extends BaseBottomSheetFragment implements B
             titlebarRightText.setText(currentFragment.getTitleBarRightText());
             titlebarRightText.setTextColor(ContextCompat.getColor(requireContext(), currentFragment.getTitlebarRightTextColor()));
             if (currentFragment.isShowTitlebarLeftLayout()) {
-                baseBinding.titlebar.setLeftImageResource(R.drawable.ease_mm_title_back);
+                baseBinding.titlebar.setLeftImageResource(R.drawable.titlebar_back);
             } else {
                 baseBinding.titlebar.setLeftLayoutVisibility(View.GONE);
             }

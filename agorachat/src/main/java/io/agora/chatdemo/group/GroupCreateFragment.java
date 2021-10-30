@@ -11,13 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BottomSheetChildFragment;
-import io.agora.chatdemo.base.BottomSheetContainerFragment;
 import io.agora.chatdemo.contact.ContactListFragment;
 import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
@@ -96,7 +96,7 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
             int tag = (int) v.getTag();
             switch (tag) {
                 case R.drawable.new_group:
-                    createNewGroup();
+                    startFrament(new NewGroupFragment(), null);
                     break;
                 case R.drawable.join_a_group:
 
@@ -127,10 +127,8 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
         return R.color.group_blue_154dfe;
     }
 
-    private void createNewGroup() {
-        if (getParentFragment() != null && getParentFragment() instanceof BottomSheetContainerFragment) {
-            ((BottomSheetContainerFragment) getParentFragment()).startFragment(new NewGroupFragment(), null);
-        }
+    @Override
+    public Fragment getBottomSheetContainerFragment() {
+        return getParentFragment();
     }
-
 }

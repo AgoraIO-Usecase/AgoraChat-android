@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BottomSheetChildFragment;
+import io.agora.chatdemo.base.BottomSheetChildHelper;
 import io.agora.chatdemo.contact.ContactListFragment;
 import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
@@ -28,7 +28,7 @@ import io.agora.chatdemo.general.widget.ArrowItemView;
  * qq:1550540124
  * 热爱生活每一天！
  */
-public class GroupCreateFragment extends ContactListFragment implements View.OnClickListener, BottomSheetChildFragment {
+public class GroupCreateFragment extends ContactListFragment implements View.OnClickListener, BottomSheetChildHelper {
     private ArrayList<Pair<Integer, Integer>> datas = new ArrayList();
     private LinearLayout headView;
 

@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment;
 
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
-import io.agora.chatdemo.base.BottomSheetChildFragment;
+import io.agora.chatdemo.base.BottomSheetChildHelper;
 
 /**
  * Created by 许成谱 on 2021/10/29 0029 20:16.
  * qq:1550540124
  */
-public class NewGroupFragment extends BaseInitFragment implements BottomSheetChildFragment {
+public class NewGroupFragment extends BaseInitFragment implements BottomSheetChildHelper {
     private EditText edtDesc;
     private TextView tvCount;
     @Override

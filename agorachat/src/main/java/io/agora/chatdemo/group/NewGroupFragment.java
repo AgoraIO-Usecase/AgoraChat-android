@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
@@ -85,11 +84,6 @@ public class NewGroupFragment extends BaseInitFragment implements BottomSheetChi
     @Override
     public boolean isShowTitlebarLeftLayout() {
         return true;
-    }
-
-    @Override
-    public Fragment getBottomSheetContainerFragment() {
-        return getParentFragment();
     }
 
     private void checkGroupInfo() {

@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.main;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -16,8 +16,9 @@ import io.agora.chatdemo.base.BaseBottomSheetFragment;
 import io.agora.chatdemo.base.BottomSheetChildHelper;
 import io.agora.chatdemo.base.BottomSheetContainerHelper;
 import io.agora.chatdemo.general.utils.CommonUtils;
+import io.agora.chatdemo.group.GroupCreateFragment;
 
-public class GroupContainerFragment extends BaseBottomSheetFragment implements BottomSheetContainerHelper {
+public class BottomSheetContainerFragment extends BaseBottomSheetFragment implements BottomSheetContainerHelper {
 
     private BottomSheetChildHelper currentChild;
     protected TextView titlebarRightText;

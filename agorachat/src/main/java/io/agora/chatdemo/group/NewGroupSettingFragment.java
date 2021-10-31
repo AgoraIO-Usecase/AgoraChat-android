@@ -1,7 +1,5 @@
 package io.agora.chatdemo.group;
 
-import androidx.fragment.app.Fragment;
-
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.base.BottomSheetChildHelper;
@@ -27,8 +25,4 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
         return true;
     }
 
-    @Override
-    public Fragment getBottomSheetContainerFragment() {
-        return getParentFragment();
-    }
 }

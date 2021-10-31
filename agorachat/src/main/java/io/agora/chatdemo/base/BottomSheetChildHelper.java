@@ -36,10 +36,10 @@ public interface BottomSheetChildHelper {
         return false;
     }
 
-    Fragment getBottomSheetContainerFragment();
+    Fragment getParentFragment();
 
     default void startFrament(Fragment fragment, String tag) {
-        Fragment parentFragment = getBottomSheetContainerFragment();
+        Fragment parentFragment = getParentFragment();
         if (parentFragment != null && parentFragment instanceof BottomSheetContainerHelper) {
             ((BottomSheetContainerHelper) parentFragment).startFragment(fragment, tag);
         }

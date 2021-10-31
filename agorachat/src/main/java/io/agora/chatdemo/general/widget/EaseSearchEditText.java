@@ -104,6 +104,9 @@ public class EaseSearchEditText extends AppCompatEditText {
         if(left == null) {
             left = ContextCompat.getDrawable(mContext, R.drawable.search);
         }
+        if(right==null) {
+            right=ContextCompat.getDrawable(mContext, R.drawable.search_close_small);
+        }
         if(left != null && (mLeftWidth != 0 && mLeftHeight != 0)) {
             left.setBounds(0, 0, (int)mLeftWidth, (int)mLeftHeight);
         }

@@ -96,7 +96,7 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
             int tag = (int) v.getTag();
             switch (tag) {
                 case R.drawable.new_group:
-                    startFrament(new NewGroupFragment(), null);
+                    startFrament(new NewGroupSettingFragment(), null);
                     break;
                 case R.drawable.join_a_group:
 

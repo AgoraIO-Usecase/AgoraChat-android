@@ -19,7 +19,7 @@ import io.agora.chatdemo.general.db.DemoDbHelper;
  * qq:1550540124
  * 热爱生活每一天
  */
-public class AddContactsFragment extends SearchFragment<String> implements AddContactAdapter.OnItemAddClickListener, BottomSheetChildHelper {
+public class AddContactsFragment extends SearchFragment<String> implements AddContactAdapter.OnItemSubViewClickListener, BottomSheetChildHelper {
     private AddContactViewModel mViewModel;
     @Override
     protected void initData() {
@@ -41,7 +41,7 @@ public class AddContactsFragment extends SearchFragment<String> implements AddCo
         }
         ((AddContactAdapter)mListAdapter).addLocalContacts(localUsers);
 
-        ((AddContactAdapter)mListAdapter).setOnItemAddClickListener(this);
+        mListAdapter.setOnItemSubViewClickListener(this);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class AddContactsFragment extends SearchFragment<String> implements AddCo
 
 
     @Override
-    public void onItemAddClick(View view, int position) {
+    public void onItemSubViewClick(View view, int position) {
         // 添加好友
         mViewModel.addContact((String) mListAdapter.getItem(position), getResources().getString(R.string.em_add_contact_add_a_friend));
     }

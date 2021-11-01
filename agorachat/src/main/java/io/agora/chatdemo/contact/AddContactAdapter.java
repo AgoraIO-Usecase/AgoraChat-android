@@ -18,9 +18,6 @@ import io.agora.chatdemo.R;
 public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
     private List<String> mContacts;
 
-    private OnItemAddClickListener mListener;
-
-    @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_item_search_list, parent, false));
     }
@@ -52,8 +49,8 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
                     mtvSearchAdd.setText(R.string.contact_adding);
                     mtvSearchAdd.setTextColor(ContextCompat.getColor(mContext,R.color.color_light_gray_999999));
                     mtvSearchAdd.setEnabled(false);
-                    if(mListener != null) {
-                        mListener.onItemAddClick(v, position);
+                    if(mItemSubViewListener != null) {
+                        mItemSubViewListener.onItemSubViewClick(v, position);
                     }
                 }
             });
@@ -72,21 +69,6 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
                 mtvSearchAdd.setEnabled(true);
             }
         }
-    }
-
-    /**
-     * 设置点击事件
-     * @param listener
-     */
-    public void setOnItemAddClickListener(OnItemAddClickListener listener) {
-        this.mListener = listener;
-    }
-
-    /**
-     * 条目添加事件
-     */
-    public interface OnItemAddClickListener {
-        void onItemAddClick(View view, int position);
     }
 
     public void addLocalContacts(List<String> contacts) {

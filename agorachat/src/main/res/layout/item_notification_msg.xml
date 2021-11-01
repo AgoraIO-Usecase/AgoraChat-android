@@ -6,7 +6,7 @@
     android:layout_height="102dp">
 
     <io.agora.chat.uikit.widget.EaseImageView
-        android:id="@+id/iv_user"
+        android:id="@+id/iv_from"
         android:layout_width="58dp"
         android:layout_height="58dp"
         android:layout_marginLeft="16dp"
@@ -23,7 +23,7 @@
         android:layout_marginTop="@dimen/margin_10"
         android:textColor="@color/color_main_text"
         android:textSize="16sp"
-        app:layout_constraintLeft_toRightOf="@id/iv_user"
+        app:layout_constraintLeft_toRightOf="@id/iv_from"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Jack" />
 
@@ -35,7 +35,7 @@
         android:layout_marginLeft="@dimen/margin_10"
         android:textColor="@color/color_main_text"
         android:textSize="14sp"
-        app:layout_constraintLeft_toRightOf="@id/iv_user"
+        app:layout_constraintLeft_toRightOf="@id/iv_from"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
         tools:text="aaaaaaaaaaaaaaaa" />
 
@@ -69,7 +69,7 @@
         android:layout_height="28dp"
         android:layout_marginRight="@dimen/margin_15"
         android:layout_marginBottom="@dimen/margin_10"
-        android:src="@drawable/delete"
+        android:src="@drawable/contacts_notification_delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 

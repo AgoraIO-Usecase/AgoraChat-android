@@ -10,7 +10,13 @@ import java.util.List;
 
 import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
+import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.BaseContactListFragment;
+import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.notification.viewmodels.NewFriendsViewModel;
 import io.agora.chatdemo.notification.viewmodels.NotifiationMsgsViewModel;
 
 /**
@@ -18,8 +24,9 @@ import io.agora.chatdemo.notification.viewmodels.NotifiationMsgsViewModel;
  * qq:1550540124
  * 热爱生活每一天！
  */
-public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage> {
+public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage> implements EaseBaseRecyclerViewAdapter.OnItemSubViewClickListener {
     private NotifiationMsgsViewModel mMsgsViewModel;
+    private NewFriendsViewModel mNewFriendViewModel;
     private List<ChatMessage> mData;
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -31,24 +38,69 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        mMsgsViewModel= new ViewModelProvider(this).get(NotifiationMsgsViewModel.class);
-        mMsgsViewModel.getChatMessageObservable().observe(this,datas -> {
+        mMsgsViewModel = new ViewModelProvider(this).get(NotifiationMsgsViewModel.class);
+        mNewFriendViewModel=new ViewModelProvider(this).get(NewFriendsViewModel.class);
+        mMsgsViewModel.getChatMessageObservable().observe(this, datas -> {
             srlContactRefresh.setRefreshing(false);
             mData = datas;
             mListAdapter.setData(datas);
         });
+
+        mNewFriendViewModel.agreeObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String message) {
+                    mMsgsViewModel.getAllMessages();
+                    EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
+                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
+                }
+            });
+        });
+        mNewFriendViewModel.refuseObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String message) {
+                    mMsgsViewModel.getAllMessages();
+                    EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
+                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
+                }
+            });
+        });
+
+        LiveDataBus messageChange = mMsgsViewModel.getMessageChange();
+        messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+    }
+
+    private void loadList(EaseEvent change) {
+        if(change == null) {
+            return;
+        }
+        if(change.isMessageChange() || change.isNotifyChange()
+                || change.isGroupLeave() || change.isChatRoomLeave()
+                || change.isContactChange()
+                || change.type == EaseEvent.TYPE.CHAT_ROOM || change.isGroupChange()) {
+            mMsgsViewModel.getAllMessages();
+        }
     }
 
     @Override
     protected void initData() {
         super.initData();
-        mMsgsViewModel.getChatMessages();
+        mMsgsViewModel.getAllMessages();
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        mListAdapter.setOnItemSubViewClickListener(this);
     }
 
     @Override
     public void onRefresh() {
         super.onRefresh();
-        mMsgsViewModel.getChatMessages();
+        mMsgsViewModel.getAllMessages();
     }
 
     @Override
@@ -73,6 +125,18 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
 
     @Override
     protected EaseBaseRecyclerViewAdapter<ChatMessage> initAdapter() {
-        return super.initAdapter();
+        return new NotaficationMsgAdapter();
+    }
+
+    @Override
+    public void onItemSubViewClick(View view, int position) {
+        switch (view.getId()) {
+            case R.id.btn_accept :
+                mNewFriendViewModel.agreeInvite(mData.get(position));
+                break;
+            case  R.id.iv_delete:
+                mNewFriendViewModel.refuseInvite(mData.get(position));
+                break;
+        }
     }
 }

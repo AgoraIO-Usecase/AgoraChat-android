@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="EaseSidebar">
+        <attr name="ease_side_bar_top_text" format="reference|string"/>
+        <attr name="ease_side_bar_text_color" format="reference|color"/>
+        <attr name="ease_side_bar_text_size" format="dimension"/>
+        <attr name="ease_side_bar_background" format="reference|color"/>
+        <attr name="ease_side_bar_focus_bg_color" format="reference|color"/>
+        <attr name="ease_side_bar_delay_disappear_time" format="reference|integer"/>
+        <attr name="ease_side_bar_head_arrays" format="reference"/>
+    </declare-styleable>
+
     <declare-styleable name="ArrowItemView">
         <attr name="arrowItemTitle" format="string|reference"/>
         <attr name="arrowItemTitleColor" format="color|reference"/>

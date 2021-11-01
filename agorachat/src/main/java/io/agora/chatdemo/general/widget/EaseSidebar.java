@@ -20,6 +20,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -27,16 +29,19 @@ import android.view.View;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import io.agora.chatdemo.R;
+import io.agora.util.EMLog;
 
 
 /**
  * side bar
  */
 public class EaseSidebar extends View{
+	private static final int RESET = 1;
 	private Paint paint;
 	private float ItemHeight;
 	private Context context;
@@ -50,6 +55,22 @@ public class EaseSidebar extends View{
 	private int mBgColor;
 	private int mWidth, mHeight;
 	private float mTextCoefficient = 1;
+	private int pointer = -1;
+	private Paint selectedPaint;
+	private int mFocusBgColor;
+	private int delayDisappearTime;
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(@NonNull Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case RESET:
+					pointer = -1;
+					invalidate();
+			        break;
+			}
+		}
+	};
 
 	public EaseSidebar(Context context) {
 		this(context, null);
@@ -81,6 +102,13 @@ public class EaseSidebar extends View{
 			}else {
 				mTextColor = a.getColor(R.styleable.EaseSidebar_ease_side_bar_text_color, Color.parseColor(DEFAULT_COLOR));
 			}
+			int focusBgColor = a.getResourceId(R.styleable.EaseSidebar_ease_side_bar_focus_bg_color, -1);
+			if(focusBgColor != -1) {
+				mFocusBgColor = ContextCompat.getColor(context, focusBgColor);
+			}else {
+				mFocusBgColor = a.getColor(R.styleable.EaseSidebar_ease_side_bar_focus_bg_color, Color.TRANSPARENT);
+			}
+			delayDisappearTime = a.getInteger(R.styleable.EaseSidebar_ease_side_bar_delay_disappear_time, 500);
 			mTextSize = a.getDimension(R.styleable.EaseSidebar_ease_side_bar_text_size, DEFAULT_TEXT_SIZE);
 			int bgId = a.getResourceId(R.styleable.EaseSidebar_ease_side_bar_background, -1);
 			if(bgId != -1) {
@@ -107,6 +135,14 @@ public class EaseSidebar extends View{
 		paint.setColor(mTextColor);
 		paint.setTextAlign(Align.CENTER);
 		paint.setTextSize(mTextSize);
+	}
+
+	@Override
+	protected void onDetachedFromWindow() {
+		super.onDetachedFromWindow();
+		if(handler != null) {
+		    handler.removeCallbacksAndMessages(null);
+		}
 	}
 
 	@Override
@@ -137,28 +173,40 @@ public class EaseSidebar extends View{
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		EMLog.d("EaseSidebar", "onDraw pointer: "+pointer);
 		if(mBgColor != Color.TRANSPARENT) {
 			canvas.drawColor(mBgColor);
 		}
 		float center = getWidth() / 2;
 		ItemHeight = getHeight() / sections.length;
 		for (int i = sections.length - 1; i > -1; i--) {
+			if (i == pointer && mFocusBgColor != Color.TRANSPARENT) {
+				paint.setColor(mFocusBgColor);
+				canvas.drawCircle(center, ItemHeight * (i+0.75f), (float) (mTextSize * 0.6), paint);
+				paint.setColor(Color.WHITE);
+			} else {
+				paint.setColor(mTextColor);
+			}
 			canvas.drawText(sections[i], center, ItemHeight * (i+1), paint);
 		}
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		int pointer = sectionForPoint(event.getY());
+		pointer = sectionForPoint(event.getY());
 		String section = sections[pointer];
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
+				handler.removeCallbacksAndMessages(null);
+				invalidate();
 				// Provides external interfaces for developers to operate
 				if(mListener != null) {
 					mListener.onActionDown(event, section);
 				}
 				return true;
 			case MotionEvent.ACTION_MOVE:
+				handler.removeCallbacksAndMessages(null);
+				invalidate();
 				// Provides external interfaces for developers to operate
 				if(mListener != null) {
 					mListener.onActionMove(event, section);
@@ -166,6 +214,8 @@ public class EaseSidebar extends View{
 				return true;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
+				handler.removeCallbacksAndMessages(null);
+				handler.sendEmptyMessageDelayed(RESET, delayDisappearTime);
 				if(mListener != null) {
 					mListener.onActionUp(event);
 				}

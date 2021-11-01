@@ -88,4 +88,9 @@ public class AddContactsFragment extends SearchFragment<String> implements AddCo
     public int getTitlebarTitle() {
         return R.string.contact_add_contacts;
     }
+
+    @Override
+    public boolean isShowTitlebarLeftLayout() {
+        return true;
+    }
 }

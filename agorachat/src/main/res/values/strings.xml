@@ -80,6 +80,19 @@
     <string name="contact_detail_show_id">AgoraID: %1$s</string>
     <string name="contact_detail_start_chat">Chat</string>
 
+    <string name="contact_add">add</string>
+    <string name="contact_adding">adding</string>
+    <string name="contact_added">added</string>
+    <string name="contact_add_contacts">Add Contacts</string>
+
+    <string name="em_add_contact_item_button_text">添加好友</string>
+    <string name="em_add_contact_item_button_text_added">已添加</string>
+    <string name="em_add_contact_not_add_myself">不能添加自己</string>
+    <string name="em_add_contact_user_already_in_contactlist">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
+    <string name="em_add_contact_this_user_is_already_your_friend">此用户已是你的好友</string>
+    <string name="em_add_contact_add_a_friend">加个好友呗</string>
+    <string name="em_add_contact_send_successful">已发送好友邀请</string>
+
     <string name="account_logoff_notification">下线通知</string>
     <string name="account_connect_conflict">同一帐号已在其他设备登录</string>
     <string name="account_user_remove">此用户已被移除</string>

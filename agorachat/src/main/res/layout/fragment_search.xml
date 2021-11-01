@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <io.agora.chatdemo.general.widget.EaseSearchEditText
+        android:id="@+id/et_search"
+        android:layout_marginTop="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:focusableInTouchMode="true"
+        android:visibility="visible"
+        android:layout_marginStart="@dimen/margin_view_distance_border"
+        android:layout_marginEnd="@dimen/margin_view_distance_border"
+        app:search_edit_drawable_left_width="20dp"
+        app:search_edit_drawable_left_height="20dp"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_contact_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/et_search"
+        android:layout_marginTop="5dp">
+
+        <io.agora.chat.uikit.widget.EaseRecyclerView
+            android:id="@+id/recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</RelativeLayout>

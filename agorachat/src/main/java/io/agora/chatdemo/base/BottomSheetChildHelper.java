@@ -10,7 +10,7 @@ import io.agora.chatdemo.R;
  * Created by 许成谱 on 2021/10/29 0029 19:39.
  * qq:1550540124
  */
-public interface BottomSheetChildFragment {
+public interface BottomSheetChildHelper {
 
     //more details by user choose
     default @StringRes
@@ -36,12 +36,12 @@ public interface BottomSheetChildFragment {
         return false;
     }
 
-    Fragment getBottomSheetContainerFragment();
+    Fragment getParentFragment();
 
     default void startFrament(Fragment fragment, String tag) {
-        Fragment parentFragment = getBottomSheetContainerFragment();
-        if (parentFragment != null && parentFragment instanceof BottomSheetContainerFragment) {
-            ((BottomSheetContainerFragment) parentFragment).startFragment(fragment, tag);
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment != null && parentFragment instanceof BottomSheetContainerHelper) {
+            ((BottomSheetContainerHelper) parentFragment).startFragment(fragment, tag);
         }
     }
 }

@@ -11,13 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BottomSheetChildFragment;
+import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.contact.AddContactsFragment;
 import io.agora.chatdemo.contact.ContactListFragment;
 import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
@@ -28,7 +28,7 @@ import io.agora.chatdemo.general.widget.ArrowItemView;
  * qq:1550540124
  * 热爱生活每一天！
  */
-public class GroupCreateFragment extends ContactListFragment implements View.OnClickListener, BottomSheetChildFragment {
+public class GroupCreateFragment extends ContactListFragment implements View.OnClickListener, BottomSheetChildHelper {
     private ArrayList<Pair<Integer, Integer>> datas = new ArrayList();
     private LinearLayout headView;
 
@@ -36,7 +36,7 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
     protected void initArgument() {
         super.initArgument();
         datas.clear();
-        datas.add(new Pair(R.drawable.new_group, R.string.group_add_contacts));
+        datas.add(new Pair(R.drawable.new_group, R.string.group_new_group));
         datas.add(new Pair(R.drawable.join_a_group, R.string.group_join_a_group));
         datas.add(new Pair(R.drawable.public_group, R.string.group_public_group_list));
         datas.add(new Pair(R.drawable.group_add_contacts, R.string.group_add_contacts));
@@ -96,7 +96,7 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
             int tag = (int) v.getTag();
             switch (tag) {
                 case R.drawable.new_group:
-                    startFrament(new NewGroupFragment(), null);
+                    startFrament(new NewGroupSettingFragment(), null);
                     break;
                 case R.drawable.join_a_group:
 
@@ -105,7 +105,7 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
 
                     break;
                 case R.drawable.group_add_contacts:
-
+                    startFrament(new AddContactsFragment(),null);
                     break;
             }
         }
@@ -125,10 +125,5 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
     @Override
     public int getTitlebarRightTextColor() {
         return R.color.group_blue_154dfe;
-    }
-
-    @Override
-    public Fragment getBottomSheetContainerFragment() {
-        return getParentFragment();
     }
 }

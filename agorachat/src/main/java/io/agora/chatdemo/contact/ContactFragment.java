@@ -21,7 +21,7 @@ import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.group.GroupContactManageFragment;
-import io.agora.chatdemo.group.GroupContainerFragment;
+import io.agora.chatdemo.main.BottomSheetContainerFragment;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
 
 public class ContactFragment extends BaseInitFragment implements EaseTitleBar.OnRightClickListener {
@@ -127,9 +127,8 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     public void onRightClick(View view) {
         switch (tab_layout.getSelectedTabPosition()) {
             case  0:
-                break;
             case  1:
-                new GroupContainerFragment().show(getChildFragmentManager(),"GroupContainerFragment");
+                new BottomSheetContainerFragment().show(getChildFragmentManager(),"ContainerFragment");
                 break;
             case  2:
                 break;

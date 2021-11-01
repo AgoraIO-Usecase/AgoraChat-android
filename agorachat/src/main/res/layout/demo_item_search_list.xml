@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="74dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_itease_layout">
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/iv_search_user_icon"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:scaleType="fitXY"
+        app:ease_shape_type="round"
+        android:visibility="gone"
+        android:src="@drawable/ease_default_avatar" />
+
+    <TextView
+        app:layout_goneMarginLeft="@dimen/margin_15"
+        android:id="@+id/tv_search_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/iv_search_user_icon"
+        app:layout_constraintBottom_toTopOf="@id/tv_search_user_id"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textAllCaps="false"
+        android:maxLines="1"
+        android:layout_marginStart="10dp"
+        app:layout_goneMarginBottom="10dp"
+        android:textSize="@dimen/text_size_big"
+        android:maxLength="35"
+        android:ellipsize="end"
+        android:textColor="@color/ease_conversation_color_item_name"
+        tools:text="AgoraID: Double ddddddddddddddddddddddddddddd"/>
+
+    <TextView
+        android:id="@+id/tv_search_user_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/iv_search_user_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_marginLeft="3dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:padding="7dp"
+        android:textColor="@color/ease_conversation_color_item_message"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="sldfjsljsldf递四方速递地方水电"/>
+
+    <TextView
+        android:id="@+id/tv_search_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_2"
+        android:layout_centerVertical="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="@dimen/margin_15"
+        tools:text="add"
+        android:textColor="@color/contacts_blue_005fff"
+        android:textSize="@dimen/text_size_big" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

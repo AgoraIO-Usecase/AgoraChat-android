@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.main;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -11,23 +11,23 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Stack;
 
-import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
-import io.agora.chatdemo.base.BottomSheetChildFragment;
-import io.agora.chatdemo.base.BottomSheetContainerFragment;
+import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.base.BottomSheetContainerHelper;
 import io.agora.chatdemo.general.utils.CommonUtils;
+import io.agora.chatdemo.group.GroupCreateFragment;
 
-public class GroupContainerFragment extends BaseBottomSheetFragment implements BottomSheetContainerFragment {
+public class BottomSheetContainerFragment extends BaseBottomSheetFragment implements BottomSheetContainerHelper {
 
-    private BottomSheetChildFragment currentFragment;
+    private BottomSheetChildHelper currentChild;
     protected TextView titlebarRightText;
-    private Stack<BottomSheetChildFragment> fragmentStack = new Stack<>();
+    private Stack<BottomSheetChildHelper> childStack = new Stack<>();
 
 
     @Override
     public void startFragment(@NonNull Fragment fragment, @Nullable String tag) {
-        if (!(fragment instanceof BottomSheetChildFragment)) {
+        if (!(fragment instanceof BottomSheetChildHelper)) {
             throw new IllegalArgumentException("only ButtomSheetChildFragment can be started here ");
         }
         if (TextUtils.isEmpty(tag)) {
@@ -35,21 +35,21 @@ public class GroupContainerFragment extends BaseBottomSheetFragment implements B
         }
         getChildFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fl_container, fragment,  tag)
+                .replace(R.id.fl_container, fragment, tag)
                 .addToBackStack(null)
                 .commit();
-        fragmentStack.add((BottomSheetChildFragment) fragment);
-        currentFragment = (BottomSheetChildFragment) fragment;
+        childStack.add((BottomSheetChildHelper) fragment);
+        currentChild = (BottomSheetChildHelper) fragment;
         initTileBar();
     }
 
     private void initTileBar() {
         //对标题的设置下沉到子fragment中
-        if (currentFragment != null) {
-            baseBinding.titlebar.getTitle().setText(currentFragment.getTitlebarTitle());
-            titlebarRightText.setText(currentFragment.getTitleBarRightText());
-            titlebarRightText.setTextColor(ContextCompat.getColor(requireContext(), currentFragment.getTitlebarRightTextColor()));
-            if (currentFragment.isShowTitlebarLeftLayout()) {
+        if (currentChild != null) {
+            baseBinding.titlebar.getTitle().setText(currentChild.getTitlebarTitle());
+            titlebarRightText.setText(currentChild.getTitleBarRightText());
+            titlebarRightText.setTextColor(ContextCompat.getColor(requireContext(), currentChild.getTitlebarRightTextColor()));
+            if (currentChild.isShowTitlebarLeftLayout()) {
                 baseBinding.titlebar.setLeftImageResource(R.drawable.titlebar_back);
             } else {
                 baseBinding.titlebar.setLeftLayoutVisibility(View.GONE);
@@ -75,25 +75,20 @@ public class GroupContainerFragment extends BaseBottomSheetFragment implements B
     @Override
     protected void initListener() {
         super.initListener();
-        titlebarRightText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!currentFragment.onTitlebarRightTextViewClick()) {
-                    hide();
+        titlebarRightText.setOnClickListener(v -> {
+                    if (!currentChild.onTitlebarRightTextViewClick()) {
+                        hide();
+                    }
                 }
-            }
-        });
-        baseBinding.titlebar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
-            @Override
-            public void onBackPress(View view) {
-                if (getChildFragmentManager().getBackStackEntryCount() > 1) {
-                    getChildFragmentManager().popBackStack();
-                    fragmentStack.pop();
-                    currentFragment = fragmentStack.peek();
-                    initTileBar();
-                } else {
-                    hide();
-                }
+        );
+        baseBinding.titlebar.setOnBackPressListener(v -> {
+            if (getChildFragmentManager().getBackStackEntryCount() > 1) {
+                getChildFragmentManager().popBackStack();
+                childStack.pop();
+                currentChild = childStack.peek();
+                initTileBar();
+            } else {
+                hide();
             }
         });
     }

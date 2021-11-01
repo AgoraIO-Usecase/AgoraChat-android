@@ -25,6 +25,7 @@ public class PublicGroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group
         private TextView mName;
         private TextView mSignature;
         private TextView mUnreadMsgNumber;
+        private TextView memberNum;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -37,6 +38,7 @@ public class PublicGroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group
             mName = findViewById(R.id.name);
             mSignature = findViewById(R.id.signature);
             mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
+            memberNum = findViewById(R.id.tv_members_num);
             mHeader.setVisibility(View.GONE);
         }
 
@@ -44,8 +46,6 @@ public class PublicGroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group
         public void setData(GroupInfo item, int position) {
             mAvatar.setImageResource(R.drawable.group_list_avatar);
             mName.setText(item.getGroupName());
-            mSignature.setVisibility(View.VISIBLE);
-            mSignature.setText(item.getGroupId()+"");
         }
     }
 }

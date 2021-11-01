@@ -1,6 +1,7 @@
 package io.agora.chatdemo.group;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -8,49 +9,62 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.chat.CursorResult;
 import io.agora.chat.Group;
 import io.agora.chat.GroupInfo;
+import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BaseInitFragment;
+import io.agora.chatdemo.base.BottomSheetChildHelper;
 import io.agora.chatdemo.chat.ChatActivity;
+import io.agora.chatdemo.contact.SearchFragment;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 
-public class GroupPublicContactManageFragment extends BaseInitFragment implements OnRefreshLoadMoreListener, OnItemClickListener {
-    public SmartRefreshLayout srlRefresh;
+public class GroupPublicContactManageFragment extends SearchFragment implements OnRefreshLoadMoreListener, OnItemClickListener, BottomSheetChildHelper {
     public RecyclerView rvList;
     public PublicGroupContactAdapter mAdapter;
     private int page_size = 20;
     private String cursor;
     private GroupContactViewModel viewModel;
     private List<Group> allJoinGroups;
+    protected List<GroupInfo> lastData;
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.demo_fragment_group_public_contact_manage;
-    }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        srlRefresh = findViewById(R.id.srl_refresh);
-        rvList = findViewById(R.id.rv_list);
+        rvList = findViewById(R.id.recycleview);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        srlRefresh.setOnRefreshLoadMoreListener(this);
+        srlContactRefresh.setOnRefreshLoadMoreListener(this);
+    }
+
+    @Override
+    protected void searchText(String content) {
+        if (TextUtils.isEmpty(content)) {
+            mAdapter.setData(lastData);
+        } else {
+            ArrayList<GroupInfo> groupInfos = new ArrayList<>(lastData);
+            for (int i = 0; i < groupInfos.size(); i++) {
+                if (!groupInfos.get(i).getGroupName().contains(content)) {
+                    groupInfos.remove(i);
+                    i--;
+                }
+            }
+            mAdapter.setData(groupInfos);
+        }
     }
 
     @Override
@@ -62,14 +76,16 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
                 public void onSuccess(CursorResult<GroupInfo> data) {
                     List<GroupInfo> groups = data.getData();
                     cursor = data.getCursor();
+                    lastData.clear();
+                    lastData.addAll(groups);
                     mAdapter.setData(groups);
                 }
 
                 @Override
                 public void hideLoading() {
                     super.hideLoading();
-                    if(srlRefresh != null) {
-                        srlRefresh.finishRefresh();
+                    if (srlContactRefresh != null) {
+                        srlContactRefresh.finishRefresh();
                     }
                 }
             });
@@ -81,14 +97,15 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
                 public void onSuccess(CursorResult<GroupInfo> data) {
                     cursor = data.getCursor();
                     List<GroupInfo> groups = data.getData();
+                    lastData.addAll(groups);
                     mAdapter.addData(groups);
                 }
 
                 @Override
                 public void hideLoading() {
                     super.hideLoading();
-                    if(srlRefresh != null) {
-                        srlRefresh.finishLoadMore();
+                    if (srlContactRefresh != null) {
+                        srlContactRefresh.finishLoadMore();
                     }
                 }
             });
@@ -117,12 +134,17 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
     @Override
     protected void initData() {
         super.initData();
+        lastData = new ArrayList<>();
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new PublicGroupContactAdapter();
         rvList.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
 
         //getData();
+    }
+
+    @Override
+    protected EaseBaseRecyclerViewAdapter initAdapter() {
+        return new PublicGroupContactAdapter();
     }
 
     public void getData() {
@@ -131,7 +153,7 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
-        if(cursor != null) {
+        if (cursor != null) {
             viewModel.getMorePublicGroups(page_size, cursor);
         }
     }
@@ -144,10 +166,15 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
     @Override
     public void onItemClick(View view, int position) {
         GroupInfo item = mAdapter.getItem(position);
-        if(GroupHelper.isJoinedGroup(allJoinGroups, item.getGroupId())) {
+        if (GroupHelper.isJoinedGroup(allJoinGroups, item.getGroupId())) {
             ChatActivity.actionStart(mContext, item.getGroupId(), DemoConstant.CHATTYPE_GROUP);
-        }else {
+        } else {
 //            GroupSimpleDetailActivity.actionStart(mContext, item.getGroupId());
         }
+    }
+
+    @Override
+    public boolean isShowTitlebarLeftLayout() {
+        return true;
     }
 }

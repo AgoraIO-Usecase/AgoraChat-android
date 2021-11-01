@@ -102,7 +102,7 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
 
                     break;
                 case R.drawable.public_group:
-
+                    startFrament(new GroupPublicContactManageFragment(),null);
                     break;
                 case R.drawable.group_add_contacts:
                     startFrament(new AddContactsFragment(),null);

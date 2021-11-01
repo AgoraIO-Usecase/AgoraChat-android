@@ -1,5 +1,6 @@
 package io.agora.chatdemo.group;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.chat.Group;
@@ -22,6 +24,7 @@ public class GroupContactManageFragment extends GroupPublicContactManageFragment
     private GroupContactAdapter mAdapter;
     private int pageIndex;
     private static final int PAGE_SIZE = 20;
+    protected List<Group> lastData;
 
     @Override
     protected void initViewModel() {
@@ -31,14 +34,16 @@ public class GroupContactManageFragment extends GroupPublicContactManageFragment
             parseResource(response, new OnResourceParseCallback<List<Group>>() {
                 @Override
                 public void onSuccess(List<Group> data) {
+                    lastData.clear();
+                    lastData.addAll(data);
                     mAdapter.setData(data);
                 }
 
                 @Override
                 public void hideLoading() {
                     super.hideLoading();
-                    if(srlRefresh != null) {
-                        srlRefresh.finishRefresh();
+                    if(srlContactRefresh != null) {
+                        srlContactRefresh.finishRefresh();
                     }
                 }
             });
@@ -48,6 +53,7 @@ public class GroupContactManageFragment extends GroupPublicContactManageFragment
                 @Override
                 public void onSuccess(List<Group> data) {
                     if(data != null) {
+                        lastData.addAll(data);
                         mAdapter.addData(data);
                     }
                 }
@@ -55,8 +61,8 @@ public class GroupContactManageFragment extends GroupPublicContactManageFragment
                 @Override
                 public void hideLoading() {
                     super.hideLoading();
-                    if(srlRefresh != null) {
-                        srlRefresh.finishLoadMore();
+                    if(srlContactRefresh != null) {
+                        srlContactRefresh.finishLoadMore();
                     }
                 }
             });
@@ -73,6 +79,7 @@ public class GroupContactManageFragment extends GroupPublicContactManageFragment
 
     @Override
     protected void initData() {
+        lastData = new ArrayList<>();
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new GroupContactAdapter();
         rvList.setAdapter(mAdapter);
@@ -98,5 +105,21 @@ public class GroupContactManageFragment extends GroupPublicContactManageFragment
         //跳转到群聊页面
         Group group = mAdapter.getItem(position);
         ChatActivity.actionStart(mContext, group.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+    }
+
+    @Override
+    protected void searchText(String content) {
+        if (TextUtils.isEmpty(content)) {
+            mAdapter.setData(lastData);
+        } else {
+            ArrayList<Group> groupInfos = new ArrayList<>(lastData);
+            for (int i = 0; i < groupInfos.size(); i++) {
+                if (!groupInfos.get(i).getGroupName().contains(content)) {
+                    groupInfos.remove(i);
+                    i--;
+                }
+            }
+            mAdapter.setData(groupInfos);
+        }
     }
 }

@@ -28,6 +28,7 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group> {
         private TextView mSignature;
         private TextView mLabel;
         private TextView mUnreadMsgNumber;
+        private TextView memberNum;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -41,19 +42,20 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group> {
             mSignature = findViewById(R.id.signature);
             mLabel = findViewById(R.id.label);
             mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
+            memberNum = findViewById(R.id.tv_members_num);
         }
 
         @Override
         public void setData(Group item, int position) {
             mAvatar.setImageResource(R.drawable.group_list_avatar);
-            mSignature.setVisibility(View.VISIBLE);
             mName.setText(item.getGroupName());
             mSignature.setText(item.getGroupId()+"");
             mLabel.setVisibility(View.GONE);
-            if(isOwner(item.getOwner())) {
-                mLabel.setVisibility(View.VISIBLE);
-                mLabel.setText(R.string.group_owner);
-            }
+//            if(isOwner(item.getOwner())) {
+//                mLabel.setVisibility(View.VISIBLE);
+//                mLabel.setText(R.string.group_owner);
+//            }
+            memberNum.setText("("+item.getMemberCount()+")");
         }
     }
 

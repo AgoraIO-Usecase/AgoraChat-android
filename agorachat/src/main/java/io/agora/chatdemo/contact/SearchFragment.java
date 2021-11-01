@@ -5,7 +5,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseListFragment;
@@ -17,7 +18,7 @@ import io.agora.chatdemo.general.widget.EaseSearchEditText;
  * 热爱生活每一天
  */
 public abstract class SearchFragment<T> extends BaseListFragment<T> {
-    protected SwipeRefreshLayout srlContactRefresh;
+    protected SmartRefreshLayout srlContactRefresh;
     protected EaseSearchEditText etSearch;
 
     @Override

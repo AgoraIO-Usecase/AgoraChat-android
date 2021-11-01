@@ -64,7 +64,7 @@ public class BottomSheetContainerFragment extends BaseBottomSheetFragment implem
         titlebarRightText = baseBinding.titlebar.getRightText();
         baseBinding.titlebar.setRightLayoutVisibility(View.VISIBLE);
         titlebarRightText.setTextSize(CommonUtils.getSpDimen(requireContext(), R.dimen.text_size_big));
-        baseBinding.titlebar.setTitleSize(CommonUtils.getSpDimen(requireContext(), R.dimen.text_size_big_18));
+        baseBinding.titlebar.getTitle().setTextSize(R.dimen.text_size_big_18);
 
         GroupCreateFragment groupCreateFragment = new GroupCreateFragment();
         startFragment(groupCreateFragment, groupCreateFragment.getClass().getSimpleName());

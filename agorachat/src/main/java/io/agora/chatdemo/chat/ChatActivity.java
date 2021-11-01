@@ -1,19 +1,22 @@
 package io.agora.chatdemo.chat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
-import io.agora.chat.uikit.chat.interfaces.OnOtherTypingListener;
+import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity {
@@ -58,22 +61,45 @@ public class ChatActivity extends BaseInitActivity {
                     public boolean onChatExtendMenuItemClick(View view, int itemId) {
                         EMLog.e("TAG", "onChatExtendMenuItemClick");
                         if(itemId == R.id.extend_item_take_picture) {
-                            return true;
+                            // check if has permissions
+                            if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
+                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                        , new String[]{Manifest.permission.CAMERA}, null);
+                                return true;
+                            }
+                            if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                        , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
+                                return true;
+                            }
+                            return false;
+                        }else if(itemId == R.id.extend_item_picture || itemId == R.id.extend_item_file || itemId == R.id.extend_item_video) {
+                            if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                        , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
+                                return true;
+                            }
+                            return false;
                         }
                         return false;
-                    }
-                })
-                .turnOnTypingMonitor(true)
-                .setOnOtherTypingListener(new OnOtherTypingListener() {
-                    @Override
-                    public void onOtherTyping(String action) {
-
                     }
                 })
                 .setOnChatInputChangeListener(new OnChatInputChangeListener() {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         EMLog.e("TAG", "onTextChanged: s: "+s.toString());
+                    }
+                })
+                .setOnChatRecordTouchListener(new OnChatRecordTouchListener() {
+                    @Override
+                    public boolean onRecordTouch(View v, MotionEvent event) {
+                        // Check if has record audio permission
+                        if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.RECORD_AUDIO)) {
+                            PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                    , new String[]{Manifest.permission.RECORD_AUDIO}, null);
+                            return true;
+                        }
+                        return false;
                     }
                 })
                 .hideChatSendAvatar(true)

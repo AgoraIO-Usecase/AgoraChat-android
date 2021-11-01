@@ -29,9 +29,8 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 
-public class GroupPublicContactManageFragment extends SearchFragment implements OnRefreshLoadMoreListener, OnItemClickListener, BottomSheetChildHelper {
+public class GroupPublicContactManageFragment extends SearchFragment<GroupInfo> implements OnRefreshLoadMoreListener, OnItemClickListener, BottomSheetChildHelper {
     public RecyclerView rvList;
-    public PublicGroupContactAdapter mAdapter;
     private int page_size = 20;
     private String cursor;
     private GroupContactViewModel viewModel;
@@ -54,7 +53,7 @@ public class GroupPublicContactManageFragment extends SearchFragment implements 
     @Override
     protected void searchText(String content) {
         if (TextUtils.isEmpty(content)) {
-            mAdapter.setData(lastData);
+            mListAdapter.setData(lastData);
         } else {
             ArrayList<GroupInfo> groupInfos = new ArrayList<>(lastData);
             for (int i = 0; i < groupInfos.size(); i++) {
@@ -63,7 +62,7 @@ public class GroupPublicContactManageFragment extends SearchFragment implements 
                     i--;
                 }
             }
-            mAdapter.setData(groupInfos);
+            mListAdapter.setData(groupInfos);
         }
     }
 
@@ -78,7 +77,7 @@ public class GroupPublicContactManageFragment extends SearchFragment implements 
                     cursor = data.getCursor();
                     lastData.clear();
                     lastData.addAll(groups);
-                    mAdapter.setData(groups);
+                    mListAdapter.setData(groups);
                 }
 
                 @Override
@@ -98,7 +97,7 @@ public class GroupPublicContactManageFragment extends SearchFragment implements 
                     cursor = data.getCursor();
                     List<GroupInfo> groups = data.getData();
                     lastData.addAll(groups);
-                    mAdapter.addData(groups);
+                    mListAdapter.addData(groups);
                 }
 
                 @Override
@@ -136,9 +135,6 @@ public class GroupPublicContactManageFragment extends SearchFragment implements 
         super.initData();
         lastData = new ArrayList<>();
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
-        rvList.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(this);
-
         //getData();
     }
 
@@ -165,7 +161,7 @@ public class GroupPublicContactManageFragment extends SearchFragment implements 
 
     @Override
     public void onItemClick(View view, int position) {
-        GroupInfo item = mAdapter.getItem(position);
+        GroupInfo item = mListAdapter.getItem(position);
         if (GroupHelper.isJoinedGroup(allJoinGroups, item.getGroupId())) {
             ChatActivity.actionStart(mContext, item.getGroupId(), DemoConstant.CHATTYPE_GROUP);
         } else {

@@ -1,5 +1,6 @@
 package io.agora.chatdemo.main;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -25,6 +26,7 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.contact.ContactFragment;
 import io.agora.chatdemo.conversation.ConversationListFragment;
 import io.agora.chatdemo.general.db.DemoDbHelper;
+import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.me.AboutMeFragment;
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -54,6 +56,14 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     public void initData() {
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
+        checkNeedPermission();
+    }
+
+    private void checkNeedPermission() {
+        if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                    , new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, null);
+        }
     }
 
     private void switchToHome() {

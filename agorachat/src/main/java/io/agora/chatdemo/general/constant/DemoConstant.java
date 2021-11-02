@@ -87,4 +87,11 @@ public interface DemoConstant extends EaseConstant {
     String USER_CARD_NICK = "nickname";
     String USER_CARD_AVATAR = "avatar";
 
+     String GROUP_NAME="group_name";
+     String GROUP_DESC="group_desc";
+     String GROUP_REASON="group_reason";
+     String GROUP_PUBLIC="group_public";
+     String GROUP_ALLOW_INVITE="group_allow_invite";
+     String GROUP_MAX_USERS="group_max_users";
+
 }

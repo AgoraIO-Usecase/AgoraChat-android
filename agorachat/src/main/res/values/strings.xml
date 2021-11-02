@@ -2,6 +2,7 @@
     <string name="app_name">AgoraChat</string>
 
     <string name="loading">Loading&#8230;</string>
+    <string name="request">requesting&#8230;</string>
     <string name="ok">Enter</string>
     <string name="Network_error">Network error</string>
 
@@ -56,6 +57,7 @@
     <string name="group_join_a_group">Join a Group</string>
     <string name="group_public_group_list">Public Group List</string>
     <string name="group_add_contacts">Add Contacts</string>
+    <string name="group_add_members">Add Members</string>
     <string name="group_contacts">Contacts</string>
     <string name="group_name">Group Name</string>
     <string name="group_description">GROUP DESCRIPTION, NOT REQUIRED</string>
@@ -73,6 +75,29 @@
     <string name="em_public_group_add">加入群聊</string>
     <string name="send_the_request_is">发送请求成功，等待群主同意</string>
     <string name="Join_the_group_chat">加入群聊成功</string>
+
+    <string name="em_group_new_title">创建群组</string>
+    <string name="em_group_new_save">完成</string>
+    <string name="em_group_new_name">名称</string>
+    <string name="em_group_new_name_hint">请输入群组名称</string>
+    <string name="em_group_new_profile">简介</string>
+    <string name="em_group_new_profile_hint">请输入群组简介</string>
+    <string name="em_group_max_users">群组人数</string>
+    <string name="em_group_set_max_users">群组人数</string>
+    <string name="em_group_members">群组成员</string>
+    <string name="em_group_new_if_public">是否公开群组</string>
+    <string name="em_group_new_if_public_uncheck_hint">其他用户不能查找到此群</string>
+    <string name="em_group_new_if_public_check_hint">其他用户可以查找到此群</string>
+    <string name="em_group_new_open_invite">群成员是否有邀请权限</string>
+    <string name="em_group_new_open_invite_uncheck_hint">只允许群主邀请用户进群</string>
+    <string name="em_group_new_open_invite_check_hint">允许群成员邀请用户进群</string>
+    <string name="em_group_new_need_owner_approval_public">加入是否需要验证</string>
+    <string name="em_group_new_need_owner_approval_uncheck_hint">用户可以直接加入群组</string>
+    <string name="em_group_new_need_owner_approval_check_hint">用户加入群组需要群主同意</string>
+    <string name="em_group_new_name_cannot_be_empty">请完善请群信息</string>
+    <string name="em_group_new_member_limit">群组人数范围3-3000人</string>
+    <string name="em_group_new_success">群组创建成功</string>
+    <string name="em_group_new_invite_join_group">%1$s邀请加入群：%2$s</string>
 
 
     <string name="contact_detail_block_contact">Block Contact</string>
@@ -203,4 +228,5 @@
     <string name="has_been_send">已发送</string>
     <string name="group_create_title">Create</string>
     <string name="group_next">Next</string>
+
 </resources>

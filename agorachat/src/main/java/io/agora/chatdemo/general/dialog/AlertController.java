@@ -14,8 +14,6 @@ import androidx.collection.ArrayMap;
 
 
 class AlertController {
-
-
     private final Context mContext;
     private final Dialog dialog;
     private final Window window;
@@ -127,10 +125,11 @@ class AlertController {
 
     /**
      * 设置图片，具体工作交给viewhelper去干
+     *
      * @param viewId
      * @param resId
      */
-    private void setImageView(int viewId, int  resId) {
+    private void setImageView(int viewId, int resId) {
         viewHelper.setImageView(viewId, resId);
     }
 

@@ -31,6 +31,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private List<String> muteList;
     private List<String> checkedList;
     private String owner;
+    private OnSelectListener listener;
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
@@ -46,6 +47,12 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         if(isCheckModel) {
             checkedList = new ArrayList<>();
         }
+        notifyDataSetChanged();
+    }
+
+    public void setSelectedMembers(List<String> existMembers) {
+        checkedList=existMembers;
+        notifyDataSetChanged();
     }
 
     public void setOwner(String owner) {
@@ -137,19 +144,28 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                     .into(mAvatar);
             if(isCheckModel) {
                 cb_select.setVisibility(View.VISIBLE);
+                if(checkedList!=null&&checkedList.contains(username)) {
+                    cb_select.setSelected(true);
+                }else{
+                    cb_select.setSelected(false);
+                }
                 if(mOnItemClickListener != null) {
                     this.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            boolean checked = cb_select.isChecked();
-                            cb_select.setChecked(!checked);
-                            if(checkedList != null) {
-                                if(cb_select.isChecked() && !isContains(checkedList, username)) {
-                                    checkedList.add(username);
-                                }
-                                if(!cb_select.isChecked()) {
-                                    checkedList.remove(username);
-                                }
+                            boolean isSelected = cb_select.isSelected();
+                            cb_select.setSelected(!isSelected);
+                            if(checkedList == null) {
+                                checkedList=new ArrayList<>();
+                            }
+                            if(cb_select.isSelected() && !isContains(checkedList, username)) {
+                                checkedList.add(username);
+                            }
+                            if(!cb_select.isSelected()) {
+                                checkedList.remove(username);
+                            }
+                            if(listener != null) {
+                                listener.onSelected(v, checkedList);
                             }
                         }
                     });
@@ -169,5 +185,13 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
 
     private boolean isContains(List<String> data, String username) {
         return data != null && data.contains(username);
+    }
+
+    public void setOnSelectListener(OnSelectListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnSelectListener {
+        void onSelected(View v, List<String> selectedMembers);
     }
 }

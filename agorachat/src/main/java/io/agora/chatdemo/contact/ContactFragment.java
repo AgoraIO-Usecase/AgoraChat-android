@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -20,6 +21,10 @@ import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
+import io.agora.chatdemo.contact.viewmodels.ContactsViewModel;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.GroupContactManageFragment;
 import io.agora.chatdemo.main.BottomSheetContainerFragment;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
@@ -30,6 +35,8 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     private ViewPager2 vp_fragment;
     private int[] titles = {R.string.contact_tab_title_friends, R.string.contact_tab_title_groups, R.string.contact_tab_title_requests};
     private ArrayList<BaseInitFragment> fragments=new ArrayList();
+    private ContactsViewModel contactsViewModel;
+    private View dot;
 
     @Override
     protected int getLayoutId() {
@@ -53,6 +60,21 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
         fragments.add(new GroupContactManageFragment());
         fragments.add(new NotificationMsgFragment());
         setupWithViewPager();
+    }
+
+    @Override
+    protected void initViewModel() {
+        super.initViewModel();
+        contactsViewModel=new ViewModelProvider(this).get(ContactsViewModel.class);
+        contactsViewModel.getConversationObservable().observe(this,data->{
+            int unreadMsgCount = data.getUnreadMsgCount();
+            if(isNofificationMsgFragmentVisiable()&&unreadMsgCount>0) {
+                dot.setVisibility(View.VISIBLE);
+            }else{
+                dot.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     private void setupWithViewPager() {
@@ -79,11 +101,27 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
                 if(position == 0) {
                     title.setBackgroundResource(R.drawable.contact_tab_bg);
                 }
+                if(position==2) {
+                    dot=title;
+                }
                 title.setText(titles[position]);
             }
         });
         // setup with viewpager2
         mediator.attach();
+    }
+
+    private void loadData(EaseEvent change) {
+        if(change == null) {
+            return;
+        }
+        contactsViewModel.getMsgConversation();
+    }
+    public boolean isNofificationMsgFragmentVisiable(){
+        if(fragments!=null&&fragments.size()>=3) {
+            return fragments.get(2).getVisiableToUser();
+        }
+        return false;
     }
 
     @Override
@@ -101,8 +139,6 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
                     layoutParams.height = (int) EaseUtils.dip2px(mContext, 28);
                     title.setGravity(Gravity.CENTER);
                 }
-
-
             }
 
             @Override
@@ -119,8 +155,21 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
             @Override
             public void onPageSelected(int position) {
                 toolbar_contact.setVisibility(View.VISIBLE);
+                for(int i = 0; i < fragments.size(); i++) {
+                  if(i==position) {
+                      fragments.get(position).setVisiableToUser(true);
+                  }else{
+                      fragments.get(position).setVisiableToUser(false);
+                  }
+                }
+
             }
         });
+
+        LiveDataBus messageChange =  LiveDataBus.get();
+        messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
+        messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
+        messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
     }
 
     @Override

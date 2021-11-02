@@ -35,13 +35,15 @@ public class GroupPublicContactManageFragment extends SearchFragment<GroupInfo> 
     private String cursor;
     private GroupContactViewModel viewModel;
     private List<Group> allJoinGroups;
-    protected List<GroupInfo> lastData;
+    protected List<GroupInfo> lastData=new ArrayList<>();
 
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         rvList = findViewById(R.id.recycleview);
+
+        rvList.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -133,9 +135,8 @@ public class GroupPublicContactManageFragment extends SearchFragment<GroupInfo> 
     @Override
     protected void initData() {
         super.initData();
-        lastData = new ArrayList<>();
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
-        //getData();
+        getData();
     }
 
     @Override
@@ -162,11 +163,7 @@ public class GroupPublicContactManageFragment extends SearchFragment<GroupInfo> 
     @Override
     public void onItemClick(View view, int position) {
         GroupInfo item = mListAdapter.getItem(position);
-        if (GroupHelper.isJoinedGroup(allJoinGroups, item.getGroupId())) {
-            ChatActivity.actionStart(mContext, item.getGroupId(), DemoConstant.CHATTYPE_GROUP);
-        } else {
-//            GroupSimpleDetailActivity.actionStart(mContext, item.getGroupId());
-        }
+        ChatActivity.actionStart(mContext, item.getGroupId(), DemoConstant.CHATTYPE_GROUP);
     }
 
     @Override

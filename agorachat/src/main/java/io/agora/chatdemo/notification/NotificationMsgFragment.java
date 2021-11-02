@@ -66,7 +66,6 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
                 }
             });
         });
-
         LiveDataBus messageChange = mMsgsViewModel.getMessageChange();
         messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
@@ -82,6 +81,14 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
                 || change.isContactChange()
                 || change.type == EaseEvent.TYPE.CHAT_ROOM || change.isGroupChange()) {
             mMsgsViewModel.getAllMessages();
+        }
+    }
+
+    @Override
+    public void setVisiableToUser(boolean isVisiableToUser) {
+        super.setVisiableToUser(isVisiableToUser);
+        if(isVisiableToUser) {
+            mNewFriendViewModel.makeAllMsgRead();
         }
     }
 

@@ -21,6 +21,7 @@ import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 public class NotifiationMsgsViewModel extends AndroidViewModel {
 
     private SingleSourceLiveData<List<ChatMessage>> chatMessageObservable;
+
     private EaseNotificationMsgManager msgManager;
     private LiveDataBus messageObservable;
 
@@ -28,9 +29,11 @@ public class NotifiationMsgsViewModel extends AndroidViewModel {
     public NotifiationMsgsViewModel(@NonNull Application application) {
         super(application);
         chatMessageObservable = new SingleSourceLiveData<>();
+
         msgManager=EaseNotificationMsgManager.getInstance();
         messageObservable = LiveDataBus.get();
     }
+
 
     public SingleSourceLiveData<List<ChatMessage>> getChatMessageObservable() {
         return chatMessageObservable;
@@ -39,6 +42,7 @@ public class NotifiationMsgsViewModel extends AndroidViewModel {
     public void getAllMessages(){
         chatMessageObservable.setValue(msgManager.getAllMessages());
     }
+
 
     public void searchMsgs(String content) {
 

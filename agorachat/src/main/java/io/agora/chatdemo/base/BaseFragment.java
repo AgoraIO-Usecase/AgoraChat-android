@@ -26,6 +26,7 @@ import io.agora.chatdemo.general.utils.ToastUtils;
 
 public class BaseFragment extends Fragment {
     public BaseActivity mContext;
+    protected boolean isVisiableToUser;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -74,6 +75,14 @@ public class BaseFragment extends Fragment {
      */
     public void runOnUiThread(Runnable runnable) {
         EaseThreadManager.getInstance().runOnMainThread(runnable);
+    }
+
+    public void setVisiableToUser(boolean isVisiableToUser){
+        this.isVisiableToUser =isVisiableToUser;
+    }
+
+    public boolean getVisiableToUser(){
+        return isVisiableToUser;
     }
 
 

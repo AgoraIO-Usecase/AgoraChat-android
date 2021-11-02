@@ -10,13 +10,13 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chatdemo.contact.viewmodels.ContactsViewModel;
+import io.agora.chatdemo.contact.viewmodels.ContactsListViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
-    private ContactsViewModel mViewModel;
+    private ContactsListViewModel mViewModel;
     private List<EaseUser> mData;
 
     @Override
@@ -28,7 +28,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        mViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(ContactsListViewModel.class);
         mViewModel.getContactObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override

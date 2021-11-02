@@ -2,9 +2,13 @@ package io.agora.chatdemo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
@@ -16,18 +20,25 @@ import java.util.Map;
 import io.agora.CallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatManager;
+import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatOptions;
 import io.agora.chat.ChatRoomManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
+import io.agora.chat.uikit.models.EaseEmojicon;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.options.EaseAvatarOptions;
+import io.agora.chat.uikit.provider.EaseEmojiconInfoProvider;
+import io.agora.chat.uikit.provider.EaseFileIconProvider;
+import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
+import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.manager.UserProfileManager;
 import io.agora.chatdemo.general.models.DemoModel;
+import io.agora.chatdemo.notification.EventsMonitor;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -160,8 +171,68 @@ public class DemoHelper {
      */
     private void initEaseUI(Context context) {
         //添加ChatPresenter,ChatPresenter中添加了网络连接状态监听，
-        //EaseUIKit.getInstance().addChatPresenter(ChatPresenter.getInstance());
+        EaseUIKit.getInstance().addChatPresenter(EventsMonitor.getInstance());
         EaseUIKit.getInstance()
+                .setSettingsProvider(new EaseSettingsProvider() {
+                    @Override
+                    public boolean isMsgNotifyAllowed(ChatMessage message) {
+                        if(message == null){
+                            return demoModel.getSettingMsgNotification();
+                        }
+                        if(!demoModel.getSettingMsgNotification()){
+                            return false;
+                        }else{
+                            String chatUsename = null;
+                            List<String> notNotifyIds = null;
+                            // get user or group id which was blocked to show message notifications
+                            if (message.getChatType() == ChatMessage.ChatType.Chat) {
+                                chatUsename = message.getFrom();
+                                notNotifyIds = demoModel.getDisabledIds();
+                            } else {
+                                chatUsename = message.getTo();
+                                notNotifyIds = demoModel.getDisabledGroups();
+                            }
+
+                            if (notNotifyIds == null || !notNotifyIds.contains(chatUsename)) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public boolean isMsgSoundAllowed(ChatMessage message) {
+                        return demoModel.getSettingMsgSound();
+                    }
+
+                    @Override
+                    public boolean isMsgVibrateAllowed(ChatMessage message) {
+                        return demoModel.getSettingMsgVibrate();
+                    }
+
+                    @Override
+                    public boolean isSpeakerOpened() {
+                        return demoModel.getSettingMsgSpeaker();
+                    }
+                })
+                .setEmojiconInfoProvider(new EaseEmojiconInfoProvider() {
+                    @Override
+                    public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
+//                        EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
+//                        for(EaseEmojicon emojicon : data.getEmojiconList()){
+//                            if(emojicon.getIdentityCode().equals(emojiconIdentityCode)){
+//                                return emojicon;
+//                            }
+//                        }
+                        return null;
+                    }
+
+                    @Override
+                    public Map<String, Object> getTextEmojiconMapping() {
+                        return null;
+                    }
+                })
                 .setUserProvider(new EaseUserProfileProvider() {
                     @Override
                     public EaseUser getUser(String username) {
@@ -169,7 +240,40 @@ public class DemoHelper {
                     }
 
                 })
-                .setAvatarOptions(getAvatarOptions());
+                .setAvatarOptions(getAvatarOptions())
+                .setFileIconProvider(new EaseFileIconProvider() {
+                    @Override
+                    public Drawable getFileIcon(String filename) {
+                        return getFileDrawable(filename);
+                    }
+                });
+    }
+
+    private Drawable getFileDrawable(String filename) {
+        if(!TextUtils.isEmpty(filename)) {
+            Drawable drawable = null;
+            Context context = DemoApplication.getInstance();
+            Resources resources = context.getResources();
+            if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_image_file_suffix))) {
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
+            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_video_file_suffix))) {
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
+            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_audio_file_suffix))) {
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
+            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_word_file_suffix))) {
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_doc);
+            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_excel_file_suffix))) {
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_exl);
+            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_pdf_file_suffix))) {
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_pdf);
+            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_ppt_file_suffix))) {
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_ppt);
+            }else {
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_unknown);
+            }
+            return drawable;
+        }
+        return null;
     }
 
     /**

@@ -430,6 +430,66 @@ public class DemoModel {
     }
 
 
+    public void setDisabledGroups(List<String> groups){
+//        if(dao == null){
+//            dao = new UserDao(context);
+//        }
+//
+//        List<String> list = new ArrayList<String>();
+//        list.addAll(groups);
+//        for(int i = 0; i < list.size(); i++){
+//            if(EaseAtMessageHelper.get().getAtMeGroups().contains(list.get(i))){
+//                list.remove(i);
+//                i--;
+//            }
+//        }
+//
+//        dao.setDisabledGroups(list);
+//        valueCache.put(Key.DisabledGroups, list);
+    }
+
+    public List<String> getDisabledGroups(){
+        Object val = valueCache.get(Key.DisabledGroups);
+
+//        if(dao == null){
+//            dao = new UserDao(context);
+//        }
+//
+//        if(val == null){
+//            val = dao.getDisabledGroups();
+//            valueCache.put(Key.DisabledGroups, val);
+//        }
+
+        //noinspection unchecked
+        return (List<String>) val;
+    }
+
+    public void setDisabledIds(List<String> ids){
+//        if(dao == null){
+//            dao = new UserDao(context);
+//        }
+//
+//        dao.setDisabledIds(ids);
+//        valueCache.put(Key.DisabledIds, ids);
+    }
+
+    public List<String> getDisabledIds(){
+        Object val = valueCache.get(Key.DisabledIds);
+
+//        if(dao == null){
+//            dao = new UserDao(context);
+//        }
+//
+//        if(val == null){
+//            val = dao.getDisabledIds();
+//            valueCache.put(Key.DisabledIds, val);
+//        }
+
+        //noinspection unchecked
+        return (List<String>) val;
+    }
+
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,

@@ -10,4 +10,5 @@ import androidx.fragment.app.Fragment;
  */
 public interface BottomSheetContainerHelper {
     void startFragment(@NonNull Fragment fragment, @Nullable String tag);
+    void hide();
 }

@@ -2,15 +2,20 @@ package io.agora.chatdemo.group;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.utils.ToastUtils;
+import io.agora.chatdemo.general.widget.SwitchItemView;
 
 /**
  * Created by 许成谱 on 2021/10/29 0029 20:16.
@@ -18,12 +23,23 @@ import io.agora.chatdemo.base.BottomSheetChildHelper;
  */
 public class NewGroupSettingFragment extends BaseInitFragment implements BottomSheetChildHelper {
     private EditText edtDesc;
+    private EditText edtGroupName;
+    private EditText edtGroupNumber;
     private TextView tvCount;
+    private SwitchItemView swToPublic;
+    private SwitchItemView swInvite;
+    private int maxUsers = 200;
+    private static final int MAX_GROUP_USERS = 3000;
+    private static final int MIN_GROUP_USERS = 3;
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        edtGroupName = findViewById(R.id.edt_group_name);
+        edtGroupNumber = findViewById(R.id.edt_mumber_num);
         edtDesc=findViewById(R.id.edt_desc);
         tvCount=findViewById(R.id.tv_count);
+        swToPublic=findViewById(R.id.swi_to_public);
+        swInvite=findViewById(R.id.swi_allow_invite);
     }
 
     @Override
@@ -47,8 +63,6 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
                 }
             }
         });
-
-
 
     }
 
@@ -74,10 +88,29 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
 
     @Override
     public boolean onTitlebarRightTextViewClick() {
-        checkGroupInfo();
+
+        String groupName = edtGroupName.getText().toString().trim();
+        if(TextUtils.isEmpty(groupName)) {
+            ToastUtils.showToast(R.string.em_group_new_name_cannot_be_empty);
+            return true;
+        }
+        maxUsers=Integer.valueOf(edtGroupNumber.getText().toString().trim());
+        if(maxUsers < MIN_GROUP_USERS || maxUsers > MAX_GROUP_USERS) {
+            showToast(R.string.em_group_new_member_limit);
+            return true;
+        }
+        String desc = edtDesc.getText().toString();
+        String reason = getString(R.string.em_group_new_invite_join_group, DemoHelper.getInstance().getCurrentUser(), groupName);
+        NewGroupSelectContactsFragment fragment = new NewGroupSelectContactsFragment();
         Bundle bundle=new Bundle();
-        //ToDo
-        startFrament(new NewGroupSelectContactsFragment(),null);
+        bundle.putString(DemoConstant.GROUP_NAME,groupName);
+        bundle.putString(DemoConstant.GROUP_DESC,desc);
+        bundle.putString(DemoConstant.GROUP_REASON,reason);
+        bundle.putBoolean(DemoConstant.GROUP_PUBLIC,swToPublic.getSwitch().isChecked());
+        bundle.putBoolean(DemoConstant.GROUP_ALLOW_INVITE,swInvite.getSwitch().isChecked());
+        bundle.putInt(DemoConstant.GROUP_MAX_USERS,maxUsers);
+        fragment.setArguments(bundle);
+        startFrament(fragment,null);
         return true;
     }
 
@@ -87,30 +120,6 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
     }
 
     private void checkGroupInfo() {
-//        String groupName = itemGroupName.getTvContent().getText().toString().trim();
-//        if(TextUtils.isEmpty(groupName)) {
-//            new SimpleDialogFragment.Builder(mContext)
-//                    .setTitle(R.string.em_group_new_name_cannot_be_empty)
-//                    .show();
-//            return;
-//        }
-//        if(maxUsers < MIN_GROUP_USERS || maxUsers > MAX_GROUP_USERS) {
-//            showToast(R.string.em_group_new_member_limit);
-//            return;
-//        }
-//        String desc = itemGroupProfile.getTvContent().getText().toString();
-//        EMGroupOptions option = new EMGroupOptions();
-//        option.maxUsers = maxUsers;
-//        option.inviteNeedConfirm = true;
-//        String reason = getString(R.string.em_group_new_invite_join_group, DemoHelper.getInstance().getCurrentUser(), groupName);
-//        if(itemSwitchPublic.getSwitch().isChecked()){
-//            option.style = itemSwitchInvite.getSwitch().isChecked() ? EMGroupStyle.EMGroupStylePublicJoinNeedApproval : EMGroupStyle.EMGroupStylePublicOpenJoin;
-//        }else{
-//            option.style = itemSwitchInvite.getSwitch().isChecked() ? EMGroupStyle.EMGroupStylePrivateMemberCanInvite : EMGroupStyle.EMGroupStylePrivateOnlyOwnerInvite;
-//        }
-//        if(newmembers == null) {
-//            newmembers = new String[]{};
-//        }
-//        viewModel.createGroup(groupName, desc, newmembers, reason, option);
+
     }
 }

@@ -148,8 +148,6 @@ public class AlertDialog extends Dialog {
         }
 
         public AlertDialog create() {
-            // We can't use Dialog's 3-arg constructor with the createThemeContextWrapper param,
-            // so we always have to re-set the theme
             final AlertDialog dialog = new AlertDialog(P.mContext, P.mThemeResId);
             P.apply(dialog.mAlert);
             dialog.setCancelable(P.mCancelable);

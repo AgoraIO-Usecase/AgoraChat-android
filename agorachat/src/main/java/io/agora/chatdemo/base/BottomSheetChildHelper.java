@@ -44,4 +44,10 @@ public interface BottomSheetChildHelper {
             ((BottomSheetContainerHelper) parentFragment).startFragment(fragment, tag);
         }
     }
+    default void  hide(){
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment != null && parentFragment instanceof BottomSheetContainerHelper) {
+            ((BottomSheetContainerHelper) parentFragment).hide();
+        }
+    }
 }

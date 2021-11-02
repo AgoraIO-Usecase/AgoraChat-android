@@ -83,6 +83,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                     //跳转到群组聊天页面
                     ChatActivity.actionStart(mContext, data.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+                    hide();
                 }
 
                 @Override

@@ -10,6 +10,19 @@ import androidx.annotation.NonNull;
 import io.agora.chatdemo.R;
 
 
+/**
+ * Sample:
+ * val dialog = AlertDialog.Builder(this)
+ *                 .setContentView(R.layout.dialog_reset_pwd)
+ *                 .setText(R.id.tv_message, msg)
+ *                 .setLayoutParams(UIUtils.dp2px(this, 256), ViewGroup.LayoutParams.WRAP_CONTENT)
+ *                 .show()
+ *         dialog.setOnClickListener(R.id.btn_input_again, object : View.OnClickListener {
+ *             override fun onClick(v: View?) {
+ *                 dialog.dismiss()
+ *             }
+ *         })
+ */
 public class AlertDialog extends Dialog {
     //具体的实现类
     final AlertController mAlert;

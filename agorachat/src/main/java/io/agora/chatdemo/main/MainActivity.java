@@ -94,7 +94,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     private void replace(Fragment fragment, String tag) {
-        if(mCurrentFragment != fragment) {
+        if(fragment != null && mCurrentFragment != fragment) {
             FragmentTransaction t = getSupportFragmentManager().beginTransaction();
             if(mCurrentFragment != null) {
                 t.hide(mCurrentFragment);

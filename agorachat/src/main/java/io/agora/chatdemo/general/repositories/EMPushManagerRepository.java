@@ -3,6 +3,9 @@ package io.agora.chatdemo.general.repositories;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.agora.CallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.PushConfigs;
@@ -164,6 +167,121 @@ public class EMPushManagerRepository extends BaseEMRepository {
 
                     }
                 });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 设置单聊用户聊天免打扰
+     *
+     * @param userId 用户名
+     * @param noPush 是否免打扰
+     */
+    public LiveData<Resource<Boolean>> setUserNotDisturb(String userId, boolean noPush) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                runOnIOThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<String> onPushList = new ArrayList<>();
+                        onPushList.add(userId);
+                        try {
+                            getPushManager().updatePushServiceForUsers(onPushList, noPush);
+                            callBack.onSuccess(createLiveData(noPush));
+                        } catch (ChatException e) {
+                            e.printStackTrace();
+                            callBack.onError(e.getErrorCode(), e.getDescription());
+                        }
+                    }
+                });
+
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取聊天免打扰用户
+     */
+    public LiveData<Resource<List<String>>> getNoPushUsers() {
+        return new NetworkOnlyResource<List<String>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
+                runOnIOThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            getPushManager().getPushConfigsFromServer();
+                        } catch (ChatException e) {
+                            e.printStackTrace();
+                            callBack.onError(e.getErrorCode(), e.getDescription());
+                            return;
+                        }
+                        List<String> noPushUsers = getPushManager().getNoPushUsers();
+                        if (noPushUsers != null && noPushUsers.size() != 0) {
+                            callBack.onSuccess(createLiveData(noPushUsers));
+                        }
+                    }
+                });
+
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Sets whether the specified group accepts offline message push
+     *
+     * @param groupID
+     * @param noPush
+     */
+    public LiveData<Resource<Boolean>> setGroupNotDisturb(String groupID, boolean noPush) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                runOnIOThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<String> onPushList = new ArrayList<>();
+                        onPushList.add(groupID);
+                        try {
+                            getPushManager().updatePushServiceForGroup(onPushList, noPush);
+                            callBack.onSuccess(createLiveData(noPush));
+                        } catch (ChatException e) {
+                            e.printStackTrace();
+                            callBack.onError(e.getErrorCode(), e.getDescription());
+                        }
+                    }
+                });
+
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Get the group list that disabled offline push
+     * Note: If you want to get the latest configs, you should call {@link PushManager#getPushConfigsFromServer()} first
+     */
+    public LiveData<Resource<List<String>>> getNoPushGroups() {
+        return new NetworkOnlyResource<List<String>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
+                runOnIOThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            getPushManager().getPushConfigsFromServer();
+                        } catch (ChatException e) {
+                            e.printStackTrace();
+                            callBack.onError(e.getErrorCode(), e.getDescription());
+                            return;
+                        }
+                        List<String> noPushGroups = getPushManager().getNoPushGroups();
+                        if (noPushGroups != null && noPushGroups.size() != 0) {
+                            callBack.onSuccess(createLiveData(noPushGroups));
+                        }
+                    }
+                });
+
             }
         }.asLiveData();
     }

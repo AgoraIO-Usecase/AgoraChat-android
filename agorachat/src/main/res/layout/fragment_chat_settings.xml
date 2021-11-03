@@ -3,12 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_white_tophalf_corner_10">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_drag_handle"/>
 
     <io.agora.chatdemo.general.widget.ArrowItemView
         android:id="@+id/item_clear_history"
         android:layout_width="match_parent"
         android:layout_height="54dp"
+        android:layout_marginTop="10dp"
+        android:foreground="@drawable/ease_ripple_click_gray"
         app:arrowItemAvatarSrc="@drawable/chat_settings_clear"
         app:arrowItemAvatarHeight="32dp"
         app:arrowItemAvatarWidth="32dp"
@@ -28,6 +38,7 @@
         app:switchItemShowAvatar="true"
         app:switchItemTitle="@string/chat_setting_mute_notification"
         app:switchItemTitleSize="16sp"
+        app:switchItemShowDivider="false"
         app:switchItemTitleColor="@color/black"/>
 
     <io.agora.chatdemo.general.widget.SwitchItemView
@@ -40,6 +51,7 @@
         app:switchItemShowAvatar="true"
         app:switchItemTitle="@string/chat_setting_to_top"
         app:switchItemTitleSize="16sp"
+        app:switchItemShowDivider="false"
         app:switchItemTitleColor="@color/black"/>
 
 </LinearLayout>

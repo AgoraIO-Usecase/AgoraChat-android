@@ -232,5 +232,9 @@
     <string name="chat_setting_clear">Clear Message History</string>
     <string name="chat_setting_mute_notification">Mute Notification</string>
     <string name="chat_setting_to_top">Sticky on Top</string>
+    <string name="chat_settings_clear_history_warning">Are you sure you want to delete all chat history？</string>
+
+    <string name="dialog_btn_cancel">Cancel</string>
+    <string name="dialog_btn_confirm">OK</string>
 
 </resources>

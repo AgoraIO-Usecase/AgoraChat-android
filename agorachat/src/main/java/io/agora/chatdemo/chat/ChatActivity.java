@@ -156,6 +156,12 @@ public class ChatActivity extends BaseInitActivity {
     @Override
     protected void initListener() {
         super.initListener();
+        titleBar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
+            @Override
+            public void onBackPress(View view) {
+                onBackPressed();
+            }
+        });
         titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
             @Override
             public void onRightClick(View view) {
@@ -164,6 +170,7 @@ public class ChatActivity extends BaseInitActivity {
                 bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
                 bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
                 BottomSheetDialogFragment fragment = new ChatSettingsFragment();
+                fragment.setArguments(bundle);
                 fragment.show(getSupportFragmentManager(), "chat_settings");
             }
         });
@@ -207,6 +214,15 @@ public class ChatActivity extends BaseInitActivity {
             }
         });
         LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
+            if(conversation == null) {
+                finish();
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }

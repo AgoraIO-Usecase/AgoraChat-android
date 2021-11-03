@@ -102,6 +102,7 @@
 
     <string name="contact_detail_block_contact">Block Contact</string>
     <string name="contact_detail_delete_contact">Delete Contact</string>
+    <string name="contact_detail_add_contact">Add Contact</string>
     <string name="contact_detail_show_id">AgoraID: %1$s</string>
     <string name="contact_detail_start_chat">Chat</string>
 

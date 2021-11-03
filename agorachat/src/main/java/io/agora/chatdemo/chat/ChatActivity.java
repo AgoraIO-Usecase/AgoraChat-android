@@ -32,6 +32,7 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
+import io.agora.chatdemo.contact.GroupMemberDetailBottomSheetFragment;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
@@ -39,6 +40,8 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.util.EMLog;
+
+import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 
 public class ChatActivity extends BaseInitActivity {
     private String conversationId;
@@ -140,7 +143,25 @@ public class ChatActivity extends BaseInitActivity {
 
                     @Override
                     public void onUserAvatarClick(String username) {
-
+                        if(!TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
+                            EaseUser user = DemoHelper.getInstance().getUserInfo(username);
+                            if(user == null){
+                                user = new EaseUser(username);
+                            }
+                            boolean isFriend =  DemoHelper.getInstance().getModel().isContact(username);
+                            if(isFriend){
+                                user.setContact(0);
+                            }else{
+                                user.setContact(3);
+                            }
+                            GroupMemberDetailBottomSheetFragment fragment = new GroupMemberDetailBottomSheetFragment();
+                            Bundle bundle =new Bundle();
+                            bundle.putSerializable(GROUP_MEMBER_USER,user);
+                            fragment.setArguments(bundle);
+                            fragment.show(getSupportFragmentManager(),"ContainerFragment");
+                        }else{
+//                            UserDetailActivity.actionStart(mContext,null,null);
+                        }
                     }
 
                     @Override

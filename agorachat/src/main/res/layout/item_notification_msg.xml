@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_10"
+        android:textAllCaps="false"
         android:textColor="@color/color_main_text"
         android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@id/iv_from"
@@ -29,7 +30,7 @@
 
     <TextView
         android:id="@+id/tv_type"
-
+        android:textAllCaps="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
@@ -64,7 +65,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_delete"
+        android:id="@+id/iv_msg_delete"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginRight="@dimen/margin_15"

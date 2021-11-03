@@ -140,8 +140,9 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
             case R.id.btn_accept :
                 mNewFriendViewModel.agreeInvite(mData.get(position));
                 break;
-            case  R.id.iv_delete:
+            case  R.id.iv_msg_delete:
                 mNewFriendViewModel.refuseInvite(mData.get(position));
+                mNewFriendViewModel.deleteMsg(mData.get(position));
                 break;
         }
     }

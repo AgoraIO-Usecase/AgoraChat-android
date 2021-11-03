@@ -16,6 +16,7 @@ public class ContactDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Boolean>> deleteObservable;
     private SingleSourceLiveData<Resource<Boolean>> blackObservable;
     private SingleSourceLiveData<Resource<EaseUser>> userInfoObservable;
+    private SingleSourceLiveData<Resource<Boolean>> addContactObservable;
 
     public ContactDetailViewModel(@NonNull Application application) {
         super(application);
@@ -23,6 +24,10 @@ public class ContactDetailViewModel extends AndroidViewModel {
         deleteObservable = new SingleSourceLiveData<>();
         blackObservable = new SingleSourceLiveData<>();
         userInfoObservable = new SingleSourceLiveData<>();
+        addContactObservable = new SingleSourceLiveData<>();
+    }
+    public LiveData<Resource<Boolean>> getAddContact() {
+        return addContactObservable;
     }
 
     public LiveData<Resource<Boolean>> deleteObservable() {
@@ -37,6 +42,9 @@ public class ContactDetailViewModel extends AndroidViewModel {
         return userInfoObservable;
     }
 
+    public void addContact(String username, String reason) {
+        addContactObservable.setSource(repository.addContact(username, reason));
+    }
     public void deleteContact(String username) {
         deleteObservable.setSource(repository.deleteContact(username));
     }

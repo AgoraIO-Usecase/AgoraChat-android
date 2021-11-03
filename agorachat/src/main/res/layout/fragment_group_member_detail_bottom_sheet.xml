@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:background="@drawable/shape_white_tophalf_corner_10"
+    android:layout_height="match_parent">
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/avatar_middle_size"
+        android:layout_height="@dimen/avatar_middle_size"
+        android:src="@drawable/ease_default_avatar"
+        android:layout_marginTop="68dp"/>
+
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_big"
+        android:textColor="@color/color_main_text"
+        android:layout_marginTop="10dp"
+        tools:text="Maria Troncatti"/>
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/color_second_text"
+        android:layout_marginTop="5dp"
+        tools:text="AgoraID: supercalifragilisticexpialidocious"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_chat"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="32dp"
+        app:arrowItemTitleSize="@dimen/text_size_big"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarSrc="@drawable/group_member_chat"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/contact_detail_start_chat"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
+
+</LinearLayout>

@@ -94,4 +94,6 @@ public interface DemoConstant extends EaseConstant {
      String GROUP_ALLOW_INVITE="group_allow_invite";
      String GROUP_MAX_USERS="group_max_users";
 
+     String GROUP_MEMBER_USER="group_member_user";
+
 }

@@ -4,25 +4,48 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
+
+import io.agora.chat.ChatClient;
+import io.agora.chat.ChatMessage;
+import io.agora.chat.ChatRoom;
+import io.agora.chat.Conversation;
+import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
+import io.agora.chat.uikit.chat.interfaces.OnChatItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.provider.EaseUserProfileProvider;
+import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
+import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
+import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
+import io.agora.chatdemo.group.GroupHelper;
 import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity {
     private String conversationId;
     private int chatType;
     private String historyMsgId;
+    private EaseTitleBar titleBar;
+    private ChatViewModel viewModel;
 
     public static void actionStart(Context context, String conversationId, int chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -47,12 +70,14 @@ public class ChatActivity extends BaseInitActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        titleBar = findViewById(R.id.title_bar);
+        titleBar.setRightImageResource(R.drawable.chat_settings_more);
         initChatFragment();
     }
 
     private void initChatFragment() {
         EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType, historyMsgId)
-                .setUseHeader(true)
+                .setUseHeader(false)
                 .setHeaderTitle(conversationId)
                 .setHeaderEnableBack(true)
                 .setUseRoamMessage(DemoHelper.getInstance().getModel().isMsgRoaming())
@@ -102,8 +127,125 @@ public class ChatActivity extends BaseInitActivity {
                         return true;
                     }
                 })
+                .setOnChatItemClickListener(new OnChatItemClickListener() {
+                    @Override
+                    public boolean onBubbleClick(ChatMessage message) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onBubbleLongClick(View v, ChatMessage message) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onUserAvatarClick(String username) {
+
+                    }
+
+                    @Override
+                    public void onUserAvatarLongClick(String username) {
+
+                    }
+                })
                 .hideChatSendAvatar(true)
                 .build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
+            @Override
+            public void onRightClick(View view) {
+                // Skip to chat settings fragment
+                Bundle bundle = new Bundle();
+                bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
+                bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
+                BottomSheetDialogFragment fragment = new ChatSettingsFragment();
+                fragment.show(getSupportFragmentManager(), "chat_settings");
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        viewModel.getChatRoomObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<ChatRoom>() {
+                @Override
+                public void onSuccess(@Nullable ChatRoom data) {
+                    setDefaultTitle();
+                }
+            });
+        });
+        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isGroupLeave() && TextUtils.equals(conversationId, event.message)) {
+                finish();
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isChatRoomLeave() && TextUtils.equals(conversationId,  event.message)) {
+                finish();
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isMessageChange()) {
+                showSnackBar(event.event);
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
+            if(conversation == null) {
+                finish();
+            }
+        });
+        setDefaultTitle();
+    }
+
+    private void showSnackBar(String event) {
+        Snackbar.make(titleBar, event, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void setDefaultTitle() {
+        String title;
+        if(chatType == DemoConstant.CHATTYPE_GROUP) {
+            title = GroupHelper.getGroupName(conversationId);
+        }else if(chatType == DemoConstant.CHATTYPE_CHATROOM) {
+            ChatRoom room = ChatClient.getInstance().chatroomManager().getChatRoom(conversationId);
+            if(room == null) {
+                viewModel.getChatRoom(conversationId);
+                return;
+            }
+            title =  TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
+        }else {
+            EaseUserProfileProvider userProvider = EaseUIKit.getInstance().getUserProvider();
+            if(userProvider != null) {
+                EaseUser user = userProvider.getUser(conversationId);
+                if(user != null) {
+                    title = user.getNickname();
+                }else {
+                    title = conversationId;
+                }
+            }else {
+                title = conversationId;
+            }
+        }
+        titleBar.setTitle(title);
     }
 }

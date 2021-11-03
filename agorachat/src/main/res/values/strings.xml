@@ -229,4 +229,8 @@
     <string name="group_create_title">Create</string>
     <string name="group_next">Next</string>
 
+    <string name="chat_setting_clear">Clear Message History</string>
+    <string name="chat_setting_mute_notification">Mute Notification</string>
+    <string name="chat_setting_to_top">Sticky on Top</string>
+
 </resources>

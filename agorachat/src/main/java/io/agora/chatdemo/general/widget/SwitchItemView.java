@@ -7,13 +7,15 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.R;
 
 
@@ -29,8 +31,9 @@ public class SwitchItemView extends ConstraintLayout {
     private float contentSize;
     private String hint;
     private View root;
-    private Switch switchItem;
+    private SwitchCompat switchItem;
     private OnCheckedChangeListener listener;
+    private EaseImageView avatar;
 
     public SwitchItemView(Context context) {
         this(context, null);
@@ -47,6 +50,7 @@ public class SwitchItemView extends ConstraintLayout {
 
     public void init(Context context, AttributeSet attrs) {
         root = LayoutInflater.from(context).inflate(R.layout.layout_item_switch, this);
+        avatar = findViewById(R.id.avatar);
         tvTitle = findViewById(R.id.tv_title);
         tvHint = findViewById(R.id.tv_hint);
         viewDivider = findViewById(R.id.view_divider);
@@ -91,7 +95,31 @@ public class SwitchItemView extends ConstraintLayout {
         boolean clickable = a.getBoolean(R.styleable.SwitchItemView_switchItemClickable, true);
         switchItem.setClickable(clickable);
 
+        boolean showAvatar = a.getBoolean(R.styleable.SwitchItemView_switchItemShowAvatar, false);
+        avatar.setVisibility(showAvatar ? VISIBLE : GONE);
+
+        int avatarSrcResourceId = a.getResourceId(R.styleable.SwitchItemView_switchItemAvatarSrc, -1);
+        if(avatarSrcResourceId != -1) {
+            avatar.setImageResource(avatarSrcResourceId);
+        }
+
+        int avatarHeightId = a.getResourceId(R.styleable.SwitchItemView_switchItemAvatarHeight, -1);
+        float height = a.getDimension(R.styleable.SwitchItemView_switchItemAvatarHeight, 0);
+        if(avatarHeightId != -1) {
+            height = getResources().getDimension(avatarHeightId);
+        }
+
+        int avatarWidthId = a.getResourceId(R.styleable.SwitchItemView_switchItemAvatarWidth, -1);
+        float width = a.getDimension(R.styleable.SwitchItemView_switchItemAvatarWidth, 0);
+        if(avatarWidthId != -1) {
+            width = getResources().getDimension(avatarWidthId);
+        }
+
         a.recycle();
+
+        ViewGroup.LayoutParams params = avatar.getLayoutParams();
+        params.height = height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int)height;
+        params.width = width == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int)width;
 
         setListener();
 
@@ -108,12 +136,16 @@ public class SwitchItemView extends ConstraintLayout {
             }
         });
     }
+    
+    public EaseImageView getAvatar() {
+        return avatar;
+    }
 
     public TextView getTvTitle() {
         return tvTitle;
     }
 
-    public Switch getSwitch() {
+    public SwitchCompat getSwitch() {
         return switchItem;
     }
 

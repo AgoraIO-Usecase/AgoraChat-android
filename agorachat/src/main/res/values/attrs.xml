@@ -39,4 +39,18 @@
         <attr name="search_edit_drawable_right_width" format="dimension"/>
         <attr name="search_edit_drawable_right_height" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="SwitchItemView">
+        <attr name="switchItemTitle" format="string|reference"/>
+        <attr name="switchItemTitleColor" format="color|reference"/>
+        <attr name="switchItemTitleSize" format="dimension|reference"/>
+        <attr name="switchItemShowDivider" format="boolean"/>
+        <attr name="switchItemHint" format="string|reference"/>
+        <attr name="switchItemCheckEnable" format="boolean"/>
+        <attr name="switchItemClickable" format="boolean"/>
+        <attr name="switchItemShowAvatar" format="boolean"/>
+        <attr name="switchItemAvatarSrc" format="reference"/>
+        <attr name="switchItemAvatarHeight" format="dimension|reference"/>
+        <attr name="switchItemAvatarWidth" format="dimension|reference"/>
+    </declare-styleable>
 </resources>

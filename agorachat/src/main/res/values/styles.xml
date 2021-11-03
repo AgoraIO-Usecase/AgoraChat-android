@@ -75,13 +75,4 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
-    <declare-styleable name="SwitchItemView">
-        <attr name="switchItemTitle" format="string|reference"/>
-        <attr name="switchItemTitleColor" format="color|reference"/>
-        <attr name="switchItemTitleSize" format="dimension|reference"/>
-        <attr name="switchItemShowDivider" format="boolean"/>
-        <attr name="switchItemHint" format="string|reference"/>
-        <attr name="switchItemCheckEnable" format="boolean"/>
-        <attr name="switchItemClickable" format="boolean"/>
-    </declare-styleable>
 </resources>

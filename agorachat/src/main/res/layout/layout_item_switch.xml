@@ -55,7 +55,7 @@
         android:layout_marginEnd="@dimen/margin_15"
         android:switchMinWidth="20dp"
         android:thumb="@drawable/demo_switch_thumb_selector"
-        android:track="@drawable/demo_switch_track_selector"
+        app:track="@drawable/demo_switch_track_selector"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

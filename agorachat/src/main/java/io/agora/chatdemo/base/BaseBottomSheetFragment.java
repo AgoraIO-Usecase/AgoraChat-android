@@ -1,6 +1,7 @@
 package io.agora.chatdemo.base;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.net.Resource;
 
 public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
     private int topOffset;
     private BottomSheetBehavior mBehavior;
+    public BaseActivity mContext;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = (BaseActivity) context;
+    }
 
     @NonNull
     @Override
@@ -95,6 +105,37 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
 
     protected boolean getCanceledOnTouchOutside() {
         return true;
+    }
+
+
+    /**
+     * 解析Resource<T>
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if(mContext != null) {
+            mContext.parseResource(response, callback);
+        }
+    }
+
+    public void showLoading() {
+        if(mContext != null) {
+            mContext.showLoading();
+        }
+    }
+
+    public void showLoading(String message) {
+        if(mContext != null) {
+            mContext.showLoading(message);
+        }
+    }
+
+    public void dismissLoading() {
+        if(mContext != null) {
+            mContext.dismissLoading();
+        }
     }
 
 }

@@ -102,7 +102,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
                     title.setBackgroundResource(R.drawable.contact_tab_bg);
                 }
                 if(position==2) {
-                    dot=title;
+                    dot=tab.getCustomView().findViewById(R.id.tv_tab_red);
                 }
                 title.setText(titles[position]);
             }
@@ -118,10 +118,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
         contactsViewModel.getMsgConversation();
     }
     public boolean isNofificationMsgFragmentVisiable(){
-        if(fragments!=null&&fragments.size()>=3) {
-            return fragments.get(2).getVisiableToUser();
-        }
-        return false;
+        return tab_layout.getSelectedTabPosition()==2;
     }
 
     @Override
@@ -155,14 +152,6 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
             @Override
             public void onPageSelected(int position) {
                 toolbar_contact.setVisibility(View.VISIBLE);
-                for(int i = 0; i < fragments.size(); i++) {
-                  if(i==position) {
-                      fragments.get(position).setVisiableToUser(true);
-                  }else{
-                      fragments.get(position).setVisiableToUser(false);
-                  }
-                }
-
             }
         });
 

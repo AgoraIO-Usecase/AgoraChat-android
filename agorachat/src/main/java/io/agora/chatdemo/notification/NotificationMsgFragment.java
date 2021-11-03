@@ -85,14 +85,6 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
     }
 
     @Override
-    public void setVisiableToUser(boolean isVisiableToUser) {
-        super.setVisiableToUser(isVisiableToUser);
-        if(isVisiableToUser) {
-            mNewFriendViewModel.makeAllMsgRead();
-        }
-    }
-
-    @Override
     protected void initData() {
         super.initData();
         mMsgsViewModel.getAllMessages();

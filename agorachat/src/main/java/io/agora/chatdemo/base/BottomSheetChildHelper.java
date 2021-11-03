@@ -38,7 +38,7 @@ public interface BottomSheetChildHelper {
 
     Fragment getParentFragment();
 
-    default void startFrament(Fragment fragment, String tag) {
+    default void startFragment(Fragment fragment, String tag) {
         Fragment parentFragment = getParentFragment();
         if (parentFragment != null && parentFragment instanceof BottomSheetContainerHelper) {
             ((BottomSheetContainerHelper) parentFragment).startFragment(fragment, tag);

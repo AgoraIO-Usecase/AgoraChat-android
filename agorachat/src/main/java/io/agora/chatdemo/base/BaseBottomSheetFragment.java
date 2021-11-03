@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -15,19 +16,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.databinding.FragmentGroupBaseBinding;
 
 /**
  * 底部弹出fragment基类，封装弹出、隐藏逻辑
  */
-public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
-    /**
-     * 顶部向下偏移量
-     */
-    private int topOffset = 0;
-    private BottomSheetBehavior mBehavior;
-    protected FragmentGroupBaseBinding baseBinding;
+public abstract class BaseBottomSheetFragment extends BottomSheetDialogFragment {
 
+    private int topOffset = 300;
+    private BottomSheetBehavior mBehavior;
 
     @NonNull
     @Override
@@ -40,8 +36,9 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        baseBinding = FragmentGroupBaseBinding.inflate(LayoutInflater.from(requireContext()), container, false);
-        return baseBinding.getRoot();
+        View rootView = inflater.inflate(getLayoutId(), container, false);
+        initArgument();
+        return rootView;
     }
 
     @Override
@@ -52,28 +49,19 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
         initData();
     }
 
-    protected void initData() {
-
-    }
-
-    protected void initListener() {
-
-    }
-
-    protected void initView() {
-
-    }
-
     @Override
     public void onStart() {
         super.onStart();
-        if (baseBinding.getRoot() != null) {
-            getDialog().setCanceledOnTouchOutside(true);
-            ViewGroup.LayoutParams layoutParams = baseBinding.getRoot().getLayoutParams();
-            layoutParams.height = getHeight();
-            mBehavior = BottomSheetBehavior.from((View) baseBinding.getRoot().getParent());
-            mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        }
+        getDialog().setCanceledOnTouchOutside(getCanceledOnTouchOutside());
+        ViewGroup.LayoutParams layoutParams = requireView().getLayoutParams();
+        layoutParams.height = getHeight();
+        mBehavior = BottomSheetBehavior.from((View) requireView().getParent());
+        mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+
+    protected <T extends View> T findViewById(@IdRes int id) {
+        return requireView().findViewById(id);
     }
 
     /**
@@ -100,4 +88,23 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
             mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
     }
+
+    protected abstract int getLayoutId();
+
+    protected void initArgument() {
+    }
+
+    protected void initData() {
+    }
+
+    protected void initListener() {
+    }
+
+    protected void initView() {
+    }
+
+    protected boolean getCanceledOnTouchOutside() {
+        return true;
+    }
+
 }

@@ -183,7 +183,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         }
     }
 
-    private void showContactUnReadIcon(boolean isShow) {
-        mTvMainContactsMsg.setVisibility(isShow ? View.VISIBLE : View.GONE);
+    public void showContactUnReadIcon(int visibility) {
+        mTvMainContactsMsg.setVisibility(visibility);
     }
 }

@@ -85,6 +85,12 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mNewFriendViewModel.makeAllMsgRead();
+    }
+
+    @Override
     protected void initData() {
         super.initData();
         mMsgsViewModel.getAllMessages();

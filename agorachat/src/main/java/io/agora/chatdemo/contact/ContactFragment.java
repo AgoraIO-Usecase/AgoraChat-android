@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -17,6 +18,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 
+import io.agora.chat.Conversation;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
@@ -27,6 +29,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.GroupContactManageFragment;
 import io.agora.chatdemo.main.BottomSheetContainerFragment;
+import io.agora.chatdemo.main.MainActivity;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
 
 public class ContactFragment extends BaseInitFragment implements EaseTitleBar.OnRightClickListener {
@@ -36,7 +39,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     private int[] titles = {R.string.contact_tab_title_friends, R.string.contact_tab_title_groups, R.string.contact_tab_title_requests};
     private ArrayList<BaseInitFragment> fragments=new ArrayList();
     private ContactsViewModel contactsViewModel;
-    private View dot;
+    private View redDot;
 
     @Override
     protected int getLayoutId() {
@@ -66,13 +69,8 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     protected void initViewModel() {
         super.initViewModel();
         contactsViewModel=new ViewModelProvider(this).get(ContactsViewModel.class);
-        contactsViewModel.getConversationObservable().observe(this,data->{
-            int unreadMsgCount = data.getUnreadMsgCount();
-            if(isNofificationMsgFragmentVisiable()&&unreadMsgCount>0) {
-                dot.setVisibility(View.VISIBLE);
-            }else{
-                dot.setVisibility(View.GONE);
-            }
+        contactsViewModel.getConversationObservable().observe(this,conversation->{
+            initRedDot(conversation);
         });
 
     }
@@ -100,9 +98,8 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
                 TextView title = tab.getCustomView().findViewById(R.id.tv_tab_title);
                 if(position == 0) {
                     title.setBackgroundResource(R.drawable.contact_tab_bg);
-                }
-                if(position==2) {
-                    dot=tab.getCustomView().findViewById(R.id.tv_tab_red);
+                }else if(position==2) {
+                    redDot =tab.getCustomView().findViewById(R.id.tv_tab_red);
                 }
                 title.setText(titles[position]);
             }
@@ -159,6 +156,20 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
         messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
+    }
+
+    private void initRedDot(Conversation conversation) {
+        int visiable;
+        if(isNofificationMsgFragmentVisiable()&&conversation.getUnreadMsgCount()>0) {
+            visiable=View.VISIBLE;
+        }else{
+            visiable=View.GONE;
+        }
+        redDot.setVisibility(visiable);
+        FragmentActivity activity = getActivity();
+        if(activity!=null&&activity instanceof MainActivity) {
+            ((MainActivity)activity).showContactUnReadIcon(visiable);
+        }
     }
 
     @Override

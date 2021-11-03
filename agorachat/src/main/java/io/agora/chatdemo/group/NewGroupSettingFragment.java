@@ -110,7 +110,7 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
         bundle.putBoolean(DemoConstant.GROUP_ALLOW_INVITE,swInvite.getSwitch().isChecked());
         bundle.putInt(DemoConstant.GROUP_MAX_USERS,maxUsers);
         fragment.setArguments(bundle);
-        startFrament(fragment,null);
+        startFragment(fragment,null);
         return true;
     }
 

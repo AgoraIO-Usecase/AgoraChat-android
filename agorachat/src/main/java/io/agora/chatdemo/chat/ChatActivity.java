@@ -97,9 +97,9 @@ public class ChatActivity extends BaseInitActivity {
                         if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.RECORD_AUDIO)) {
                             PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
                                     , new String[]{Manifest.permission.RECORD_AUDIO}, null);
-                            return true;
+                            return false;
                         }
-                        return false;
+                        return true;
                     }
                 })
                 .hideChatSendAvatar(true)

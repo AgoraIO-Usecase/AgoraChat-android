@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/layout_userinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_15"
+            android:layout_marginTop="64dp"
+            android:layout_marginRight="@dimen/margin_15"
+            android:text="@string/me_setting"
+            android:textAllCaps="false"
+            android:textColor="@color/color_light_gray_999999"
+            android:textSize="@dimen/text_size_small" />
+
+        <io.agora.chatdemo.general.widget.ArrowItemView
+            android:id="@+id/setting_general"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:foreground="@drawable/ease_ripple_click_gray"
+            app:arrowItemArrowSrc="@drawable/arrow_right"
+            app:arrowItemAvatarHeight="32dp"
+            app:arrowItemAvatarSrc="@drawable/me_general"
+            app:arrowItemAvatarWidth="32dp"
+            app:arrowItemShowAvatar="true"
+            app:arrowItemTitle="@string/me_setting_general"
+            app:arrowItemTitleSize="@dimen/text_size_big" />
+
+        <io.agora.chatdemo.general.widget.ArrowItemView
+            android:id="@+id/setting_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:foreground="@drawable/ease_ripple_click_gray"
+            app:arrowItemAvatarHeight="32dp"
+            app:arrowItemAvatarSrc="@drawable/me_notifications"
+            app:arrowItemAvatarWidth="32dp"
+            app:arrowItemShowArrow="true"
+            app:arrowItemShowAvatar="true"
+            app:arrowItemTitle="@string/me_setting_notifications"
+            app:arrowItemTitleSize="@dimen/text_size_big" />
+
+        <io.agora.chatdemo.general.widget.ArrowItemView
+            android:id="@+id/setting_privacy"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:foreground="@drawable/ease_ripple_click_gray"
+            app:arrowItemAvatarHeight="32dp"
+            app:arrowItemAvatarSrc="@drawable/me_privacy"
+            app:arrowItemAvatarWidth="32dp"
+            app:arrowItemShowArrow="true"
+            app:arrowItemShowAvatar="true"
+            app:arrowItemTitle="@string/me_setting_privacy"
+            app:arrowItemTitleSize="@dimen/text_size_big" />
+
+        <io.agora.chatdemo.general.widget.ArrowItemView
+            android:id="@+id/setting_about"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:foreground="@drawable/ease_ripple_click_gray"
+            app:arrowItemAvatarHeight="32dp"
+            app:arrowItemAvatarSrc="@drawable/me_about"
+            app:arrowItemAvatarWidth="32dp"
+            app:arrowItemShowArrow="true"
+            app:arrowItemShowAvatar="true"
+            app:arrowItemTitle="@string/me_setting_about"
+            app:arrowItemTitleSize="@dimen/text_size_big" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_15"
+            android:text="@string/me_setting"
+            android:textAllCaps="false"
+            android:textColor="@color/color_light_gray_999999"
+            android:textSize="@dimen/text_size_small" />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_15"
+            android:layout_marginRight="@dimen/margin_15"
+            android:paddingTop="@dimen/margin_15"
+            android:paddingBottom="@dimen/margin_15"
+            android:text="@string/me_setting_logout"
+            android:textAllCaps="false"
+            android:textColor="@color/contacts_blue_005fff"
+            android:textSize="@dimen/text_size_big" />
+    </LinearLayout>
+</ScrollView>

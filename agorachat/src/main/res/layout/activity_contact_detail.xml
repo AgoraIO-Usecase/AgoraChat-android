@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:layout_width="match_parent"
@@ -12,8 +13,26 @@
         android:layout_height="@dimen/ease_common_title_bar_height"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
-    <include layout="@layout/include_user_info"/>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_userinfo"/>
 
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/iv_chat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/contact_start_chat"
+        android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/color_main_text"
+        android:layout_marginTop="5dp"
+        android:text="@string/contact_detail_start_chat"/>
+    
     <io.agora.chatdemo.general.widget.ArrowItemView
         android:id="@+id/item_block_contact"
         android:layout_width="match_parent"

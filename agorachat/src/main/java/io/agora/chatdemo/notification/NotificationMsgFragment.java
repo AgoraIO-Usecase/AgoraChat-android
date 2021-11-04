@@ -19,11 +19,6 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.notification.viewmodels.NewFriendsViewModel;
 import io.agora.chatdemo.notification.viewmodels.NotifiationMsgsViewModel;
 
-/**
- * Created by 许成谱 on 2021/10/27 0027 16:04.
- * qq:1550540124
- * 热爱生活每一天！
- */
 public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage> implements EaseBaseRecyclerViewAdapter.OnItemSubViewClickListener {
     private NotifiationMsgsViewModel mMsgsViewModel;
     private NewFriendsViewModel mNewFriendViewModel;

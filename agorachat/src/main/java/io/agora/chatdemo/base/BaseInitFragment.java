@@ -20,7 +20,7 @@ public abstract class BaseInitFragment extends BaseFragment {
         if(layoutId != 0) {
             view = inflater.inflate(layoutId, container, false);
         }else {
-            view = getContentView();
+            view = getContentView(inflater,container,savedInstanceState);
         }
         initArgument();
         return view;
@@ -51,8 +51,11 @@ public abstract class BaseInitFragment extends BaseFragment {
     /**
      * Return the layout view
      * @return
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
      */
-    protected View getContentView() {
+    protected View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return null;
     }
 

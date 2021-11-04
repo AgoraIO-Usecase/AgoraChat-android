@@ -44,7 +44,9 @@ public abstract class BaseInitFragment extends BaseFragment {
      * Return the layout ID
      * @return
      */
-    protected abstract int getLayoutId();
+    protected int getLayoutId(){
+        return 0;
+    };
 
     /**
      * Return the layout view

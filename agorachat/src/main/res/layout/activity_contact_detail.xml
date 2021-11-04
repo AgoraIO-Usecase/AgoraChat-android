@@ -13,30 +13,10 @@
         android:layout_height="@dimen/ease_common_title_bar_height"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
-    <io.agora.chat.uikit.widget.EaseImageView
-        android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/avatar_big_size"
-        android:layout_height="@dimen/avatar_big_size"
-        android:src="@drawable/ease_default_avatar"
-        android:layout_marginTop="5dp"/>
-
-    <TextView
-        android:id="@+id/tv_nickname"
-        android:layout_width="wrap_content"
+    <include
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_big_20"
-        android:textColor="@color/color_main_text"
-        android:layout_marginTop="10dp"
-        tools:text="Maria Troncatti"/>
-
-    <TextView
-        android:id="@+id/tv_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_small"
-        android:textColor="@color/color_second_text"
-        android:layout_marginTop="5dp"
-        tools:text="AgoraID: supercalifragilisticexpialidocious"/>
+        layout="@layout/layout_userinfo"/>
 
     <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/iv_chat"

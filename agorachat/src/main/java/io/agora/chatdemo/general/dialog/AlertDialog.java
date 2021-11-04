@@ -24,7 +24,6 @@ import io.agora.chatdemo.R;
  *         })
  */
 public class AlertDialog extends Dialog {
-    //具体的实现类
     final AlertController mAlert;
 
     public AlertDialog(@NonNull Context context) {

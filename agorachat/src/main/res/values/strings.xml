@@ -253,4 +253,9 @@
     <string name="me_setting_logins">Logins</string>
     <string name="me_setting_logout">Log Out</string>
 
+    <string name="me_setting_change_avatar">Change Avatar</string>
+    <string name="me_setting_change_nickname">Change Nickname</string>
+    <string name="me_setting_copy_agoraid">Copy AgoraID</string>
+
+
 </resources>

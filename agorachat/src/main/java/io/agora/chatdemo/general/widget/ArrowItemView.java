@@ -21,6 +21,7 @@ public class ArrowItemView extends ConstraintLayout {
     private EaseImageView avatar;
     private TextView tvTitle;
     private TextView tvContent;
+    private TextView tvRight;
     private ImageView ivArrow;
     private View viewDivider;
     private String title;
@@ -51,6 +52,7 @@ public class ArrowItemView extends ConstraintLayout {
         tvContent = findViewById(R.id.tv_content);
         ivArrow = findViewById(R.id.iv_arrow);
         viewDivider = findViewById(R.id.view_divider);
+        tvRight = findViewById(R.id.tv_right);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ArrowItemView);
         int titleResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemTitle, -1);
@@ -147,16 +149,21 @@ public class ArrowItemView extends ConstraintLayout {
         return tvTitle.getText().toString().trim();
     }
 
+    public TextView getRightTitle(){
+        return tvRight;
+    }
     public void setTitle(String title) {
         tvTitle.setText(title);
     }
-
     public void setContent(String content) {
         tvContent.setText(content);
     }
 
     public void setArrow(int resourceId) {
         ivArrow.setImageResource(resourceId);
+    }
+    public void setArrowVisiable(int visiable){
+        ivArrow.setVisibility(visiable);
     }
 
     public void setAvatar(int resourceId) {

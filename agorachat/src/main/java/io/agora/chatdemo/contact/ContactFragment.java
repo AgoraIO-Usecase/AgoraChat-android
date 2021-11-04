@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -29,7 +28,6 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.GroupContactManageFragment;
 import io.agora.chatdemo.main.BottomSheetContainerFragment;
-import io.agora.chatdemo.main.MainActivity;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
 
 public class ContactFragment extends BaseInitFragment implements EaseTitleBar.OnRightClickListener {
@@ -63,6 +61,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
         fragments.add(new GroupContactManageFragment());
         fragments.add(new NotificationMsgFragment());
         setupWithViewPager();
+        contactsViewModel.getMsgConversation();
     }
 
     @Override
@@ -156,20 +155,18 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
         messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
+        messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
     }
 
     private void initRedDot(Conversation conversation) {
         int visiable;
-        if(isNofificationMsgFragmentVisiable()&&conversation.getUnreadMsgCount()>0) {
+        int unreadMsgCount = conversation.getUnreadMsgCount();
+        if(!isNofificationMsgFragmentVisiable()&&unreadMsgCount>0) {
             visiable=View.VISIBLE;
         }else{
             visiable=View.GONE;
         }
         redDot.setVisibility(visiable);
-        FragmentActivity activity = getActivity();
-        if(activity!=null&&activity instanceof MainActivity) {
-            ((MainActivity)activity).showContactUnReadIcon(visiable);
-        }
     }
 
     @Override

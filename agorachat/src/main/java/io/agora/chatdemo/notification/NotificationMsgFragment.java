@@ -70,6 +70,7 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
         messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
     }
 
     private void loadList(EaseEvent change) {
@@ -139,8 +140,9 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
             case R.id.btn_accept :
                 mNewFriendViewModel.agreeInvite(mData.get(position));
                 break;
-            case  R.id.iv_delete:
+            case  R.id.iv_msg_delete:
                 mNewFriendViewModel.refuseInvite(mData.get(position));
+                mNewFriendViewModel.deleteMsg(mData.get(position));
                 break;
         }
     }

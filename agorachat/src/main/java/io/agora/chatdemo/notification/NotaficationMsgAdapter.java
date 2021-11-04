@@ -11,25 +11,20 @@ import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.databinding.ItemNotificationMsgBinding;
 import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
-import io.agora.exceptions.ChatException;
 
+import static io.agora.chatdemo.general.constant.DemoConstant.SYSTEM_MESSAGE_NAME;
 import static io.agora.chatdemo.general.constant.DemoConstant.SYSTEM_MESSAGE_STATUS;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAPPLYED;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEINVITEED;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.GROUPINVITATION;
+import static io.agora.chatdemo.general.manager.PushAndMessageHelper.getSystemMessage;
 
-/**
- * Created by 许成谱 on 2021/10/27 0027 19:28.
- * qq:1550540124
- * 热爱生活每一天！
- */
 class NotaficationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
 
     @Override
     public ViewHolder<ChatMessage> getViewHolder(ViewGroup parent, int viewType) {
         return new MsgViewHolder(ItemNotificationMsgBinding.inflate(LayoutInflater.from(mContext), parent, false));
     }
-
 
     class MsgViewHolder extends ViewHolder<ChatMessage> {
 
@@ -42,12 +37,13 @@ class NotaficationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
 
         @Override
         public void setData(ChatMessage msg, int position) {
-            itemBinding.ivDelete.setImageResource(R.drawable.contacts_notification_delete);
+            itemBinding.ivMsgDelete.setImageResource(R.drawable.contacts_notification_delete);
             itemBinding.ivFrom.setImageResource(R.drawable.icon);
-            itemBinding.tvName.setText(msg.getFrom());
+
             try {
+                String groupName = msg.getStringAttribute(SYSTEM_MESSAGE_NAME);
+                itemBinding.tvName.setText(groupName);
                 String messageStatus = msg.getStringAttribute(SYSTEM_MESSAGE_STATUS);
-                itemBinding.tvType.setText(messageStatus);
                 InviteMessageStatus status = InviteMessageStatus.valueOf(messageStatus);
 
                 if (status == BEINVITEED) {
@@ -59,12 +55,16 @@ class NotaficationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
                 }else{
                     itemBinding.btnAccept.setVisibility(View.GONE);
                 }
-            } catch (ChatException e) {
+                itemBinding.tvType.setText( getSystemMessage(msg));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            itemBinding.btnAccept.setOnClickListener(v-> {
-               mItemSubViewListener.onItemSubViewClick(v,position);
+            itemBinding.btnAccept.setOnClickListener(v -> {
+                mItemSubViewListener.onItemSubViewClick(v, position);
+            });
+            itemBinding.ivMsgDelete.setOnClickListener(v -> {
+                mItemSubViewListener.onItemSubViewClick(v, position);
             });
         }
     }

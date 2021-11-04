@@ -12,12 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.Conversation;
 import io.agora.chat.uikit.conversation.EaseConversationListFragment;
 import io.agora.chat.uikit.conversation.model.EaseConversationSetStyle;
 import io.agora.chatdemo.DemoApplication;
@@ -25,7 +27,10 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.contact.ContactFragment;
 import io.agora.chatdemo.conversation.ConversationListFragment;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.me.AboutMeFragment;
 
@@ -36,6 +41,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private TextView mTvMainHomeMsg, mTvMainContactsMsg;
     private int[] badgeIds = {R.layout.badge_home, R.layout.badge_contacts};
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_contacts_msg};
+    private MainViewModel mainViewModel;
 
     @Override
     protected int getLayoutId() {
@@ -52,11 +58,40 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     public void initListener() {
         navView.setOnNavigationItemSelectedListener(this);
+        mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel.getConversationObservable().observe(this,conversation->{
+            initRedDot(conversation);
+        });
+
+        LiveDataBus messageChange =  LiveDataBus.get();
+        messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, this::loadData);
+
+    }
+
+    private void loadData(EaseEvent easeEvent) {
+        mainViewModel.getMsgConversation();
+    }
+
+    private void initRedDot(Conversation conversation) {
+        int visiable;
+        int unreadMsgCount = conversation.getUnreadMsgCount();
+        if(unreadMsgCount>0) {
+            visiable=View.VISIBLE;
+        }else{
+            visiable=View.GONE;
+        }
+        showContactUnReadIcon(visiable);
     }
 
     public void initData() {
+
+        mainViewModel.getMsgConversation();
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
         checkNeedPermission();
+
     }
 
     private void checkNeedPermission() {

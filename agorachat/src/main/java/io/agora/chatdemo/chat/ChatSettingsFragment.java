@@ -22,7 +22,6 @@ import io.agora.chatdemo.chat.viewmodel.ChatSettingsViewModel;
 import io.agora.chatdemo.databinding.FragmentChatSettingsBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
-import io.agora.chatdemo.general.dialog.DemoDialogFragment;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
@@ -75,7 +74,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     private void showDialog() {
         new SimpleDialog.Builder(mContext)
                 .setTitle(R.string.chat_settings_clear_history_warning)
-                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                .setOnConfirmClickListener(new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
                         viewModel.clearHistory(conversationId);

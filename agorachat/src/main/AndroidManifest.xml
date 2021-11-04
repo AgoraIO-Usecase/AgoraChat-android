@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.agora.chatdemo">
+
     <!-- IM SDK required start -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!-- IM SDK required end -->
 
     <application
         android:name=".DemoApplication"
@@ -33,50 +35,57 @@
             android:name=".sign.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity> <!-- Sign in -->
-        <activity
-            android:name=".sign.SignInActivity"
-            android:screenOrientation="portrait" /> <!-- Contact detail -->
-        <activity
-            android:name=".contact.ContactDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".chat.ChatActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- 适配Android 7.0, 需要将下方的com.hyphenate.easeim替换为你的app包名 -->
+        </activity>
+        <!--Sign in-->
+        <activity android:name=".sign.SignInActivity"
+            android:screenOrientation="portrait"/>
+        <!--Contact detail-->
+        <activity android:name=".contact.ContactDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".chat.ChatActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait"/>
+        <!--Group detail-->
+        <activity android:name=".group.activities.GroupDetailActivity" />
+
+        <!-- 适配Android 7.0, 需要将下方的com.hyphenate.easeim替换为你的app包名 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            android:exported="false">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider> <!-- IM SDK required start -->
+        </provider>
+
+        <!-- IM SDK required start-->
         <!-- SDK service -->
         <service
             android:name="io.agora.chat.ChatService"
+            android:exported="true"/>
+        <service android:name="io.agora.chat.ChatJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="true" />
-        <service
-            android:name="io.agora.chat.ChatJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- SDK receiver -->
+
+        <!-- SDK receiver -->
         <receiver android:name="io.agora.chat.MonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
-                <data android:scheme="package" />
+                <data android:scheme="package"/>
             </intent-filter>
             <!-- optional filter -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
             </intent-filter>
         </receiver>
+        <!-- IM SDK required end-->
     </application>
 
 </manifest>

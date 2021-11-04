@@ -8,12 +8,11 @@ import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.EaseTitleBar;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.ChatActivity;
@@ -35,10 +34,16 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     private ArrowItemView item_block_contact;
     private ArrowItemView item_delete_block;
     private ContactDetailViewModel viewModel;
+    private boolean fromChat;
 
     public static void actionStart(Context context, String username) {
+        actionStart(context, username, false);
+    }
+
+    public static void actionStart(Context context, String username, boolean isFromChat) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
         intent.putExtra("username", username);
+        intent.putExtra("from_chat", isFromChat);
         context.startActivity(intent);
     }
 
@@ -51,6 +56,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         username = getIntent().getStringExtra("username");
+        fromChat = getIntent().getBooleanExtra("from_chat", false);
     }
 
     @Override
@@ -58,11 +64,16 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
         super.initView(savedInstanceState);
         toolbar_contact_detail = findViewById(R.id.toolbar_contact_detail);
         iv_avatar = findViewById(R.id.iv_avatar);
-        tv_nickname = findViewById(R.id.tv_nickname);
+        tv_nickname = findViewById(R.id.tv_name);
         tv_id = findViewById(R.id.tv_id);
         iv_chat = findViewById(R.id.iv_chat);
+        TextView tv_chat = findViewById(R.id.tv_chat);
         item_block_contact = findViewById(R.id.item_block_contact);
         item_delete_block = findViewById(R.id.item_delete_block);
+        if(fromChat) {
+            iv_chat.setVisibility(View.GONE);
+            tv_chat.setVisibility(View.GONE);
+        }
         EaseUserUtils.setUserAvatarStyle(iv_avatar);
     }
 
@@ -120,13 +131,8 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     }
 
     private void updateLayout(EaseUser user) {
-        tv_nickname.setText(user.getNickname());
-        tv_id.setText(getString(R.string.contact_detail_show_id, user.getUsername()));
-        Glide.with(mContext)
-                .load(user.getAvatar())
-                .placeholder(R.drawable.ease_default_avatar)
-                .error(R.drawable.ease_default_avatar)
-                .into(iv_avatar);
+        DemoHelper.getInstance().setUserInfo(mContext, username, tv_nickname, iv_avatar);
+        tv_id.setText(getString(R.string.show_agora_chat_id, user.getUsername()));
     }
 
     @Override

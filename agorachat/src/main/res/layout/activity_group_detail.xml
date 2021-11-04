@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/toolbar_group_detail"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
+
+    <include
+        android:id="@+id/include_info"
+        layout="@layout/include_user_info"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_group_members"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="32dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarSrc="@drawable/group_detail_members"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="true"
+        app:arrowItemTitle="@string/group_detail_members"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_group_notice"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemShowAvatar="true"
+        android:visibility="gone"
+        app:arrowItemAvatarSrc="@drawable/group_detail_notice"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="true"
+        app:arrowItemTitle="@string/group_detail_notice"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
+
+    <TextView
+        android:id="@+id/tv_notice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="17dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="36dp"
+        android:visibility="gone"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/color_light_gray_999999"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_group_files"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarSrc="@drawable/group_detail_files"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="true"
+        android:visibility="gone"
+        app:arrowItemTitle="@string/group_detail_files"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_group_transfer"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarSrc="@drawable/group_detail_trans"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="true"
+        android:visibility="gone"
+        app:arrowItemTitle="@string/group_detail_transfer"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_leave_group"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarSrc="@drawable/group_detail_leave"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/group_detail_leave_group"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_disband_group"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarSrc="@drawable/group_detail_delete"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="false"
+        android:visibility="gone"
+        app:arrowItemTitle="@string/group_detail_disband_group"
+        android:foreground="@drawable/ease_ripple_click_gray"/>
+
+</LinearLayout>

@@ -7,7 +7,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -36,6 +39,7 @@ import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.general.db.DemoDbHelper;
+import io.agora.chatdemo.general.manager.UserInfoHelper;
 import io.agora.chatdemo.general.manager.UserProfileManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.notification.EventsMonitor;
@@ -547,6 +551,13 @@ public class DemoHelper {
             return true;
         }
         return false;
+    }
+
+    public void setUserInfo(Activity context, String username, TextView tvName, ImageView avatar) {
+        setUserInfo(context, username, R.drawable.ease_default_avatar, tvName, avatar);
+    }
+    public void setUserInfo(Activity context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
+        UserInfoHelper.setUserInfo(context, username, defaultAvatar, tvName, avatar);
     }
 
 }

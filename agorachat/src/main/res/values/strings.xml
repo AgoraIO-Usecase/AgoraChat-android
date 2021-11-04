@@ -99,11 +99,11 @@
     <string name="em_group_new_success">群组创建成功</string>
     <string name="em_group_new_invite_join_group">%1$s邀请加入群：%2$s</string>
 
+    <string name="show_agora_chat_id">AgoraID: %1$s</string>
 
     <string name="contact_detail_block_contact">Block Contact</string>
     <string name="contact_detail_delete_contact">Delete Contact</string>
     <string name="contact_detail_add_contact">Add Contact</string>
-    <string name="contact_detail_show_id">AgoraID: %1$s</string>
     <string name="contact_detail_start_chat">Chat</string>
     <string name="contact_detail_block_title">Block this contact now?</string>
     <string name="contact_detail_block_content">When you block this contact, you will not receive any messages from them.</string>
@@ -243,6 +243,20 @@
 
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_confirm">OK</string>
+
+    <string name="group_detail_members">Members</string>
+    <string name="group_detail_notice">Group Notice</string>
+    <string name="group_detail_files">Group Files</string>
+    <string name="group_detail_transfer">Transfer Ownership</string>
+    <string name="group_detail_disband_group">Disband this Group</string>
+    <string name="group_detail_leave_group">Leave this Group</string>
+    <string name="group_detail_leave_hint_title">Leave this group now?</string>
+    <string name="group_detail_leave_hint_content">No prompt for other members and no group messages after you quit this group.</string>
+    <string name="group_detail_leave_hint_confirm">Leave</string>
+    <string name="group_detail_disband_hint_title">Disband this group now?</string>
+    <string name="group_detail_disband_hint_content">Delete this group and associated Chats.</string>
+    <string name="group_detail_disband_hint_confirm">Disband</string>
+    <string name="group_detail_disband_hint_transfer">Transfer Ownership n’ Leave</string>
 
     <string name="me_setting">Settings</string>
     <string name="me_setting_general">General</string>

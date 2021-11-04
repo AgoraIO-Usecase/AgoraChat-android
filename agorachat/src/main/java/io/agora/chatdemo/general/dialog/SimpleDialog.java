@@ -179,6 +179,16 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
             if(showCancel) {
                 mGroupMiddle.setVisibility(View.VISIBLE);
             }
+            boolean hideConfirm = bundle.getBoolean("hide_confirm");
+            if(hideConfirm) {
+                mBtnDialogConfirm.setVisibility(View.GONE);
+            }
+            boolean cancelOutsideTouch = bundle.getBoolean("cancel_outside_touch");
+            if(getDialog() != null) {
+                getDialog().setCanceledOnTouchOutside(cancelOutsideTouch);
+            }
+            boolean cancelable = bundle.getBoolean("set_cancelable");
+            setCancelable(cancelable);
         }
 
         checkContent();
@@ -315,6 +325,21 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
 
         public Builder showCancelButton(boolean showCancel) {
             this.bundle.putBoolean("show_cancel", showCancel);
+            return this;
+        }
+
+        public Builder hideConfirmButton(boolean hide) {
+            this.bundle.putBoolean("hide_confirm", hide);
+            return this;
+        }
+
+        public Builder setCanceledOnTouchOutside(boolean cancel) {
+            this.bundle.putBoolean("cancel_outside_touch", cancel);
+            return this;
+        }
+
+        public Builder setCancelable(boolean cancelable) {
+            this.bundle.putBoolean("set_cancelable", cancelable);
             return this;
         }
 

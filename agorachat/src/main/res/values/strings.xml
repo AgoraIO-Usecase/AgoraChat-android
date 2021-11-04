@@ -105,6 +105,12 @@
     <string name="contact_detail_add_contact">Add Contact</string>
     <string name="contact_detail_show_id">AgoraID: %1$s</string>
     <string name="contact_detail_start_chat">Chat</string>
+    <string name="contact_detail_block_title">Block this contact now?</string>
+    <string name="contact_detail_block_content">When you block this contact, you will not receive any messages from them.</string>
+    <string name="contact_detail_block_confirm_text">Block</string>
+    <string name="contact_detail_delete_title">Delete this contact now?</string>
+    <string name="contact_detail_delete_content">Delete this contact and associated Chats.</string>
+    <string name="contact_detail_delete_confirm_text">Delete</string>
 
     <string name="contact_add">add</string>
     <string name="contact_adding">adding</string>

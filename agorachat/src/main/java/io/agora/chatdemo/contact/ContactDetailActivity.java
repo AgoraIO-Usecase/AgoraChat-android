@@ -10,17 +10,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 
-import io.agora.chat.ChatClient;
-import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
+import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.viewmodels.ContactDetailViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.widget.ArrowItemView;
@@ -133,20 +133,48 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_chat :
-                showToast("聊天");
-                sendMessage();
+                skipToChat();
                 break;
             case R.id.item_block_contact :
-                //viewModel.addUserToBlackList(username, true);
+                showBlockDialog();
                 break;
             case R.id.item_delete_block :
-                //viewModel.deleteContact(username);
+                showDeleteDialog();
                 break;
         }
     }
 
-    private void sendMessage() {
-        ChatMessage mes = ChatMessage.createTxtSendMessage("Hello", username);
-        ChatClient.getInstance().chatManager().sendMessage(mes);
+    private void showBlockDialog() {
+        new SimpleDialog.Builder(mContext)
+                .setTitle(R.string.contact_detail_block_title)
+                .setContent(R.string.contact_detail_block_content)
+                .setOnConfirmClickListener(R.string.contact_detail_block_confirm_text, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.addUserToBlackList(username, true);
+                    }
+                })
+                .setConfirmColor(R.color.contact_color_block)
+                .showCancelButton(true)
+                .show();
+    }
+
+    private void showDeleteDialog() {
+        new SimpleDialog.Builder(mContext)
+                .setTitle(R.string.contact_detail_delete_title)
+                .setContent(R.string.contact_detail_delete_content)
+                .setOnConfirmClickListener(R.string.contact_detail_delete_confirm_text, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.deleteContact(username);
+                    }
+                })
+                .setConfirmColor(R.color.contact_color_block)
+                .showCancelButton(true)
+                .show();
+    }
+
+    private void skipToChat() {
+        ChatActivity.actionStart(mContext, username, DemoConstant.CHATTYPE_SINGLE);
     }
 }

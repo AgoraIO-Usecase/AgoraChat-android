@@ -1,5 +1,8 @@
 package io.agora.chatdemo.contact;
 
+import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
+import static io.agora.chatdemo.general.utils.ToastUtils.showToast;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +25,6 @@ import io.agora.chatdemo.databinding.FragmentGroupMemberDetailBottomSheetBinding
 import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
-
-import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
-import static io.agora.chatdemo.general.utils.ToastUtils.showToast;
 
 
 public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragment {
@@ -69,7 +69,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
                     .into(mBinding.ivAvatar);
         }
         mBinding.tvNickname.setText(user.getNickname());
-        mBinding.tvId.setText(getString(R.string.contact_detail_show_id, user.getUsername()));
+        mBinding.tvId.setText(getString(R.string.show_agora_chat_id, user.getUsername()));
         setTopOffset((int) (EaseUtils.getScreenInfo(getContext())[1]-UIUtils.dp2px(getContext(),425)));
     }
 

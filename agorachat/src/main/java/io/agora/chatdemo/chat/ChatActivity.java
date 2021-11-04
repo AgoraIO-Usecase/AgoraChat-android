@@ -38,14 +38,15 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
+import io.agora.chatdemo.contact.ContactDetailActivity;
 import io.agora.chatdemo.contact.GroupMemberDetailBottomSheetFragment;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
-import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity {
@@ -203,7 +204,11 @@ public class ChatActivity extends BaseInitActivity {
         titleBar.setOnIconClickListener(new EaseTitleBar.OnIconClickListener() {
             @Override
             public void onIconClick(View view) {
-                GroupDetailActivity.actionStart(mContext, conversationId, true);
+                if(chatType == DemoConstant.CHATTYPE_SINGLE) {
+                    ContactDetailActivity.actionStart(mContext, conversationId, true);
+                }else if(chatType == DemoConstant.CHATTYPE_GROUP){
+                    GroupDetailActivity.actionStart(mContext, conversationId, true);
+                }
             }
         });
     }

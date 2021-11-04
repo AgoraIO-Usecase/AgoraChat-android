@@ -34,10 +34,16 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     private ArrowItemView item_block_contact;
     private ArrowItemView item_delete_block;
     private ContactDetailViewModel viewModel;
+    private boolean fromChat;
 
     public static void actionStart(Context context, String username) {
+        actionStart(context, username, false);
+    }
+
+    public static void actionStart(Context context, String username, boolean isFromChat) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
         intent.putExtra("username", username);
+        intent.putExtra("from_chat", isFromChat);
         context.startActivity(intent);
     }
 
@@ -50,6 +56,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         username = getIntent().getStringExtra("username");
+        fromChat = getIntent().getBooleanExtra("from_chat", false);
     }
 
     @Override
@@ -60,8 +67,13 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
         tv_nickname = findViewById(R.id.tv_name);
         tv_id = findViewById(R.id.tv_id);
         iv_chat = findViewById(R.id.iv_chat);
+        TextView tv_chat = findViewById(R.id.tv_chat);
         item_block_contact = findViewById(R.id.item_block_contact);
         item_delete_block = findViewById(R.id.item_delete_block);
+        if(fromChat) {
+            iv_chat.setVisibility(View.GONE);
+            tv_chat.setVisibility(View.GONE);
+        }
         EaseUserUtils.setUserAvatarStyle(iv_avatar);
     }
 

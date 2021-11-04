@@ -7,11 +7,11 @@
                     <solid android:color="@color/dialog_color_btn_bg_select"/>
                     <stroke android:color="@color/dialog_color_btn_stroke"/>
                 </shape>
-                <item android:top="1dp" android:right="1dp">
-                    <shape android:shape="rectangle">
-                        <solid android:color="@color/dialog_color_btn_bg_select"/>
-                    </shape>
-                </item>
+            </item>
+            <item android:top="1dp" android:right="1dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/dialog_color_btn_bg_select"/>
+                </shape>
             </item>
         </layer-list>
     </item>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/avatar_big_size"
+        android:layout_height="@dimen/avatar_big_size"
+        android:src="@drawable/ease_default_avatar"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_big_20"
+        android:textColor="@color/color_main_text"
+        android:layout_marginTop="10dp"
+        tools:text="Maria Troncatti"/>
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/color_second_text"
+        android:layout_marginTop="5dp"
+        tools:text="AgoraID: supercalifragilisticexpialidocious"/>
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/color_second_text"
+        android:layout_marginTop="2dp"
+        tools:text="Description"
+        android:visibility="gone"/>
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/iv_chat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/contact_start_chat"
+        android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:id="@+id/tv_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/color_main_text"
+        android:layout_marginTop="5dp"
+        android:text="@string/contact_detail_start_chat"/>
+
+</LinearLayout>

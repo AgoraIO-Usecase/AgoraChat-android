@@ -106,7 +106,7 @@ public class ArrowItemView extends ConstraintLayout {
         boolean showAvatar = a.getBoolean(R.styleable.ArrowItemView_arrowItemShowAvatar, false);
         avatar.setVisibility(showAvatar ? VISIBLE : GONE);
 
-        int arrowSrcResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarSrc, -1);
+        int arrowSrcResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemArrowSrc, -1);
         if(arrowSrcResourceId != -1) {
             ivArrow.setImageResource(arrowSrcResourceId);
         }

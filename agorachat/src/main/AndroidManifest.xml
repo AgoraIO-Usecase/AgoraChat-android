@@ -50,6 +50,8 @@
         <activity android:name=".chat.ChatActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"/>
+        <!--Group detail-->
+        <activity android:name=".group.activities.GroupDetailActivity" />
 
         <!-- 适配Android 7.0, 需要将下方的com.hyphenate.easeim替换为你的app包名 -->
         <provider

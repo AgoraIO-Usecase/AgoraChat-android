@@ -15,7 +15,13 @@ public abstract class BaseInitFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutId(), container, false);
+        int layoutId = getLayoutId();
+        View view = null;
+        if(layoutId != 0) {
+            view = inflater.inflate(layoutId, container, false);
+        }else {
+            view = getContentView();
+        }
         initArgument();
         return view;
     }
@@ -35,18 +41,26 @@ public abstract class BaseInitFragment extends BaseFragment {
     }
 
     /**
-     * 获取布局id
+     * Return the layout ID
      * @return
      */
     protected abstract int getLayoutId();
 
     /**
-     * 获取传递参数
+     * Return the layout view
+     * @return
+     */
+    protected View getContentView() {
+        return null;
+    }
+
+    /**
+     * Initialize the params
      */
     protected void initArgument() {}
 
     /**
-     * 初始化布局相关
+     * Initialize the views
      * @param savedInstanceState
      */
     protected void initView(Bundle savedInstanceState) {
@@ -55,22 +69,22 @@ public abstract class BaseInitFragment extends BaseFragment {
 
 
     /**
-     * 初始化ViewModel相关
+     * Initialize the viewmodels
      */
     protected void initViewModel() {}
 
     /**
-     * 初始化监听等
+     * Initialize the listeners
      */
     protected void initListener() {}
 
     /**
-     * 初始化数据相关
+     * Initialize the data
      */
     protected void initData() {}
 
     /**
-     * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
+     * Call it after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}
      * @param id
      * @param <T>
      * @return

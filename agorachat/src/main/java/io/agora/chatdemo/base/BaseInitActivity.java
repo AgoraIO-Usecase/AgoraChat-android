@@ -2,6 +2,7 @@ package io.agora.chatdemo.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -9,7 +10,12 @@ public abstract class BaseInitActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
+        int layoutId = getLayoutId();
+        if(layoutId != 0) {
+            setContentView(layoutId);
+        }else {
+            setContentView(getContentView());
+        }
         initSystemFit();
         initIntent(getIntent());
         initView(savedInstanceState);
@@ -17,15 +23,22 @@ public abstract class BaseInitActivity extends BaseActivity {
         initData();
     }
 
-    protected void initSystemFit() {
-        setFitSystemForTheme(true);
+    protected View getContentView() {
+        return null;
     }
 
     /**
      * get layout id
      * @return
      */
-    protected abstract int getLayoutId();
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    protected void initSystemFit() {
+        setFitSystemForTheme(true);
+    }
+
 
     /**
      * init intent

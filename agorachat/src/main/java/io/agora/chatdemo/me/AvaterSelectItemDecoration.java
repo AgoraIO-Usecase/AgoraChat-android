@@ -8,11 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by 许成谱 on 2021/11/4 0004 20:18.
- * qq:1550540124
- * 热爱生活每一天
- */
 public class AvaterSelectItemDecoration extends RecyclerView.ItemDecoration {
     private int space;
     public AvaterSelectItemDecoration(int space) {

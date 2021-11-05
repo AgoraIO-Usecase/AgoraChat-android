@@ -6,10 +6,6 @@ import androidx.fragment.app.Fragment;
 
 import io.agora.chatdemo.R;
 
-/**
- * Created by 许成谱 on 2021/10/29 0029 19:39.
- * qq:1550540124
- */
 public interface BottomSheetChildHelper {
 
     //more details by user choose

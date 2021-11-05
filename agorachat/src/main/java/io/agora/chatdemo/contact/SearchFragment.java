@@ -12,11 +12,6 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseListFragment;
 import io.agora.chatdemo.general.widget.EaseSearchEditText;
 
-/**
- * Created by 许成谱 on 2021/10/31 0031 9:30.
- * qq:1550540124
- * 热爱生活每一天
- */
 public abstract class SearchFragment<T> extends BaseListFragment<T> {
     protected SmartRefreshLayout srlContactRefresh;
     protected EaseSearchEditText etSearch;

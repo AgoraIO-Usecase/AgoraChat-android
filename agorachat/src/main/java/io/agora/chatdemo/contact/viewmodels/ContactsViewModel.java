@@ -9,11 +9,6 @@ import io.agora.chat.Conversation;
 import io.agora.chat.uikit.manager.EaseNotificationMsgManager;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 
-/**
- * Created by 许成谱 on 2021/11/2 0002 21:35.
- * qq:1550540124
- * 热爱生活每一天
- */
 public class ContactsViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Conversation> conversationObservable;
     private EaseNotificationMsgManager msgManager;

@@ -23,11 +23,6 @@ import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.ArrowItemView;
 
-/**
- * Created by 许成谱 on 2021/10/26 0026 12:10.
- * qq:1550540124
- * 热爱生活每一天！
- */
 public class GroupCreateFragment extends ContactListFragment implements View.OnClickListener, BottomSheetChildHelper {
     private ArrayList<Pair<Integer, Integer>> datas = new ArrayList();
     private LinearLayout headView;

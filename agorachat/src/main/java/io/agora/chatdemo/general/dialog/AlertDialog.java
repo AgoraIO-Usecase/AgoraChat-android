@@ -11,17 +11,13 @@ import io.agora.chatdemo.R;
 
 
 /**
- * Sample:
- * val dialog = AlertDialog.Builder(this)
- *                 .setContentView(R.layout.dialog_reset_pwd)
- *                 .setText(R.id.tv_message, msg)
- *                 .setLayoutParams(UIUtils.dp2px(this, 256), ViewGroup.LayoutParams.WRAP_CONTENT)
- *                 .show()
- *         dialog.setOnClickListener(R.id.btn_input_again, object : View.OnClickListener {
- *             override fun onClick(v: View?) {
- *                 dialog.dismiss()
- *             }
- *         })
+ * new AlertDialog.Builder(mContext)
+ *                 .setContentView(R.layout.dialog_me_setting_userinfo)
+ *                 .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+ *                 .setGravity(Gravity.BOTTOM)
+ *                 .setCancelable(true)
+ *                 .setOnClickListener(R.id.tv_copy_id, this)
+ *                 .show();
  */
 public class AlertDialog extends Dialog {
     final AlertController mAlert;

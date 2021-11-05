@@ -42,6 +42,7 @@ import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.manager.UserInfoHelper;
 import io.agora.chatdemo.general.manager.UserProfileManager;
 import io.agora.chatdemo.general.models.DemoModel;
+import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.notification.EventsMonitor;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
@@ -565,6 +566,13 @@ public class DemoHelper {
     }
     public void setUserInfo(Activity context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
         UserInfoHelper.setUserInfo(context, username, defaultAvatar, tvName, avatar);
+    }
+
+    public boolean setGroupInfo(Context context, String groupId, TextView tvName, ImageView avatar) {
+        return setGroupInfo(context, groupId, R.drawable.group_avatar, tvName, avatar);
+    }
+    public boolean setGroupInfo(Context context, String groupId, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
+        return GroupHelper.setGroupInfo(context, groupId, defaultAvatar, tvName, avatar);
     }
 
 }

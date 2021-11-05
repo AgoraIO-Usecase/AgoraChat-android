@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import io.agora.chat.GroupInfo;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.widget.EaseImageView;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 
 
@@ -44,8 +45,10 @@ public class PublicGroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group
 
         @Override
         public void setData(GroupInfo item, int position) {
-            mAvatar.setImageResource(R.drawable.avatar_1);
-            mName.setText(item.getGroupName());
+            boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, item.getGroupId(), mName, mAvatar);
+            if(!hasProvided) {
+                mName.setText(item.getGroupName());
+            }
         }
     }
 }

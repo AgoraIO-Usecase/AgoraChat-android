@@ -1,9 +1,10 @@
 package io.agora.chatdemo.chat;
 
+import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -12,7 +13,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -20,17 +20,13 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
-import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.constants.EaseConstant;
-import io.agora.chat.uikit.models.EaseConvSet;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.provider.EaseConversationInfoProvider;
-import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -47,8 +43,6 @@ import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.util.EMLog;
-
-import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 
 public class ChatActivity extends BaseInitActivity {
     private String conversationId;
@@ -277,48 +271,13 @@ public class ChatActivity extends BaseInitActivity {
     }
 
     private void setDefaultTitle() {
-        String title = "";
         if(chatType != DemoConstant.CHATTYPE_SINGLE) {
-            EaseConversationInfoProvider conversationInfoProvider = EaseUIKit.getInstance().getConversationInfoProvider();
-            if(conversationInfoProvider != null) {
-                EaseConvSet info = conversationInfoProvider.getConversationInfo(conversationId);
-                if(info != null) {
-                    if(!TextUtils.isEmpty(info.getName())) {
-                        title = info.getName();
-                    }
-                    Drawable icon = info.getIcon();
-                    Glide.with(this)
-                            .load(info.getIconUrl())
-                            .placeholder(R.drawable.icon)
-                            .error(icon != null ? icon : R.drawable.icon)
-                            .into(titleBar.getIcon());
-                    titleBar.setTitle(title);
-                }else {
-                    setGroupInfo();
-                }
-            }else {
+            boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
+            if(!hasProvided) {
                 setGroupInfo();
             }
         }else {
-            String avatarUrl = "";
-            EaseUserProfileProvider userProvider = EaseUIKit.getInstance().getUserProvider();
-            if(userProvider != null) {
-                EaseUser user = userProvider.getUser(conversationId);
-                if(user != null) {
-                    title = user.getNickname();
-                    avatarUrl = user.getAvatar();
-                }else {
-                    title = conversationId;
-                }
-            }else {
-                title = conversationId;
-            }
-            Glide.with(this)
-                    .load(avatarUrl)
-                    .placeholder(R.drawable.ease_default_avatar)
-                    .error(R.drawable.ease_default_avatar)
-                    .into(titleBar.getIcon());
-            titleBar.setTitle(title);
+            DemoHelper.getInstance().setUserInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
         }
     }
 

@@ -12,6 +12,7 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.widget.EaseImageView;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 
 
@@ -47,9 +48,11 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group> {
 
         @Override
         public void setData(Group item, int position) {
-            mAvatar.setImageResource(R.drawable.group_avatar);
-            mName.setText(item.getGroupName());
-            mSignature.setText(item.getGroupId()+"");
+            boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, item.getGroupId(), mName, mAvatar);
+            if(!hasProvided) {
+                mName.setText(item.getGroupName());
+            }
+            mSignature.setText(item.getGroupId());
             mLabel.setVisibility(View.GONE);
 //            if(isOwner(item.getOwner())) {
 //                mLabel.setVisibility(View.VISIBLE);

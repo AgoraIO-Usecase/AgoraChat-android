@@ -3,7 +3,6 @@ package io.agora.chatdemo.group.activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,14 +10,10 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-
 import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
-import io.agora.chat.uikit.EaseUIKit;
-import io.agora.chat.uikit.models.EaseConvSet;
-import io.agora.chat.uikit.provider.EaseConversationInfoProvider;
 import io.agora.chat.uikit.widget.EaseTitleBar;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.ChatActivity;
@@ -200,25 +195,8 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             binding.itemDisbandGroup.setVisibility(View.GONE);
         }
 
-        EaseConversationInfoProvider conversationInfoProvider = EaseUIKit.getInstance().getConversationInfoProvider();
-        if(conversationInfoProvider != null) {
-            EaseConvSet info = conversationInfoProvider.getConversationInfo(groupId);
-            if(info != null) {
-                String title = "";
-                if(!TextUtils.isEmpty(info.getName())) {
-                    title = info.getName();
-                }
-                Drawable icon = info.getIcon();
-                Glide.with(this)
-                        .load(info.getIconUrl())
-                        .placeholder(R.drawable.icon)
-                        .error(icon != null ? icon : R.drawable.icon)
-                        .into(binding.includeInfo.ivAvatar);
-                binding.includeInfo.tvName.setText(title);
-            }else {
-                setGroupInfo();
-            }
-        }else {
+        boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, groupId, binding.includeInfo.tvName, binding.includeInfo.ivAvatar);
+        if(!hasProvided) {
             setGroupInfo();
         }
         binding.includeInfo.tvId.setText(getString(R.string.show_agora_chat_id, groupId));
@@ -229,7 +207,6 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     private void setGroupInfo() {
         String title = GroupHelper.getGroupName(groupId);
         binding.includeInfo.tvName.setText(title);
-        binding.includeInfo.ivAvatar.setImageResource(R.drawable.icon);
     }
 
     private void showEditDialog() {

@@ -1,12 +1,22 @@
 package io.agora.chatdemo.group;
 
+import android.content.Context;
 import android.text.TextUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.DrawableRes;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.Group;
+import io.agora.chat.uikit.EaseUIKit;
+import io.agora.chat.uikit.models.EaseGroupInfo;
+import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chatdemo.DemoHelper;
 
 public class GroupHelper {
@@ -142,5 +152,33 @@ public class GroupHelper {
             }
         }
         return false;
+    }
+
+    public static boolean setGroupInfo(Context context, String groupId, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
+        String name = groupId;
+        String userAvatar= "";
+        boolean isProvide = false;
+        EaseGroupInfoProvider userProvider = EaseUIKit.getInstance().getGroupInfoProvider();
+        if(userProvider != null) {
+            EaseGroupInfo info = userProvider.getGroupInfo(groupId, 1);
+            if(info != null) {
+                if(!TextUtils.isEmpty(info.getName())) {
+                    name = info.getName();
+                }
+                userAvatar = info.getIconUrl();
+                isProvide = true;
+            }
+        }
+        if(tvName != null && !TextUtils.isEmpty(name)) {
+            tvName.setText(name);
+        }
+        if(avatar != null) {
+            Glide.with(context)
+                    .load(userAvatar)
+                    .placeholder(defaultAvatar)
+                    .error(defaultAvatar)
+                    .into(avatar);
+        }
+        return isProvide;
     }
 }

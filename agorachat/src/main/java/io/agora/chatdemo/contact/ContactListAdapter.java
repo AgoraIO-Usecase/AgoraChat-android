@@ -67,6 +67,10 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         this.muteList = muteList;
     }
 
+    public List<String> getMuteList() {
+        return muteList;
+    }
+
     public List<String> getCheckedList() {
         return checkedList;
     }

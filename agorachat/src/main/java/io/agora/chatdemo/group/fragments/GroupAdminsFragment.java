@@ -22,6 +22,7 @@ public class GroupAdminsFragment extends BaseContactListFragment<EaseUser> {
     private ContactListAdapter listAdapter;
     private String groupId;
     private List<EaseUser> mGroupManagerList = new ArrayList<>();
+    private int groupRole;
 
     @Override
     protected void initArgument() {
@@ -29,6 +30,7 @@ public class GroupAdminsFragment extends BaseContactListFragment<EaseUser> {
         Bundle bundle = getArguments();
         if(bundle != null) {
             groupId = bundle.getString("group_id");
+            groupRole = bundle.getInt("group_role");
         }
     }
 

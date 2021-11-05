@@ -96,4 +96,8 @@ public interface DemoConstant extends EaseConstant {
 
      String GROUP_MEMBER_USER="group_member_user";
 
+     int GROUP_ROLE_OWNER = 1;
+     int GROUP_ROLE_ADMIN = 2;
+     int GROUP_ROLE_MEMBER = 0;
+
 }

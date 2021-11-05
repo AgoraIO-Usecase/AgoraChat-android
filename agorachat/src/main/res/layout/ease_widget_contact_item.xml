@@ -89,8 +89,8 @@
             android:layout_marginStart="10dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/color_second_text"
-            android:textSize="16sp"
+            android:textColor="@color/color_light_gray_999999"
+            android:textSize="14sp"
             android:visibility="visible"
             tools:text="label"/>
 

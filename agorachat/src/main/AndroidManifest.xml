@@ -53,6 +53,8 @@
         <activity android:name=".group.activities.GroupDetailActivity" />
         <!--Group members-->
         <activity android:name=".group.activities.GroupMembersActivity" />
+        <!--Transfer group owner-->
+        <activity android:name=".group.activities.GroupTransferActivity" />
 
         <!-- 适配Android 7.0, 需要将下方的com.hyphenate.easeim替换为你的app包名 -->
         <provider

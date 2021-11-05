@@ -263,6 +263,18 @@
     <string name="group_members_tab_title_mute">Mute</string>
     <string name="group_members_tab_title_block">Block</string>
     <string name="group_members_tab_title_white">White</string>
+    <string name="group_members_title">Members</string>
+    <string name="group_members_dialog_menu_make_admin">Make Admin</string>
+    <string name="group_members_dialog_menu_remove_admin">Remove Admin</string>
+    <string name="group_members_dialog_menu_mute">Mute</string>
+    <string name="group_members_dialog_menu_unmute">UnMute</string>
+    <string name="group_members_dialog_menu_block">Move to Blocked list</string>
+    <string name="group_members_dialog_menu_remove_block">Remove from Blocked list</string>
+    <string name="group_members_dialog_menu_to_allow">Move to Allowed list</string>
+    <string name="group_members_dialog_menu_remove_from_allow">Remove from Allowed list</string>
+    <string name="group_members_dialog_menu_remove">Remove From Group</string>
+
+    <string name="group_transfer_title">Transfer Ownership</string>
 
     <string name="me_setting">Settings</string>
     <string name="me_setting_general">General</string>

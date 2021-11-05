@@ -31,6 +31,7 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.databinding.ActivityGroupMembersBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.fragments.GroupAdminsFragment;
 import io.agora.chatdemo.group.fragments.GroupAllMembersFragment;
@@ -40,10 +41,12 @@ import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
 
 public class GroupMembersActivity extends BaseInitActivity implements EaseTitleBar.OnRightClickListener {
     private ActivityGroupMembersBinding binding;
-    private int[] titles = {R.string.group_members_tab_title_all, R.string.group_members_tab_title_all, R.string.group_members_tab_title_all};
+    private int[] titles;
     private ArrayList<BaseInitFragment> fragments=new ArrayList();
     private String groupId;
     private GroupMemberAuthorityViewModel viewModel;
+    private Group group;
+    private int role;
 
     public static void actionStart(Context context, String groupId) {
         Intent starter = new Intent(context, GroupMembersActivity.class);
@@ -66,26 +69,52 @@ public class GroupMembersActivity extends BaseInitActivity implements EaseTitleB
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        titles = new int[] {R.string.group_members_tab_title_all, R.string.group_members_tab_title_admin
-                , R.string.group_members_tab_title_mute, R.string.group_members_tab_title_block};
-        GroupAllMembersFragment allMembersFragment = new GroupAllMembersFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("group_id", groupId);
-        allMembersFragment.setArguments(bundle);
+        binding.titleBar.setTitle(getString(R.string.group_members_title));
+        group = ChatClient.getInstance().groupManager().getGroup(groupId);
+        if(GroupHelper.isOwner(group)) {
+            role = DemoConstant.GROUP_ROLE_OWNER;
+        }else if(GroupHelper.isAdmin(group)) {
+            role = DemoConstant.GROUP_ROLE_ADMIN;
+        }else {
+            role = DemoConstant.GROUP_ROLE_MEMBER;
+        }
+        if(role == DemoConstant.GROUP_ROLE_OWNER || role == DemoConstant.GROUP_ROLE_ADMIN) {
+            titles = new int[] {R.string.group_members_tab_title_all, R.string.group_members_tab_title_admin
+                    , R.string.group_members_tab_title_mute, R.string.group_members_tab_title_block};
+            GroupAllMembersFragment allMembersFragment = new GroupAllMembersFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("group_id", groupId);
+            bundle.putInt("group_role", role);
+            allMembersFragment.setArguments(bundle);
 
-        GroupAdminsFragment adminsFragment = new GroupAdminsFragment();
-        adminsFragment.setArguments(bundle);
+            GroupAdminsFragment adminsFragment = new GroupAdminsFragment();
+            adminsFragment.setArguments(bundle);
 
-        GroupMuteListFragment muteListFragment = new GroupMuteListFragment();
-        muteListFragment.setArguments(bundle);
+            GroupMuteListFragment muteListFragment = new GroupMuteListFragment();
+            muteListFragment.setArguments(bundle);
 
-        GroupBlockListFragment blockListFragment = new GroupBlockListFragment();
-        blockListFragment.setArguments(bundle);
+            GroupBlockListFragment blockListFragment = new GroupBlockListFragment();
+            blockListFragment.setArguments(bundle);
 
-        fragments.add(allMembersFragment);
-        fragments.add(adminsFragment);
-        fragments.add(muteListFragment);
-        fragments.add(blockListFragment);
+            fragments.add(allMembersFragment);
+            fragments.add(adminsFragment);
+            fragments.add(muteListFragment);
+            fragments.add(blockListFragment);
+        }else {
+            titles = new int[] {R.string.group_members_tab_title_all, R.string.group_members_tab_title_admin};
+            GroupAllMembersFragment allMembersFragment = new GroupAllMembersFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("group_id", groupId);
+            bundle.putInt("group_role", role);
+            allMembersFragment.setArguments(bundle);
+
+            GroupAdminsFragment adminsFragment = new GroupAdminsFragment();
+            adminsFragment.setArguments(bundle);
+
+            fragments.add(allMembersFragment);
+            fragments.add(adminsFragment);
+        }
+
 
         setupWithViewPager();
     }
@@ -155,7 +184,11 @@ public class GroupMembersActivity extends BaseInitActivity implements EaseTitleB
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
-                    Group group = ChatClient.getInstance().groupManager().getGroup(groupId);
+                    group = ChatClient.getInstance().groupManager().getGroup(groupId);
+                    if(group == null) {
+                        return;
+                    }
+                    binding.titleBar.setTitle(getString(R.string.group_members_title)+" (" + group.getMemberCount() +")");
                     if(GroupHelper.isAdmin(group) || GroupHelper.isOwner(group)) {
                         viewModel.getMuteMembers(groupId);
                     }

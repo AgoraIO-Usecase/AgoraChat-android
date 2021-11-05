@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.chat.Group;
-import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 
@@ -104,7 +104,7 @@ public class GroupContactManageFragment extends GroupPublicContactManageFragment
     public void onItemClick(View view, int position) {
         //跳转到群聊页面
         Group group = mAdapter.getItem(position);
-        ChatActivity.actionStart(mContext, group.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+        GroupDetailActivity.actionStart(mContext, group.getGroupId());
     }
 
     @Override

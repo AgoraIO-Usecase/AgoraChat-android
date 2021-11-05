@@ -21,6 +21,7 @@ import io.agora.chat.uikit.provider.EaseConversationInfoProvider;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
+import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.databinding.ActivityGroupDetailBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -93,6 +94,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 onBackPressed();
             }
         });
+        binding.includeInfo.ivChat.setOnClickListener(this);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -118,6 +120,9 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 break;
             case R.id.item_disband_group:
                 disbandGroup();
+                break;
+            case R.id.iv_chat:
+                ChatActivity.actionStart(mContext, groupId, DemoConstant.CHATTYPE_GROUP);
                 break;
         }
     }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BottomSheetChildHelper;
-import io.agora.chatdemo.contact.AddContactsFragment;
+import io.agora.chatdemo.contact.AddContactFragment;
 import io.agora.chatdemo.contact.ContactListFragment;
 import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
@@ -94,13 +94,13 @@ public class GroupCreateFragment extends ContactListFragment implements View.OnC
                     startFragment(new NewGroupSettingFragment(), null);
                     break;
                 case R.drawable.join_a_group:
-
+                    startFragment(new JoinGroupFragment(),null);
                     break;
                 case R.drawable.public_group:
                     startFragment(new GroupPublicContactManageFragment(),null);
                     break;
                 case R.drawable.group_add_contacts:
-                    startFragment(new AddContactsFragment(),null);
+                    startFragment(new AddContactFragment(),null);
                     break;
             }
         }

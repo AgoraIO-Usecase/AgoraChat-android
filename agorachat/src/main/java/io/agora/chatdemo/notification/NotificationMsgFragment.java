@@ -55,7 +55,7 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(String message) {
-                    mMsgsViewModel.getAllMessages();
+//                    mMsgsViewModel.getAllMessages();
                     EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
                     LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
                 }
@@ -137,7 +137,9 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
                 break;
             case  R.id.iv_msg_delete:
                 mNewFriendViewModel.refuseInvite(mData.get(position));
-                mNewFriendViewModel.deleteMsg(mData.get(position));
+                mData.remove(position);
+                mListAdapter.notifyItemRemoved(position);
+//                mNewFriendViewModel.deleteMsg(mData.get(position));
                 break;
         }
     }

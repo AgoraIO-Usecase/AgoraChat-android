@@ -174,9 +174,8 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
         switch (tab_layout.getSelectedTabPosition()) {
             case  0:
             case  1:
-                new BottomSheetContainerFragment().show(getChildFragmentManager(),"ContainerFragment");
-                break;
             case  2:
+                new BottomSheetContainerFragment().show(getChildFragmentManager(),"ContainerFragment");
                 break;
         }
     }

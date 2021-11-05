@@ -44,7 +44,7 @@ public class PublicGroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group
 
         @Override
         public void setData(GroupInfo item, int position) {
-            mAvatar.setImageResource(R.drawable.group_list_avatar);
+            mAvatar.setImageResource(R.drawable.avatar_1);
             mName.setText(item.getGroupName());
         }
     }

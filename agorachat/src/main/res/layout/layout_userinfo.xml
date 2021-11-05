@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/ll_userinfo"
     android:gravity="center_horizontal"
@@ -11,7 +12,9 @@
         android:id="@+id/iv_avatar"
         android:layout_width="@dimen/avatar_big_size"
         android:layout_height="@dimen/avatar_big_size"
-        android:src="@drawable/ease_default_avatar"
+        android:scaleType="fitXY"
+        app:ease_shape_type="round"
+        android:src="@drawable/avatar_1"
         android:layout_marginTop="5dp"/>
 
     <TextView

@@ -42,7 +42,6 @@ public class GroupPublicContactManageFragment extends SearchFragment<GroupInfo> 
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         rvList = findViewById(R.id.recycleview);
-
         rvList.setNestedScrollingEnabled(false);
     }
 

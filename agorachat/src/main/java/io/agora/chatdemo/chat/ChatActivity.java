@@ -1,7 +1,5 @@
 package io.agora.chatdemo.chat;
 
-import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +47,8 @@ import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.util.EMLog;
+
+import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 
 public class ChatActivity extends BaseInitActivity {
     private String conversationId;

@@ -13,12 +13,14 @@ import io.agora.chatdemo.base.BottomSheetChildHelper;
 import io.agora.chatdemo.contact.viewmodels.AddContactViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.db.DemoDbHelper;
+import io.agora.chatdemo.global.AddType;
 
-public class AddContactsFragment extends SearchFragment<String> implements AddContactAdapter.OnItemSubViewClickListener, BottomSheetChildHelper {
+public class AddContactFragment extends SearchFragment<String> implements AddAdapter.OnItemSubViewClickListener, BottomSheetChildHelper {
     private AddContactViewModel mViewModel;
+
     @Override
-    protected void initData() {
-        super.initData();
+    protected void initViewModel() {
+        super.initViewModel();
         mViewModel = new ViewModelProvider(mContext).get(AddContactViewModel.class);
         mViewModel.getAddContact().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
@@ -27,27 +29,37 @@ public class AddContactsFragment extends SearchFragment<String> implements AddCo
                     showToast(getResources().getString(R.string.em_add_contact_send_successful));
                 }
             });
-
         });
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+
         //获取本地的好友列表
         List<String> localUsers = null;
-        if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
+        if (DemoDbHelper.getInstance(mContext).getUserDao() != null) {
             localUsers = DemoDbHelper.getInstance(mContext).getUserDao().loadContactUsers();
         }
-        ((AddContactAdapter)mListAdapter).addLocalContacts(localUsers);
+        ((AddAdapter) mListAdapter).setAddedDatas(localUsers);
 
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
         mListAdapter.setOnItemSubViewClickListener(this);
     }
 
     @Override
     protected EaseBaseRecyclerViewAdapter<String> initAdapter() {
-        return new AddContactAdapter();
+        return new AddAdapter(AddType.CONTACT);
     }
 
     @Override
     public void searchText(String query) {
         // you can search the user from your app server here.
-        if(!TextUtils.isEmpty(query)) {
+        if (!TextUtils.isEmpty(query)) {
             if (mListAdapter.getData() != null && !mListAdapter.getData().isEmpty()) {
                 mListAdapter.clearData();
             }

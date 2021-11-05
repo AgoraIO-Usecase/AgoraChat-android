@@ -56,6 +56,9 @@
     <string name="group_new_group">New Group</string>
     <string name="group_join_a_group">Join a Group</string>
     <string name="group_public_group_list">Public Group List</string>
+    <string name="group_apply">Apply</string>
+    <string name="group_applying">Applying</string>
+    <string name="group_applied">Applied</string>
     <string name="group_add_contacts">Add Contacts</string>
     <string name="group_add_members">Add Members</string>
     <string name="group_contacts">Contacts</string>
@@ -112,9 +115,9 @@
     <string name="contact_detail_delete_content">Delete this contact and associated Chats.</string>
     <string name="contact_detail_delete_confirm_text">Delete</string>
 
-    <string name="contact_add">add</string>
-    <string name="contact_adding">adding</string>
-    <string name="contact_added">added</string>
+    <string name="contact_add">Add</string>
+    <string name="contact_adding">Adding</string>
+    <string name="contact_added">Added</string>
     <string name="contact_add_contacts">Add Contacts</string>
 
     <string name="em_add_contact_item_button_text">添加好友</string>

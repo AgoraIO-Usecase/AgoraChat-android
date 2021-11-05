@@ -83,9 +83,18 @@
             android:layout_height="wrap_content"
             android:textColor="@color/color_light_gray_999999"
             android:textSize="@dimen/text_size_normal"
+            android:text="(0)"
             app:layout_constraintLeft_toRightOf="@id/name"
             app:layout_constraintTop_toTopOf="@id/name"
             tools:text="(300)" />
+        <ImageView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@drawable/arrow_right"
+            android:layout_marginRight="@dimen/margin_15"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
 
         <TextView
             android:id="@+id/signature"

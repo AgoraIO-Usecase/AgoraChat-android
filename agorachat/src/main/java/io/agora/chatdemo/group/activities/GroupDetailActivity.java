@@ -234,7 +234,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     }
 
     protected void skipToMemberList() {
-
+        GroupMembersActivity.actionStart(mContext, groupId);
     }
 
     private void skipToNotice() {

@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
+import io.agora.chatdemo.DemoHelper;
 
 public class UserInfoHelper {
 
@@ -38,5 +39,9 @@ public class UserInfoHelper {
                     .error(defaultAvatar)
                     .into(avatar);
         }
+    }
+
+    public static EaseUser getUserInfo(String username) {
+        return DemoHelper.getInstance().getUserInfo(username);
     }
 }

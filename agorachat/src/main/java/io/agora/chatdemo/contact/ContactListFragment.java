@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.chat.uikit.models.EaseUser;
@@ -17,7 +18,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     private ContactsListViewModel mViewModel;
-    private List<EaseUser> mData;
+    private List<EaseUser> mData = new ArrayList<>();
 
     @Override
     protected void initView(Bundle savedInstanceState) {

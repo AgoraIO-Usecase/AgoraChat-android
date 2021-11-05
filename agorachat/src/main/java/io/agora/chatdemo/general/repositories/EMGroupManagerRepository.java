@@ -28,6 +28,7 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
+import io.agora.chatdemo.general.manager.UserInfoHelper;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.exceptions.ChatException;
@@ -330,12 +331,9 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     List<EaseUser> users = new ArrayList<>();
                     if(members != null && !members.isEmpty()){
                         for(int i = 0; i < members.size(); i++){
-                            EaseUser user = DemoHelper.getInstance().getUserInfo(members.get(i));
+                            EaseUser user = UserInfoHelper.getUserInfo(members.get(i));
                             if(user != null){
                                 users.add(user);
-                            }else{
-                                EaseUser m_user = new EaseUser(members.get(i));
-                                users.add(m_user);
                             }
                         }
                     }
@@ -344,6 +342,51 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                 });
             }
 
+        }.asLiveData();
+    }
+
+    /**
+     * Get group managers, include group owner and group admins
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<List<EaseUser>>> getGroupManagers(String groupId) {
+        return new NetworkOnlyResource<List<EaseUser>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.NOT_LOGIN);
+                    return;
+                }
+                getGroupManager().asyncGetGroupFromServer(groupId, new ValueCallBack<Group>() {
+                    @Override
+                    public void onSuccess(Group value) {
+                        List<EaseUser> groupManagers = new ArrayList<>();
+                        List<String> adminList = value.getAdminList();
+                        if(adminList != null && !adminList.isEmpty()) {
+                            for (String username : adminList) {
+                                EaseUser user = UserInfoHelper.getUserInfo(username);
+                                if(user != null){
+                                    groupManagers.add(user);
+                                }
+                            }
+                        }
+                        sortUserData(groupManagers);
+                        EaseUser owner = UserInfoHelper.getUserInfo(value.getOwner());
+                        groupManagers.add(0, owner);
+                        if(!groupManagers.isEmpty()) {
+                            callBack.onSuccess(createLiveData(groupManagers));
+                        }else {
+                            callBack.onError(ErrorCode.ERR_GROUP_NO_MEMBERS);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
         }.asLiveData();
     }
 
@@ -386,7 +429,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @param groupId
      * @return
      */
-    public LiveData<Resource<List<String>>> getGroupBlackList(String groupId) {
+    public LiveData<Resource<List<String>>> getGroupBlockList(String groupId) {
         return new NetworkOnlyResource<List<String>>() {
 
             @Override

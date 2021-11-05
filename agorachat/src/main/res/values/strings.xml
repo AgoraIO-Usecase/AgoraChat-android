@@ -258,6 +258,12 @@
     <string name="group_detail_disband_hint_confirm">Disband</string>
     <string name="group_detail_disband_hint_transfer">Transfer Ownership n’ Leave</string>
 
+    <string name="group_members_tab_title_all">All</string>
+    <string name="group_members_tab_title_admin">Admin</string>
+    <string name="group_members_tab_title_mute">Mute</string>
+    <string name="group_members_tab_title_block">Block</string>
+    <string name="group_members_tab_title_white">White</string>
+
     <string name="me_setting">Settings</string>
     <string name="me_setting_general">General</string>
     <string name="me_setting_notifications">Notifications</string>

@@ -291,12 +291,19 @@ public class DemoHelper {
     }
 
     public EaseUser getUserInfo(String username) {
+        if(TextUtils.isEmpty(username)) {
+            return null;
+        }
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         EaseUser user = null;
-        if(username.equals(ChatClient.getInstance().getCurrentUser()))
+        if(username.equalsIgnoreCase(ChatClient.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
+        // If do not contains the key, will return null
         user = getContactList().get(username);
+        if(user == null) {
+            user = new EaseUser(username);
+        }
         return user;
     }
 
@@ -491,14 +498,14 @@ public class DemoHelper {
         demoModel.update(object);
     }
 
-
     /**
      * get contact list
      *
      * @return
      */
     public Map<String, EaseUser> getContactList() {
-        if (isLoggedIn() && contactList == null) {
+        // Fetching data directly from the local database without considering too many complex scenarios
+        if (isLoggedIn()) {
             contactList = demoModel.getAllUserList();
         }
 

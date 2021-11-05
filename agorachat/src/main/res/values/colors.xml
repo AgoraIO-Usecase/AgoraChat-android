@@ -39,6 +39,7 @@
     <color name="contact_base_color_divider">#fff2f2f2</color>
     <color name="contact_color_block">@color/color_alert</color>
     <color name="color_light_gray_999999">#999999</color>
+    <color name="color_light_gray_88111111">#88111111</color>
     <color name="color_light_gray_cccccc">#cccccc</color>
     <color name="color_black_333333">#333333</color>
 

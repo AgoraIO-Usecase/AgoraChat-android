@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <include
+            android:id="@+id/layout_userinfo"
             layout="@layout/layout_userinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

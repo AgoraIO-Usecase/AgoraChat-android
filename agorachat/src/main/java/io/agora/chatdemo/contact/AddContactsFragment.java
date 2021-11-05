@@ -14,11 +14,6 @@ import io.agora.chatdemo.contact.viewmodels.AddContactViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 
-/**
- * Created by 许成谱 on 2021/10/31 0031 9:40.
- * qq:1550540124
- * 热爱生活每一天
- */
 public class AddContactsFragment extends SearchFragment<String> implements AddContactAdapter.OnItemSubViewClickListener, BottomSheetChildHelper {
     private AddContactViewModel mViewModel;
     @Override

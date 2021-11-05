@@ -32,11 +32,6 @@ import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.MembersScrollViewHeadView;
 import io.agora.chatdemo.group.viewmodel.NewGroupViewModel;
 
-/**
- * Created by 许成谱 on 2021/10/30 0030 19:57
- * qq:1550540124
- * 热爱生活每一天
- */
 public class NewGroupSelectContactsFragment extends ContactListFragment implements BottomSheetChildHelper,
         MembersScrollViewHeadView.OnMembersChangeListener, ContactListAdapter.OnSelectListener {
 

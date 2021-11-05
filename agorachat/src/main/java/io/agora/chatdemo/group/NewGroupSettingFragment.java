@@ -17,10 +17,6 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.general.widget.SwitchItemView;
 
-/**
- * Created by 许成谱 on 2021/10/29 0029 20:16.
- * qq:1550540124
- */
 public class NewGroupSettingFragment extends BaseInitFragment implements BottomSheetChildHelper {
     private EditText edtDesc;
     private EditText edtGroupName;

@@ -13,11 +13,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 
-/**
- * Created by 许成谱 on 2021/10/28 0028 19:11.
- * qq:1550540124
- * 热爱生活每一天！
- */
+
 public class NotifiationMsgsViewModel extends AndroidViewModel {
 
     private SingleSourceLiveData<List<ChatMessage>> chatMessageObservable;

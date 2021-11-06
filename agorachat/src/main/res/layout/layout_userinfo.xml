@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:id="@+id/ll_userinfo"
     android:gravity="center_horizontal"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/iv_avatar"

@@ -21,9 +21,10 @@ import io.agora.chatdemo.global.AddType;
 import io.agora.chatdemo.group.viewmodel.SearchGroupViewModel;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
-public class SearchGroupFragment extends SearchFragment<String> implements BottomSheetChildHelper,AddAdapter.OnItemSubViewClickListener {
+public class SearchGroupFragment extends SearchFragment<String> implements BottomSheetChildHelper, AddAdapter.OnItemSubViewClickListener {
     private SearchGroupViewModel viewModel;
-    private List<String> allJoinedGroupIDs=new ArrayList<>();
+    private List<String> allJoinedGroupIDs = new ArrayList<>();
+
     @Override
     protected void initData() {
         super.initData();
@@ -37,11 +38,13 @@ public class SearchGroupFragment extends SearchFragment<String> implements Botto
                 }
             });
         });
-        viewModel.getJoinObservable().observe(this,response->{
+        viewModel.getJoinObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    showToast(getResources().getString(R.string.em_add_contact_send_successful));
+                    if(true) {
+                        showToast(getResources().getString(R.string.group_application_send));
+                    }
                 }
             });
         });
@@ -52,7 +55,7 @@ public class SearchGroupFragment extends SearchFragment<String> implements Botto
                 @Override
                 public void onSuccess(@Nullable List<Group> datas) {
                     getGroupIDs(datas);
-                    ((AddAdapter)mListAdapter).setAddedDatas(allJoinedGroupIDs);
+                    ((AddAdapter) mListAdapter).setAddedDatas(allJoinedGroupIDs);
                 }
             });
         });
@@ -101,7 +104,7 @@ public class SearchGroupFragment extends SearchFragment<String> implements Botto
 
     @Override
     public void onItemSubViewClick(View view, int position) {
-        if(!TextUtils.isEmpty(mListAdapter.getData().get(position))) {
+        if (!TextUtils.isEmpty(mListAdapter.getData().get(position))) {
             viewModel.getGroup(mListAdapter.getData().get(position));
         }
     }

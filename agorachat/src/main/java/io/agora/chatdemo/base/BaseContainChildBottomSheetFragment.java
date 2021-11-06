@@ -93,16 +93,20 @@ public abstract class BaseContainChildBottomSheetFragment extends BaseBottomShee
         baseBinding.titlebar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
             @Override
             public void onBackPress(View view) {
-                if (getChildFragmentManager().getBackStackEntryCount() > 1) {
-                    getChildFragmentManager().popBackStack();
-                    childStack.pop();
-                    currentChild = childStack.peek();
-                    initTileBar();
-                } else {
-                    hide();
-                }
+                back();
             }
         });
+    }
+
+    public void back() {
+        if (getChildFragmentManager().getBackStackEntryCount() > 1) {
+            getChildFragmentManager().popBackStack();
+            childStack.pop();
+            currentChild = childStack.peek();
+            initTileBar();
+        } else {
+            hide();
+        }
     }
 
     /**

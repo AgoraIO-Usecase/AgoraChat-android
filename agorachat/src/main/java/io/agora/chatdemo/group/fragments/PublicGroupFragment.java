@@ -21,11 +21,11 @@ import io.agora.chat.GroupInfo;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.SearchFragment;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.group.adapter.PublicGroupAdapter;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
@@ -117,15 +117,11 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
                 @Override
                 public void onSuccess(@Nullable List<Group> data) {
                     allJoinGroups = data;
-                    //获取完加入的群组信息，再请求数据
-                    getData();
                 }
 
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
-                    //请求出错后，再请求数据
-                    getData();
                 }
             });
         });
@@ -146,6 +142,7 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
 
     public void getData() {
         viewModel.getPublicGroups(page_size);
+        viewModel.loadAllGroups();
     }
 
     @Override
@@ -162,8 +159,17 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
 
     @Override
     public void onItemClick(View view, int position) {
-        GroupInfo item = mListAdapter.getItem(position);
-        ChatActivity.actionStart(mContext, item.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+        if(allJoinGroups!=null&&allJoinGroups.contains(lastData.get(position))) {
+            GroupInfo item = mListAdapter.getItem(position);
+            ChatActivity.actionStart(mContext, item.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+        }else{
+            PublicGroupDetailFragment publicGroupDetailFragment = new PublicGroupDetailFragment();
+            Bundle bundle=new Bundle();
+            bundle.putString("group_id",lastData.get(position).getGroupId());
+            publicGroupDetailFragment.setArguments(bundle);
+            startFragment(publicGroupDetailFragment,null);
+        }
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.agora.chatdemo.contact;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         this.showInitials = showInitials;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setCheckModel(boolean isCheckModel) {
         this.isCheckModel = isCheckModel;
         if(isCheckModel) {
@@ -50,6 +52,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setSelectedMembers(List<String> existMembers) {
         checkedList=existMembers;
         notifyDataSetChanged();
@@ -57,14 +60,19 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
 
     public void setOwner(String owner) {
         this.owner = owner;
+        notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setAdminList(List<String> adminList) {
         this.adminList = adminList;
+        notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setMuteList(List<String> muteList) {
         this.muteList = muteList;
+        notifyDataSetChanged();
     }
 
     public List<String> getMuteList() {
@@ -138,8 +146,6 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             }
             if(TextUtils.equals(owner, username)) {
                 setLabel(label, mContext.getString(R.string.group_role_owner));
-            }else {
-                label.setVisibility(View.GONE);
             }
             mName.setText(item.getNickname());
             Glide.with(mContext)

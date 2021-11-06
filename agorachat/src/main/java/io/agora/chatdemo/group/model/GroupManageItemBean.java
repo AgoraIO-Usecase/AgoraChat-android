@@ -6,6 +6,8 @@ public class GroupManageItemBean implements Serializable {
     private int icon;
     private String title;
     private boolean isAlert;
+    private int id;
+    private String username;
 
     public int getIcon() {
         return icon;
@@ -29,5 +31,21 @@ public class GroupManageItemBean implements Serializable {
 
     public void setAlert(boolean alert) {
         isAlert = alert;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

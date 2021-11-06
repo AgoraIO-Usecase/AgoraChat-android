@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.R;
@@ -37,6 +38,11 @@ public class GroupMemberManageAdapter extends EaseBaseRecyclerViewAdapter<GroupM
         public void setData(GroupManageItemBean item, int position) {
             image.setImageResource(item.getIcon());
             text.setText(item.getTitle());
+            if(item.isAlert()) {
+                text.setTextColor(ContextCompat.getColor(text.getContext(), R.color.color_alert));
+            }else {
+                text.setTextColor(ContextCompat.getColor(text.getContext(), R.color.black));
+            }
         }
     }
 }

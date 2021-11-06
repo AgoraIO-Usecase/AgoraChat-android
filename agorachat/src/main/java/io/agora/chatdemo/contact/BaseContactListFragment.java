@@ -85,4 +85,10 @@ public abstract class BaseContactListFragment<T> extends BaseListFragment<T> imp
     public void onRefresh() {
 
     }
+
+    protected void finishRefresh() {
+        if(srlContactRefresh != null && srlContactRefresh.isRefreshing()) {
+            srlContactRefresh.setRefreshing(false);
+        }
+    }
 }

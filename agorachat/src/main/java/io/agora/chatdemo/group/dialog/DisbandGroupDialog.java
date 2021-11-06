@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.dialog;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -29,6 +29,7 @@ public class DisbandGroupDialog extends SimpleDialog {
         if(!TextUtils.isEmpty(content)) {
             tvContent.setText(content);
         }
+        mBtnDialogConfirm.setVisibility(View.GONE);
         btnDialogDisband = findViewById(R.id.btn_dialog_disband);
         btnDialogTransfer = findViewById(R.id.btn_dialog_transfer);
         btnDialogCancel = findViewById(R.id.btn_dialog_cancel);

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ids for group member manage -->
+    <item name="action_group_manage_make_admin" type="id"/>
+    <item name="action_group_manage_remove_admin" type="id"/>
+    <item name="action_group_manage_make_mute" type="id"/>
+    <item name="action_group_manage_make_unmute" type="id"/>
+    <item name="action_group_manage_move_to_block" type="id"/>
+    <item name="action_group_manage_remove_from_block" type="id"/>
+    <item name="action_group_manage_remove_from_group" type="id"/>
+
+</resources>

@@ -35,6 +35,7 @@
             android:textColor="#000000"
             android:gravity="center"
             android:maxLines="2"
+            android:textStyle="bold"
             android:ellipsize="end"
             tools:text="title"/>
 
@@ -48,7 +49,8 @@
             app:layout_constraintTop_toBottomOf="@id/tv_dialog_title"
             app:layout_constraintBottom_toTopOf="@id/btn_dialog_confirm"
             android:visibility="gone"
-            android:layout_marginBottom="@dimen/dialog_middle_margin_bottom"/>
+            android:layout_marginBottom="@dimen/dialog_middle_margin_bottom"
+            app:layout_goneMarginBottom="0dp"/>
 
         <Button
             android:id="@+id/btn_dialog_cancel"
@@ -74,6 +76,7 @@
             android:background="@drawable/dialog_btn_selector"
             android:text="@string/dialog_btn_confirm"
             android:textSize="18sp"
+            android:visibility="gone"
             android:textColor="@color/dialog_btn_text_color_selector"/>
 
         <androidx.constraintlayout.widget.Group

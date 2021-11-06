@@ -1,17 +1,17 @@
-package io.agora.chatdemo.main;
+package io.agora.chatdemo.global;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import io.agora.chatdemo.base.BaseContainChildBottomSheetFragment;
-import io.agora.chatdemo.group.GroupCreateFragment;
+import io.agora.chatdemo.group.fragments.ButtomSheetMenuFragment;
 
 public class BottomSheetContainerFragment extends BaseContainChildBottomSheetFragment {
 
     @NonNull
     @Override
     protected Fragment getChildFragment() {
-        return new GroupCreateFragment();
+        return new ButtomSheetMenuFragment();
     }
 
     @Override

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/layout_userinfo"
+        layout="@layout/layout_userinfo"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"/>
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/color_second_text"
+        android:layout_marginTop="2dp"
+        tools:text="Description"
+        android:visibility="visible"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_join"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="32dp"
+        android:foreground="@drawable/ease_ripple_click_gray"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarSrc="@drawable/public_group_join"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="false"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemTitle="@string/group_join_this_group" />
+
+
+</LinearLayout>

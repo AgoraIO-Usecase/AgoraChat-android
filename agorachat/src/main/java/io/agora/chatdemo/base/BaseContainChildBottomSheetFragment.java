@@ -17,11 +17,13 @@ import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.databinding.FragmentContainTitleBaseBinding;
 import io.agora.chatdemo.general.utils.CommonUtils;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
+import io.agora.chatdemo.global.BottomSheetContainerHelper;
 
 /**
  * Base bottom fragment which has child fragment and title
  */
-public abstract class BaseContainChildBottomSheetFragment extends BaseBottomSheetFragment implements BottomSheetContainerHelper{
+public abstract class BaseContainChildBottomSheetFragment extends BaseBottomSheetFragment implements BottomSheetContainerHelper {
     protected FragmentContainTitleBaseBinding baseBinding;
     protected BottomSheetChildHelper currentChild;
     protected Stack<BottomSheetChildHelper> childStack = new Stack<>();
@@ -91,16 +93,20 @@ public abstract class BaseContainChildBottomSheetFragment extends BaseBottomShee
         baseBinding.titlebar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
             @Override
             public void onBackPress(View view) {
-                if (getChildFragmentManager().getBackStackEntryCount() > 1) {
-                    getChildFragmentManager().popBackStack();
-                    childStack.pop();
-                    currentChild = childStack.peek();
-                    initTileBar();
-                } else {
-                    hide();
-                }
+                back();
             }
         });
+    }
+
+    public void back() {
+        if (getChildFragmentManager().getBackStackEntryCount() > 1) {
+            getChildFragmentManager().popBackStack();
+            childStack.pop();
+            currentChild = childStack.peek();
+            initTileBar();
+        } else {
+            hide();
+        }
     }
 
     /**

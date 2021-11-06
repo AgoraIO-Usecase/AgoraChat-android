@@ -32,7 +32,7 @@ import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
-import io.agora.chatdemo.me.AboutMeFragment;
+import io.agora.chatdemo.me.MeFragment;
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
@@ -123,7 +123,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     private void switchToAboutMe() {
         if(mAboutMeFragment == null) {
-            mAboutMeFragment = new AboutMeFragment();
+            mAboutMeFragment = new MeFragment();
         }
         replace(mAboutMeFragment, "me");
     }

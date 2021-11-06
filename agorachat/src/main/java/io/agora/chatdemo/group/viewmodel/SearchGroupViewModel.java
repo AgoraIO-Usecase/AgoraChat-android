@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.viewmodel;
 
 import android.app.Application;
 
@@ -12,12 +12,12 @@ import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.repositories.EMGroupManagerRepository;
 
 
-public class JoinGroupViewModel extends AndroidViewModel {
+public class SearchGroupViewModel extends AndroidViewModel {
     private EMGroupManagerRepository repository;
     private SingleSourceLiveData<Resource<Group>> groupObservable;
     private SingleSourceLiveData<Resource<Boolean>> joinObservable;
 
-    public JoinGroupViewModel(@NonNull Application application) {
+    public SearchGroupViewModel(@NonNull Application application) {
         super(application);
         repository = new EMGroupManagerRepository();
         groupObservable = new SingleSourceLiveData<>();

@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.fragments;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -13,20 +13,22 @@ import io.agora.chat.Group;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.contact.AddAdapter;
 import io.agora.chatdemo.contact.SearchFragment;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.global.AddType;
+import io.agora.chatdemo.group.viewmodel.SearchGroupViewModel;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
-public class JoinGroupFragment extends SearchFragment<String> implements BottomSheetChildHelper,AddAdapter.OnItemSubViewClickListener {
-    private JoinGroupViewModel viewModel;
-    private List<String> allJoinedGroupIDs=new ArrayList<>();
+public class SearchGroupFragment extends SearchFragment<String> implements BottomSheetChildHelper, AddAdapter.OnItemSubViewClickListener {
+    private SearchGroupViewModel viewModel;
+    private List<String> allJoinedGroupIDs = new ArrayList<>();
+
     @Override
     protected void initData() {
         super.initData();
-        viewModel = new ViewModelProvider(this).get(JoinGroupViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SearchGroupViewModel.class);
         viewModel.getGroupObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Group>() {
                 @Override
@@ -36,11 +38,13 @@ public class JoinGroupFragment extends SearchFragment<String> implements BottomS
                 }
             });
         });
-        viewModel.getJoinObservable().observe(this,response->{
+        viewModel.getJoinObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    showToast(getResources().getString(R.string.em_add_contact_send_successful));
+                    if(true) {
+                        showToast(getResources().getString(R.string.group_application_send));
+                    }
                 }
             });
         });
@@ -51,7 +55,7 @@ public class JoinGroupFragment extends SearchFragment<String> implements BottomS
                 @Override
                 public void onSuccess(@Nullable List<Group> datas) {
                     getGroupIDs(datas);
-                    ((AddAdapter)mListAdapter).setAddedDatas(allJoinedGroupIDs);
+                    ((AddAdapter) mListAdapter).setAddedDatas(allJoinedGroupIDs);
                 }
             });
         });
@@ -100,7 +104,7 @@ public class JoinGroupFragment extends SearchFragment<String> implements BottomS
 
     @Override
     public void onItemSubViewClick(View view, int position) {
-        if(!TextUtils.isEmpty(mListAdapter.getData().get(position))) {
+        if (!TextUtils.isEmpty(mListAdapter.getData().get(position))) {
             viewModel.getGroup(mListAdapter.getData().get(position));
         }
     }

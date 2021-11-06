@@ -1,4 +1,4 @@
-package io.agora.chatdemo.base;
+package io.agora.chatdemo.global;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.StringRes;
@@ -46,4 +46,11 @@ public interface BottomSheetChildHelper {
             ((BottomSheetContainerHelper) parentFragment).hide();
         }
     }
+    default void back(){
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment != null && parentFragment instanceof BottomSheetContainerHelper) {
+            ((BottomSheetContainerHelper) parentFragment).back();
+        }
+    }
+
 }

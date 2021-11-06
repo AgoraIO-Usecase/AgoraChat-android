@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,15 +21,16 @@ import io.agora.chat.GroupInfo;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.SearchFragment;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.group.adapter.PublicGroupAdapter;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 
-public class GroupPublicContactManageFragment extends SearchFragment<GroupInfo> implements OnRefreshLoadMoreListener, OnItemClickListener, BottomSheetChildHelper {
+public class PublicGroupFragment extends SearchFragment<GroupInfo> implements OnRefreshLoadMoreListener, OnItemClickListener, BottomSheetChildHelper {
     public RecyclerView rvList;
     private int page_size = 20;
     private String cursor;
@@ -140,7 +141,7 @@ public class GroupPublicContactManageFragment extends SearchFragment<GroupInfo> 
 
     @Override
     protected EaseBaseRecyclerViewAdapter initAdapter() {
-        return new PublicGroupContactAdapter();
+        return new PublicGroupAdapter();
     }
 
     public void getData() {

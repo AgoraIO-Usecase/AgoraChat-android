@@ -26,8 +26,8 @@ import io.agora.chatdemo.contact.viewmodels.ContactsViewModel;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.group.GroupContactManageFragment;
-import io.agora.chatdemo.main.BottomSheetContainerFragment;
+import io.agora.chatdemo.group.fragments.JoinedGroupFragment;
+import io.agora.chatdemo.global.BottomSheetContainerFragment;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
 
 public class ContactFragment extends BaseInitFragment implements EaseTitleBar.OnRightClickListener {
@@ -58,7 +58,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     protected void initData() {
         super.initData();
         fragments.add(new ContactListFragment());
-        fragments.add(new GroupContactManageFragment());
+        fragments.add(new JoinedGroupFragment());
         fragments.add(new NotificationMsgFragment());
         setupWithViewPager();
         contactsViewModel.getMsgConversation();

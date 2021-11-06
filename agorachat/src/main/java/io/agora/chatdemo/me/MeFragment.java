@@ -15,7 +15,7 @@ import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.databinding.FragmentAboutMeBinding;
 import io.agora.chatdemo.general.dialog.AlertDialog;
 
-public class AboutMeFragment extends BaseInitFragment implements View.OnClickListener {
+public class MeFragment extends BaseInitFragment implements View.OnClickListener {
 
     private static final int REQUEST_CODE = 12;
     private FragmentAboutMeBinding mBinding;
@@ -46,6 +46,14 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         mBinding.layoutUserinfo.ivAvatar.setOnClickListener(this);
         mBinding.layoutUserinfo.tvNickname.setOnClickListener(this);
         mBinding.layoutUserinfo.tvId.setOnClickListener(this);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+
+
+
     }
 
     @Override

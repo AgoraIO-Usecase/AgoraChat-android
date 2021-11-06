@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.fragments;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
-import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.general.widget.SwitchItemView;

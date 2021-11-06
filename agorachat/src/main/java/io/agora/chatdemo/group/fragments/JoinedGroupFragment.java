@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.fragments;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -15,13 +15,14 @@ import io.agora.chat.Group;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.group.adapter.JoinedGroupAdapter;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 
-public class GroupContactManageFragment extends GroupPublicContactManageFragment {
+public class JoinedGroupFragment extends PublicGroupFragment {
     private GroupContactViewModel mViewModel;
-    private GroupContactAdapter mAdapter;
+    private JoinedGroupAdapter mAdapter;
     private int pageIndex;
     private static final int PAGE_SIZE = 20;
     protected List<Group> lastData;
@@ -81,7 +82,7 @@ public class GroupContactManageFragment extends GroupPublicContactManageFragment
     protected void initData() {
         lastData = new ArrayList<>();
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new GroupContactAdapter();
+        mAdapter = new JoinedGroupAdapter();
         rvList.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
 

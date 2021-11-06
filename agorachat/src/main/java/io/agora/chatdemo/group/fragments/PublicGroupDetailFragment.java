@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.fragments;
 
 import android.view.View;
 
@@ -9,7 +9,7 @@ import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.base.BaseListFragment;
 
 
-class GroupListFragment extends BaseListFragment<Group> {
+class PublicGroupDetailFragment extends BaseListFragment<Group> {
     @Override
     protected RecyclerView initRecyclerView() {
         return null;

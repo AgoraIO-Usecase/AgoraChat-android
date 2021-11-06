@@ -9,13 +9,13 @@ import java.util.List;
 
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.contact.viewmodels.AddContactViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.global.AddType;
 
-public class AddContactFragment extends SearchFragment<String> implements AddAdapter.OnItemSubViewClickListener, BottomSheetChildHelper {
+public class SearchContactFragment extends SearchFragment<String> implements AddAdapter.OnItemSubViewClickListener, BottomSheetChildHelper {
     private AddContactViewModel mViewModel;
 
     @Override

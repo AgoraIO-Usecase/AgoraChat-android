@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.fragments;
 
 import android.os.Bundle;
 import android.view.Gravity;
@@ -19,7 +19,7 @@ import io.agora.chat.GroupManager;
 import io.agora.chat.GroupOptions;
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.ContactListAdapter;
 import io.agora.chatdemo.contact.ContactListFragment;

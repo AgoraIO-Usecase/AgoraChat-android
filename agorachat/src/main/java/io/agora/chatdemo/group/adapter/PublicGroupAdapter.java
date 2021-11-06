@@ -1,6 +1,5 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.adapter;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,26 +7,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import io.agora.chat.ChatClient;
-import io.agora.chat.Group;
+import io.agora.chat.GroupInfo;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 
 
-public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group> {
+public class PublicGroupAdapter extends EaseBaseRecyclerViewAdapter<GroupInfo> {
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new GroupViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_widget_contact_item, parent, false));
     }
 
-    private class GroupViewHolder extends ViewHolder<Group> {
+    private class GroupViewHolder extends ViewHolder<GroupInfo> {
         private TextView mHeader;
         private EaseImageView mAvatar;
         private TextView mName;
         private TextView mSignature;
-        private TextView mLabel;
         private TextView mUnreadMsgNumber;
         private TextView memberNum;
 
@@ -41,28 +38,17 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<Group> {
             mAvatar = findViewById(R.id.avatar);
             mName = findViewById(R.id.name);
             mSignature = findViewById(R.id.signature);
-            mLabel = findViewById(R.id.label);
             mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
             memberNum = findViewById(R.id.tv_members_num);
+            mHeader.setVisibility(View.GONE);
         }
 
         @Override
-        public void setData(Group item, int position) {
+        public void setData(GroupInfo item, int position) {
             boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, item.getGroupId(), mName, mAvatar);
             if(!hasProvided) {
                 mName.setText(item.getGroupName());
             }
-            mSignature.setText(item.getGroupId());
-            mLabel.setVisibility(View.GONE);
-//            if(isOwner(item.getOwner())) {
-//                mLabel.setVisibility(View.VISIBLE);
-//                mLabel.setText(R.string.group_owner);
-//            }
-            memberNum.setText("("+item.getMemberCount()+")");
         }
-    }
-
-    private boolean isOwner(String owner) {
-        return TextUtils.equals(ChatClient.getInstance().getCurrentUser(), owner);
     }
 }

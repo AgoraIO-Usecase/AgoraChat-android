@@ -1,4 +1,4 @@
-package io.agora.chatdemo.base;
+package io.agora.chatdemo.global;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

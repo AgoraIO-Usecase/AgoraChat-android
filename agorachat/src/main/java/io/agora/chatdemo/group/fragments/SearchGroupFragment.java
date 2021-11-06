@@ -1,4 +1,4 @@
-package io.agora.chatdemo.group;
+package io.agora.chatdemo.group.fragments;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -13,20 +13,21 @@ import io.agora.chat.Group;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BottomSheetChildHelper;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.contact.AddAdapter;
 import io.agora.chatdemo.contact.SearchFragment;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.global.AddType;
+import io.agora.chatdemo.group.viewmodel.SearchGroupViewModel;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
-public class JoinGroupFragment extends SearchFragment<String> implements BottomSheetChildHelper,AddAdapter.OnItemSubViewClickListener {
-    private JoinGroupViewModel viewModel;
+public class SearchGroupFragment extends SearchFragment<String> implements BottomSheetChildHelper,AddAdapter.OnItemSubViewClickListener {
+    private SearchGroupViewModel viewModel;
     private List<String> allJoinedGroupIDs=new ArrayList<>();
     @Override
     protected void initData() {
         super.initData();
-        viewModel = new ViewModelProvider(this).get(JoinGroupViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SearchGroupViewModel.class);
         viewModel.getGroupObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Group>() {
                 @Override

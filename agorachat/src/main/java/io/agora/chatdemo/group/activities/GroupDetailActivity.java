@@ -23,7 +23,7 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.group.DisbandGroupDialog;
+import io.agora.chatdemo.group.dialog.DisbandGroupDialog;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.viewmodel.GroupDetailViewModel;
 
@@ -108,7 +108,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             case R.id.item_group_files:
                 skipToFiles();
             case R.id.item_group_transfer:
-                skipToTransfer();
+                skipToTransfer(false);
                 break;
             case R.id.item_leave_group:
                 leaveGroup();
@@ -227,9 +227,10 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
 
     }
 
-    private void skipToTransfer() {
+    private void skipToTransfer(boolean leave) {
         if(GroupHelper.isOwner(group)) {
-            //
+            // Skip to transfer activity
+            GroupTransferActivity.actionStart(mContext, groupId, leave);
         }
     }
 
@@ -254,7 +255,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                     @Override
                     public void onClick(View v) {
                         // skip to transfer
-                        skipToTransfer();
+                        skipToTransfer(true);
                     }
                 })
                 .setTitle(R.string.group_detail_disband_hint_title)

@@ -51,8 +51,8 @@
     <string name="group_destroy">群组已删除</string>
     <string name="group_role_owner">Group Owner</string>
     <string name="group_role_admin">Admin</string>
-    <string name="group_permission_mute">Admin/Mute</string>
-    <string name="group_admin_muted">group_admin_muted</string>
+    <string name="group_permission_mute">Mute</string>
+    <string name="group_admin_muted">Admin/Mute</string>
     <string name="group_new_group">New Group</string>
     <string name="group_join_a_group">Join a Group</string>
     <string name="group_join">Join</string>
@@ -284,6 +284,10 @@
     <string name="group_members_action_move_to_block">Move to block?</string>
     <string name="group_members_action_remove_from_group">Remove from group?</string>
     <string name="group_members_action_confirm">Yes</string>
+    <string name="group_members_action_transfer_title">Transfer Ownership to %1$s?</string>
+    <string name="group_members_action_transfer_confirm">Transfer</string>
+    <string name="group_members_action_transfer_and_leave_title">Transfer Ownership to %1$s and Leave this Group?</string>
+    <string name="group_members_action_transfer_and_leave_confirm">Yes</string>
 
     <string name="group_transfer_title">Transfer Ownership</string>
 

@@ -1,6 +1,5 @@
 package io.agora.chatdemo.group.fragments;
 
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -11,28 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.contact.BaseContactListFragment;
-import io.agora.chatdemo.contact.ContactListAdapter;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.group.model.GroupManageItemBean;
 import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
 
-public class GroupAdminsFragment extends BaseContactListFragment<EaseUser> {
-    private GroupMemberAuthorityViewModel viewModel;
-    private ContactListAdapter listAdapter;
-    private String groupId;
-    private List<EaseUser> mGroupManagerList = new ArrayList<>();
-    private int groupRole;
-
-    @Override
-    protected void initArgument() {
-        super.initArgument();
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            groupId = bundle.getString("group_id");
-            groupRole = bundle.getInt("group_role");
-        }
-    }
+public class GroupAdminsFragment extends GroupBaseManageFragment {
 
     @Override
     protected void initViewModel() {
@@ -43,31 +28,18 @@ public class GroupAdminsFragment extends BaseContactListFragment<EaseUser> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
-                    mGroupManagerList = data;
+                    finishRefresh();
+                    mDataList = data;
                     listAdapter.setData(data);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    runOnUiThread(()-> finishRefresh());
                 }
             });
         });
-    }
-
-    @Override
-    protected void initView(Bundle savedInstanceState) {
-        super.initView(savedInstanceState);
-        etSearch.setVisibility(View.VISIBLE);
-        listAdapter = (ContactListAdapter) mListAdapter;
-        listAdapter.setEmptyView(R.layout.ease_layout_no_data_show_nothing);
-    }
-
-    @Override
-    protected void initListener() {
-        super.initListener();
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
-        // activity has call it
-        // viewModel.getGroupManagers(groupId);
     }
 
     @Override
@@ -84,31 +56,28 @@ public class GroupAdminsFragment extends BaseContactListFragment<EaseUser> {
 
     @Override
     public void onItemClick(View view, int position) {
-
-    }
-
-    protected void checkSearchContent(String content) {
-        if(TextUtils.isEmpty(content)) {
-            mListAdapter.setData(mGroupManagerList);
-            sideBarContact.setVisibility(View.VISIBLE);
-            srlContactRefresh.setEnabled(true);
-        }else {
-            List<EaseUser> easeUsers = searchContact(content, mListAdapter.getData());
-            mListAdapter.setData(easeUsers);
-            sideBarContact.setVisibility(View.GONE);
-            srlContactRefresh.setEnabled(false);
+        EaseUser item = listAdapter.getItem(position);
+        List<GroupManageItemBean> itemBeans = getMenuData(item.getUsername());
+        if(!itemBeans.isEmpty()) {
+            showManageDialog(itemBeans, item.getNickname());
         }
     }
 
-    private List<EaseUser> searchContact(String keyword, List<EaseUser> data) {
-        List<EaseUser> list = new ArrayList<>();
-        if(data != null && !data.isEmpty()) {
-            for (EaseUser user : data) {
-                if(user.getUsername().contains(keyword) || (!TextUtils.isEmpty(user.getNickname()) && user.getNickname().contains(keyword))) {
-                    list.add(user);
-                }
-            }
+    private List<GroupManageItemBean> getMenuData(String username) {
+        if(TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
+            return new ArrayList<>();
         }
-        return list;
+        if(!GroupHelper.isOwner(group)) {
+            return new ArrayList<>();
+        }
+        List<GroupManageItemBean> data = new ArrayList<>();
+        GroupManageItemBean itemBean = new GroupManageItemBean();
+        // remove admin
+        itemBean.setIcon(R.drawable.group_manage_remove_admin);
+        itemBean.setTitle(getString(R.string.group_members_dialog_menu_remove_admin));
+        itemBean.setId(R.id.action_group_manage_remove_admin);
+        itemBean.setUsername(username);
+        data.add(itemBean);
+        return data;
     }
 }

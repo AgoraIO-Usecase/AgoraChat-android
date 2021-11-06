@@ -115,7 +115,6 @@ public class GroupMembersActivity extends BaseInitActivity implements EaseTitleB
             fragments.add(adminsFragment);
         }
 
-
         setupWithViewPager();
     }
 
@@ -123,6 +122,12 @@ public class GroupMembersActivity extends BaseInitActivity implements EaseTitleB
     protected void initListener() {
         super.initListener();
         binding.titleBar.setOnRightClickListener(this);
+        binding.titleBar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
+            @Override
+            public void onBackPress(View view) {
+                onBackPressed();
+            }
+        });
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

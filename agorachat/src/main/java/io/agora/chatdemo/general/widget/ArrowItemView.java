@@ -91,11 +91,11 @@ public class ArrowItemView extends ConstraintLayout {
         tvContent.setTextColor(contentColor);
 
         int contentSizeId = a.getResourceId(R.styleable.ArrowItemView_arrowItemContentSize, -1);
-        contentSize = a.getDimension(R.styleable.ArrowItemView_arrowItemContentSize, 14);
+        contentSize = a.getDimension(R.styleable.ArrowItemView_arrowItemContentSize, sp2px(getContext(), 14));
         if (contentSizeId != -1) {
             contentSize = getResources().getDimension(contentSizeId);
         }
-        tvContent.setTextSize(contentSize);
+        tvContent.getPaint().setTextSize(contentSize);
 
         boolean showDivider = a.getBoolean(R.styleable.ArrowItemView_arrowItemShowDivider, true);
         viewDivider.setVisibility(showDivider ? VISIBLE : GONE);

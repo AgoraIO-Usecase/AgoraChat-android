@@ -3,12 +3,14 @@ package io.agora.chatdemo.group.dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,7 @@ import java.util.List;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.widget.dialog.EaseAlertDialog;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.general.widget.DividerItemDecoration;
 import io.agora.chatdemo.group.adapter.GroupMemberManageAdapter;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
 
@@ -28,6 +31,8 @@ public class GroupMemberManageDialog extends EaseAlertDialog implements OnItemCl
     private Button btnCancel;
     private OnItemClickListener itemClickListener;
     private List<GroupManageItemBean> data;
+    private String username;
+    private TextView tvName;
 
     public GroupMemberManageDialog(@NonNull Context context) {
         super(context);
@@ -51,17 +56,12 @@ public class GroupMemberManageDialog extends EaseAlertDialog implements OnItemCl
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        init();
-    }
-
     public void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_group_member_manage, null);
         setContentView(view);
         rvDialog = view.findViewById(R.id.rv_dialog);
         btnCancel = view.findViewById(R.id.btn_cancel);
+        tvName = findViewById(R.id.tv_name);
         rvDialog.setLayoutManager(new LinearLayoutManager(getContext()));
         rvDialog.setHasFixedSize(true);
 
@@ -69,6 +69,9 @@ public class GroupMemberManageDialog extends EaseAlertDialog implements OnItemCl
         adapter = new GroupMemberManageAdapter();
         concatAdapter.addAdapter(adapter);
         rvDialog.setAdapter(concatAdapter);
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL, false);
+        itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.divider_dialog_menu_list));
+        rvDialog.addItemDecoration(itemDecoration);
 
         adapter.setData(this.data);
 
@@ -79,6 +82,10 @@ public class GroupMemberManageDialog extends EaseAlertDialog implements OnItemCl
                 dismiss();
             }
         });
+
+        if(!TextUtils.isEmpty(username)) {
+            tvName.setText(username);
+        }
     }
 
     @Override
@@ -89,41 +96,16 @@ public class GroupMemberManageDialog extends EaseAlertDialog implements OnItemCl
         }
     }
 
-    private void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.itemClickListener = listener;
     }
 
-    private void setData(List<GroupManageItemBean> data) {
+    public void setData(List<GroupManageItemBean> data) {
         this.data = data;
     }
 
-    public static class Builder extends EaseAlertDialog.Builder<GroupMemberManageDialog> {
-        private Context context;
-        private Bundle bundle;
-        private OnItemClickListener itemClickListener;
-        private List<GroupManageItemBean> data;
-
-        public Builder(Context context) {
-            super(context);
-            this.context = context;
-            this.bundle = new Bundle();
-        }
-
-        public Builder setOnItemClickListener(OnItemClickListener listener) {
-            this.itemClickListener = listener;
-            return this;
-        }
-
-        public Builder setData(List<GroupManageItemBean> data) {
-            this.data = data;
-            return this;
-        }
-
-        @Override
-        public EaseAlertDialog.Builder<GroupMemberManageDialog> setCustomDialog(GroupMemberManageDialog dialog) {
-            dialog.setOnItemClickListener(itemClickListener);
-            dialog.setData(this.data);
-            return super.setCustomDialog(dialog);
-        }
+    public void setUsername(String username) {
+        this.username = username;
     }
+
 }

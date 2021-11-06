@@ -1,5 +1,6 @@
 package io.agora.chatdemo.group.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -17,12 +18,14 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.widget.dialog.EaseAlertDialog;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.BaseContactListFragment;
 import io.agora.chatdemo.contact.ContactListAdapter;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.dialog.GroupMemberManageDialog;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
@@ -86,7 +89,14 @@ public class GroupAllMembersFragment extends BaseContactListFragment<EaseUser> {
                 }
             });
         });
-
+        viewModel.getRefreshObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(@Nullable String data) {
+                    loadData();
+                }
+            });
+        });
     }
 
     @Override
@@ -104,7 +114,11 @@ public class GroupAllMembersFragment extends BaseContactListFragment<EaseUser> {
         managersAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                EaseUser item = managersAdapter.getItem(position);
+                List<GroupManageItemBean> itemBeans = getMenuData(item.getUsername());
+                if(!itemBeans.isEmpty()) {
+                    showManageDialog(itemBeans, item.getNickname());
+                }
             }
         });
     }
@@ -112,6 +126,10 @@ public class GroupAllMembersFragment extends BaseContactListFragment<EaseUser> {
     @Override
     protected void initData() {
         super.initData();
+        loadData();
+    }
+
+    private void loadData() {
         viewModel.getGroupManagers(groupId);
         viewModel.getMembers(groupId);
     }
@@ -139,15 +157,18 @@ public class GroupAllMembersFragment extends BaseContactListFragment<EaseUser> {
     @Override
     public void onItemClick(View view, int position) {
         EaseUser item = listAdapter.getItem(position);
-        //showManageDialog();
+        List<GroupManageItemBean> itemBeans = getMenuData(item.getUsername());
+        if(!itemBeans.isEmpty()) {
+            showManageDialog(itemBeans, item.getNickname());
+        }
     }
 
-    private void getMenuData(String username) {
+    private List<GroupManageItemBean> getMenuData(String username) {
         if(TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
-            return;
+            return new ArrayList<>();
         }
         if(!GroupHelper.isOwner(group) && !GroupHelper.isAdmin(group)) {
-            return;
+            return new ArrayList<>();
         }
         List<GroupManageItemBean> data = new ArrayList<>();
         GroupManageItemBean itemBean = new GroupManageItemBean();
@@ -155,55 +176,150 @@ public class GroupAllMembersFragment extends BaseContactListFragment<EaseUser> {
             // add admin/mute/block
             boolean inAdminList = GroupHelper.isInAdminList(username, group.getAdminList());
             if(inAdminList) {
-                itemBean.setIcon(R.drawable.icon);
+                itemBean.setIcon(R.drawable.group_manage_remove_admin);
                 itemBean.setTitle(getString(R.string.group_members_dialog_menu_remove_admin));
+                itemBean.setId(R.id.action_group_manage_remove_admin);
             }else {
-                itemBean.setIcon(R.drawable.icon);
+                itemBean.setIcon(R.drawable.group_manage_make_admin);
                 itemBean.setTitle(getString(R.string.group_members_dialog_menu_make_admin));
+                itemBean.setId(R.id.action_group_manage_make_admin);
             }
+            itemBean.setUsername(username);
+            data.add(itemBean);
             itemBean = new GroupManageItemBean();
             if(GroupHelper.isInMuteList(username, listAdapter.getMuteList())) {
-                itemBean.setIcon(R.drawable.icon);
+                itemBean.setIcon(R.drawable.group_manage_unmute);
                 itemBean.setTitle(getString(R.string.group_members_dialog_menu_unmute));
+                itemBean.setId(R.id.action_group_manage_make_unmute);
             }else {
-                itemBean.setIcon(R.drawable.icon);
+                itemBean.setIcon(R.drawable.group_manage_make_mute);
                 itemBean.setTitle(getString(R.string.group_members_dialog_menu_mute));
+                itemBean.setId(R.id.action_group_manage_make_mute);
             }
+            itemBean.setUsername(username);
+            data.add(itemBean);
             itemBean = new GroupManageItemBean();
-            itemBean.setIcon(R.drawable.icon);
+            itemBean.setIcon(R.drawable.group_manage_make_blocked);
             itemBean.setTitle(getString(R.string.group_members_dialog_menu_block));
+            itemBean.setId(R.id.action_group_manage_move_to_block);
+            itemBean.setUsername(username);
+            data.add(itemBean);
 
         }else if(groupRole == DemoConstant.GROUP_ROLE_ADMIN) {
             if(!GroupHelper.isInAdminList(username, group.getAdminList()) && !TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
                 if(GroupHelper.isInMuteList(username, listAdapter.getMuteList())) {
-                    itemBean.setIcon(R.drawable.icon);
+                    itemBean.setIcon(R.drawable.group_manage_unmute);
                     itemBean.setTitle(getString(R.string.group_members_dialog_menu_unmute));
+                    itemBean.setId(R.id.action_group_manage_make_unmute);
                 }else {
-                    itemBean.setIcon(R.drawable.icon);
+                    itemBean.setIcon(R.drawable.group_manage_make_mute);
                     itemBean.setTitle(getString(R.string.group_members_dialog_menu_mute));
+                    itemBean.setId(R.id.action_group_manage_make_mute);
                 }
+                itemBean.setUsername(username);
+                data.add(itemBean);
                 itemBean = new GroupManageItemBean();
-                itemBean.setIcon(R.drawable.icon);
+                itemBean.setIcon(R.drawable.group_manage_make_blocked);
                 itemBean.setTitle(getString(R.string.group_members_dialog_menu_block));
+                itemBean.setId(R.id.action_group_manage_move_to_block);
+                itemBean.setUsername(username);
+                data.add(itemBean);
             }
         }
         itemBean = new GroupManageItemBean();
-        itemBean.setIcon(R.drawable.icon);
+        itemBean.setIcon(R.drawable.group_manage_remove_member);
         itemBean.setTitle(getString(R.string.group_members_dialog_menu_remove));
         itemBean.setAlert(true);
+        itemBean.setId(R.id.action_group_manage_remove_from_group);
+        itemBean.setUsername(username);
+        data.add(itemBean);
+        return data;
     }
 
-    private void showManageDialog() {
-        new GroupMemberManageDialog.Builder(mContext)
-                .setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
+    private void showManageDialog(List<GroupManageItemBean> itemBeans, String nickname) {
+        GroupMemberManageDialog dialog = new GroupMemberManageDialog(mContext);
+        dialog.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                GroupManageItemBean bean = itemBeans.get(position);
+                executeAction(bean);
+            }
+        });
+        dialog.setData(itemBeans);
+        dialog.setUsername(nickname);
+        dialog.init();
+        new EaseAlertDialog.Builder<GroupMemberManageDialog>(mContext)
+                .setCustomDialog(dialog)
+                .setFullWidth()
+                .setGravity(Gravity.BOTTOM)
+                .setFromBottomAnimation()
+                .show();
+    }
 
+    @SuppressLint("NonConstantResourceId")
+    private void executeAction(GroupManageItemBean bean) {
+        switch (bean.getId()) {
+            case R.id.action_group_manage_make_admin:
+                viewModel.addGroupAdmin(groupId, bean.getUsername());
+                break;
+            case R.id.action_group_manage_remove_admin:
+                showRemoveAdminDialog(bean);
+                break;
+            case R.id.action_group_manage_make_mute:
+                List<String> mutes = new ArrayList<>();
+                mutes.add(bean.getUsername());
+                viewModel.muteGroupMembers(groupId, mutes, 24*60*60*1000);
+                break;
+            case R.id.action_group_manage_make_unmute:
+                List<String> unmutes = new ArrayList<>();
+                unmutes.add(bean.getUsername());
+                viewModel.unMuteGroupMembers(groupId, unmutes);
+                break;
+            case R.id.action_group_manage_move_to_block:
+                showMoveToBlockedList(bean);
+                break;
+            case R.id.action_group_manage_remove_from_group:
+                showRemoveFromGroup(bean);
+                break;
+        }
+    }
+
+    private void showRemoveAdminDialog(GroupManageItemBean bean) {
+        new SimpleDialog.Builder(mContext)
+                .setTitle(R.string.group_members_action_remove_admin)
+                .setOnConfirmClickListener(R.string.group_members_action_confirm, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.removeGroupAdmin(groupId, bean.getUsername());
                     }
                 })
-                .setFullWidth()
-                .setFromBottomAnimation()
-                .setGravity(Gravity.BOTTOM)
+                .showCancelButton(true)
+                .show();
+    }
+
+    private void showMoveToBlockedList(GroupManageItemBean bean) {
+        new SimpleDialog.Builder(mContext)
+                .setTitle(R.string.group_members_action_move_to_block)
+                .setOnConfirmClickListener(R.string.group_members_action_confirm, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.blockUser(groupId, bean.getUsername());
+                    }
+                })
+                .showCancelButton(true)
+                .show();
+    }
+
+    private void showRemoveFromGroup(GroupManageItemBean bean) {
+        new SimpleDialog.Builder(mContext)
+                .setTitle(R.string.group_members_action_remove_from_group)
+                .setOnConfirmClickListener(R.string.group_members_action_confirm, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.removeUserFromGroup(groupId, bean.getUsername());
+                    }
+                })
+                .showCancelButton(true)
                 .show();
     }
 

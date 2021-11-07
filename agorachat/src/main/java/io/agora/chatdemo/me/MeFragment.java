@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import io.agora.CallBack;
+import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chatdemo.DemoHelper;
@@ -17,6 +19,8 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.databinding.FragmentAboutMeBinding;
 import io.agora.chatdemo.general.dialog.AlertDialog;
+import io.agora.chatdemo.general.dialog.SimpleDialog;
+import io.agora.chatdemo.sign.SignInActivity;
 
 public class MeFragment extends BaseInitFragment implements View.OnClickListener {
 
@@ -57,8 +61,10 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     protected void initData() {
         super.initData();
         currentUser = DemoHelper.getInstance().getCurrentUser();
+        mBinding.layoutUserinfo.tvId.setText("AgoraID:"+currentUser);
         EaseUserUtils.setUserNick(currentUser, mBinding.layoutUserinfo.tvNickname);
         EaseUserUtils.setUserAvatar(getContext(), currentUser,mBinding.layoutUserinfo.ivAvatar);
+        mBinding.settingAbout.setContent("V"+DemoHelper.getInstance().getAppVersionName(mContext));
     }
 
     @Override
@@ -104,16 +110,17 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
 
     }
     private void logout() {
-        /*new SimpleDialog.Builder(mContext)
+        new SimpleDialog.Builder(mContext)
                 .setTitle(R.string.em_login_out_hint)
                 .showCancelButton(true)
-                .setOnConfirmClickListener(R.string.em_dialog_btn_confirm, new DemoDialogFragment.OnConfirmClickListener() {
+                .hideConfirmButton(false)
+                .setOnConfirmClickListener(R.string.em_dialog_btn_confirm, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
-                        DemoHelper.getInstance().logout(true, new EMCallBack() {
+                        DemoHelper.getInstance().logout(true, new CallBack() {
                             @Override
                             public void onSuccess() {
-                                LoginActivity.startAction(mContext);
+                                SignInActivity.startAction(mContext);
                                 mContext.finish();
                             }
 
@@ -129,7 +136,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                         });
                     }
                 })
-                .show();*/
+                .show();
     }
     private void showSettingUserInfoDialog() {
         alertDialog = new AlertDialog.Builder(mContext)

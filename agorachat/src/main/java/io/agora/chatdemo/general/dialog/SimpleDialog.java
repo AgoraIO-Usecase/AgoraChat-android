@@ -182,6 +182,8 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
             boolean hideConfirm = bundle.getBoolean("hide_confirm");
             if(hideConfirm) {
                 mBtnDialogConfirm.setVisibility(View.GONE);
+            }else{
+                mBtnDialogConfirm.setVisibility(View.VISIBLE);
             }
             boolean cancelOutsideTouch = bundle.getBoolean("cancel_outside_touch");
             if(getDialog() != null) {

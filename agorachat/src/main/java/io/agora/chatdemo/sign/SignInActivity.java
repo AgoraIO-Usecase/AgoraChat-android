@@ -1,5 +1,6 @@
 package io.agora.chatdemo.sign;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,9 +18,9 @@ import java.util.regex.Pattern;
 
 import io.agora.CallBack;
 import io.agora.chat.ChatClient;
-import io.agora.chatdemo.main.MainActivity;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
+import io.agora.chatdemo.main.MainActivity;
 
 public class SignInActivity extends BaseActivity {
 
@@ -115,5 +116,10 @@ public class SignInActivity extends BaseActivity {
     public void showLeftDrawable(TextView editText, Drawable left) {
         String content = editText.getText().toString().trim();
         editText.setCompoundDrawablesWithIntrinsicBounds(TextUtils.isEmpty(content) ? null : left, null, null, null);
+    }
+
+    public static void startAction(Context context) {
+        Intent intent = new Intent(context, SignInActivity.class);
+        context.startActivity(intent);
     }
 }

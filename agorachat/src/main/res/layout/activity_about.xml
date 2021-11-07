@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".me.AboutActivity">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        android:background="@color/white"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back"
+        app:titleBarTitle="@string/about_title"
+        app:titleBarTitlePosition="left" />
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_sdk_version"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemTitleSize="@dimen/text_size_big"
+        app:arrowItemContentSize="@dimen/text_size_big"
+        app:arrowItemContentColor="@color/color_light_gray_999999"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/about_sdk_version"
+        tools:arrowItemContent="AgoraChatv3.8.7" />
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_lib_version"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemTitleSize="@dimen/text_size_big"
+        app:arrowItemContentSize="@dimen/text_size_big"
+        app:arrowItemContentColor="@color/color_light_gray_999999"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/about_lib_version"
+        tools:arrowItemContent="AgoraChatv3.8.7" />
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_policy"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemTitleSize="@dimen/text_size_big"
+        app:arrowItemContentSize="@dimen/text_size_big"
+        app:arrowItemContentColor="@color/color_light_gray_999999"
+        app:arrowItemShowArrow="true"
+        app:arrowItemTitle="@string/about_policy"
+         />
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_more"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemTitleSize="@dimen/text_size_big"
+        app:arrowItemContentSize="@dimen/text_size_big"
+        app:arrowItemContentColor="@color/group_blue_154dfe"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/about_more"
+        app:arrowItemContent="@string/about_net_addr" />
+
+</LinearLayout>

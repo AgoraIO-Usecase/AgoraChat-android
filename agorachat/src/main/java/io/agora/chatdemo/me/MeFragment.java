@@ -59,9 +59,6 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         currentUser = DemoHelper.getInstance().getCurrentUser();
         EaseUserUtils.setUserNick(currentUser, mBinding.layoutUserinfo.tvNickname);
         EaseUserUtils.setUserAvatar(getContext(), currentUser,mBinding.layoutUserinfo.ivAvatar);
-
-
-
     }
 
     @Override

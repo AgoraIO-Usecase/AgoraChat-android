@@ -1,8 +1,5 @@
 package io.agora.chatdemo.contact;
 
-import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
-import static io.agora.chatdemo.general.utils.ToastUtils.showToast;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +20,10 @@ import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.viewmodels.ContactDetailViewModel;
 import io.agora.chatdemo.databinding.FragmentGroupMemberDetailBottomSheetBinding;
 import io.agora.chatdemo.general.enums.Status;
-import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
+
+import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
+import static io.agora.chatdemo.general.utils.ToastUtils.showToast;
 
 
 public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragment {
@@ -52,7 +51,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
         //strange
         if(user!=null&&user.getContact()==3) {
             mBinding.itemChat.setAvatar(R.drawable.group_member_add);
-            mBinding.itemChat.setTitle(CommonUtils.getString(getContext(),R.string.contact_detail_add_contact));
+            mBinding.itemChat.setTitle(UIUtils.getString(getContext(),R.string.contact_detail_add_contact));
             mBinding.itemChat.getRightTitle().setVisibility(View.VISIBLE);
             mBinding.itemChat.setArrow(View.GONE);
         }

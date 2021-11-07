@@ -1,5 +1,6 @@
 package io.agora.chatdemo.me;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseListFragment;
 import io.agora.chatdemo.databinding.FragmentUserAvaterSelectBinding;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.general.manager.PreferenceManager;
 import io.agora.chatdemo.general.utils.UIUtils;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class UserAvatarSelectFragment extends BaseListFragment<Integer> implements SwipeRefreshLayout.OnRefreshListener {
@@ -37,8 +45,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        mRecyclerView.addItemDecoration(new AvaterSelectItemDecoration(UIUtils.dp2px(mContext,10)));
-
+        mRecyclerView.addItemDecoration(new AvaterSelectItemDecoration(UIUtils.dp2px(mContext,7)));
     }
 
     @Override
@@ -90,7 +97,16 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
 
     @Override
     public void onItemClick(View view, int position) {
-
+        Integer headImg = avaterImages.get(position);
+        PreferenceManager.getInstance().setCurrentUserAvatar(headImg.toString());
+        DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(headImg.toString());
+        EaseEvent event = EaseEvent.create(DemoConstant.AVATAR_CHANGE, EaseEvent.TYPE.CONTACT);
+        event.message = headImg.toString();
+        LiveDataBus.get().with(DemoConstant.AVATAR_CHANGE).postValue(event);
+        Intent intent = getActivity().getIntent();
+        intent.putExtra("headImage", headImg);
+        getActivity().setResult(RESULT_OK, intent);
+        getActivity().finish();
     }
 
     @Override

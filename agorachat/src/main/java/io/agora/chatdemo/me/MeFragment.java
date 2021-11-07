@@ -10,9 +10,10 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+
 import io.agora.CallBack;
 import io.agora.chat.uikit.manager.EaseThreadManager;
-import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -26,13 +27,14 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.sign.SignInActivity;
 
+import static android.app.Activity.RESULT_OK;
+
 public class MeFragment extends BaseInitFragment implements View.OnClickListener {
 
     private static final int REQUEST_CODE = 12;
     private FragmentAboutMeBinding mBinding;
     private MeViewModel mViewModel;
     private AlertDialog alertDialog;
-    private EaseUser user;
     private String currentUser;
 
     @Override
@@ -207,5 +209,12 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if((requestCode == REQUEST_CODE && resultCode == RESULT_OK)) {
+            if(data != null) {
+                int headImg = data.getIntExtra("headImage",R.drawable.ease_default_avatar);
+                Glide.with(mContext).load(headImg).placeholder(R.drawable.ease_default_avatar).into(mBinding.layoutUserinfo.ivAvatar);
+            }
+        }
     }
 }

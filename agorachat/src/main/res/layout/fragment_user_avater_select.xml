@@ -5,6 +5,7 @@
     android:id="@+id/user_avatar_select"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context="me.UserAvatarSelectFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

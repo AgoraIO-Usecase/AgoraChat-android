@@ -17,6 +17,7 @@ import io.agora.chat.Group;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.DemoHelper;
 
 public class GroupHelper {
@@ -166,7 +167,20 @@ public class GroupHelper {
                     name = info.getName();
                 }
                 userAvatar = info.getIconUrl();
-                isProvide = true;
+                EaseGroupInfo.AvatarSettings settings = info.getAvatarSettings();
+                if(settings != null && avatar != null && avatar instanceof EaseImageView) {
+                    if(settings.getAvatarShapeType() != 0)
+                        ((EaseImageView)avatar).setShapeType(settings.getAvatarShapeType());
+                    if(settings.getAvatarBorderWidth() != 0)
+                        ((EaseImageView)avatar).setBorderWidth(settings.getAvatarBorderWidth());
+                    if(settings.getAvatarBorderColor() != 0)
+                        ((EaseImageView)avatar).setBorderColor(settings.getAvatarBorderColor());
+                    if(settings.getAvatarRadius() != 0)
+                        ((EaseImageView)avatar).setRadius(settings.getAvatarRadius());
+                }
+                if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(userAvatar)) {
+                    isProvide = true;
+                }
             }
         }
         if(tvName != null && !TextUtils.isEmpty(name)) {

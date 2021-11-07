@@ -25,6 +25,7 @@ import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
+import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.widget.EaseTitleBar;
@@ -168,6 +169,19 @@ public class ChatActivity extends BaseInitActivity {
                     @Override
                     public void onUserAvatarLongClick(String username) {
 
+                    }
+                })
+                .setOnMessageSendCallBack(new OnMessageSendCallBack() {
+
+                    @Override
+                    public void onChatSuccess(ChatMessage message) {
+                        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE,EaseEvent.TYPE.MESSAGE));
+                    }
+
+                    @Override
+                    public void onChatError(int code, String errorMsg) {
+                        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE,EaseEvent.TYPE.MESSAGE));
+                        showToast(getString(R.string.chat_msg_error_toast, code, errorMsg));
                     }
                 })
                 .hideChatSendAvatar(true)

@@ -68,22 +68,33 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, this::loadData);
-
+        messageChange.with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event != null && event.isMessageChange()) {
+                refreshConversation();
+            }
+        });
     }
 
     private void loadData(EaseEvent easeEvent) {
         mainViewModel.getMsgConversation();
+        refreshConversation();
+    }
+
+    private void refreshConversation() {
+        if(mConversationListFragment != null && mConversationListFragment instanceof EaseConversationListFragment) {
+            ((EaseConversationListFragment) mConversationListFragment).refreshList();
+        }
     }
 
     private void initRedDot(Conversation conversation) {
-        int visiable;
+        int visible;
         int unreadMsgCount = conversation.getUnreadMsgCount();
         if(unreadMsgCount>0) {
-            visiable=View.VISIBLE;
+            visible=View.VISIBLE;
         }else{
-            visiable=View.GONE;
+            visible=View.GONE;
         }
-        showContactUnReadIcon(visiable);
+        showContactUnReadIcon(visible);
     }
 
     public void initData() {

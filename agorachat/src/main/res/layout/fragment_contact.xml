@@ -10,7 +10,7 @@
         android:layout_height="@dimen/ease_common_title_bar_height"
         app:titleBarRightVisible="true"
         app:titleBarRightImage="@drawable/add"
-        app:titleBarTitle="@string/main_title_contacts"
+        app:titleBarIcon="@drawable/chat_toolbar_icon"
         app:titleBarTitleTextColor="@color/color_main_blue"
         app:titleBarDisplayHomeAsUpEnabled="false"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -29,14 +29,17 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatOptions;
 import io.agora.chat.ChatRoomManager;
 import io.agora.chat.ContactManager;
+import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.models.EaseEmojicon;
+import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.options.EaseAvatarOptions;
 import io.agora.chat.uikit.provider.EaseEmojiconInfoProvider;
 import io.agora.chat.uikit.provider.EaseFileIconProvider;
+import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
@@ -246,6 +249,20 @@ public class DemoHelper {
                         return getUserInfo(username);
                     }
 
+                })
+                .setGroupInfoProvider(new EaseGroupInfoProvider() {
+                    @Override
+                    public EaseGroupInfo getGroupInfo(String groupId, int type) {
+                        if(type == Conversation.ConversationType.GroupChat.ordinal()) {
+                            EaseGroupInfo info = new EaseGroupInfo();
+                            EaseGroupInfo.AvatarSettings settings = new EaseGroupInfo.AvatarSettings();
+                            settings.setAvatarShapeType(2);
+                            settings.setAvatarRadius(1);
+                            info.setAvatarSettings(settings);
+                            return info;
+                        }
+                        return null;
+                    }
                 })
                 .setAvatarOptions(getAvatarOptions())
                 .setFileIconProvider(new EaseFileIconProvider() {

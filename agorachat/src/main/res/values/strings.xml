@@ -243,6 +243,7 @@
     <string name="group_next">Next</string>
     <string name="group_application_send">The group application has been sent</string>
 
+    <string name="chat_msg_error_toast">Send message failed, error code: %1$d, error message: %2$s</string>
     <string name="chat_setting_clear">Clear Message History</string>
     <string name="chat_setting_mute_notification">Mute Notification</string>
     <string name="chat_setting_to_top">Sticky on Top</string>

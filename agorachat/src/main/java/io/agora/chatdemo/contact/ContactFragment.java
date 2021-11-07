@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.utils.EaseUtils;
+import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
@@ -26,8 +27,8 @@ import io.agora.chatdemo.contact.viewmodels.ContactsViewModel;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.group.fragments.JoinedGroupFragment;
 import io.agora.chatdemo.global.BottomSheetContainerFragment;
+import io.agora.chatdemo.group.fragments.JoinedGroupFragment;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
 
 public class ContactFragment extends BaseInitFragment implements EaseTitleBar.OnRightClickListener {
@@ -51,7 +52,12 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
         tab_layout = findViewById(R.id.tab_layout);
         vp_fragment = findViewById(R.id.vp_fragment);
         toolbar_contact.setRightImageResource(R.drawable.add);
-
+        toolbar_contact.setIcon(R.drawable.contact_toolbar_icon);
+        EaseImageView icon = toolbar_contact.getIcon();
+        icon.setShapeType(0);
+        ViewGroup.LayoutParams layoutParams = icon.getLayoutParams();
+        layoutParams.height = (int) EaseUtils.dip2px(mContext, 20);
+        layoutParams.width = (int) EaseUtils.dip2px(mContext, 100);
     }
 
     @Override

@@ -33,6 +33,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private List<String> checkedList;
     private String owner;
     private OnSelectListener listener;
+    private List<String> memberList;
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
@@ -80,7 +81,19 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     }
 
     public List<String> getCheckedList() {
+        if(this.memberList != null) {
+            if(checkedList == null) {
+                return memberList;
+            }else {
+                checkedList.addAll(memberList);
+            }
+        }
         return checkedList;
+    }
+
+    public void setGroupMemberList(List<String> memberList) {
+        this.memberList = memberList;
+        notifyDataSetChanged();
     }
 
     private class ContactViewHolder extends ViewHolder<EaseUser> {
@@ -158,6 +171,14 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                     cb_select.setSelected(true);
                 }else{
                     cb_select.setSelected(false);
+                }
+                if(isContains(memberList, username)) {
+                    cb_select.setSelected(true);
+                    cb_select.setEnabled(false);
+                    this.itemView.setEnabled(false);
+                }else {
+                    cb_select.setEnabled(true);
+                    this.itemView.setEnabled(true);
                 }
                 if(mOnItemClickListener != null) {
                     this.itemView.setOnClickListener(new View.OnClickListener() {

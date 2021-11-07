@@ -48,7 +48,6 @@ public class GroupBaseManageFragment extends BaseContactListFragment<EaseUser> {
         group = ChatClient.getInstance().groupManager().getGroup(groupId);
         etSearch.setVisibility(View.VISIBLE);
         listAdapter = (ContactListAdapter) mListAdapter;
-        listAdapter.setEmptyView(R.layout.ease_layout_no_data_show_nothing);
     }
 
     @Override

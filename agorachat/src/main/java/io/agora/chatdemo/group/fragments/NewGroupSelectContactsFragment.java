@@ -35,13 +35,13 @@ import io.agora.chatdemo.group.viewmodel.NewGroupViewModel;
 public class NewGroupSelectContactsFragment extends ContactListFragment implements BottomSheetChildHelper,
         MembersScrollViewHeadView.OnMembersChangeListener, ContactListAdapter.OnSelectListener {
 
-    private MembersScrollViewHeadView headContainer;
+    protected MembersScrollViewHeadView headContainer;
     private String groupName;
     private String groupDesc;
     private String reason;
     private boolean groupPublic;
     private boolean groupAllowInvite;
-    private NewGroupViewModel viewModel;
+    protected NewGroupViewModel viewModel;
     private int groupMaxUsers;
 
     @Override
@@ -49,6 +49,9 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
         super.initArgument();
 
         Bundle bundle=getArguments();
+        if(bundle == null) {
+            return;
+        }
         groupName = bundle.getString(DemoConstant.GROUP_NAME);
         groupDesc = bundle.getString(DemoConstant.GROUP_DESC);
         reason = bundle.getString(DemoConstant.GROUP_REASON);
@@ -76,7 +79,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
                 public void onSuccess(Group data) {
                     showToast(R.string.em_group_new_success);
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
-                    //跳转到群组聊天页面
+                    // Skip to chat activity
                     ChatActivity.actionStart(mContext, data.getGroupId(), DemoConstant.CHATTYPE_GROUP);
                     hide();
                 }

@@ -578,10 +578,10 @@ public class DemoHelper {
         return false;
     }
 
-    public void setUserInfo(Activity context, String username, TextView tvName, ImageView avatar) {
+    public void setUserInfo(Context context, String username, TextView tvName, ImageView avatar) {
         setUserInfo(context, username, R.drawable.ease_default_avatar, tvName, avatar);
     }
-    public void setUserInfo(Activity context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
+    public void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
         UserInfoHelper.setUserInfo(context, username, defaultAvatar, tvName, avatar);
     }
 

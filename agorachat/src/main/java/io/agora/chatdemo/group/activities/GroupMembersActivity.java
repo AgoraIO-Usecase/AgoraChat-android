@@ -32,7 +32,10 @@ import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.databinding.ActivityGroupMembersBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.group.fragments.BottomSheetAddMembersFragment;
 import io.agora.chatdemo.group.fragments.GroupAdminsFragment;
 import io.agora.chatdemo.group.fragments.GroupAllMembersFragment;
 import io.agora.chatdemo.group.fragments.GroupBlockListFragment;
@@ -77,6 +80,9 @@ public class GroupMembersActivity extends BaseInitActivity implements EaseTitleB
             role = DemoConstant.GROUP_ROLE_ADMIN;
         }else {
             role = DemoConstant.GROUP_ROLE_MEMBER;
+        }
+        if(!isAllowToInvite()) {
+            binding.titleBar.setRightLayoutVisibility(View.GONE);
         }
         if(role == DemoConstant.GROUP_ROLE_OWNER || role == DemoConstant.GROUP_ROLE_ADMIN) {
             titles = new int[] {R.string.group_members_tab_title_all, R.string.group_members_tab_title_admin
@@ -200,11 +206,45 @@ public class GroupMembersActivity extends BaseInitActivity implements EaseTitleB
                 }
             });
         });
+        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isGroupChange()) {
+                loadData();
+            }
+        });
+        loadData();
+    }
+
+    private void loadData() {
         viewModel.getGroupManagers(groupId);
+        if(isAllowToInvite()) {
+            viewModel.getGroupAllMembers(groupId);
+        }
     }
 
     @Override
     public void onRightClick(View view) {
+        if(!isAllowToInvite()) {
+            return;
+        }
+        BottomSheetAddMembersFragment fragment = new BottomSheetAddMembersFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("group_id", groupId);
+        fragment.setArguments(bundle);
+        fragment.show(getSupportFragmentManager(), "add_group_members");
+    }
 
+    private boolean isAllowToInvite() {
+        // Group owner or admin
+        if(GroupHelper.isOwner(group) || GroupHelper.isAdmin(group)) {
+            return true;
+        }
+        // Private group which allow member to invite
+        if(!group.isPublic() && group.isMemberAllowToInvite()) {
+            return true;
+        }
+        return false;
     }
 }

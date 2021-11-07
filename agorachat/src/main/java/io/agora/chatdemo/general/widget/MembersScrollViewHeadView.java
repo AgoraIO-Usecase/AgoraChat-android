@@ -11,21 +11,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
-import io.agora.chat.uikit.EaseUIKit;
-import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.provider.EaseUserProfileProvider;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 
 public class MembersScrollViewHeadView extends HorizontalScrollView {
 
     private LinearLayout container;
-    private EaseUserProfileProvider provider;
     private OnMembersChangeListener listener;
+    private List<String> groupMembers;
 
     public MembersScrollViewHeadView(Context context) {
         this(context, null);
@@ -44,38 +41,66 @@ public class MembersScrollViewHeadView extends HorizontalScrollView {
         container = new LinearLayout(getContext());
         container.setOrientation(LinearLayout.HORIZONTAL);
         addView(container);
-        provider = EaseUIKit.getInstance().getUserProvider();
     }
 
-    //后期再优化逻辑，减少不必要的view移除添加
+    // TODO: 2021/11/7 Optimize later
     public void setMembers(List<String> members) {
-        if(members==null) {
+        if(container != null) {
+            container.removeAllViews();
+        }
+        setChildView(members, true);
+        if(groupMembers != null && !groupMembers.isEmpty()) {
+            setChildView(groupMembers, false);
+        }
+    }
+
+    private void setChildView(List<String> data, boolean canDelete) {
+        if(container == null || data == null || data.isEmpty()) {
             return;
         }
-        container.removeAllViews();
-        for (int i = 0; i < members.size(); i++) {
+        for (int i = 0; i < data.size(); i++) {
+            if(TextUtils.equals(data.get(i), DemoHelper.getInstance().getCurrentUser())) {
+                continue;
+            }
             View view=LayoutInflater.from(getContext()).inflate(R.layout.layout_contact_avatar_name,container,false);
             container.addView(view);
             EaseImageView ivAvatar = view.findViewById(R.id.iv_avatar);
             TextView tvName = view.findViewById(R.id.tv_name);
             ImageView ivDelete = view.findViewById(R.id.iv_delete);
-            if (provider != null) {
-                EaseUser user = provider.getUser(members.get(i));
-                String avatar = user.getAvatar();
-                if(!TextUtils.isEmpty(avatar)) {
-                    Glide.with(this).load(avatar).into(ivAvatar);
-                }
+            EaseUserUtils.setUserAvatarStyle(ivAvatar);
+            DemoHelper.getInstance().setUserInfo(getContext(), data.get(i), tvName, ivAvatar);
+            if(!canDelete) {
+                ivDelete.setVisibility(GONE);
             }
-            tvName.setText(members.get(i));
-            String member = members.get(i);
+            String member = data.get(i);
             ivDelete.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    members.remove(member);
+                    data.remove(member);
                     container.removeView(view);
-                    listener.onMembersChange(members);
+                    listener.onMembersChange(data);
                 }
             });
+        }
+    }
+
+    public void setGroupMembers(List<String> groupMembers) {
+        if(container == null || groupMembers == null || groupMembers.isEmpty()) {
+            return;
+        }
+        this.groupMembers = groupMembers;
+        int childCount = container.getChildCount();
+        if(childCount == 0) {
+            setChildView(groupMembers, false);
+        }else {
+            for(int i = 0; i < childCount; i++) {
+                View child = container.getChildAt(i);
+                ImageView ivDelete = child.findViewById(R.id.iv_delete);
+                TextView tvName = child.findViewById(R.id.tv_name);
+                if(groupMembers.contains(tvName.getText().toString().trim())) {
+                    ivDelete.setVisibility(GONE);
+                }
+            }
         }
     }
 

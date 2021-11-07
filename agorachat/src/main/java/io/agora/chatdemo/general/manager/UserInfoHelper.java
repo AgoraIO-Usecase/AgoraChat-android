@@ -1,6 +1,6 @@
 package io.agora.chatdemo.general.manager;
 
-import android.app.Activity;
+import android.content.Context;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +16,7 @@ import io.agora.chatdemo.DemoHelper;
 
 public class UserInfoHelper {
 
-    public static void setUserInfo(Activity context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
+    public static void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
         String name = username;
         String userAvatar= "";
         EaseUserProfileProvider userProvider = EaseUIKit.getInstance().getUserProvider();

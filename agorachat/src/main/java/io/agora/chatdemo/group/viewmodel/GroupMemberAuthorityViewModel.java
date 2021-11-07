@@ -20,6 +20,7 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
     private EMGroupManagerRepository repository;
     private SingleSourceLiveData<Resource<Group>> adminObservable;
     private SingleSourceLiveData<Resource<List<EaseUser>>> membersObservable;
+    private SingleSourceLiveData<Resource<List<String>>> allMembersObservable;
     private SingleSourceLiveData<Resource<List<EaseUser>>> groupManagersObservable;
     private SingleSourceLiveData<Resource<Map<String, Long>>> muteMembersObservable;
     private SingleSourceLiveData<Resource<List<String>>> blockMembersObservable;
@@ -37,6 +38,7 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
         refreshObservable = new SingleSourceLiveData<>();
         transferOwnerObservable = new SingleSourceLiveData<>();
         groupManagersObservable = new SingleSourceLiveData<>();
+        allMembersObservable = new SingleSourceLiveData<>();
     }
 
     public LiveDataBus getMessageChangeObservable() {
@@ -57,6 +59,14 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
 
     public void getMembers(String groupId) {
         membersObservable.setSource(repository.getGroupMembers(groupId));
+    }
+
+    public LiveData<Resource<List<String>>> getAllMembersObservable() {
+        return allMembersObservable;
+    }
+
+    public void getGroupAllMembers(String groupId) {
+        allMembersObservable.setSource(repository.getGroupAllStringMembers(groupId));
     }
 
     public LiveData<Resource<List<EaseUser>>> getGroupManagersObservable() {

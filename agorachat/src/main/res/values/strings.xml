@@ -240,6 +240,7 @@
 
     <string name="has_been_send">已发送</string>
     <string name="group_create_title">Create</string>
+    <string name="group_done_title">Done</string>
     <string name="group_next">Next</string>
     <string name="group_application_send">The group application has been sent</string>
 

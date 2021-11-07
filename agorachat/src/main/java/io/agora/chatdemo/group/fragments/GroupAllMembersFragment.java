@@ -1,5 +1,6 @@
 package io.agora.chatdemo.group.fragments;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -19,6 +20,8 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.ContactListAdapter;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
 import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
@@ -26,6 +29,12 @@ import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
 public class GroupAllMembersFragment extends GroupBaseManageFragment {
     protected ContactListAdapter managersAdapter;
     private List<EaseUser> mGroupManagerList = new ArrayList<>();
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        listAdapter.setEmptyView(R.layout.ease_layout_no_data_show_nothing);
+    }
 
     @Override
     protected void initViewModel() {
@@ -79,6 +88,14 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
                     loadData();
                 }
             });
+        });
+        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isGroupChange()) {
+                loadData();
+            }
         });
     }
 

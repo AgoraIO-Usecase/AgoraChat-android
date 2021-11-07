@@ -18,6 +18,7 @@ import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.general.widget.SwitchItemView;
 
 public class NewGroupSettingFragment extends BaseInitFragment implements BottomSheetChildHelper {
+    private static final int DEFAULT_GROUP_MAX_MEMBERS = 200;
     private EditText edtDesc;
     private EditText edtGroupName;
     private EditText edtGroupNumber;
@@ -90,10 +91,19 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
             ToastUtils.showToast(R.string.em_group_new_name_cannot_be_empty);
             return true;
         }
-        maxUsers=Integer.valueOf(edtGroupNumber.getText().toString().trim());
-        if(maxUsers < MIN_GROUP_USERS || maxUsers > MAX_GROUP_USERS) {
-            showToast(R.string.em_group_new_member_limit);
-            return true;
+        String memberNumber = edtGroupNumber.getText().toString().trim();
+        if(TextUtils.isEmpty(memberNumber)) {
+            maxUsers = DEFAULT_GROUP_MAX_MEMBERS;
+        }else {
+            try {
+                maxUsers = Integer.parseInt(memberNumber);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            if(maxUsers < MIN_GROUP_USERS || maxUsers > MAX_GROUP_USERS) {
+                showToast(R.string.em_group_new_member_limit);
+                return true;
+            }
         }
         String desc = edtDesc.getText().toString();
         String reason = getString(R.string.em_group_new_invite_join_group, DemoHelper.getInstance().getCurrentUser(), groupName);

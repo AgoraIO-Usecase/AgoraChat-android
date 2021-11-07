@@ -304,6 +304,8 @@
     <string name="me_setting_change_nickname">Change Nickname</string>
     <string name="me_setting_copy_agoraid">Copy AgoraID</string>
 
+    <string name="me_copy_success">Copy Success</string>
+
     <string name="about_title">About</string>
     <string name="about_sdk_version">SDK Version</string>
     <string name="about_lib_version">UI Library Version</string>

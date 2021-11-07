@@ -18,8 +18,12 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.databinding.FragmentAboutMeBinding;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.sign.SignInActivity;
 
 public class MeFragment extends BaseInitFragment implements View.OnClickListener {
@@ -55,6 +59,16 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         mBinding.layoutUserinfo.ivAvatar.setOnClickListener(this);
         mBinding.layoutUserinfo.tvNickname.setOnClickListener(this);
         mBinding.layoutUserinfo.tvId.setOnClickListener(this);
+
+        LiveDataBus.get().with(DemoConstant.USER_INFO, EaseEvent.class).observe(this, event -> {
+            if (event != null) {
+//                nickName_view.setText("昵称：" + event.message);
+//                userId_view.setText("账号：" + EMClient.getInstance().getCurrentUser());
+//                if(userInfo != null){
+//                    userInfo.setNickName(event.message);
+//                }
+            }
+        });
     }
 
     @Override
@@ -98,10 +112,13 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 alertDialog.dismiss();
                 break;
             case R.id.tv_change_nickname:
+//                changeNickName();
                 alertDialog.dismiss();
                 break;
             case R.id.tv_copy_id:
+                CommonUtils.copyContentToClipboard(mContext,currentUser);
                 alertDialog.dismiss();
+                showToast(R.string.me_copy_success);
                 break;
             case R.id.btn_cancel:
                 alertDialog.dismiss();
@@ -109,6 +126,42 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         }
 
     }
+
+//    private void changeNickName() {
+//        String nick = inputNickName.getText().toString();
+//        if (nick != null && nick.length() > 0) {
+//            EMClient.getInstance().userInfoManager().updateOwnInfoByAttribute(EMUserInfoType.NICKNAME, nick, new EMValueCallBack<String>() {
+//                @Override
+//                public void onSuccess(String value) {
+//                    EMLog.d(TAG, "fetchUserInfoById :" + value);
+//                    showToast(R.string.demo_offline_nickname_update_success);
+//                    nickName = nick;
+//                    PreferenceManager.getInstance().setCurrentUserNick(nick);
+//
+//
+//                    EaseEvent event = EaseEvent.create(DemoConstant.NICK_NAME_CHANGE, EaseEvent.TYPE.CONTACT);
+//                    //发送联系人更新事件
+//                    event.message = nick;
+//                    LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE).postValue(event);
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            //同时更新推送昵称
+//                            viewModel.updatePushNickname(nick);
+//                        }
+//                    });
+//                }
+//
+//                @Override
+//                public void onError(int error, String errorMsg) {
+//                    EMLog.d(TAG, "fetchUserInfoById  error:" + error + " errorMsg:" + errorMsg);
+//                    showToast(R.string.demo_offline_nickname_update_failed);
+//                }
+//            });
+//        }else{
+//            showToast(R.string.demo_offline_nickname_is_empty);
+//        }
+//    }
+
     private void logout() {
         new SimpleDialog.Builder(mContext)
                 .setTitle(R.string.em_login_out_hint)

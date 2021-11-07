@@ -86,6 +86,7 @@ public class ChatActivity extends BaseInitActivity {
         EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType, historyMsgId)
                 .setUseHeader(false)
                 .setUseRoamMessage(DemoHelper.getInstance().getModel().isMsgRoaming())
+                .setEmptyLayout(R.layout.ease_layout_no_data_show_nothing)
                 .setOnChatExtendMenuItemClickListener(new OnChatExtendMenuItemClickListener() {
                     @Override
                     public boolean onChatExtendMenuItemClick(View view, int itemId) {

@@ -76,7 +76,6 @@
             android:background="@drawable/dialog_btn_selector"
             android:text="@string/dialog_btn_confirm"
             android:textSize="18sp"
-            android:visibility="gone"
             android:textColor="@color/dialog_btn_text_color_selector"/>
 
         <androidx.constraintlayout.widget.Group

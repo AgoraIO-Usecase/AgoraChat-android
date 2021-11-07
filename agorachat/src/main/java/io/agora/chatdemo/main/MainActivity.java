@@ -117,7 +117,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             mConversationListFragment = new EaseConversationListFragment.Builder()
                                             .setCustomFragment(new ConversationListFragment())
                                             .setUseHeader(true)
-                                            .setHeaderTitle(getString(R.string.main_title_home))
                                             .setUnreadPosition(EaseConversationSetStyle.UnreadDotPosition.RIGHT)
                                             .setUnreadStyle(EaseConversationSetStyle.UnreadStyle.NUM)
                                             .build();

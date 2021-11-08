@@ -81,6 +81,7 @@ public interface DemoConstant extends EaseConstant {
     String SYSTEM_MESSAGE_GROUP_ID = "groupId";
     String SYSTEM_MESSAGE_NAME = "name";
     String SYSTEM_MESSAGE_INVITER = "inviter";
+    String SYSTEM_MESSAGE_EXPIRED = "expired";
 
     String USER_CARD_EVENT = "userCard";
     String USER_CARD_ID = "uid";

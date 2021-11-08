@@ -87,6 +87,8 @@ public interface DemoConstant extends EaseConstant {
     String USER_CARD_NICK = "nickname";
     String USER_CARD_AVATAR = "avatar";
 
+    String USER_INFO = "userinfo";
+
      String GROUP_NAME="group_name";
      String GROUP_DESC="group_desc";
      String GROUP_REASON="group_reason";

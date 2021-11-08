@@ -10,13 +10,24 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import io.agora.chat.uikit.models.EaseUser;
+import com.bumptech.glide.Glide;
+
+import io.agora.CallBack;
+import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.databinding.FragmentAboutMeBinding;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.AlertDialog;
+import io.agora.chatdemo.general.dialog.SimpleDialog;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.general.utils.CommonUtils;
+import io.agora.chatdemo.sign.SignInActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MeFragment extends BaseInitFragment implements View.OnClickListener {
 
@@ -24,7 +35,6 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     private FragmentAboutMeBinding mBinding;
     private MeViewModel mViewModel;
     private AlertDialog alertDialog;
-    private EaseUser user;
     private String currentUser;
 
     @Override
@@ -51,17 +61,26 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         mBinding.layoutUserinfo.ivAvatar.setOnClickListener(this);
         mBinding.layoutUserinfo.tvNickname.setOnClickListener(this);
         mBinding.layoutUserinfo.tvId.setOnClickListener(this);
+
+        LiveDataBus.get().with(DemoConstant.USER_INFO, EaseEvent.class).observe(this, event -> {
+            if (event != null) {
+//                nickName_view.setText("昵称：" + event.message);
+//                userId_view.setText("账号：" + EMClient.getInstance().getCurrentUser());
+//                if(userInfo != null){
+//                    userInfo.setNickName(event.message);
+//                }
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
         currentUser = DemoHelper.getInstance().getCurrentUser();
+        mBinding.layoutUserinfo.tvId.setText("AgoraID:"+currentUser);
         EaseUserUtils.setUserNick(currentUser, mBinding.layoutUserinfo.tvNickname);
         EaseUserUtils.setUserAvatar(getContext(), currentUser,mBinding.layoutUserinfo.ivAvatar);
-
-
-
+        mBinding.settingAbout.setContent("V"+DemoHelper.getInstance().getAppVersionName(mContext));
     }
 
     @Override
@@ -95,10 +114,13 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 alertDialog.dismiss();
                 break;
             case R.id.tv_change_nickname:
+//                changeNickName();
                 alertDialog.dismiss();
                 break;
             case R.id.tv_copy_id:
+                CommonUtils.copyContentToClipboard(mContext,currentUser);
                 alertDialog.dismiss();
+                showToast(R.string.me_copy_success);
                 break;
             case R.id.btn_cancel:
                 alertDialog.dismiss();
@@ -106,17 +128,54 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         }
 
     }
+
+//    private void changeNickName() {
+//        String nick = inputNickName.getText().toString();
+//        if (nick != null && nick.length() > 0) {
+//            EMClient.getInstance().userInfoManager().updateOwnInfoByAttribute(EMUserInfoType.NICKNAME, nick, new EMValueCallBack<String>() {
+//                @Override
+//                public void onSuccess(String value) {
+//                    EMLog.d(TAG, "fetchUserInfoById :" + value);
+//                    showToast(R.string.demo_offline_nickname_update_success);
+//                    nickName = nick;
+//                    PreferenceManager.getInstance().setCurrentUserNick(nick);
+//
+//
+//                    EaseEvent event = EaseEvent.create(DemoConstant.NICK_NAME_CHANGE, EaseEvent.TYPE.CONTACT);
+//                    //发送联系人更新事件
+//                    event.message = nick;
+//                    LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE).postValue(event);
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            //同时更新推送昵称
+//                            viewModel.updatePushNickname(nick);
+//                        }
+//                    });
+//                }
+//
+//                @Override
+//                public void onError(int error, String errorMsg) {
+//                    EMLog.d(TAG, "fetchUserInfoById  error:" + error + " errorMsg:" + errorMsg);
+//                    showToast(R.string.demo_offline_nickname_update_failed);
+//                }
+//            });
+//        }else{
+//            showToast(R.string.demo_offline_nickname_is_empty);
+//        }
+//    }
+
     private void logout() {
-        /*new SimpleDialog.Builder(mContext)
+        new SimpleDialog.Builder(mContext)
                 .setTitle(R.string.em_login_out_hint)
                 .showCancelButton(true)
-                .setOnConfirmClickListener(R.string.em_dialog_btn_confirm, new DemoDialogFragment.OnConfirmClickListener() {
+                .hideConfirmButton(false)
+                .setOnConfirmClickListener(R.string.em_dialog_btn_confirm, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
-                        DemoHelper.getInstance().logout(true, new EMCallBack() {
+                        DemoHelper.getInstance().logout(true, new CallBack() {
                             @Override
                             public void onSuccess() {
-                                LoginActivity.startAction(mContext);
+                                SignInActivity.startAction(mContext);
                                 mContext.finish();
                             }
 
@@ -132,7 +191,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                         });
                     }
                 })
-                .show();*/
+                .show();
     }
     private void showSettingUserInfoDialog() {
         alertDialog = new AlertDialog.Builder(mContext)
@@ -150,5 +209,12 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if((requestCode == REQUEST_CODE && resultCode == RESULT_OK)) {
+            if(data != null) {
+                int headImg = data.getIntExtra("headImage",R.drawable.ease_default_avatar);
+                Glide.with(mContext).load(headImg).placeholder(R.drawable.ease_default_avatar).into(mBinding.layoutUserinfo.ivAvatar);
+            }
+        }
     }
 }

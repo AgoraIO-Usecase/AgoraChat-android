@@ -28,7 +28,8 @@
         android:theme="@style/Theme.HyphenateDemoAndroid"
         android:usesCleartextTraffic="true">
         <activity android:name=".me.AboutActivity"></activity>
-        <activity android:name=".me.UserAvatarSelectActivity" />
+        <activity android:name=".me.UserAvatarSelectActivity"
+            />
         <activity android:name=".main.MainActivity" /> <!-- Splash -->
         <activity
             android:name=".sign.SplashActivity"

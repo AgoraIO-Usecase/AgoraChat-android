@@ -16,7 +16,7 @@ import java.util.Stack;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.databinding.FragmentContainTitleBaseBinding;
-import io.agora.chatdemo.general.utils.CommonUtils;
+import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.global.BottomSheetContainerHelper;
 
@@ -82,8 +82,8 @@ public abstract class BaseContainChildBottomSheetFragment extends BaseBottomShee
     protected void setTitleBar() {
         if(showTitle()) {
             baseBinding.titlebar.setRightLayoutVisibility(View.VISIBLE);
-            baseBinding.titlebar.getRightText().setTextSize(CommonUtils.getSpDimen(requireContext(), R.dimen.text_size_big));
-            baseBinding.titlebar.getTitle().setTextSize(CommonUtils.getSpDimen(requireContext(), R.dimen.text_size_big_18));
+            baseBinding.titlebar.getRightText().setTextSize(UIUtils.getSpDimen(requireContext(), R.dimen.text_size_big));
+            baseBinding.titlebar.getTitle().setTextSize(UIUtils.getSpDimen(requireContext(), R.dimen.text_size_big_18));
         }
     }
 

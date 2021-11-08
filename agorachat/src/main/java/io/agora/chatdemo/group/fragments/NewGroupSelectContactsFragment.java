@@ -19,7 +19,6 @@ import io.agora.chat.GroupManager;
 import io.agora.chat.GroupOptions;
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.ContactListAdapter;
 import io.agora.chatdemo.contact.ContactListFragment;
@@ -27,9 +26,9 @@ import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.MembersScrollViewHeadView;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.group.viewmodel.NewGroupViewModel;
 
 public class NewGroupSelectContactsFragment extends ContactListFragment implements BottomSheetChildHelper,
@@ -113,8 +112,8 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
         contacts.setText(R.string.group_contacts);
         contacts.setLayoutParams(contactsParams);
         contacts.setGravity(Gravity.LEFT);
-        contacts.setTextSize(CommonUtils.getSpDimen(mContext, R.dimen.text_size_small));
-        contacts.setPadding((int) CommonUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) CommonUtils.getAbsDimen(mContext, R.dimen.margin_2), (int) CommonUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) CommonUtils.getAbsDimen(mContext, R.dimen.margin_2));
+        contacts.setTextSize(UIUtils.getSpDimen(mContext, R.dimen.text_size_small));
+        contacts.setPadding((int) UIUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_2), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_2));
         contacts.setTextColor(ContextCompat.getColor(mContext, R.color.color_light_gray_999999));
         ((EaseRecyclerView) mRecyclerView).addHeaderView(contacts);
     }

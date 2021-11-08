@@ -16,12 +16,11 @@ import java.util.ArrayList;
 
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.global.BottomSheetChildHelper;
-import io.agora.chatdemo.contact.SearchContactFragment;
 import io.agora.chatdemo.contact.ContactListFragment;
-import io.agora.chatdemo.general.utils.CommonUtils;
+import io.agora.chatdemo.contact.SearchContactFragment;
 import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.ArrowItemView;
+import io.agora.chatdemo.global.BottomSheetChildHelper;
 
 public class ButtomSheetMenuFragment extends ContactListFragment implements View.OnClickListener, BottomSheetChildHelper {
     private ArrayList<Pair<Integer, Integer>> datas = new ArrayList();
@@ -39,7 +38,7 @@ public class ButtomSheetMenuFragment extends ContactListFragment implements View
         AbsListView.LayoutParams headviewParams = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         headView = new LinearLayout(mContext);
         headView.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams itemViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) CommonUtils.getAbsDimen(mContext, R.dimen.common_arrow_item_view_height));
+        LinearLayout.LayoutParams itemViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) UIUtils.getAbsDimen(mContext, R.dimen.common_arrow_item_view_height));
         for (Pair<Integer, Integer> data : datas) {
             ArrowItemView itemView = new ArrowItemView(mContext);
             itemView.setAvatar(data.first);
@@ -47,8 +46,8 @@ public class ButtomSheetMenuFragment extends ContactListFragment implements View
             itemView.setAvatarMargin(UIUtils.dp2px(mContext, 0), UIUtils.dp2px(mContext, 7), UIUtils.dp2px(mContext, 6), UIUtils.dp2px(mContext, 7));
             itemView.setAvatarHeight(UIUtils.dp2px(mContext, 40));
             itemView.setAvatarWidth(UIUtils.dp2px(mContext, 40));
-            itemView.setTitle(CommonUtils.getString(mContext, data.second));
-            itemView.setTitleSize(UIUtils.px2dp(mContext, (int) CommonUtils.getAbsDimen(mContext, R.dimen.text_size_big)));
+            itemView.setTitle(UIUtils.getString(mContext, data.second));
+            itemView.setTitleSize(UIUtils.px2dp(mContext, (int) UIUtils.getAbsDimen(mContext, R.dimen.text_size_big)));
             itemView.setArrow(R.drawable.arrow_right);
             itemView.setLayoutParams(itemViewParams);
             itemView.setTag(data.first);
@@ -62,8 +61,8 @@ public class ButtomSheetMenuFragment extends ContactListFragment implements View
         contacts.setText(R.string.group_contacts);
         contacts.setLayoutParams(contactsParams);
         contacts.setGravity(Gravity.LEFT);
-        contacts.setTextSize(CommonUtils.getSpDimen(mContext, R.dimen.text_size_small));
-        contacts.setPadding((int) CommonUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) CommonUtils.getAbsDimen(mContext, R.dimen.margin_2), (int) CommonUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) CommonUtils.getAbsDimen(mContext, R.dimen.margin_2));
+        contacts.setTextSize(UIUtils.getSpDimen(mContext, R.dimen.text_size_small));
+        contacts.setPadding((int) UIUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_2), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_2));
         contacts.setTextColor(ContextCompat.getColor(mContext, R.color.color_light_gray_999999));
         headView.addView(contacts);
     }

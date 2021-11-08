@@ -1,5 +1,6 @@
 package io.agora.chatdemo.me;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import io.agora.chatdemo.R;
@@ -16,6 +17,7 @@ public class UserAvatarSelectActivity extends BaseInitActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        setFitSystemForTheme(true,R.color.black);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, new UserAvatarSelectFragment())

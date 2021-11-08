@@ -2,6 +2,8 @@ package io.agora.chatdemo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Process;
@@ -590,6 +592,18 @@ public class DemoHelper {
     }
     public boolean setGroupInfo(Context context, String groupId, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
         return GroupHelper.setGroupInfo(context, groupId, defaultAvatar, tvName, avatar);
+    }
+
+    public  String getAppVersionName(Context context) {
+        String versionName=null;
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+        } catch (Exception e) {
+            Log.e("VersionInfo", "Exception", e);
+        }
+        return versionName;
     }
 
 }

@@ -214,6 +214,9 @@
     <string name="demo_system_other_decline_invite">%1$s拒绝了您的好友请求</string>
     <string name="demo_system_other_decline_remote_user_apply_to_join_group">%1$s拒绝了您的入群申请</string>
     <string name="demo_system_other_decline_received_remote_user_invitation">%1$s拒绝了您的入群邀请</string>
+    <string name="system_msg_ignored">Ignored</string>
+    <string name="system_msg_accepted">Accepted</string>
+    <string name="system_msg_expired">Expired</string>
 
     <string name="demo_contact_get_userInfo_failed">获取用户属性失败</string>
 

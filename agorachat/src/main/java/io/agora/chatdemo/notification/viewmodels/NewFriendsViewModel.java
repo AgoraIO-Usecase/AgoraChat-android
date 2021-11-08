@@ -115,11 +115,12 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 msg.setBody(body);
                 EaseNotificationMsgManager.getInstance().updateMessage(msg);
                 agreeObservable.postValue(Resource.success(message));
-                messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (ChatException e) {
                 e.printStackTrace();
+                msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_EXPIRED, R.string.system_msg_expired);
                 agreeObservable.postValue(Resource.error(e.getErrorCode(), e.getMessage(), ""));
             }
+            messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
         });
     }
 
@@ -147,11 +148,12 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 msg.setBody(body);
                 EaseNotificationMsgManager.getInstance().updateMessage(msg);
                 refuseObservable.postValue(Resource.success(message));
-                messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
-            } catch (ChatException e) {
+               } catch (ChatException e) {
                 e.printStackTrace();
+                msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_EXPIRED, R.string.system_msg_expired);
                 refuseObservable.postValue(Resource.error(e.getErrorCode(), e.getMessage(), ""));
             }
+            messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
         });
     }
 

@@ -45,9 +45,10 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(String message) {
-                    mMsgsViewModel.getAllMessages();
-                    EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
-                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
+                }
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
                 }
             });
         });
@@ -55,9 +56,11 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(String message) {
-//                    mMsgsViewModel.getAllMessages();
-                    EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
-                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
                 }
             });
         });
@@ -72,12 +75,7 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
         if(change == null) {
             return;
         }
-        if(change.isMessageChange() || change.isNotifyChange()
-                || change.isGroupLeave() || change.isChatRoomLeave()
-                || change.isContactChange()
-                || change.type == EaseEvent.TYPE.CHAT_ROOM || change.isGroupChange()) {
-            mMsgsViewModel.getAllMessages();
-        }
+        mMsgsViewModel.getAllMessages();
     }
 
     @Override
@@ -137,9 +135,6 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
                 break;
             case  R.id.iv_msg_delete:
                 mNewFriendViewModel.refuseInvite(mData.get(position));
-                mData.remove(position);
-                mListAdapter.notifyItemRemoved(position);
-//                mNewFriendViewModel.deleteMsg(mData.get(position));
                 break;
         }
     }

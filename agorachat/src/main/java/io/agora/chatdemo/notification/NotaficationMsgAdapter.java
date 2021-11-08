@@ -15,9 +15,11 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
 
 import static io.agora.chatdemo.general.constant.DemoConstant.SYSTEM_MESSAGE_FROM;
+import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAGREED;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAPPLYED;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEINVITEED;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.GROUPINVITATION;
+import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.REFUSED;
 import static io.agora.chatdemo.general.manager.PushAndMessageHelper.getSystemMessage;
 
 class NotaficationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
@@ -56,15 +58,33 @@ class NotaficationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
                 String statusParams = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS);
                 InviteMessageStatus status = InviteMessageStatus.valueOf(statusParams);
 
-                if (status == BEINVITEED) {
-                    itemBinding.btnAccept.setVisibility(View.VISIBLE);
-                } else if (status == BEAPPLYED) {
-                    itemBinding.btnAccept.setVisibility(View.VISIBLE);
-                } else if (status == GROUPINVITATION) {
-                    itemBinding.btnAccept.setVisibility(View.VISIBLE);
-                }else{
-                    itemBinding.btnAccept.setVisibility(View.GONE);
+                String expired = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_EXPIRED,null);
+                if(!TextUtils.isEmpty(expired)) {
+                    itemBinding.tvStatus.setText(R.string.system_msg_expired);
+                }else {
+                    if (status == BEINVITEED) {
+                        itemBinding.group.setVisibility(View.VISIBLE);
+                        itemBinding.tvStatus.setVisibility(View.GONE);
+                    } else if (status == BEAPPLYED) {
+                        itemBinding.group.setVisibility(View.VISIBLE);
+                        itemBinding.tvStatus.setVisibility(View.GONE);
+                    } else if (status == GROUPINVITATION) {
+                        itemBinding.group.setVisibility(View.VISIBLE);
+                        itemBinding.tvStatus.setVisibility(View.GONE);
+                    }else if(status == REFUSED) {
+                        itemBinding.tvStatus.setText(R.string.system_msg_ignored);
+                        itemBinding.tvStatus.setVisibility(View.VISIBLE);
+                        itemBinding.group.setVisibility(View.GONE);
+                    }else if(status == BEAGREED) {
+                        itemBinding.tvStatus.setText(R.string.system_msg_accepted);
+                        itemBinding.tvStatus.setVisibility(View.VISIBLE);
+                        itemBinding.group.setVisibility(View.GONE);
+                    }else{
+                        itemBinding.tvStatus.setVisibility(View.GONE);
+                        itemBinding.group.setVisibility(View.GONE);
+                    }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

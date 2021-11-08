@@ -378,13 +378,11 @@ public class DemoHelper {
             PushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
                 public void onError(PushType pushType, long errorCode) {
-                    // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
                     EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
                 }
 
                 @Override
                 public boolean isSupportPush(PushType pushType, PushConfig pushConfig) {
-                    // 由外部实现代码判断设备是否支持FCM推送
                     if(pushType == PushType.FCM){
                         EMLog.d("FCM", "GooglePlayServiceCode:"+ GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
                         return GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;

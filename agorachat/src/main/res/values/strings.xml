@@ -54,6 +54,7 @@
     <string name="group_permission_mute">Mute</string>
     <string name="group_admin_muted">Admin/Mute</string>
     <string name="group_new_group">New Group</string>
+    <string name="group_authoried_to_join">Authorizated to join</string>
     <string name="group_join_a_group">Join a Group</string>
     <string name="group_join">Join</string>
     <string name="group_join_this_group">Join this Group</string>

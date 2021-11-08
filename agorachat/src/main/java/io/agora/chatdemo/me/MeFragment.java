@@ -193,7 +193,6 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                     PreferenceManager.getInstance().setCurrentUserNick(nick);
 
                     EaseEvent event = EaseEvent.create(DemoConstant.NICK_NAME_CHANGE, EaseEvent.TYPE.CONTACT);
-                    //发送联系人更新事件
                     event.message = nick;
                     LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE).postValue(event);
                     runOnUiThread(new Runnable() {

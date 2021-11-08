@@ -69,7 +69,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
         }
         mBinding.tvNickname.setText(user.getNickname());
         mBinding.tvId.setText(getString(R.string.show_agora_chat_id, user.getUsername()));
-        setTopOffset((int) (EaseUtils.getScreenInfo(getContext())[1]-UIUtils.dp2px(getContext(),425)));
+        setTopOffset((int) (EaseUtils.getScreenInfo(getContext())[1]-UIUtils.dp2px(getContext(),387)));
     }
 
     @Override

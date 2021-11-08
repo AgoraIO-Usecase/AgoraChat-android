@@ -43,7 +43,7 @@
         app:arrowItemAvatarSrc="@drawable/group_member_chat"
         app:arrowItemAvatarHeight="32dp"
         app:arrowItemAvatarWidth="32dp"
-        app:arrowItemShowArrow="false"
+        app:arrowItemShowArrow="true"
         app:arrowItemTitle="@string/contact_detail_start_chat"
         android:foreground="@drawable/ease_ripple_click_gray"/>
 

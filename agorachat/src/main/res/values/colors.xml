@@ -56,4 +56,7 @@
     <color name="dialog_color_btn_warning">@color/white</color>
 
     <color name="layout_empty_content">#979797</color>
+
+    <color name="dialog_change_nickname_bg">#F2F2F2</color>
+    <color name="dialog_change_nickname_divider">#363c3c43</color>
 </resources>

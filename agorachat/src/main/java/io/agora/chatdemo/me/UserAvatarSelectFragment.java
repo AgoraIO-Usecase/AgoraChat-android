@@ -76,6 +76,11 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
         avaterImages.add(R.drawable.avatar_5);
         avaterImages.add(R.drawable.avatar_6);
         avaterImages.add(R.drawable.avatar_7);
+        avaterImages.add(R.drawable.avatar_8);
+        avaterImages.add(R.drawable.avatar_9);
+        avaterImages.add(R.drawable.avatar_10);
+        avaterImages.add(R.drawable.avatar_11);
+        avaterImages.add(R.drawable.avatar_12);
         mListAdapter.setData(avaterImages);
     }
 

@@ -17,7 +17,7 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.general.widget.SwitchItemView;
 
-public class NewGroupSettingFragment extends BaseInitFragment implements BottomSheetChildHelper {
+public class NewGroupSettingFragment extends BaseInitFragment implements BottomSheetChildHelper, SwitchItemView.OnCheckedChangeListener {
     private static final int DEFAULT_GROUP_MAX_MEMBERS = 200;
     private EditText edtDesc;
     private EditText edtGroupName;
@@ -60,6 +60,7 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
                 }
             }
         });
+        swToPublic.setOnCheckedChangeListener(this);
 
     }
 
@@ -127,5 +128,16 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
 
     private void checkGroupInfo() {
 
+    }
+
+    @Override
+    public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
+        if(buttonView==swToPublic) {
+            if(isChecked) {
+                swInvite.getTvTitle().setText(R.string.group_authoried_to_join);
+            }else{
+                swInvite.getTvTitle().setText(R.string.group_allow_members_to_invite);
+            }
+        }
     }
 }

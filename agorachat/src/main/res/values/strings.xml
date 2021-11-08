@@ -54,6 +54,7 @@
     <string name="group_permission_mute">Mute</string>
     <string name="group_admin_muted">Admin/Mute</string>
     <string name="group_new_group">New Group</string>
+    <string name="group_authoried_to_join">Authorizated to join</string>
     <string name="group_join_a_group">Join a Group</string>
     <string name="group_join">Join</string>
     <string name="group_join_this_group">Join this Group</string>
@@ -320,6 +321,13 @@
     <string name="em_dialog_btn_confirm_warning">确认移交</string>
 
     <string name="em_login_out_hint">Sure to Quit？</string>
+
+    <string name="dialog_change_nickname_title">Change Group Name</string>
+    <string name="dialog_change_nickname_reminder">Latin letters and numbers only</string>
+
+    <string name="nickname_update_success">Nickname Update Success</string>
+    <string name="nickname_update_failed">Nickname Update Failed</string>
+    <string name="nickname_is_empty">Nickname Is Empty</string>
 
 
 </resources>

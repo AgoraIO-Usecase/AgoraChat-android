@@ -179,6 +179,9 @@ public class GroupMembersActivity extends BaseInitActivity implements EaseTitleB
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 tab.setCustomView(R.layout.layout_custom_tab_contact);
                 TextView title = tab.getCustomView().findViewById(R.id.tv_tab_title);
+                ViewGroup.LayoutParams layoutParams = title.getLayoutParams();
+                layoutParams.height = (int) EaseUtils.dip2px(mContext, 28);
+                title.setGravity(Gravity.CENTER);
                 title.setBackgroundResource(R.drawable.contact_tab_bg);
                 title.setText(titles[position]);
             }

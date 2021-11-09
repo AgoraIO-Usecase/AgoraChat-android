@@ -1,4 +1,3 @@
-include ':agorachat'
 include ':app'
 include ':uikit'
 project(':uikit').projectDir = new File('../AgoraChatUIKit/uikit')

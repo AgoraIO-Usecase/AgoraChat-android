@@ -1,210 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.agora.chatdemo"
-    >
-
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
-    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-
+    package="io.agora.chatdemo">
     <!-- IM SDK required start -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <!-- IM SDK required end -->
-
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/em_logo_uidemo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
-
-        <!-- IM SDK required start-->
-        <!-- set your API key -->
-        <meta-data
-            android:name="EASEMOB_APPKEY"
-            android:value="1193210624041558#chat-demo"/>
-
-        <!-- SDK service -->
-        <service
-            android:name="io.agora.chat.ChatService"
-            android:exported="true"/>
-        <service android:name="io.agora.chat.ChatJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true" />
-
-        <!-- SDK receiver -->
-        <receiver android:name="io.agora.chat.MonitorReceiver">
+        android:theme="@style/Theme.HyphenateDemoAndroid"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".me.AboutActivity"></activity>
+        <activity android:name=".me.UserAvatarSelectActivity"
+            />
+        <activity android:name=".main.MainActivity" /> <!-- Splash -->
+        <activity
+            android:name=".sign.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <data android:scheme="package"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- optional filter -->
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT"/>
-            </intent-filter>
-        </receiver>
-        <!-- IM SDK required end-->
-
-        <!-- to Android 7.0, replace io.agora.chatdemo to your package name -->
+        </activity> <!-- Sign in -->
+        <activity
+            android:name=".sign.SignInActivity"
+            android:screenOrientation="portrait" /> <!-- Contact detail -->
+        <activity
+            android:name=".contact.ContactDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".chat.ChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- Group detail -->
+        <activity android:name=".group.activities.GroupDetailActivity" /> <!-- Group members -->
+        <activity android:name=".group.activities.GroupMembersActivity" /> <!-- Transfer group owner -->
+        <activity android:name=".group.activities.GroupTransferActivity" /> <!-- 适配Android 7.0, 需要将下方的com.hyphenate.easeim替换为你的app包名 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-        <!--Splash-->
-        <activity
-            android:name=".ui.SplashActivity"
-            android:screenOrientation="portrait">
+        </provider> <!-- IM SDK required start -->
+        <!-- SDK service -->
+        <service
+            android:name="io.agora.chat.ChatService"
+            android:exported="true" />
+        <service
+            android:name="io.agora.chat.ChatJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- SDK receiver -->
+        <receiver android:name="io.agora.chat.MonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <data android:scheme="package" />
             </intent-filter>
-        </activity>
-        <!--Main-->
-        <activity
-            android:name=".ui.MainActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            >
-        </activity>
-
-        <!--Sign in activity-->
-        <activity
-            android:name=".sign.SignInActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <!--Sign up activity-->
-        <activity
-            android:name=".sign.SignUpActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <!--Show normal file activity-->
-        <activity
-            android:name="io.agora.easeui.ui.EaseShowNormalFileActivity"
-            android:screenOrientation="portrait" />
-        <!--Show big image activity-->
-        <activity
-            android:name="io.agora.easeui.ui.EaseShowImageActivity"
-            android:screenOrientation="portrait"/>
-        <!--Show video activity-->
-        <activity
-            android:name="io.agora.easeui.ui.EaseShowVideoActivity"
-            android:screenOrientation="portrait" />
-        <!--Show location activity-->
-        <activity
-            android:name="io.agora.easeui.ui.EaseMapActivity"
-            android:screenOrientation="portrait" />
-        <!--Group list activity-->
-        <activity android:name=".group.GroupListActivity"/>
-        <!--Group detail activity-->
-        <activity android:name=".group.GroupDetailsActivity"/>
-        <!--Invite members activity-->
-        <activity android:name=".group.InviteMembersActivity"/>
-        <activity android:name=".group.MembersListActivity"/>
-        <!--Group members list activity-->
-        <activity android:name=".group.GroupMembersListActivity"/>
-        <!--Group admin list activity-->
-        <activity android:name=".group.GroupAdminActivity"/>
-        <!--Create group activity-->
-        <activity android:name=".group.NewGroupActivity"/>
-        <!--Public groups list activity-->
-        <activity android:name=".group.PublicGroupsListActivity"/>
-        <!--Group transfer activity-->
-        <activity android:name=".group.GroupTransferOwnerActivity"/>
-        <!--Group operate activity-->
-        <activity android:name=".group.GroupBlackListOrMuteActivity"/>
-        <!--Chat room-->
-        <activity android:name=".chatroom.ChatRoomListActivity"/>
-        <!--Chat room details activity-->
-        <activity android:name=".chatroom.ChatRoomDetailsActivity"/>
-        <!--Chat room member list activity-->
-        <activity android:name=".chatroom.ChatRoomMembersActivity"/>
-        <!--Chat room black list activity-->
-        <activity android:name=".chatroom.ChatRoomBlacklistActivity"/>
-        <!--Chat activity-->
-        <activity
-            android:name=".chat.ChatActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <!--Account activity-->
-        <activity
-            android:name=".settings.AccountActivity"
-            android:screenOrientation="portrait"/>
-        <!--Add contacts-->
-        <activity
-            android:name=".user.AddContactsActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateVisible"/>
-        <!--Apply for activity-->
-        <activity
-            android:name=".apply.ApplyActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
-        <!--Blacklist activity-->
-        <activity
-            android:name=".settings.BlackListActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
-        <!--Current Place activity-->
-        <activity android:name=".ui.MapsCurrentPlaceActivity" />
-        <!--Settings details activity-->
-        <activity android:name=".settings.SettingsActivity" />
-
-        <!-- FCM required start -->
-        <service android:name=".fcm.EMFCMMSGService"
-            android:exported="false">
+            <!-- optional filter -->
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
-        </service>
-        <!-- FCM required end -->
-        <!-- [START fcm_default_channel] -->
-<!--        <meta-data-->
-<!--            android:name="com.google.firebase.messaging.default_notification_channel_id"-->
-<!--            android:value="@string/default_notification_channel_id" />-->
-        <!-- [END fcm_default_channel] -->
-
-        <!-- set your google map api key -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/maps_api_key"/>
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        </receiver>
     </application>
 
 </manifest>

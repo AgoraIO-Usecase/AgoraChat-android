@@ -1,102 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="main_badge_size">25dp</dimen>
+    <dimen name="main_badge_margin_left">32dp</dimen>
+    <dimen name="main_badge_margin_top">9dp</dimen>
+    <dimen name="main_badge_padding">5dp</dimen>
 
-    <!--base-->
-    <dimen name="size_headline">24sp</dimen>
-    <dimen name="size_title">20sp</dimen>
-    <dimen name="size_subhead">16sp</dimen>
-    <dimen name="size_body">14sp</dimen>
-    <dimen name="size_menu">16sp</dimen>
-    <dimen name="size_btn_large">20sp</dimen>
-    <dimen name="size_btn_normal">16sp</dimen>
-    <dimen name="size_btn_small">12sp</dimen>
-    <dimen name="size_caption">12sp</dimen>
-    <dimen name="size_10">10sp</dimen>
-    <dimen name="size_12">12sp</dimen>
-    <dimen name="size_14">14sp</dimen>
-    <dimen name="size_16">16sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_normal">14sp</dimen>
+    <dimen name="text_size_big">16sp</dimen>
+    <dimen name="text_size_big_18">18sp</dimen>
+    <dimen name="text_size_big_20">20sp</dimen>
 
-    <dimen name="em_dimen_8">8dp</dimen>
-    <dimen name="em_dimen_16">16dp</dimen>
+    <dimen name="avatar_big_size">140dp</dimen>
+    <dimen name="avatar_middle_size">100dp</dimen>
+    <dimen name="margin_2">2dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_view_distance_border">16dp</dimen>
 
-    <!--contact-->
-    <dimen name="header_size">20.5sp</dimen>
-    <dimen name="contact_name_size">16sp</dimen>
-    <dimen name="contact_item_height">60dp</dimen>
-    <dimen name="contact_avatar_size">39.5dp</dimen>
-    <dimen name="contact_avatar_margin_left">43dp</dimen>
-    <dimen name="contact_name_margin_left">17.5dp</dimen>
-    <dimen name="contact_dialog_width">280dp</dimen>
-    <dimen name="contact_dialog_height">218dp</dimen>
-    <dimen name="contact_dialog_avatar_size">79dp</dimen>
-    <dimen name="contact_dialog_txt_margin_top">20dp</dimen>
-    <dimen name="contact_dialog_base_line_height">1.5dp</dimen>
-    <dimen name="contact_dialog_icon_size">20dp</dimen>
-    <dimen name="contact_search_margin">16dp</dimen>
-    <dimen name="contact_search_padding_horizontal">16dp</dimen>
-    <dimen name="contact_search_padding_vertical">8dp</dimen>
-    <dimen name="contact_search_input_height">48dp</dimen>
+    <dimen name="common_serch_text_height">32dp</dimen>
+    <dimen name="common_arrow_item_avatar_height">40dp</dimen>
+    <dimen name="common_arrow_item_view_height">54dp</dimen>
 
-    <!--group-->
-    <dimen name="group_icon_padding_left">7dp</dimen>
-    <dimen name="group_text_margin_left">8.5dp</dimen>
-    <dimen name="group_text_size">14sp</dimen>
-    <dimen name="group_arrow_right_icon">16dp</dimen>
+    <dimen name="common_item_height">54dp</dimen>
 
-    <dimen name="base_line_height">1dp</dimen>
-    <dimen name="base_line_margin_left">72.5dp</dimen>
-    <dimen name="group_item_height">73dp</dimen>
-    <dimen name="group_item_avatar_size">39.5dp</dimen>
-    <dimen name="group_item_padding">16dp</dimen>
-    <dimen name="group_name_margin_left">17.5dp</dimen>
-    <dimen name="group_name_size">16sp</dimen>
-    <dimen name="group_details_item_height">70dp</dimen>
-    <dimen name="group_details_name_size">20sp</dimen>
-    <dimen name="group_details_desc_size">12sp</dimen>
+    <dimen name="dialog_title_size">20sp</dimen>
+    <dimen name="dialog_middle_size">18sp</dimen>
+    <dimen name="dialog_btn_size">16sp</dimen>
 
-    <!--chatroom-->
-    <dimen name="chatroom_item_avatar_size">39.5dp</dimen>
-    <dimen name="chatroom_name_margin">16dp</dimen>
-
-    <!--call-->
-    <dimen name="call_name_size">18sp</dimen>
-    <dimen name="call_info_size">14sp</dimen>
-    <dimen name="call_info_item_height">48dp</dimen>
-    <dimen name="call_switch_width">48dp</dimen>
-    <dimen name="call_switch_height">48dp</dimen>
-    <dimen name="call_avatar_size">96dp</dimen>
-    <dimen name="call_btn_margin">16dp</dimen>
-    <dimen name="call_layout_margin">16dp</dimen>
-    <dimen name="call_local_width">96dp</dimen>
-    <dimen name="call_local_height">128dp</dimen>
-    <dimen name="call_message_icon_margin">8dp</dimen>
-    <dimen name="call_small_width">24dp</dimen>
-    <dimen name="call_small_height">32dp</dimen>
-
-    <dimen name="devices_height">1dp</dimen>
-
-    <dimen name="apply_avatar_size">48dp</dimen>
-    <dimen name="apply_padding">8dp</dimen>
-    <dimen name="apply_margin">8dp</dimen>
-
-    <dimen name="btn_height_big">48dp</dimen>
-    <dimen name="btn_height_small">36dp</dimen>
-    <dimen name="btn_margin">8dp</dimen>
-
-
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="activity_padding">16dp</dimen>
-
-
-    <!--Settings-->
-    <dimen name="settings_fab_small_size">36dp</dimen>
-    <dimen name="setting_header_height">220dp</dimen>
-    <dimen name="account_item_padding">16dp</dimen>
-
-    <dimen name="logo_margin">24dp</dimen>
-
-    <!--other-->
+    <dimen name="dialog_title_margin_top">19dp</dimen>
+    <dimen name="dialog_title_margin_bottom">24dp</dimen>
+    <dimen name="dialog_title_gone_margin_bottom">22dp</dimen>
+    <dimen name="dialog_title_gone_margin_top">19dp</dimen>
+    <dimen name="dialog_middle_margin_bottom">21dp</dimen>
+    <dimen name="dialog_middle_margin_left">31dp</dimen>
+    <dimen name="dialog_middle_margin_right">31dp</dimen>
+    <dimen name="dialog_drawable_padding">18dp</dimen>
 
 </resources>

@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.List;
 
 import io.agora.CallBack;
+import io.agora.Error;
 import io.agora.chat.uikit.utils.StatusBarCompat;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
@@ -77,10 +78,20 @@ public class BaseActivity extends AppCompatActivity {
             if(!event.isAccountChange()) {
                 return;
             }
+            int errorCode = 0;
+            try {
+                errorCode = Integer.parseInt(event.event);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            if(errorCode == 0) {
+                return;
+            }
             String accountEvent = event.event;
-            if(TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_REMOVED) ||
-                TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_KICKED_BY_CHANGE_PASSWORD) ||
-                TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_KICKED_BY_OTHER_DEVICE)) {
+            if(errorCode == Error.USER_REMOVED
+                    || errorCode == Error.USER_KICKED_BY_CHANGE_PASSWORD
+                    || errorCode == Error.TOKEN_EXPIRED
+                    || errorCode == Error.USER_KICKED_BY_OTHER_DEVICE) {
                 DemoHelper.getInstance().logout(false, new CallBack() {
                     @Override
                     public void onSuccess() {
@@ -100,9 +111,8 @@ public class BaseActivity extends AppCompatActivity {
 
                     }
                 });
-            }else if(TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_CONFLICT)
-                    || TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_REMOVED)
-                    || TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_FORBIDDEN)) {
+            }else if(errorCode == Error.USER_LOGIN_ANOTHER_DEVICE 
+                    || errorCode == Error.SERVER_SERVICE_RESTRICTED) {
                 DemoHelper.getInstance().logout(false, null);
                 showExceptionDialog(accountEvent);
             }
@@ -354,10 +364,10 @@ public class BaseActivity extends AppCompatActivity {
             return;
         }
         if(response.status == Status.SUCCESS) {
-            callback.hideLoading();
+            callback.onHideLoading();
             callback.onSuccess(response.data);
         }else if(response.status == Status.ERROR) {
-            callback.hideLoading();
+            callback.onHideLoading();
             if(!callback.hideErrorMsg) {
                 showToast(response.getMessage());
             }

@@ -19,9 +19,8 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <!--指定Dialog的主题-->
     <style name="Dialog.Light" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/color_main_blue</item>
     </style>
 
     <style name="main_badge_tv">

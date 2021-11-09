@@ -2,6 +2,8 @@ package io.agora.chatdemo.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -42,6 +44,11 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private int[] badgeIds = {R.layout.badge_home, R.layout.badge_contacts};
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_contacts_msg};
     private MainViewModel mainViewModel;
+    
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getLayoutId() {

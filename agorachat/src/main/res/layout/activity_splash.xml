@@ -5,17 +5,19 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/iv_icon"
         android:layout_width="120dp"
         android:layout_height="115dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/icon"/>
+        android:src="@drawable/icon" />
 
     <ImageView
+        android:id="@+id/iv_brand_icon"
         android:layout_width="wrap_content"
         android:layout_height="34dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="65dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/text_agorachat"/>
+        android:src="@drawable/agora_brand"/>
 
 </RelativeLayout>

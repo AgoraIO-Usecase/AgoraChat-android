@@ -83,8 +83,8 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
                 }
 
                 @Override
-                public void hideLoading() {
-                    super.hideLoading();
+                public void onHideLoading() {
+                    super.onHideLoading();
                     if (srlContactRefresh != null) {
                         srlContactRefresh.finishRefresh();
                     }
@@ -103,8 +103,8 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
                 }
 
                 @Override
-                public void hideLoading() {
-                    super.hideLoading();
+                public void onHideLoading() {
+                    super.onHideLoading();
                     if (srlContactRefresh != null) {
                         srlContactRefresh.finishLoadMore();
                     }

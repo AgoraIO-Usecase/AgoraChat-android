@@ -90,8 +90,8 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
                 }
 
                 @Override
-                public void hideLoading() {
-                    super.hideLoading();
+                public void onHideLoading() {
+                    super.onHideLoading();
                     dismissLoading();
                 }
             });

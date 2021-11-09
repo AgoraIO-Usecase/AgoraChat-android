@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.HyphenateDemoAndroid" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+    <style name="Theme.HyphenateDemoAndroid" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
@@ -16,6 +16,11 @@
         <item name="android:windowBackground">@color/color_window_bg</item>
         <item name="android:divider">@drawable/demo_default_divider_list</item>
         <!-- remove button default shadow effect -->
-        <item name="android:buttonStyle">@style/Button.BorderLess</item>
+        <!--<item name="android:buttonStyle">@style/Button.BorderLess</item>-->
+    </style>
+
+    <style name="Theme.Launcher" parent="Theme.HyphenateDemoAndroid">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 </resources>

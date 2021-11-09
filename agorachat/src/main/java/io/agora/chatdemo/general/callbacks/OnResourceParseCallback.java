@@ -40,5 +40,5 @@ public abstract class OnResourceParseCallback<T> {
     /**
      * 隐藏加载
      */
-    public void hideLoading(){}
+    public void onHideLoading(){}
 }

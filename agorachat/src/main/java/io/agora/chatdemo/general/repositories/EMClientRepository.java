@@ -44,7 +44,7 @@ public class EMClientRepository extends BaseEMRepository{
                 if(isAutoLogin()) {
                     runOnIOThread(() -> {
                         if(isLoggedIn()) {
-                            loadAllConversationsAndGroups();
+                            initLocalDb();
                             callBack.onSuccess(createLiveData(true));
                         }else {
                             callBack.onError(ErrorCode.NOT_LOGIN);
@@ -59,15 +59,9 @@ public class EMClientRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
-    /**
-     * 从本地数据库加载所有的对话及群组
-     */
-    private void loadAllConversationsAndGroups() {
-        // 初始化数据库
+    private void initLocalDb() {
+        // init demo db
         initDb();
-        // 从本地数据库加载所有的对话及群组
-        getChatManager().loadAllConversations();
-        getGroupManager().loadAllGroups();
     }
 
     /**
@@ -144,6 +138,39 @@ public class EMClientRepository extends BaseEMRepository{
 
         }.asLiveData();
     }
+    
+    public LiveData<Resource<Boolean>> loginWithAgoraToken(String userName, String token) {
+        return new NetworkOnlyResource<Boolean>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                ChatClient.getInstance().loginWithAgoraToken(userName, token, new DemoCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+    
+    public LiveData<Resource<Boolean>> renewAgoraToken(String token) {
+        return new NetworkOnlyResource<Boolean>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                ChatClient.getInstance().renewToken(token);
+                callBack.onSuccess(createLiveData(true));
+            }
+
+        }.asLiveData();
+    }
 
     /**
      * 退出登录
@@ -192,7 +219,7 @@ public class EMClientRepository extends BaseEMRepository{
 
     private void successForCallBack(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
         // ** manually load all local groups and conversation
-        loadAllConversationsAndGroups();
+        initLocalDb();
         //从服务器拉取加入的群，防止进入会话页面只显示id
         getAllJoinGroup();
         // get contacts from server
@@ -239,5 +266,44 @@ public class EMClientRepository extends BaseEMRepository{
 
     private void closeDb() {
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
+    }
+
+    /**
+     * Renew Agora chat by app server
+     * @return
+     */
+    public LiveData<Resource<String>> renewAgoraChatToken() {
+        return new NetworkOnlyResource<String>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<Boolean>> loginByAppServer(String username, String nickname) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                runOnIOThread(()-> {
+                    ChatClient.getInstance().login(username, nickname, new CallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(true));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+                    });
+                });
+            }
+        }.asLiveData();
     }
 }

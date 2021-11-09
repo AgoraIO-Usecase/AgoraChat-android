@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import io.agora.ChatRoomChangeListener;
 import io.agora.ContactListener;
 import io.agora.ConversationListener;
+import io.agora.Error;
 import io.agora.MultiDeviceListener;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
@@ -29,7 +30,9 @@ import io.agora.chat.MucSharedFile;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.UserInfo;
 import io.agora.chat.adapter.EMAChatRoomManagerListener;
+import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.interfaces.EaseGroupListener;
+import io.agora.chat.uikit.interfaces.OnEaseChatConnectionListener;
 import io.agora.chat.uikit.manager.EaseAtMessageHelper;
 import io.agora.chat.uikit.manager.EaseChatPresenter;
 import io.agora.chat.uikit.manager.EaseNotificationMsgManager;
@@ -64,7 +67,6 @@ public class EventsMonitor extends EaseChatPresenter {
     private boolean isPushConfigsWithServer = false;
     private Context appContext;
     protected Handler handler;
-    private EMClientRepository mRepository;
 
     Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
 
@@ -73,9 +75,9 @@ public class EventsMonitor extends EaseChatPresenter {
         initHandler(appContext.getMainLooper());
         messageChangeLiveData = LiveDataBus.get();
         //添加网络连接状态监听
-//        DemoHelper.getInstance().getChatClient().addConnectionListener(new ChatConnectionListener());
+        EaseUIKit.getInstance().setOnEaseChatConnectionListener(new ChatConnectionListener());
         //添加多端登录监听
-//        DemoHelper.getInstance().getChatClient().addMultiDeviceListener(new ChatMultiDeviceListener());
+        DemoHelper.getInstance().getChatClient().addMultiDeviceListener(new ChatMultiDeviceListener());
         //添加群组监听
         DemoHelper.getInstance().getGroupManager().addGroupChangeListener(new ChatGroupListener());
         //添加联系人监听
@@ -84,9 +86,6 @@ public class EventsMonitor extends EaseChatPresenter {
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
         //添加对会话的监听（监听已读回执）
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
-
-        mRepository = new EMClientRepository();
-
     }
 
     public static EventsMonitor getInstance() {
@@ -192,10 +191,6 @@ public class EventsMonitor extends EaseChatPresenter {
     @Override
     public void onMessageRead(List<ChatMessage> messages) {
         super.onMessageRead(messages);
-//        if(!(DemoApplication.getInstance().getLifecycleCallbacks().current() instanceof ChatActivity)) {
-//            EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
-//            messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
-//        }
     }
 
     @Override
@@ -235,102 +230,38 @@ public class EventsMonitor extends EaseChatPresenter {
         }
     }
 
-//    private class ChatConnectionListener implements ConnectionListener {
-//
-//        @Override
-//        public void onConnected() {
-//            EMLog.i(TAG, "onConnected");
-//            if(!DemoHelper.getInstance().isLoggedIn()) {
-//                return;
-//            }
-//            if(!isGroupsSyncedWithServer) {
-//                EMLog.i(TAG, "isGroupsSyncedWithServer");
-//                new EMGroupManagerRepository().getAllGroups(new ResultCallBack<List<EMGroup>>() {
-//                    @Override
-//                    public void onSuccess(List<EMGroup> value) {
-//                        //加载完群组信息后，刷新会话列表页面，保证展示群组名称
-//                        EMLog.i(TAG, "isGroupsSyncedWithServer success");
-//                        EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
-//                        messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(event);
-//                    }
-//
-//                    @Override
-//                    public void onError(int error, String errorMsg) {
-//
-//                    }
-//                });
-//                isGroupsSyncedWithServer = true;
-//            }
-//            if(!isContactsSyncedWithServer) {
-//                EMLog.i(TAG, "isContactsSyncedWithServer");
-//                new EMContactManagerRepository().getContactList(new ResultCallBack<List<EaseUser>>() {
-//                    @Override
-//                    public void onSuccess(List<EaseUser> value) {
-//                        EmUserDao userDao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao();
-//                        if(userDao != null) {
-//                            userDao.clearUsers();
-//                            userDao.insert(EmUserEntity.parseList(value));
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(int error, String errorMsg) {
-//
-//                    }
-//                });
-//                isContactsSyncedWithServer = true;
-//            }
-//            if(!isBlackListSyncedWithServer) {
-//                EMLog.i(TAG, "isBlackListSyncedWithServer");
-//                new EMContactManagerRepository().getBlackContactList(null);
-//                isBlackListSyncedWithServer = true;
-//            }
-//            if(!isPushConfigsWithServer) {
-//                EMLog.i(TAG, "isPushConfigsWithServer");
-//                //首先获取push配置，否则获取push配置项会为空
-//                new EMPushManagerRepository().fetchPushConfigsFromServer();
-//                isPushConfigsWithServer = true;
-//            }
-//        }
-//
-//        /**
-//         * 用来监听账号异常
-//         * @param error
-//         */
-//        @Override
-//        public void onDisconnected(int error) {
-//            EMLog.i(TAG, "onDisconnected ="+error);
-//            String event = null;
-//            if (error == EMError.USER_REMOVED) {
-//                event = DemoConstant.ACCOUNT_REMOVED;
-//            } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-//                event = DemoConstant.ACCOUNT_CONFLICT;
-//            } else if (error == EMError.SERVER_SERVICE_RESTRICTED) {
-//                event = DemoConstant.ACCOUNT_FORBIDDEN;
-//            } else if (error == EMError.USER_KICKED_BY_CHANGE_PASSWORD) {
-//                event = DemoConstant.ACCOUNT_KICKED_BY_CHANGE_PASSWORD;
-//            } else if (error == EMError.USER_KICKED_BY_OTHER_DEVICE) {
-//                event = DemoConstant.ACCOUNT_KICKED_BY_OTHER_DEVICE;
-//            }
-//            if(!TextUtils.isEmpty(event)) {
-//                LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(event, EaseEvent.TYPE.ACCOUNT));
-//                EMLog.i(TAG, event);
-//            }
-//        }
-//
-//        @Override
-//        public void onTokenExpired() {
-//            String event = DemoConstant.ACCOUNT_TOKENEXPIRED;
-//            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(event, EaseEvent.TYPE.ACCOUNT));
-//            EMLog.i(TAG, event);
-//        }
-//
-//        @Override
-//        public void onTokenWillExpire() {
-//            mRepository.reNewToken();
-//            EMLog.i(TAG, "onTokenWillExpire");
-//        }
-//    }
+    private class ChatConnectionListener implements OnEaseChatConnectionListener {
+
+        @Override
+        public void onConnected() {
+            EMLog.i(TAG, "onConnected");
+            DemoHelper.getInstance().getUserProfileManager().initUserInfo();
+        }
+
+        @Override
+        public void onDisconnect(int error) {
+            EMLog.i(TAG, "onDisconnected ="+error);
+        }
+
+        @Override
+        public void onAccountLogout(int error) {
+            EMLog.i(TAG, "onAccountLogout ="+error);
+            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(error), EaseEvent.TYPE.ACCOUNT));
+        }
+
+        @Override
+        public void onTokenExpired() {
+            EMLog.i(TAG, "onTokenExpired");
+            int tokenExpired = Error.TOKEN_EXPIRED;
+            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(tokenExpired), EaseEvent.TYPE.ACCOUNT));
+        }
+
+        @Override
+        public void onTokenWillExpire() {
+            EMLog.i(TAG, "onTokenExpired");
+            new EMClientRepository().renewAgoraChatToken();
+        }
+    }
 
     private class ChatGroupListener extends EaseGroupListener {
 
@@ -1212,7 +1143,7 @@ public class EventsMonitor extends EaseChatPresenter {
         }
         String content = sb.toString();
         if(content.contains(ChatClient.getInstance().getCurrentUser())) {
-            content = "您";
+            content = "You";
         }
         return content;
     }

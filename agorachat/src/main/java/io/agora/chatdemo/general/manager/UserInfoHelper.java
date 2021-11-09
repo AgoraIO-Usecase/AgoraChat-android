@@ -44,4 +44,5 @@ public class UserInfoHelper {
     public static EaseUser getUserInfo(String username) {
         return DemoHelper.getInstance().getUserInfo(username);
     }
+    
 }

@@ -104,7 +104,7 @@
             android:paddingTop="@dimen/margin_15"
             android:paddingBottom="@dimen/margin_15"
             android:text="@string/me_setting_logout"
-            android:textAllCaps="false"
+            style="?android:attr/borderlessButtonStyle"
             android:textColor="@color/contacts_blue_005fff"
             android:textSize="@dimen/text_size_big" />
     </LinearLayout>

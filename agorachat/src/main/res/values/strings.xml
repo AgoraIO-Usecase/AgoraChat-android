@@ -12,7 +12,7 @@
     <string name="ease_sign_nickname">Nickname</string>
     <string name="ease_sign_login">Log In</string>
     <string name="sign_error_illegal_character">Latin letters and numbers only.</string>
-    <string name="sign_error_not_id">Please Enter a AgoraID.</string>
+    <string name="sign_error_not_id">Please enter a AgoraID.</string>
 
     <string name="error_network_error">当前网络不可用</string>
     <string name="error_not_login">未登录过环信</string>

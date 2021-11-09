@@ -82,7 +82,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_15"
         android:layout_marginBottom="@dimen/margin_15"
-        android:textColor="@color/msg_status"
         android:textSize="@dimen/text_size_normal"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -2,11 +2,27 @@ package io.agora.chatdemo.general.manager;
 
 import android.content.Context;
 
+import java.util.List;
+
 import io.agora.chat.ChatClient;
+import io.agora.chat.Group;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chatdemo.DemoApplication;
+import io.agora.chatdemo.DemoHelper;
+import io.agora.chatdemo.general.callbacks.ResultCallBack;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.db.DemoDbHelper;
+import io.agora.chatdemo.general.db.dao.EmUserDao;
+import io.agora.chatdemo.general.db.entity.EmUserEntity;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
+import io.agora.chatdemo.general.repositories.EMGroupManagerRepository;
+import io.agora.chatdemo.general.repositories.EMPushManagerRepository;
+import io.agora.util.EMLog;
 
 public class UserProfileManager {
-
+	private static final String TAG = UserProfileManager.class.getSimpleName();
 	/**
 	 * application context
 	 */
@@ -21,6 +37,11 @@ public class UserProfileManager {
 	private boolean isSyncingContactInfosWithServer = false;
 
 	private EaseUser currentUser;
+
+	private boolean isGroupsSyncedWithServer = false;
+	private boolean isContactsSyncedWithServer = false;
+	private boolean isBlackListSyncedWithServer = false;
+	private boolean isPushConfigsWithServer = false;
 
 	public UserProfileManager() {
 	}
@@ -67,6 +88,58 @@ public class UserProfileManager {
 
 	private String getCurrentUserAvatar() {
 		return PreferenceManager.getInstance().getCurrentUserAvatar();
+	}
+	
+	public void initUserInfo() {
+		if(!DemoHelper.getInstance().isLoggedIn()) {
+			return;
+		}
+		if(!isGroupsSyncedWithServer) {
+			EMLog.i(TAG, "isGroupsSyncedWithServer");
+			new EMGroupManagerRepository().getAllGroups(new ResultCallBack<List<Group>>() {
+				@Override
+				public void onSuccess(List<Group> value) {
+					EMLog.i(TAG, "isGroupsSyncedWithServer success");
+					EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+					LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(event);
+				}
+
+				@Override
+				public void onError(int error, String errorMsg) {
+
+				}
+			});
+			isGroupsSyncedWithServer = true;
+		}
+		if(!isContactsSyncedWithServer) {
+			EMLog.i(TAG, "isContactsSyncedWithServer");
+			new EMContactManagerRepository().getContactList(new ResultCallBack<List<EaseUser>>() {
+				@Override
+				public void onSuccess(List<EaseUser> value) {
+					EmUserDao userDao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao();
+					if(userDao != null) {
+						userDao.clearUsers();
+						userDao.insert(EmUserEntity.parseList(value));
+					}
+				}
+
+				@Override
+				public void onError(int error, String errorMsg) {
+
+				}
+			});
+			isContactsSyncedWithServer = true;
+		}
+		if(!isBlackListSyncedWithServer) {
+			EMLog.i(TAG, "isBlackListSyncedWithServer");
+			new EMContactManagerRepository().getBlackContactList(null);
+			isBlackListSyncedWithServer = true;
+		}
+		if(!isPushConfigsWithServer) {
+			EMLog.i(TAG, "isPushConfigsWithServer");
+			new EMPushManagerRepository().fetchPushConfigsFromServer();
+			isPushConfigsWithServer = true;
+		}
 	}
 
 }

@@ -28,6 +28,7 @@
 
     <color name="sign_edit_text_bg">#F2F2F2</color>
     <color name="sign_btn_bg">#FF114EFF</color>
+    <color name="sign_btn_unable_bg">#88114EFF</color>
 
     <color name="main_title_color">@color/color_main_blue</color>
     <color name="main_color_tab_normal">#ff000000</color>

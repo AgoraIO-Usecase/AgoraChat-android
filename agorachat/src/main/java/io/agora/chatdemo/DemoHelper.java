@@ -344,7 +344,7 @@ public class DemoHelper {
         Log.d(TAG, "init Agora Chat Options");
 
         ChatOptions options = new ChatOptions();
-        options.setAppKey( context.getString(R.string.ease_configure_app_key));
+        options.setAppKey( context.getString(R.string.configure_app_key));
         // Sets whether to automatically accept friend invitations. Default is true
         options.setAcceptInvitationAlways(false);
         // Set whether read confirmation is required by the recipient
@@ -357,7 +357,7 @@ public class DemoHelper {
          */
         PushConfig.Builder builder = new PushConfig.Builder(context);
 
-        builder.enableFCM("142290967082");
+        builder.enableFCM(context.getString(R.string.configure_fcm_send_id));
         options.setPushConfig(builder.build());
 
         // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息

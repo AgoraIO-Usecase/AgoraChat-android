@@ -1,5 +1,7 @@
 package io.agora.chatdemo.me;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -38,8 +40,6 @@ import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.sign.SignInActivity;
 import io.agora.util.EMLog;
 
-import static android.app.Activity.RESULT_OK;
-
 public class MeFragment extends BaseInitFragment implements View.OnClickListener, TextWatcher {
 
     private static final int REQUEST_CODE = 12;
@@ -76,8 +76,8 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 }
 
                 @Override
-                public void hideLoading() {
-                    super.hideLoading();
+                public void onHideLoading() {
+                    super.onHideLoading();
 //                    dismissLoading();
                 }
             });
@@ -224,7 +224,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                         DemoHelper.getInstance().logout(true, new CallBack() {
                             @Override
                             public void onSuccess() {
-                                SignInActivity.startAction(mContext);
+                                SignInActivity.actionStart(mContext);
                                 mContext.finish();
                             }
 

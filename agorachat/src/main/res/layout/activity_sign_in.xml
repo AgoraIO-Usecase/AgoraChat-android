@@ -55,7 +55,7 @@
         android:layout_marginTop="18dp"
         android:text="@string/ease_sign_login"
         android:textColor="@color/white"
-        android:background="@drawable/sign_button_bg"/>
+        android:background="@drawable/sign_button_bg_selector"/>
 
     <View
         android:layout_width="wrap_content"

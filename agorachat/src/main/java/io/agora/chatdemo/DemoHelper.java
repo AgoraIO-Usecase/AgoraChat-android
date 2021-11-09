@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
@@ -105,6 +106,9 @@ public class DemoHelper {
     private boolean initSDK(Context context) {
         // 根据项目需求对SDK进行配置
         ChatOptions options = initChatOptions(context);
+        if(options == null) {
+            return false;
+        }
         //配置自定义的rest server和im server
         //options.setRestServer("a1-hsb.easemob.com");
         //options.setIMServer("106.75.100.247");
@@ -344,7 +348,12 @@ public class DemoHelper {
         Log.d(TAG, "init Agora Chat Options");
 
         ChatOptions options = new ChatOptions();
-        options.setAppKey( context.getString(R.string.configure_app_key));
+        String appkey = context.getString(R.string.configure_app_key);
+        if(TextUtils.isEmpty(appkey) || !appkey.contains("#")) {
+            Toast.makeText(context, "Please set your appkey in configures.xml", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        options.setAppKey(appkey);
         // Sets whether to automatically accept friend invitations. Default is true
         options.setAcceptInvitationAlways(false);
         // Set whether read confirmation is required by the recipient

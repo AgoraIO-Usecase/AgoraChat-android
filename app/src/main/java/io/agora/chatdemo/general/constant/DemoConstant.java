@@ -58,7 +58,7 @@ public interface DemoConstant extends EaseConstant {
     String CONTACT_DELETE = "contact_delete";
     String CONTACT_UPDATE = "contact_update";
     String NICK_NAME_CHANGE = "nick_name_change";
-    String AVATAR_CHANGE = "avatar_change";
+    String CURRENT_USER_INFO_CHANGE = "current_user_info_change";
     String REMOVE_BLACK = "remove_black";
 
     String GROUP_CHANGE = "group_change";

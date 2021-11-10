@@ -1,5 +1,7 @@
 package io.agora.chatdemo.me;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,8 +26,6 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.PreferenceManager;
 import io.agora.chatdemo.general.utils.UIUtils;
-
-import static android.app.Activity.RESULT_OK;
 
 
 public class UserAvatarSelectFragment extends BaseListFragment<Integer> implements SwipeRefreshLayout.OnRefreshListener {
@@ -105,9 +105,9 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
         Integer headImg = avaterImages.get(position);
         PreferenceManager.getInstance().setCurrentUserAvatar(headImg.toString());
         DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(headImg.toString());
-        EaseEvent event = EaseEvent.create(DemoConstant.AVATAR_CHANGE, EaseEvent.TYPE.CONTACT);
+        EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
         event.message = headImg.toString();
-        LiveDataBus.get().with(DemoConstant.AVATAR_CHANGE).postValue(event);
+        LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE).postValue(event);
         Intent intent = getActivity().getIntent();
         intent.putExtra("headImage", headImg);
         getActivity().setResult(RESULT_OK, intent);

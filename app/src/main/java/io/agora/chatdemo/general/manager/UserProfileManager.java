@@ -1,6 +1,7 @@
 package io.agora.chatdemo.general.manager;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import java.util.List;
 
@@ -70,6 +71,13 @@ public class UserProfileManager {
 			setCurrentUserAvatar(avatarUrl);
 		}
 		return avatarUrl;
+	}
+
+	public String updateUserNickname(String nickname) {
+		if (!TextUtils.isEmpty(nickname)) {
+			setCurrentUserNick(nickname);
+		}
+		return nickname;
 	}
 
 	private void setCurrentUserNick(String nickname) {

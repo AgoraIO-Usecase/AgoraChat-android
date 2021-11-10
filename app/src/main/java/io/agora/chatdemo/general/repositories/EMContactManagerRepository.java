@@ -1,6 +1,7 @@
 package io.agora.chatdemo.general.repositories;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.agora.CallBack;
+import io.agora.Error;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.UserInfo;
@@ -22,8 +24,11 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.dao.EmUserDao;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.exceptions.ChatException;
@@ -507,6 +512,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(userIds, new ValueCallBack<Map<String, UserInfo>>() {
                     @Override
                     public void onSuccess(Map<String, UserInfo> value) {
+                        Log.e("TAG", "getUserInfoById success");
                         if(callBack != null) {
                             callBack.onSuccess(createLiveData(transformEMUserInfo(value.get(finalUserId))));
                         }
@@ -527,6 +533,115 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 DemoHelper.getInstance().updateContactList();
             }
         }.asLiveData();
+    }
+
+    /**
+     * update current user's attribute
+     * @param attribute
+     * @param value
+     * @return
+     */
+    public LiveData<Resource<EaseUser>> updateCurrentUserInfo(UserInfo.UserInfoType attribute, String value) {
+        return new NetworkBoundResource<EaseUser, String>() {
+            @Override
+            protected boolean shouldFetch(EaseUser data) {
+                return true;
+            }
+
+            @Override
+            protected LiveData<EaseUser> loadFromDb() {
+                EaseUser user = DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo();
+                if(user == null) {
+                    user = new EaseUser(getCurrentUser());
+                }
+                return createLiveData(user);
+            }
+
+            @Override
+            protected void createCall(ResultCallBack<LiveData<String>> callBack) {
+                runOnIOThread(()-> {
+                    ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(attribute, value, new ValueCallBack<String>() {
+                        @Override
+                        public void onSuccess(String value) {
+                            EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
+                            LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE).postValue(event);
+                            callBack.onSuccess(createLiveData(value));
+                        }
+
+                        @Override
+                        public void onError(int error, String errorMsg) {
+                            callBack.onError(error, errorMsg);
+                        }
+                    });
+                });
+            }
+
+            @Override
+            protected void saveCallResult(String item) {
+                if(attribute == UserInfo.UserInfoType.AVATAR_URL) {
+                    DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(item);
+                }else if(attribute == UserInfo.UserInfoType.NICKNAME){
+                    DemoHelper.getInstance().getUserProfileManager().updateUserNickname(item);
+                }
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Login to update nickname
+     * @param nickname
+     * @param callBack
+     */
+    public void updateCurrentUserNickname(String nickname, ResultCallBack<EaseUser> callBack) {
+        runOnIOThread(()-> {
+            String[] ids = {getCurrentUser()};
+            ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(ids, new ValueCallBack<Map<String, UserInfo>>() {
+                @Override
+                public void onSuccess(Map<String, UserInfo> value) {
+                    if(value != null && value.containsKey(getCurrentUser())) {
+                        UserInfo info = value.get(getCurrentUser());
+                        EaseUser user = transformEMUserInfo(info);
+                        if(user == null) {
+                            if(callBack != null) {
+                                callBack.onError(Error.USER_UPDATEINFO_FAILED);
+                            }
+                            return;
+                        }
+                        DemoHelper.getInstance().getUserProfileManager().updateUserNickname(info.getNickName());
+                        DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(info.getAvatarUrl());
+                        if(!TextUtils.isEmpty(nickname) && !TextUtils.equals(user.getNickname(), nickname)) {
+                            ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nickname, new ValueCallBack<String>() {
+                                @Override
+                                public void onSuccess(String value) {
+                                    DemoHelper.getInstance().getUserProfileManager().updateUserNickname(info.getNickName());
+                                    if(callBack != null) {
+                                        callBack.onSuccess(DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo());
+                                    }
+                                }
+
+                                @Override
+                                public void onError(int error, String errorMsg) {
+                                    if(callBack != null) {
+                                        callBack.onError(error, errorMsg);
+                                    }
+                                }
+                            });
+                        }else {
+                            if(callBack != null) {
+                                callBack.onSuccess(DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo());
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(int error, String errorMsg) {
+                    if(callBack != null) {
+                        callBack.onError(error, errorMsg);
+                    }
+                }
+            });
+        });
     }
 
     private EaseUser transformEMUserInfo(UserInfo info) {

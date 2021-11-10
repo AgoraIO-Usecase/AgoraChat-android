@@ -57,8 +57,7 @@ public class EMClientRepository extends BaseEMRepository{
                 if(isAutoLogin()) {
                     runOnIOThread(() -> {
                         if(isLoggedIn()) {
-                            initLocalDb();
-                            callBack.onSuccess(createLiveData(true));
+                            success(null, callBack);
                         }else {
                             callBack.onError(ErrorCode.NOT_LOGIN);
                         }
@@ -234,9 +233,7 @@ public class EMClientRepository extends BaseEMRepository{
         // ** manually load all local groups and conversation
         initLocalDb();
         //从服务器拉取加入的群，防止进入会话页面只显示id
-        getAllJoinGroup();
-        // get contacts from server
-        getContactsFromServer();
+        DemoHelper.getInstance().getUserProfileManager().initUserInfo();
         // get current user id
         String currentUser = ChatClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
@@ -320,12 +317,13 @@ public class EMClientRepository extends BaseEMRepository{
                             ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
                                 @Override
                                 public void onSuccess() {
-                                    callBack.onSuccess(createLiveData(true));
+                                    success(nickname, callBack);
                                 }
 
                                 @Override
                                 public void onError(int code, String error) {
                                     callBack.onError(code, error);
+                                    closeDb();
                                 }
 
                                 @Override
@@ -346,6 +344,15 @@ public class EMClientRepository extends BaseEMRepository{
                 });
             }
         }.asLiveData();
+    }
+
+    private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        // ** manually load all local groups and conversation
+        initLocalDb();
+        DemoHelper.getInstance().getUserProfileManager().initUserInfo();
+        // get current user
+        new EMContactManagerRepository().updateCurrentUserNickname(nickname, null);
+        callBack.onSuccess(createLiveData(true));
     }
 
     private void loginToAppServer(String username, String nickname, ResultCallBack<LoginBean> callBack) {

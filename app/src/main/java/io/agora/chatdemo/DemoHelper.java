@@ -2,10 +2,12 @@ package io.agora.chatdemo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,6 +36,7 @@ import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
+import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseEmojicon;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
@@ -348,12 +351,14 @@ public class DemoHelper {
         Log.d(TAG, "init Agora Chat Options");
 
         ChatOptions options = new ChatOptions();
-        String appkey = context.getString(R.string.configure_app_key);
-        if(TextUtils.isEmpty(appkey) || !appkey.contains("#")) {
-            Toast.makeText(context, "Please set your appkey in configures.xml", Toast.LENGTH_SHORT).show();
+        boolean hasAppkey = checkAgoraChatAppKey(context);
+        // You can set your AppKey by options.setAppKey(appkey)
+        if(!hasAppkey) {
+            String error = context.getString(R.string.check_appkey_error);
+            EMLog.e(TAG, error);
+            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
             return null;
         }
-        options.setAppKey(appkey);
         // Sets whether to automatically accept friend invitations. Default is true
         options.setAcceptInvitationAlways(false);
         // Set whether read confirmation is required by the recipient
@@ -366,7 +371,8 @@ public class DemoHelper {
          */
         PushConfig.Builder builder = new PushConfig.Builder(context);
 
-        builder.enableFCM(context.getString(R.string.configure_fcm_send_id));
+        // The FCM sender id should equals with the project_number in google-services.json
+        builder.enableFCM("142290967082");
         options.setPushConfig(builder.build());
 
         // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
@@ -380,6 +386,31 @@ public class DemoHelper {
         // 是否自动下载缩略图，默认是true为自动下载
         options.setAutoDownloadThumbnail(demoModel.isSetAutodownloadThumbnail());
         return options;
+    }
+
+    private boolean checkAgoraChatAppKey(Context context) {
+        String appPackageName = context.getPackageName();
+        ApplicationInfo ai = null;
+        try {
+            ai = context.getPackageManager().getApplicationInfo(appPackageName, PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if(ai != null) {
+            Bundle metaData = ai.metaData;
+            if(metaData == null){
+                return false;
+            }
+            // read appkey
+            String appKeyFromConfig = metaData.getString("EASEMOB_APPKEY");
+
+            if (TextUtils.isEmpty(appKeyFromConfig) || !appKeyFromConfig.contains("#")) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public void initPush(Context context) {
@@ -485,9 +516,9 @@ public class DemoHelper {
      * get instance of EaseNotifier
      * @return
      */
-//    public EaseNotifier getNotifier(){
-//        return EaseUIKit.getInstance().getNotifier();
-//    }
+    public EaseNotifier getNotifier(){
+        return EaseUIKit.getInstance().getNotifier();
+    }
 
     /**
      * 获取本地标记，是否自动登录

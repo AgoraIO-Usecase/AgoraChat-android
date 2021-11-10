@@ -8,6 +8,7 @@
 
     <string name="search_text_hint">Search</string>
 
+    <string name="check_appkey_error">Please check whether Agora Chat AppKey is set in androidmanifest.xml</string>
     <string name="ease_sign_agora_id">AgoraID</string>
     <string name="ease_sign_nickname">Nickname</string>
     <string name="ease_sign_login">Log In</string>

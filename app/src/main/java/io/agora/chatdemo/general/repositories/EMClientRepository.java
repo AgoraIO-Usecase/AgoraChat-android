@@ -1,15 +1,25 @@
 package io.agora.chatdemo.general.repositories;
 
+import static io.agora.cloud.HttpClientManager.Method_POST;
+
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.CallBack;
+import io.agora.Error;
 import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.general.callbacks.DemoCallBack;
@@ -20,8 +30,11 @@ import io.agora.chatdemo.general.db.entity.EmUserEntity;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.PreferenceManager;
+import io.agora.chatdemo.general.models.LoginBean;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
+import io.agora.cloud.HttpClientManager;
+import io.agora.cloud.HttpResponse;
 import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
 
@@ -276,7 +289,22 @@ public class EMClientRepository extends BaseEMRepository{
         return new NetworkOnlyResource<String>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
-                
+                loginToAppServer(ChatClient.getInstance().getCurrentUser(), "nickname", new ResultCallBack<LoginBean>() {
+                    @Override
+                    public void onSuccess(LoginBean value) {
+                        if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
+                            ChatClient.getInstance().renewToken(value.getAccessToken());
+                            callBack.onSuccess(createLiveData(value.getAccessToken()));
+                        }else {
+                            callBack.onError(Error.GENERAL_ERROR, "AccessToken is null!");
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
             }
         }.asLiveData();
     }
@@ -285,25 +313,74 @@ public class EMClientRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                runOnIOThread(()-> {
-                    ChatClient.getInstance().login(username, nickname, new CallBack() {
-                        @Override
-                        public void onSuccess() {
-                            callBack.onSuccess(createLiveData(true));
+                loginToAppServer(username, nickname, new ResultCallBack<LoginBean>() {
+                    @Override
+                    public void onSuccess(LoginBean value) {
+                        if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
+                            ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
+                                @Override
+                                public void onSuccess() {
+                                    callBack.onSuccess(createLiveData(true));
+                                }
+
+                                @Override
+                                public void onError(int code, String error) {
+                                    callBack.onError(code, error);
+                                }
+
+                                @Override
+                                public void onProgress(int progress, String status) {
+
+                                }
+                            });
+                        }else {
+                            callBack.onError(Error.GENERAL_ERROR, "AccessToken is null!");
                         }
 
-                        @Override
-                        public void onError(int code, String error) {
-                            callBack.onError(code, error);
-                        }
+                    }
 
-                        @Override
-                        public void onProgress(int progress, String status) {
-
-                        }
-                    });
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
                 });
             }
         }.asLiveData();
+    }
+
+    private void loginToAppServer(String username, String nickname, ResultCallBack<LoginBean> callBack) {
+        runOnIOThread(() -> {
+            try {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+
+                JSONObject request = new JSONObject();
+                request.putOpt("userAccount", username);
+                request.putOpt("userNickname", nickname);
+
+                HttpResponse response = HttpClientManager.httpExecute(BuildConfig.APP_SERVER_URL, headers, request.toString(), Method_POST);
+                int code = response.code;
+                String responseInfo = response.content;
+                if (code == 200) {
+                    if (responseInfo != null && responseInfo.length() > 0) {
+                        JSONObject object = new JSONObject(responseInfo);
+                        String token = object.getString("accessToken");
+                        LoginBean bean = new LoginBean();
+                        bean.setAccessToken(token);
+                        bean.setUserNickname(nickname);
+                        if(callBack != null) {
+                            callBack.onSuccess(bean);
+                        }
+                    } else {
+                        callBack.onError(code, responseInfo);
+                    }
+                } else {
+                    callBack.onError(code, responseInfo);
+                }
+            } catch (Exception e) {
+                //e.printStackTrace();
+                callBack.onError(Error.NETWORK_ERROR, e.getMessage());
+            }
+        });
     }
 }

@@ -497,9 +497,9 @@ public class DemoHelper {
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
     }
 
-//    public EaseAvatarOptions getEaseAvatarOptions() {
-//        return EaseUIKit.getInstance().getAvatarOptions();
-//    }
+    public EaseAvatarOptions getEaseAvatarOptions() {
+        return EaseUIKit.getInstance().getAvatarOptions();
+    }
 
     public DemoModel getModel(){
         if(demoModel == null) {

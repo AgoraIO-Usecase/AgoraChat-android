@@ -26,6 +26,9 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+        // If you use your own Agora Chat appkey, you should deploy your own App Server.
+        // See:
+        buildConfigField ("String", "APP_SERVER_URL", "\" http://hk.test.easemob.com/app/chat/user/login\"")
 
         manifestPlaceholders = [AGORA_CHAT_APPKEY: properties.getProperty("AGORA_CHAT_APPKEY", "******")]
     }

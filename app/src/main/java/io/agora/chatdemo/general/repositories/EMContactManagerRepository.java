@@ -35,6 +35,7 @@ import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
 
 public class EMContactManagerRepository extends BaseEMRepository{
+    private static final String TAG = EMContactManagerRepository.class.getSimpleName();
 
     public LiveData<Resource<Boolean>> addContact(String username, String reason) {
         return new NetworkOnlyResource<Boolean>() {
@@ -613,6 +614,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nickname, new ValueCallBack<String>() {
                                 @Override
                                 public void onSuccess(String value) {
+                                    EMLog.d(TAG, "update nickname success");
                                     DemoHelper.getInstance().getUserProfileManager().updateUserNickname(info.getNickName());
                                     if(callBack != null) {
                                         callBack.onSuccess(DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo());

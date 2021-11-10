@@ -23,7 +23,7 @@ import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.manager.EaseThreadManager;
-import io.agora.chat.uikit.utils.EaseUserUtils;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
@@ -51,6 +51,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     private TextView remind;
     private AlertDialog nickDialog;
     private String TAG = getClass().getSimpleName();
+    private EaseUser userInfo;
 
     @Override
     protected View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         mBinding.layoutUserinfo.tvNickname.setOnClickListener(this);
         mBinding.layoutUserinfo.tvId.setOnClickListener(this);
 
-        LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE, EaseEvent.class).observe(this, event -> {
+        LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.class).observe(this, event -> {
             if (event != null) {
                 mBinding.layoutUserinfo.tvNickname.setText(event.message);
             }
@@ -107,9 +108,10 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     protected void initData() {
         super.initData();
         currentUser = DemoHelper.getInstance().getCurrentUser();
-        mBinding.layoutUserinfo.tvId.setText("AgoraID:" + currentUser);
-        mBinding.layoutUserinfo.tvNickname.setText(currentUser);
-        EaseUserUtils.setUserAvatar(getContext(), currentUser, mBinding.layoutUserinfo.ivAvatar);
+        userInfo = DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo();
+        mBinding.layoutUserinfo.tvId.setText(getString(R.string.show_agora_chat_id, userInfo.getUsername()));
+        mBinding.layoutUserinfo.tvNickname.setText(userInfo.getNickname());
+        DemoHelper.getInstance().setUserInfo(mContext, currentUser, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivAvatar);
         mBinding.settingAbout.setContent("V" + DemoHelper.getInstance().getAppVersionName(mContext));
     }
 
@@ -192,9 +194,9 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                     showToast(R.string.nickname_update_success);
                     PreferenceManager.getInstance().setCurrentUserNick(nick);
 
-                    EaseEvent event = EaseEvent.create(DemoConstant.NICK_NAME_CHANGE, EaseEvent.TYPE.CONTACT);
+                    EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
                     event.message = nick;
-                    LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE).postValue(event);
+                    LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE).postValue(event);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             mViewModel.updatePushNickname(nick);

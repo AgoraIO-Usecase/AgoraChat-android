@@ -157,7 +157,6 @@ public class GroupHelper {
 
     public static boolean setGroupInfo(Context context, String groupId, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
         String name = groupId;
-        String userAvatar= "";
         boolean isProvide = false;
         EaseGroupInfoProvider userProvider = EaseUIKit.getInstance().getGroupInfoProvider();
         if(userProvider != null) {
@@ -166,7 +165,17 @@ public class GroupHelper {
                 if(!TextUtils.isEmpty(info.getName())) {
                     name = info.getName();
                 }
-                userAvatar = info.getIconUrl();
+                String iconUrl = info.getIconUrl();
+                if(!TextUtils.isEmpty(iconUrl)) {
+                    try {
+                        int resourceId = Integer.parseInt(iconUrl);
+                        Glide.with(context).load(resourceId).error(defaultAvatar).into(avatar);
+                    } catch (NumberFormatException e) {
+                        Glide.with(context).load(iconUrl).error(defaultAvatar).into(avatar);
+                    }
+                }else {
+                    Glide.with(context).load(info.getIcon()).error(defaultAvatar).into(avatar);
+                }
                 EaseGroupInfo.AvatarSettings settings = info.getAvatarSettings();
                 if(settings != null && avatar != null && avatar instanceof EaseImageView) {
                     if(settings.getAvatarShapeType() != 0)
@@ -178,20 +187,13 @@ public class GroupHelper {
                     if(settings.getAvatarRadius() != 0)
                         ((EaseImageView)avatar).setRadius(settings.getAvatarRadius());
                 }
-                if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(userAvatar)) {
+                if(!TextUtils.isEmpty(info.getName())) {
                     isProvide = true;
                 }
             }
         }
         if(tvName != null && !TextUtils.isEmpty(name)) {
             tvName.setText(name);
-        }
-        if(avatar != null) {
-            Glide.with(context)
-                    .load(userAvatar)
-                    .placeholder(defaultAvatar)
-                    .error(defaultAvatar)
-                    .into(avatar);
         }
         return isProvide;
     }

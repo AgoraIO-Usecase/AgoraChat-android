@@ -97,6 +97,7 @@ public class SignInActivity extends BaseInitActivity {
                 public void onSuccess(@Nullable Boolean data) {
                     Intent intent = new Intent(mContext, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
 
                 @Override

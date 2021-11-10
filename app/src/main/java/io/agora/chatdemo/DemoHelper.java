@@ -113,7 +113,7 @@ public class DemoHelper {
             return false;
         }
         //配置自定义的rest server和im server
-        //options.setRestServer("a1-hsb.easemob.com");
+        options.setRestServer("a61.easemob.com");
         //options.setIMServer("106.75.100.247");
         //options.setImPort(6717);
         // 初始化SDK
@@ -262,6 +262,7 @@ public class DemoHelper {
                     public EaseGroupInfo getGroupInfo(String groupId, int type) {
                         if(type == Conversation.ConversationType.GroupChat.ordinal()) {
                             EaseGroupInfo info = new EaseGroupInfo();
+                            info.setIcon(ContextCompat.getDrawable(context, R.drawable.group_avatar));
                             EaseGroupInfo.AvatarSettings settings = new EaseGroupInfo.AvatarSettings();
                             settings.setAvatarShapeType(2);
                             settings.setAvatarRadius(1);

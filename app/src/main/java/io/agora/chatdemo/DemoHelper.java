@@ -51,6 +51,7 @@ import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.manager.UserInfoHelper;
 import io.agora.chatdemo.general.manager.UserProfileManager;
 import io.agora.chatdemo.general.models.DemoModel;
+import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.notification.EventsMonitor;
 import io.agora.push.PushConfig;
@@ -330,9 +331,14 @@ public class DemoHelper {
         // If do not contains the key, will return null
         user = getContactList().get(username);
         if(user == null) {
+            getUserInfoFromServer(username);
             user = new EaseUser(username);
         }
         return user;
+    }
+
+    private void getUserInfoFromServer(String username) {
+        new EMContactManagerRepository().getUserInfoById(username, demoModel.isContact(username));
     }
 
     public UserProfileManager getUserProfileManager() {

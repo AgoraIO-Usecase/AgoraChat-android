@@ -608,8 +608,15 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             }
                             return;
                         }
-                        DemoHelper.getInstance().getUserProfileManager().updateUserNickname(info.getNickName());
-                        DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(info.getAvatarUrl());
+                        DemoHelper.getInstance().getUserProfileManager().updateUserNickname(user.getNickname());
+                        if(TextUtils.isEmpty(user.getAvatar())) {
+                            EaseUser userInfo = DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo();
+                            if(TextUtils.isEmpty(userInfo.getAvatar())) {
+                                // Set random avatar, you should remove it
+                                user.setAvatar(String.valueOf(new TestAvatarRepository().getAvatar()));
+                            }
+                        }
+                        DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(user.getAvatar());
                         if(!TextUtils.isEmpty(nickname) && !TextUtils.equals(user.getNickname(), nickname)) {
                             ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nickname, new ValueCallBack<String>() {
                                 @Override

@@ -33,11 +33,20 @@ public class UserInfoHelper {
             tvName.setText(name);
         }
         if(avatar != null) {
-            Glide.with(context)
-                    .load(userAvatar)
-                    .placeholder(defaultAvatar)
-                    .error(defaultAvatar)
-                    .into(avatar);
+            try {
+                int resourceId = Integer.parseInt(userAvatar);
+                Glide.with(context)
+                        .load(resourceId)
+                        .placeholder(defaultAvatar)
+                        .error(defaultAvatar)
+                        .into(avatar);
+            } catch (NumberFormatException e) {
+                Glide.with(context)
+                        .load(userAvatar)
+                        .placeholder(defaultAvatar)
+                        .error(defaultAvatar)
+                        .into(avatar);
+            }
         }
     }
 

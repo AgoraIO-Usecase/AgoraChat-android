@@ -66,10 +66,12 @@ public class SignInActivity extends BaseInitActivity {
                 String content = s.toString().trim();
                 if(TextUtils.isEmpty(content)) {
                     setErrorHint("");
+                    btn_login.setEnabled(true);
                     return;
                 }
-                if(TextUtils.isEmpty(content) && !patternID(content)) {
+                if(!TextUtils.isEmpty(content) && !patternID(content)) {
                     setErrorHint(getString(R.string.sign_error_illegal_character));
+                    btn_login.setEnabled(false);
                 }
             }
         });
@@ -80,9 +82,15 @@ public class SignInActivity extends BaseInitActivity {
                 String agoraID = et_agora_id.getText().toString().trim();
                 if(TextUtils.isEmpty(agoraID)) {
                     setErrorHint(getString(R.string.sign_error_not_id));
+                    btn_login.setEnabled(false);
                     return;
                 }
                 String nickname = et_nickname.getText().toString().trim();
+                if(TextUtils.isEmpty(nickname)) {
+                    setErrorHint(getString(R.string.sign_error_not_nickname));
+                    btn_login.setEnabled(false);
+                    return;
+                }
                 btn_login.setEnabled(false);
                 viewModel.login(agoraID, nickname);
             }

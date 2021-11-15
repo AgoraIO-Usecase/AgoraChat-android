@@ -27,7 +27,6 @@ import io.agora.chatdemo.contact.viewmodels.ContactsViewModel;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.global.BottomSheetContainerFragment;
 import io.agora.chatdemo.group.fragments.JoinedGroupFragment;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
 
@@ -181,7 +180,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
             case  0:
             case  1:
             case  2:
-                new BottomSheetContainerFragment().show(getChildFragmentManager(),"ContainerFragment");
+                new BottomSheetContactFragment().show(getChildFragmentManager(),"addContactOrGroup");
                 break;
         }
     }

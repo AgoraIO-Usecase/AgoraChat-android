@@ -1,17 +1,15 @@
-package io.agora.chatdemo.global;
+package io.agora.chatdemo.contact;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import io.agora.chatdemo.base.BaseContainChildBottomSheetFragment;
-import io.agora.chatdemo.group.fragments.BottomSheetMenuFragment;
 
-public class BottomSheetContainerFragment extends BaseContainChildBottomSheetFragment {
-
+public class BottomSheetContactFragment extends BaseContainChildBottomSheetFragment {
     @NonNull
     @Override
     protected Fragment getChildFragment() {
-        return new BottomSheetMenuFragment();
+        return new AddContactOrGroupFragment();
     }
 
     @Override

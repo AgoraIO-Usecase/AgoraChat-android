@@ -22,7 +22,7 @@ import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.ArrowItemView;
 import io.agora.chatdemo.global.BottomSheetChildHelper;
 
-public class ButtomSheetMenuFragment extends ContactListFragment implements View.OnClickListener, BottomSheetChildHelper {
+public class BottomSheetMenuFragment extends ContactListFragment implements View.OnClickListener, BottomSheetChildHelper {
     private ArrayList<Pair<Integer, Integer>> datas = new ArrayList();
     private LinearLayout headView;
 

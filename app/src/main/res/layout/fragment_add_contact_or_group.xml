@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_white_tophalf_corner_10">
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_add_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_item_height"
+        android:foreground="@drawable/ease_ripple_click_gray"
+        app:arrowItemAvatarSrc="@drawable/group_add_contacts"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemShowArrow="true"
+        app:arrowItemTitle="@string/contact_add_contacts"
+        app:arrowItemTitleSize="16sp"
+        app:arrowItemTitleColor="@color/black"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_join_group"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_item_height"
+        android:foreground="@drawable/ease_ripple_click_gray"
+        app:arrowItemAvatarSrc="@drawable/join_a_group"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemShowArrow="true"
+        app:arrowItemTitle="@string/group_join_a_group"
+        app:arrowItemTitleSize="16sp"
+        app:arrowItemTitleColor="@color/black"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_public_group"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_item_height"
+        android:foreground="@drawable/ease_ripple_click_gray"
+        app:arrowItemAvatarSrc="@drawable/public_group"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemShowArrow="true"
+        app:arrowItemTitle="@string/group_public_group_list"
+        app:arrowItemTitleSize="16sp"
+        app:arrowItemTitleColor="@color/black"/>
+
+</LinearLayout>

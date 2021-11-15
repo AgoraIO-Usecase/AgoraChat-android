@@ -551,7 +551,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected LiveData<EaseUser> loadFromDb() {
-                EaseUser user = DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo();
+                EaseUser user = DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo();
                 if(user == null) {
                     user = new EaseUser(getCurrentUser());
                 }
@@ -580,9 +580,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void saveCallResult(String item) {
                 if(attribute == UserInfo.UserInfoType.AVATAR_URL) {
-                    DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(item);
+                    DemoHelper.getInstance().getUserInfoManager().updateUserAvatar(item);
                 }else if(attribute == UserInfo.UserInfoType.NICKNAME){
-                    DemoHelper.getInstance().getUserProfileManager().updateUserNickname(item);
+                    DemoHelper.getInstance().getUserInfoManager().updateUserNickname(item);
                 }
             }
         }.asLiveData();
@@ -608,23 +608,23 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             }
                             return;
                         }
-                        DemoHelper.getInstance().getUserProfileManager().updateUserNickname(user.getNickname());
+                        DemoHelper.getInstance().getUserInfoManager().updateUserNickname(user.getNickname());
                         if(TextUtils.isEmpty(user.getAvatar())) {
-                            EaseUser userInfo = DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo();
+                            EaseUser userInfo = DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo();
                             if(TextUtils.isEmpty(userInfo.getAvatar())) {
                                 // Set random avatar, you should remove it
                                 user.setAvatar(String.valueOf(new TestAvatarRepository().getAvatar()));
                             }
                         }
-                        DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(user.getAvatar());
+                        DemoHelper.getInstance().getUserInfoManager().updateUserAvatar(user.getAvatar());
                         if(!TextUtils.isEmpty(nickname) && !TextUtils.equals(user.getNickname(), nickname)) {
                             ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nickname, new ValueCallBack<String>() {
                                 @Override
                                 public void onSuccess(String value) {
                                     EMLog.d(TAG, "update nickname success");
-                                    DemoHelper.getInstance().getUserProfileManager().updateUserNickname(info.getNickName());
+                                    DemoHelper.getInstance().getUserInfoManager().updateUserNickname(info.getNickName());
                                     if(callBack != null) {
-                                        callBack.onSuccess(DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo());
+                                        callBack.onSuccess(DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo());
                                     }
                                 }
 
@@ -637,7 +637,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             });
                         }else {
                             if(callBack != null) {
-                                callBack.onSuccess(DemoHelper.getInstance().getUserProfileManager().getCurrentUserInfo());
+                                callBack.onSuccess(DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo());
                             }
                         }
                     }

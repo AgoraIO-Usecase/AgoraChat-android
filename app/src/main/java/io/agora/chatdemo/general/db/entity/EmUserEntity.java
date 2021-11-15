@@ -14,7 +14,7 @@ import java.util.Set;
 import io.agora.chat.ChatClient;
 import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chatdemo.general.manager.UserInfoHelper;
+import io.agora.chatdemo.DemoHelper;
 
 
 @Entity(tableName = "em_users", primaryKeys = {"username"},
@@ -67,7 +67,7 @@ public class EmUserEntity extends EaseUser {
             return users;
         }
         for (String id : ids) {
-            EaseUser user = UserInfoHelper.getUserInfo(id);
+            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(id);
             if(user != null) {
                 users.add(user);
             }
@@ -82,7 +82,7 @@ public class EmUserEntity extends EaseUser {
             return users;
         }
         for (String id : ids) {
-            EaseUser user = UserInfoHelper.getUserInfo(id);
+            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(id);
             if(user != null) {
                 users.add(user);
             }

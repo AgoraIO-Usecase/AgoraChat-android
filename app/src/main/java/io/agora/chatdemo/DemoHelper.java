@@ -48,12 +48,10 @@ import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.general.db.DemoDbHelper;
-import io.agora.chatdemo.general.manager.UserInfoHelper;
-import io.agora.chatdemo.general.manager.UserProfileManager;
+import io.agora.chatdemo.general.manager.UserInfoManager;
 import io.agora.chatdemo.general.models.DemoModel;
-import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 import io.agora.chatdemo.group.GroupHelper;
-import io.agora.chatdemo.notification.EventsMonitor;
+import io.agora.chatdemo.global.EventsMonitor;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -71,7 +69,7 @@ public class DemoHelper {
     private static DemoHelper mInstance;
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
-    private UserProfileManager userProManager;
+    private UserInfoManager userInfoManager;
 
     private DemoHelper() {}
 
@@ -117,6 +115,7 @@ public class DemoHelper {
         options.setRestServer("a61.easemob.com");
         //options.setIMServer("106.75.100.247");
         //options.setImPort(6717);
+        options.setUsingHttpsOnly(true);
         // 初始化SDK
         isSDKInit = EaseUIKit.getInstance().init(context, options);
         return isSDKInit();
@@ -254,7 +253,7 @@ public class DemoHelper {
                 .setUserProvider(new EaseUserProfileProvider() {
                     @Override
                     public EaseUser getUser(String username) {
-                        return getUserInfo(username);
+                        return getUserInfoManager().getUserInfo(username);
                     }
 
                 })
@@ -319,33 +318,11 @@ public class DemoHelper {
         return avatarOptions;
     }
 
-    public EaseUser getUserInfo(String username) {
-        if(TextUtils.isEmpty(username)) {
-            return null;
+    public UserInfoManager getUserInfoManager() {
+        if (userInfoManager == null) {
+            userInfoManager = new UserInfoManager();
         }
-        // To get instance of EaseUser, here we get it from the user list in memory
-        // You'd better cache it if you get it from your server
-        EaseUser user = null;
-        if(username.equalsIgnoreCase(ChatClient.getInstance().getCurrentUser()))
-            return getUserProfileManager().getCurrentUserInfo();
-        // If do not contains the key, will return null
-        user = getContactList().get(username);
-        if(user == null) {
-            getUserInfoFromServer(username);
-            user = new EaseUser(username);
-        }
-        return user;
-    }
-
-    private void getUserInfoFromServer(String username) {
-        new EMContactManagerRepository().getUserInfoById(username, demoModel.isContact(username));
-    }
-
-    public UserProfileManager getUserProfileManager() {
-        if (userProManager == null) {
-            userProManager = new UserProfileManager();
-        }
-        return userProManager;
+        return userInfoManager;
     }
 
 
@@ -629,7 +606,7 @@ public class DemoHelper {
         setUserInfo(context, username, R.drawable.ease_default_avatar, tvName, avatar);
     }
     public void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
-        UserInfoHelper.setUserInfo(context, username, defaultAvatar, tvName, avatar);
+        getUserInfoManager().setUserInfo(context, username, defaultAvatar, tvName, avatar);
     }
 
     public boolean setGroupInfo(Context context, String groupId, TextView tvName, ImageView avatar) {

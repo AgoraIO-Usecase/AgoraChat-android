@@ -2,12 +2,20 @@ package io.agora.chatdemo.general.manager;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.DrawableRes;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
+import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
@@ -22,8 +30,8 @@ import io.agora.chatdemo.general.repositories.EMGroupManagerRepository;
 import io.agora.chatdemo.general.repositories.EMPushManagerRepository;
 import io.agora.util.EMLog;
 
-public class UserProfileManager {
-	private static final String TAG = UserProfileManager.class.getSimpleName();
+public class UserInfoManager {
+	private static final String TAG = UserInfoManager.class.getSimpleName();
 	/**
 	 * application context
 	 */
@@ -44,7 +52,7 @@ public class UserProfileManager {
 	private boolean isBlackListSyncedWithServer = false;
 	private boolean isPushConfigsWithServer = false;
 
-	public UserProfileManager() {
+	public UserInfoManager() {
 	}
 
 	public synchronized boolean init(Context context) {
@@ -148,6 +156,61 @@ public class UserProfileManager {
 			new EMPushManagerRepository().fetchPushConfigsFromServer();
 			isPushConfigsWithServer = true;
 		}
+	}
+
+	public static void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
+		String name = username;
+		String userAvatar= "";
+		EaseUserProfileProvider userProvider = EaseUIKit.getInstance().getUserProvider();
+		if(userProvider != null) {
+			EaseUser user = userProvider.getUser(username);
+			if(user != null) {
+				if(!TextUtils.isEmpty(user.getNickname())) {
+					name = user.getNickname();
+				}
+				userAvatar = user.getAvatar();
+			}
+		}
+		if(tvName != null && !TextUtils.isEmpty(name)) {
+			tvName.setText(name);
+		}
+		if(avatar != null) {
+			try {
+				int resourceId = Integer.parseInt(userAvatar);
+				Glide.with(context)
+						.load(resourceId)
+						.placeholder(defaultAvatar)
+						.error(defaultAvatar)
+						.into(avatar);
+			} catch (NumberFormatException e) {
+				Glide.with(context)
+						.load(userAvatar)
+						.placeholder(defaultAvatar)
+						.error(defaultAvatar)
+						.into(avatar);
+			}
+		}
+	}
+
+	public EaseUser getUserInfo(String username) {
+		if(TextUtils.isEmpty(username)) {
+			return null;
+		}
+		// To get instance of EaseUser, here we get it from the user list in memory
+		// You'd better cache it if you get it from your server
+		EaseUser user = null;
+		if(username.equalsIgnoreCase(ChatClient.getInstance().getCurrentUser()))
+			return getCurrentUserInfo();
+		// If do not contains the key, will return null
+		user = DemoHelper.getInstance().getContactList().get(username);
+		if(user == null) {
+			getUserInfoFromServer(username);
+			user = new EaseUser(username);
+		}
+		return user;
+	}
+	private void getUserInfoFromServer(String username) {
+		new EMContactManagerRepository().getUserInfoById(username, DemoHelper.getInstance().getModel().isContact(username));
 	}
 
 }

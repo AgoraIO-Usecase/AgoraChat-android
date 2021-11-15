@@ -104,7 +104,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
     public void onItemClick(View view, int position) {
         Integer headImg = avaterImages.get(position);
         PreferenceManager.getInstance().setCurrentUserAvatar(headImg.toString());
-        DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(headImg.toString());
+        DemoHelper.getInstance().getUserInfoManager().updateUserAvatar(headImg.toString());
         EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
         event.message = headImg.toString();
         LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE).postValue(event);

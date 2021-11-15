@@ -28,7 +28,6 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
-import io.agora.chatdemo.general.manager.UserInfoHelper;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.exceptions.ChatException;
@@ -372,7 +371,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     List<EaseUser> users = new ArrayList<>();
                     if(members != null && !members.isEmpty()){
                         for(int i = 0; i < members.size(); i++){
-                            EaseUser user = UserInfoHelper.getUserInfo(members.get(i));
+                            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(members.get(i));
                             if(user != null){
                                 users.add(user);
                             }
@@ -406,14 +405,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                         List<String> adminList = value.getAdminList();
                         if(adminList != null && !adminList.isEmpty()) {
                             for (String username : adminList) {
-                                EaseUser user = UserInfoHelper.getUserInfo(username);
+                                EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(username);
                                 if(user != null){
                                     groupManagers.add(user);
                                 }
                             }
                         }
                         sortUserData(groupManagers);
-                        EaseUser owner = UserInfoHelper.getUserInfo(value.getOwner());
+                        EaseUser owner = DemoHelper.getInstance().getUserInfoManager().getUserInfo(value.getOwner());
                         groupManagers.add(0, owner);
                         if(!groupManagers.isEmpty()) {
                             callBack.onSuccess(createLiveData(groupManagers));

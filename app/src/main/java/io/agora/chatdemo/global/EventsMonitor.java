@@ -1,4 +1,4 @@
-package io.agora.chatdemo.notification;
+package io.agora.chatdemo.global;
 
 import android.app.Activity;
 import android.content.Context;
@@ -235,7 +235,7 @@ public class EventsMonitor extends EaseChatPresenter {
         @Override
         public void onConnected() {
             EMLog.i(TAG, "onConnected");
-            DemoHelper.getInstance().getUserProfileManager().initUserInfo();
+            DemoHelper.getInstance().getUserInfoManager().initUserInfo();
         }
 
         @Override

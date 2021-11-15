@@ -32,7 +32,7 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
                     if(data != null && data.isEmpty()) {
                         List<EaseUser> users = new ArrayList<>();
                         for (String username : data){
-                            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(username);
+                            EaseUser user = DemoHelper.getInstance().getUsersManager().getUserInfo(username);
                             if(user != null) {
                                 users.add(user);
                             }
@@ -76,7 +76,7 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
 
 
     private List<GroupManageItemBean> getMenuData(String username) {
-        if(TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
+        if(TextUtils.equals(username, DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
             return new ArrayList<>();
         }
         if(!GroupHelper.isOwner(group) && !GroupHelper.isAdmin(group)) {

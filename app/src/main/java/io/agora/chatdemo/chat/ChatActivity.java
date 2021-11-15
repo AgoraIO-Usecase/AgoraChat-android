@@ -145,8 +145,8 @@ public class ChatActivity extends BaseInitActivity {
 
                     @Override
                     public void onUserAvatarClick(String username) {
-                        if(!TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
-                            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(username);
+                        if(!TextUtils.equals(username, DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
+                            EaseUser user = DemoHelper.getInstance().getUsersManager().getUserInfo(username);
                             if(user == null){
                                 user = new EaseUser(username);
                             }
@@ -291,7 +291,7 @@ public class ChatActivity extends BaseInitActivity {
                 setGroupInfo();
             }
         }else {
-            DemoHelper.getInstance().setUserInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
+            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
         }
     }
 

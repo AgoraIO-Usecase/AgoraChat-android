@@ -233,7 +233,7 @@ public class EMClientRepository extends BaseEMRepository{
         // ** manually load all local groups and conversation
         initLocalDb();
         //从服务器拉取加入的群，防止进入会话页面只显示id
-        DemoHelper.getInstance().getUserInfoManager().initUserInfo();
+        DemoHelper.getInstance().getUsersManager().initUserInfo();
         // get current user id
         String currentUser = ChatClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
@@ -349,7 +349,7 @@ public class EMClientRepository extends BaseEMRepository{
     private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
         // ** manually load all local groups and conversation
         initLocalDb();
-        DemoHelper.getInstance().getUserInfoManager().initUserInfo();
+        DemoHelper.getInstance().getUsersManager().initUserInfo();
         // get current user
         new EMContactManagerRepository().updateCurrentUserNickname(nickname, null);
         callBack.onSuccess(createLiveData(true));

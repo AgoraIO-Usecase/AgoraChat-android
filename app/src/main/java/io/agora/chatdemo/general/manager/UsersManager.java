@@ -18,6 +18,7 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
+import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
@@ -30,38 +31,13 @@ import io.agora.chatdemo.general.repositories.EMGroupManagerRepository;
 import io.agora.chatdemo.general.repositories.EMPushManagerRepository;
 import io.agora.util.EMLog;
 
-public class UserInfoManager {
-	private static final String TAG = UserInfoManager.class.getSimpleName();
-	/**
-	 * application context
-	 */
-	protected Context appContext = null;
-
-	/**
-	 * init flag: test if the sdk has been inited before, we don't need to init
-	 * again
-	 */
-	private boolean sdkInited = false;
-
-	private boolean isSyncingContactInfosWithServer = false;
-
+public class UsersManager {
+	private static final String TAG = UsersManager.class.getSimpleName();
 	private EaseUser currentUser;
-
 	private boolean isGroupsSyncedWithServer = false;
 	private boolean isContactsSyncedWithServer = false;
 	private boolean isBlackListSyncedWithServer = false;
 	private boolean isPushConfigsWithServer = false;
-
-	public UserInfoManager() {
-	}
-
-	public synchronized boolean init(Context context) {
-		if (sdkInited) {
-			return true;
-		}
-		sdkInited = true;
-		return true;
-	}
 
 	public synchronized EaseUser getCurrentUserInfo() {
 		if (currentUser == null) {
@@ -72,6 +48,10 @@ public class UserInfoManager {
 			currentUser.setAvatar(getCurrentUserAvatar());
 		}
 		return currentUser;
+	}
+
+	public String getCurrentUserID() {
+		return ChatClient.getInstance().getCurrentUser();
 	}
 
 	public String updateUserAvatar(String avatarUrl) {
@@ -157,8 +137,11 @@ public class UserInfoManager {
 			isPushConfigsWithServer = true;
 		}
 	}
+	public void setUserInfo(Context context, String username, TextView tvName, ImageView avatar) {
+		setUserInfo(context, username, R.drawable.ease_default_avatar, tvName, avatar);
+	}
 
-	public static void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
+	public void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
 		String name = username;
 		String userAvatar= "";
 		EaseUserProfileProvider userProvider = EaseUIKit.getInstance().getUserProvider();
@@ -212,5 +195,18 @@ public class UserInfoManager {
 	private void getUserInfoFromServer(String username) {
 		new EMContactManagerRepository().getUserInfoById(username, DemoHelper.getInstance().getModel().isContact(username));
 	}
-
+	/**
+	 * Determine if it is from the current user account of another device
+	 * @param username
+	 * @return
+	 */
+	public boolean isCurrentUserFromOtherDevice(String username) {
+		if(TextUtils.isEmpty(username)) {
+			return false;
+		}
+		if(username.contains("/") && username.contains(ChatClient.getInstance().getCurrentUser())) {
+			return true;
+		}
+		return false;
+	}
 }

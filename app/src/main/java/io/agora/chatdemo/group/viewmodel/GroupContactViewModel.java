@@ -31,7 +31,7 @@ public class GroupContactViewModel extends AndroidViewModel {
 
     public GroupContactViewModel(@NonNull Application application) {
         super(application);
-        currentUser = DemoHelper.getInstance().getCurrentUser();
+        currentUser = DemoHelper.getInstance().getUsersManager().getCurrentUserID();
         mRepository = new EMGroupManagerRepository();
         allGroupObservable = new SingleSourceLiveData<>();
         groupMemberObservable = new SingleSourceLiveData<>();

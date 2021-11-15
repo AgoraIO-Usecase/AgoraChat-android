@@ -48,10 +48,10 @@ import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.general.db.DemoDbHelper;
-import io.agora.chatdemo.general.manager.UserInfoManager;
+import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.group.GroupHelper;
-import io.agora.chatdemo.global.EventsMonitor;
+import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -69,7 +69,7 @@ public class DemoHelper {
     private static DemoHelper mInstance;
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
-    private UserInfoManager userInfoManager;
+    private UsersManager usersManager;
 
     private DemoHelper() {}
 
@@ -179,16 +179,12 @@ public class DemoHelper {
         return getChatClient().pushManager();
     }
 
-    public String getCurrentUser() {
-        return getChatClient().getCurrentUser();
-    }
-
     /**
      * @param context
      */
     private void initEaseUI(Context context) {
         //添加ChatPresenter,ChatPresenter中添加了网络连接状态监听，
-        EaseUIKit.getInstance().addChatPresenter(EventsMonitor.getInstance());
+        EaseUIKit.getInstance().addChatPresenter(GlobalEventsMonitor.getInstance());
         EaseUIKit.getInstance()
                 .setSettingsProvider(new EaseSettingsProvider() {
                     @Override
@@ -253,7 +249,7 @@ public class DemoHelper {
                 .setUserProvider(new EaseUserProfileProvider() {
                     @Override
                     public EaseUser getUser(String username) {
-                        return getUserInfoManager().getUserInfo(username);
+                        return getUsersManager().getUserInfo(username);
                     }
 
                 })
@@ -318,11 +314,11 @@ public class DemoHelper {
         return avatarOptions;
     }
 
-    public UserInfoManager getUserInfoManager() {
-        if (userInfoManager == null) {
-            userInfoManager = new UserInfoManager();
+    public UsersManager getUsersManager() {
+        if (usersManager == null) {
+            usersManager = new UsersManager();
         }
-        return userInfoManager;
+        return usersManager;
     }
 
 
@@ -492,10 +488,6 @@ public class DemoHelper {
         return demoModel;
     }
 
-    public String getCurrentLoginUser() {
-        return ChatClient.getInstance().getCurrentUser();
-    }
-
     /**
      * get instance of EaseNotifier
      * @return
@@ -587,27 +579,7 @@ public class DemoHelper {
         return num;
     }
 
-    /**
-     * Determine if it is from the current user account of another device
-     * @param username
-     * @return
-     */
-    public boolean isCurrentUserFromOtherDevice(String username) {
-        if(TextUtils.isEmpty(username)) {
-            return false;
-        }
-        if(username.contains("/") && username.contains(ChatClient.getInstance().getCurrentUser())) {
-            return true;
-        }
-        return false;
-    }
 
-    public void setUserInfo(Context context, String username, TextView tvName, ImageView avatar) {
-        setUserInfo(context, username, R.drawable.ease_default_avatar, tvName, avatar);
-    }
-    public void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
-        getUserInfoManager().setUserInfo(context, username, defaultAvatar, tvName, avatar);
-    }
 
     public boolean setGroupInfo(Context context, String groupId, TextView tvName, ImageView avatar) {
         return setGroupInfo(context, groupId, R.drawable.group_avatar, tvName, avatar);

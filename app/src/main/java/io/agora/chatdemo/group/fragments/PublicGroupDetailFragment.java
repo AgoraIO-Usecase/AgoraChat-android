@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import io.agora.chat.Group;
+import io.agora.chat.GroupInfo;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
@@ -30,6 +31,7 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
     private String groupId;
     private GroupDetailViewModel viewModel;
     private Group group;
+    private GroupInfo groupInfo;
 
     @Override
     protected View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +44,8 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
         super.initArgument();
         Bundle arguments = getArguments();
         if(arguments!=null) {
-            groupId = arguments.getString("group_id");
+            groupInfo = (GroupInfo) arguments.getSerializable("group");
+            groupId = groupInfo.getGroupId();
         }
     }
 
@@ -54,11 +57,20 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    if (true) {
-                        showToast(getResources().getString(R.string.group_application_send));
-                        back();
-                    }
+                    showToast(getResources().getString(R.string.group_application_send));
+                    back();
+                }
 
+                @Override
+                public void onLoading(@Nullable Boolean data) {
+                    super.onLoading(data);
+                    showLoading();
+                }
+
+                @Override
+                public void onHideLoading() {
+                    super.onHideLoading();
+                    dismissLoading();
                 }
             });
         });
@@ -67,7 +79,9 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
                 @Override
                 public void onSuccess(@Nullable Group data) {
                     group = data;
-                    setGroupView();
+                    if(group != null) {
+                        setGroupView(group.getGroupId(), group.getGroupName(), group.getDescription());
+                    }
                 }
             });
         });
@@ -99,12 +113,16 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
         });
     }
 
-    private void setGroupView() {
-        if (group == null) {
+    private void setGroupView(String groupId, String groupName, String groupDes) {
+        if(TextUtils.isEmpty(groupId)) {
             return;
         }
-        mBinding.layoutUserinfo.tvId.setText(getString(R.string.show_agora_chat_id, groupId));
-        mBinding.tvDescription.setText(group.getDescription());
+        mBinding.layoutUserinfo.tvId.setText(getString(R.string.show_agora_group_id, groupId));
+        boolean hasSet = DemoHelper.getInstance().setGroupInfo(mContext, groupId, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivAvatar);
+        if(!hasSet) {
+            mBinding.layoutUserinfo.tvNickname.setText(groupName);
+        }
+        mBinding.tvDescription.setText(groupDes);
     }
 
 
@@ -126,6 +144,7 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
         super.initData();
         rightTitle.setText(R.string.group_join);
         viewModel.getGroup(groupId);
+        setGroupView(groupId, groupInfo.getGroupName(), "");
     }
 
     @Override

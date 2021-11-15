@@ -165,7 +165,7 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
         }else{
             PublicGroupDetailFragment publicGroupDetailFragment = new PublicGroupDetailFragment();
             Bundle bundle=new Bundle();
-            bundle.putString("group_id",lastData.get(position).getGroupId());
+            bundle.putSerializable("group",lastData.get(position));
             publicGroupDetailFragment.setArguments(bundle);
             startFragment(publicGroupDetailFragment,null);
         }

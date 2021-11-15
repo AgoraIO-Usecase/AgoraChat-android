@@ -109,6 +109,7 @@
     <string name="em_group_new_invite_join_group">%1$s邀请加入群：%2$s</string>
 
     <string name="show_agora_chat_id">AgoraID: %1$s</string>
+    <string name="show_agora_group_id">GroupID: %1$s</string>
 
     <string name="contact_detail_block_contact">Block Contact</string>
     <string name="contact_detail_delete_contact">Delete Contact</string>

@@ -69,7 +69,7 @@ public class DemoHelper {
     private static DemoHelper mInstance;
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
-    private UserInfoManager userProManager;
+    private UserInfoManager userInfoManager;
 
     private DemoHelper() {}
 
@@ -253,7 +253,7 @@ public class DemoHelper {
                 .setUserProvider(new EaseUserProfileProvider() {
                     @Override
                     public EaseUser getUser(String username) {
-                        return getUserProfileManager().getUserInfo(username);
+                        return getUserInfoManager().getUserInfo(username);
                     }
 
                 })
@@ -318,15 +318,11 @@ public class DemoHelper {
         return avatarOptions;
     }
 
-
-
-
-
-    public UserInfoManager getUserProfileManager() {
-        if (userProManager == null) {
-            userProManager = new UserInfoManager();
+    public UserInfoManager getUserInfoManager() {
+        if (userInfoManager == null) {
+            userInfoManager = new UserInfoManager();
         }
-        return userProManager;
+        return userInfoManager;
     }
 
 
@@ -610,7 +606,7 @@ public class DemoHelper {
         setUserInfo(context, username, R.drawable.ease_default_avatar, tvName, avatar);
     }
     public void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
-        getUserProfileManager().setUserInfo(context, username, defaultAvatar, tvName, avatar);
+        getUserInfoManager().setUserInfo(context, username, defaultAvatar, tvName, avatar);
     }
 
     public boolean setGroupInfo(Context context, String groupId, TextView tvName, ImageView avatar) {

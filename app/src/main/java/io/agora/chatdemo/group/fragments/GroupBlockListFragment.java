@@ -32,7 +32,7 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
                     if(data != null && data.isEmpty()) {
                         List<EaseUser> users = new ArrayList<>();
                         for (String username : data){
-                            EaseUser user = DemoHelper.getInstance().getUserProfileManager().getUserInfo(username);
+                            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(username);
                             if(user != null) {
                                 users.add(user);
                             }

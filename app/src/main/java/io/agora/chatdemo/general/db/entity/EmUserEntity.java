@@ -67,7 +67,7 @@ public class EmUserEntity extends EaseUser {
             return users;
         }
         for (String id : ids) {
-            EaseUser user = DemoHelper.getInstance().getUserProfileManager().getUserInfo(id);
+            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(id);
             if(user != null) {
                 users.add(user);
             }
@@ -82,7 +82,7 @@ public class EmUserEntity extends EaseUser {
             return users;
         }
         for (String id : ids) {
-            EaseUser user = DemoHelper.getInstance().getUserProfileManager().getUserInfo(id);
+            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(id);
             if(user != null) {
                 users.add(user);
             }

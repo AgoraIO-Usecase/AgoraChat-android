@@ -35,7 +35,7 @@ public class GroupMuteListFragment extends GroupBaseManageFragment {
                     if(muteList != null && !muteList.isEmpty()) {
                         List<EaseUser> users = new ArrayList<>();
                         for (String username : muteList){
-                            EaseUser user = DemoHelper.getInstance().getUserProfileManager().getUserInfo(username);
+                            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(username);
                             if(user != null) {
                                 users.add(user);
                             }

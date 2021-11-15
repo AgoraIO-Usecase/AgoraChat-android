@@ -371,7 +371,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     List<EaseUser> users = new ArrayList<>();
                     if(members != null && !members.isEmpty()){
                         for(int i = 0; i < members.size(); i++){
-                            EaseUser user = DemoHelper.getInstance().getUserProfileManager().getUserInfo(members.get(i));
+                            EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(members.get(i));
                             if(user != null){
                                 users.add(user);
                             }
@@ -405,14 +405,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                         List<String> adminList = value.getAdminList();
                         if(adminList != null && !adminList.isEmpty()) {
                             for (String username : adminList) {
-                                EaseUser user = DemoHelper.getInstance().getUserProfileManager().getUserInfo(username);
+                                EaseUser user = DemoHelper.getInstance().getUserInfoManager().getUserInfo(username);
                                 if(user != null){
                                     groupManagers.add(user);
                                 }
                             }
                         }
                         sortUserData(groupManagers);
-                        EaseUser owner = DemoHelper.getInstance().getUserProfileManager().getUserInfo(value.getOwner());
+                        EaseUser owner = DemoHelper.getInstance().getUserInfoManager().getUserInfo(value.getOwner());
                         groupManagers.add(0, owner);
                         if(!groupManagers.isEmpty()) {
                             callBack.onSuccess(createLiveData(groupManagers));

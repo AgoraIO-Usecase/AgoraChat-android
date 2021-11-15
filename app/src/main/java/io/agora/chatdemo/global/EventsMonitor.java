@@ -235,7 +235,7 @@ public class EventsMonitor extends EaseChatPresenter {
         @Override
         public void onConnected() {
             EMLog.i(TAG, "onConnected");
-            DemoHelper.getInstance().getUserProfileManager().initUserInfo();
+            DemoHelper.getInstance().getUserInfoManager().initUserInfo();
         }
 
         @Override

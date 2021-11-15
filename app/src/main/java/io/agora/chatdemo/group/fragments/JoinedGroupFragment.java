@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ import io.agora.chat.Group;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
-import io.agora.chatdemo.group.adapter.JoinedGroupAdapter;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
+import io.agora.chatdemo.group.adapter.JoinedGroupAdapter;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 
@@ -95,7 +95,7 @@ public class JoinedGroupFragment extends PublicGroupFragment {
         mViewModel.loadGroupListFromServer(pageIndex, PAGE_SIZE);
     }
 
-    @Override
+        @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
         pageIndex += PAGE_SIZE;
         mViewModel.loadMoreGroupListFromServer(pageIndex, PAGE_SIZE);

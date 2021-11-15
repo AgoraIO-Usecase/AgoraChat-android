@@ -6,7 +6,7 @@ import android.text.TextWatcher;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseListFragment;

@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 public class PublicGroupFragment extends SearchFragment<GroupInfo> implements OnRefreshLoadMoreListener, OnItemClickListener, BottomSheetChildHelper {
     public RecyclerView rvList;
-    private int page_size = 20;
+    private static final int PAGE_SIZE = 20;
     private String cursor;
     private GroupContactViewModel viewModel;
     private List<Group> allJoinGroups;
@@ -141,14 +141,14 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
     }
 
     public void getData() {
-        viewModel.getPublicGroups(page_size);
+        viewModel.getPublicGroups(PAGE_SIZE);
         viewModel.loadAllGroups();
     }
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
         if (cursor != null) {
-            viewModel.getMorePublicGroups(page_size, cursor);
+            viewModel.getMorePublicGroups(PAGE_SIZE, cursor);
         }
     }
 

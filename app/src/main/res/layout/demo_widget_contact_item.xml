@@ -58,24 +58,27 @@
             android:visibility="gone"
             app:layout_constraintRight_toRightOf="@id/avatar"
             app:layout_constraintTop_toTopOf="@id/avatar"
-            tools:text="群主" />
+            tools:text="Owner" />
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="34dp"
+            android:maxLines="1"
             android:ellipsize="end"
-            android:maxLength="15"
-            android:singleLine="true"
+            android:maxEms="15"
             android:textColor="@color/color_main_text"
             android:textSize="@dimen/text_size_big"
-            app:layout_constraintBottom_toTopOf="@id/signature"
-            app:layout_constraintLeft_toRightOf="@id/avatar"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="测试沙发斯蒂芬水电费水电费水电费地方水电费是否" />
+            app:layout_constraintBottom_toBottomOf="@id/avatar"
+            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintTop_toTopOf="@id/avatar"
+            app:layout_constraintEnd_toStartOf="@id/tv_members_num"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_bias="0"
+            tools:text="Group name" />
 
         <TextView
             android:id="@+id/tv_members_num"
@@ -83,14 +86,17 @@
             android:layout_height="wrap_content"
             android:textColor="@color/color_light_gray_999999"
             android:textSize="@dimen/text_size_normal"
-            android:text="(0)"
-            app:layout_constraintLeft_toRightOf="@id/name"
+            app:layout_constraintBottom_toBottomOf="@id/name"
             app:layout_constraintTop_toTopOf="@id/name"
+            app:layout_constraintStart_toEndOf="@id/name"
+            app:layout_constraintEnd_toStartOf="@id/iv_arrow"
             tools:text="(300)" />
+
         <ImageView
+            android:id="@+id/iv_arrow"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/arrow_right"
             android:layout_marginRight="@dimen/margin_15"
             android:layout_width="20dp"

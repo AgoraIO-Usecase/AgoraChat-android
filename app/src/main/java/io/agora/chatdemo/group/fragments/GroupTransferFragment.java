@@ -50,7 +50,7 @@ public class GroupTransferFragment extends GroupAllMembersFragment {
             @Override
             public void onItemClick(View view, int position) {
                 EaseUser item = managersAdapter.getItem(position);
-                if(TextUtils.equals(item.getUsername(), DemoHelper.getInstance().getCurrentUser())) {
+                if(TextUtils.equals(item.getUsername(), DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
                     return;
                 }
                 if(!GroupHelper.isOwner(group)) {
@@ -64,7 +64,7 @@ public class GroupTransferFragment extends GroupAllMembersFragment {
     @Override
     public void onItemClick(View view, int position) {
         EaseUser item = listAdapter.getItem(position);
-        if(TextUtils.equals(item.getUsername(), DemoHelper.getInstance().getCurrentUser())) {
+        if(TextUtils.equals(item.getUsername(), DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
             return;
         }
         if(!GroupHelper.isOwner(group)) {

@@ -33,7 +33,7 @@ public class SearchGroupFragment extends SearchFragment<String> implements Botto
             parseResource(response, new OnResourceParseCallback<Group>() {
                 @Override
                 public void onSuccess(Group data) {
-                    String reason = getString(R.string.demo_group_listener_onRequestToJoinReceived, DemoHelper.getInstance().getCurrentUser(), data.getGroupName());
+                    String reason = getString(R.string.demo_group_listener_onRequestToJoinReceived, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), data.getGroupName());
                     viewModel.joinGroup(data, reason);
                 }
             });

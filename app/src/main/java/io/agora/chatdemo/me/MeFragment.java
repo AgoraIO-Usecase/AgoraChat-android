@@ -107,11 +107,11 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     @Override
     protected void initData() {
         super.initData();
-        currentUser = DemoHelper.getInstance().getCurrentUser();
-        userInfo = DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo();
+        currentUser = DemoHelper.getInstance().getUsersManager().getCurrentUserID();
+        userInfo = DemoHelper.getInstance().getUsersManager().getCurrentUserInfo();
         mBinding.layoutUserinfo.tvId.setText(getString(R.string.show_agora_chat_id, userInfo.getUsername()));
         mBinding.layoutUserinfo.tvNickname.setText(userInfo.getNickname());
-        DemoHelper.getInstance().setUserInfo(mContext, currentUser, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivAvatar);
+        DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, currentUser, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivAvatar);
         mBinding.settingAbout.setContent("V" + DemoHelper.getInstance().getAppVersionName(mContext));
     }
 

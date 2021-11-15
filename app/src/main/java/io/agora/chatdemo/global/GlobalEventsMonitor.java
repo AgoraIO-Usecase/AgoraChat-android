@@ -56,10 +56,10 @@ import io.agora.util.EMLog;
  * 主要用于chat过程中的全局监听，并对相应的事件进行处理
  * {@link #init()}方法建议在登录成功以后进行调用
  */
-public class EventsMonitor extends EaseChatPresenter {
-    private static final String TAG = EventsMonitor.class.getSimpleName();
+public class GlobalEventsMonitor extends EaseChatPresenter {
+    private static final String TAG = GlobalEventsMonitor.class.getSimpleName();
     private static final int HANDLER_SHOW_TOAST = 0;
-    private static EventsMonitor instance;
+    private static GlobalEventsMonitor instance;
     private LiveDataBus messageChangeLiveData;
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
@@ -70,7 +70,7 @@ public class EventsMonitor extends EaseChatPresenter {
 
     Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
 
-    private EventsMonitor() {
+    private GlobalEventsMonitor() {
         appContext = DemoApplication.getInstance();
         initHandler(appContext.getMainLooper());
         messageChangeLiveData = LiveDataBus.get();
@@ -88,11 +88,11 @@ public class EventsMonitor extends EaseChatPresenter {
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
     }
 
-    public static EventsMonitor getInstance() {
+    public static GlobalEventsMonitor getInstance() {
         if(instance == null) {
-            synchronized (EventsMonitor.class) {
+            synchronized (GlobalEventsMonitor.class) {
                 if(instance == null) {
-                    instance = new EventsMonitor();
+                    instance = new GlobalEventsMonitor();
                 }
             }
         }
@@ -235,7 +235,7 @@ public class EventsMonitor extends EaseChatPresenter {
         @Override
         public void onConnected() {
             EMLog.i(TAG, "onConnected");
-            DemoHelper.getInstance().getUserInfoManager().initUserInfo();
+            DemoHelper.getInstance().getUsersManager().initUserInfo();
         }
 
         @Override
@@ -1043,7 +1043,7 @@ public class EventsMonitor extends EaseChatPresenter {
 
         @Override
         public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
-            if(TextUtils.equals(DemoHelper.getInstance().getCurrentUser(), participant)) {
+            if(TextUtils.equals(DemoHelper.getInstance().getUsersManager().getCurrentUserID(), participant)) {
                 setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
                 if(reason == EMAChatRoomManagerListener.BE_KICKED) {
                     showToast(R.string.quiting_the_chat_room);

@@ -131,7 +131,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     }
 
     private void updateLayout(EaseUser user) {
-        DemoHelper.getInstance().setUserInfo(mContext, username, tv_nickname, iv_avatar);
+        DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, username, tv_nickname, iv_avatar);
         tv_id.setText(getString(R.string.show_agora_chat_id, user.getUsername()));
     }
 

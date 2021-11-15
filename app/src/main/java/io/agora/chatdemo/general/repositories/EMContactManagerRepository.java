@@ -159,7 +159,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             user.setContact(0);
                         }
 
-                        if(DemoHelper.getInstance().isCurrentUserFromOtherDevice(user.getUsername())){
+                        if(DemoHelper.getInstance().getUsersManager().isCurrentUserFromOtherDevice(user.getUsername())){
                             UserInfo selfInfo =  value.get(ChatClient.getInstance().getCurrentUser());
                             if(selfInfo != null){
                                 user.setNickname(selfInfo.getNickName());
@@ -505,7 +505,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void createCall(ResultCallBack<LiveData<EaseUser>> callBack) {
                 String userId = username;
-                if(DemoHelper.getInstance().isCurrentUserFromOtherDevice(username)) {
+                if(DemoHelper.getInstance().getUsersManager().isCurrentUserFromOtherDevice(username)) {
                     userId = ChatClient.getInstance().getCurrentUser();
                 }
                 String[] userIds = new String[]{userId};
@@ -551,7 +551,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected LiveData<EaseUser> loadFromDb() {
-                EaseUser user = DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo();
+                EaseUser user = DemoHelper.getInstance().getUsersManager().getCurrentUserInfo();
                 if(user == null) {
                     user = new EaseUser(getCurrentUser());
                 }
@@ -580,9 +580,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void saveCallResult(String item) {
                 if(attribute == UserInfo.UserInfoType.AVATAR_URL) {
-                    DemoHelper.getInstance().getUserInfoManager().updateUserAvatar(item);
+                    DemoHelper.getInstance().getUsersManager().updateUserAvatar(item);
                 }else if(attribute == UserInfo.UserInfoType.NICKNAME){
-                    DemoHelper.getInstance().getUserInfoManager().updateUserNickname(item);
+                    DemoHelper.getInstance().getUsersManager().updateUserNickname(item);
                 }
             }
         }.asLiveData();
@@ -608,25 +608,23 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             }
                             return;
                         }
-                        DemoHelper.getInstance().getUserInfoManager().updateUserNickname(user.getNickname());
+                        DemoHelper.getInstance().getUsersManager().updateUserNickname(user.getNickname());
                         if(TextUtils.isEmpty(user.getAvatar())) {
-                            EaseUser userInfo = DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo();
-                            String avatar = userInfo.getAvatar();
-                            if(TextUtils.isEmpty(avatar)) {
-                                // Set random avatar, only demo use it, you should remove it
-                                avatar = String.valueOf(new TestAvatarRepository().getAvatar());
+                            EaseUser userInfo = DemoHelper.getInstance().getUsersManager().getCurrentUserInfo();
+                            if(TextUtils.isEmpty(userInfo.getAvatar())) {
+                                // Set random avatar, you should remove it
+                                user.setAvatar(String.valueOf(new TestAvatarRepository().getAvatar()));
                             }
-                            user.setAvatar(avatar);
                         }
-                        DemoHelper.getInstance().getUserInfoManager().updateUserAvatar(user.getAvatar());
+                        DemoHelper.getInstance().getUsersManager().updateUserAvatar(user.getAvatar());
                         if(!TextUtils.isEmpty(nickname) && !TextUtils.equals(user.getNickname(), nickname)) {
                             ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nickname, new ValueCallBack<String>() {
                                 @Override
                                 public void onSuccess(String value) {
                                     EMLog.d(TAG, "update nickname success");
-                                    DemoHelper.getInstance().getUserInfoManager().updateUserNickname(nickname);
+                                    DemoHelper.getInstance().getUsersManager().updateUserNickname(info.getNickName());
                                     if(callBack != null) {
-                                        callBack.onSuccess(DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo());
+                                        callBack.onSuccess(DemoHelper.getInstance().getUsersManager().getCurrentUserInfo());
                                     }
                                 }
 
@@ -639,7 +637,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             });
                         }else {
                             if(callBack != null) {
-                                callBack.onSuccess(DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo());
+                                callBack.onSuccess(DemoHelper.getInstance().getUsersManager().getCurrentUserInfo());
                             }
                         }
                     }

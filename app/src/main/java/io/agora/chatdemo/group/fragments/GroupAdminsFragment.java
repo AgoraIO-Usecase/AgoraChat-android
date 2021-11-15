@@ -64,7 +64,7 @@ public class GroupAdminsFragment extends GroupBaseManageFragment {
     }
 
     private List<GroupManageItemBean> getMenuData(String username) {
-        if(TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
+        if(TextUtils.equals(username, DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
             return new ArrayList<>();
         }
         if(!GroupHelper.isOwner(group)) {

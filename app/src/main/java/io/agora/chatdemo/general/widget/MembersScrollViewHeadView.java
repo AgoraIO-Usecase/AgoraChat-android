@@ -59,7 +59,7 @@ public class MembersScrollViewHeadView extends HorizontalScrollView {
             return;
         }
         for (int i = 0; i < data.size(); i++) {
-            if(TextUtils.equals(data.get(i), DemoHelper.getInstance().getCurrentUser())) {
+            if(TextUtils.equals(data.get(i), DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
                 continue;
             }
             View view=LayoutInflater.from(getContext()).inflate(R.layout.layout_contact_avatar_name,container,false);
@@ -68,7 +68,7 @@ public class MembersScrollViewHeadView extends HorizontalScrollView {
             TextView tvName = view.findViewById(R.id.tv_name);
             ImageView ivDelete = view.findViewById(R.id.iv_delete);
             EaseUserUtils.setUserAvatarStyle(ivAvatar);
-            DemoHelper.getInstance().setUserInfo(getContext(), data.get(i), tvName, ivAvatar);
+            DemoHelper.getInstance().getUsersManager().setUserInfo(getContext(), data.get(i), tvName, ivAvatar);
             if(!canDelete) {
                 ivDelete.setVisibility(GONE);
             }

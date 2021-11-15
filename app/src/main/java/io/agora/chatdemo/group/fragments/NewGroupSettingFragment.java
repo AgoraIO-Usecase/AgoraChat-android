@@ -107,7 +107,7 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
             }
         }
         String desc = edtDesc.getText().toString();
-        String reason = getString(R.string.em_group_new_invite_join_group, DemoHelper.getInstance().getCurrentUser(), groupName);
+        String reason = getString(R.string.em_group_new_invite_join_group, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), groupName);
         NewGroupSelectContactsFragment fragment = new NewGroupSelectContactsFragment();
         Bundle bundle=new Bundle();
         bundle.putString(DemoConstant.GROUP_NAME,groupName);

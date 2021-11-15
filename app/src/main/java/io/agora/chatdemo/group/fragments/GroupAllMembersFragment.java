@@ -155,7 +155,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
     }
 
     private List<GroupManageItemBean> getMenuData(String username) {
-        if(TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
+        if(TextUtils.equals(username, DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
             return new ArrayList<>();
         }
         if(!GroupHelper.isOwner(group) && !GroupHelper.isAdmin(group)) {
@@ -200,7 +200,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
             }
 
         }else if(groupRole == DemoConstant.GROUP_ROLE_ADMIN) {
-            if(!GroupHelper.isInAdminList(username, group.getAdminList()) && !TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
+            if(!GroupHelper.isInAdminList(username, group.getAdminList()) && !TextUtils.equals(username, DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
                 if(GroupHelper.isInMuteList(username, listAdapter.getMuteList())) {
                     itemBean.setIcon(R.drawable.group_manage_unmute);
                     itemBean.setTitle(getString(R.string.group_members_dialog_menu_unmute));

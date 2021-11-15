@@ -31,7 +31,7 @@ public class GroupHelper {
                 TextUtils.isEmpty(group.getOwner())) {
             return false;
         }
-        return TextUtils.equals(group.getOwner(), DemoHelper.getInstance().getCurrentUser());
+        return TextUtils.equals(group.getOwner(), DemoHelper.getInstance().getUsersManager().getCurrentUserID());
     }
 
     /**
@@ -43,7 +43,7 @@ public class GroupHelper {
                 TextUtils.isEmpty(room.getOwner())) {
             return false;
         }
-        return TextUtils.equals(room.getOwner(), DemoHelper.getInstance().getCurrentUser());
+        return TextUtils.equals(room.getOwner(), DemoHelper.getInstance().getUsersManager().getCurrentUserID());
     }
 
     /**
@@ -53,7 +53,7 @@ public class GroupHelper {
     public synchronized static boolean isAdmin(Group group) {
         List<String> adminList = group.getAdminList();
         if(adminList != null && !adminList.isEmpty()) {
-            return adminList.contains(DemoHelper.getInstance().getCurrentUser());
+            return adminList.contains(DemoHelper.getInstance().getUsersManager().getCurrentUserID());
         }
         return false;
     }
@@ -65,7 +65,7 @@ public class GroupHelper {
     public synchronized static boolean isAdmin(ChatRoom group) {
         List<String> adminList = group.getAdminList();
         if(adminList != null && !adminList.isEmpty()) {
-            return adminList.contains(DemoHelper.getInstance().getCurrentUser());
+            return adminList.contains(DemoHelper.getInstance().getUsersManager().getCurrentUserID());
         }
         return false;
     }

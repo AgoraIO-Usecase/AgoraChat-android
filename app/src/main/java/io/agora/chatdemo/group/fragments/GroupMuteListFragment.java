@@ -15,7 +15,6 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
-import io.agora.chatdemo.general.manager.UserInfoHelper;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
 import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
@@ -36,7 +35,7 @@ public class GroupMuteListFragment extends GroupBaseManageFragment {
                     if(muteList != null && !muteList.isEmpty()) {
                         List<EaseUser> users = new ArrayList<>();
                         for (String username : muteList){
-                            EaseUser user = UserInfoHelper.getUserInfo(username);
+                            EaseUser user = DemoHelper.getInstance().getUserProfileManager().getUserInfo(username);
                             if(user != null) {
                                 users.add(user);
                             }

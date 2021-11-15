@@ -1,7 +1,5 @@
 package io.agora.chatdemo.chat;
 
-import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -39,11 +37,12 @@ import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.general.manager.UserInfoHelper;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.util.EMLog;
+
+import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 
 public class ChatActivity extends BaseInitActivity {
     private String conversationId;
@@ -147,7 +146,7 @@ public class ChatActivity extends BaseInitActivity {
                     @Override
                     public void onUserAvatarClick(String username) {
                         if(!TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
-                            EaseUser user = UserInfoHelper.getUserInfo(username);
+                            EaseUser user = DemoHelper.getInstance().getUserProfileManager().getUserInfo(username);
                             if(user == null){
                                 user = new EaseUser(username);
                             }

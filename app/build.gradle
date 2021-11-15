@@ -106,5 +106,15 @@ dependencies {
     implementation project(path: ':uikit')
 }
 
+task copyApp(type: Copy) {
+    FileTree tree = fileTree('build/outputs/apk') {
+        include '**/*.apk'
+    }
+    from tree
+    File file = new File('outputs')
+    into file
+}
+
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
+

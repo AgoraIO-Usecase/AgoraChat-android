@@ -1,4 +1,4 @@
-package io.agora.chatdemo.notification;
+package io.agora.chatdemo.global;
 
 import android.app.Activity;
 import android.content.Context;

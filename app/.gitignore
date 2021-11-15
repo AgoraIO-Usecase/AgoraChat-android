@@ -2,3 +2,5 @@
 /src/androidTest
 /src/test
 /schemas
+/keystore/hyphenate.keystore
+/outputs

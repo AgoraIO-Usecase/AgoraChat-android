@@ -53,7 +53,7 @@
     <color name="dialog_color_btn_stroke">@color/gray</color>
     <color name="dialog_color_title">#ff424242</color>
     <color name="dialog_color_normal">@color/color_main_blue</color>
-    <color name="dialog_color_btn_brand">@color/em_color_brand</color>
+    <color name="dialog_color_btn_brand">@color/ease_color_brand</color>
     <color name="dialog_color_btn_warning">@color/white</color>
 
     <color name="layout_empty_content">#979797</color>

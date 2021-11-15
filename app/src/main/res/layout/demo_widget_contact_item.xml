@@ -53,7 +53,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:rotation="45"
-            android:textColor="@color/em_color_brand"
+            android:textColor="@color/ease_color_brand"
             android:textSize="@dimen/text_size_small"
             android:visibility="gone"
             app:layout_constraintRight_toRightOf="@id/avatar"

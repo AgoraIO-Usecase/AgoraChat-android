@@ -611,10 +611,12 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         DemoHelper.getInstance().getUserInfoManager().updateUserNickname(user.getNickname());
                         if(TextUtils.isEmpty(user.getAvatar())) {
                             EaseUser userInfo = DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo();
-                            if(TextUtils.isEmpty(userInfo.getAvatar())) {
-                                // Set random avatar, you should remove it
-                                user.setAvatar(String.valueOf(new TestAvatarRepository().getAvatar()));
+                            String avatar = userInfo.getAvatar();
+                            if(TextUtils.isEmpty(avatar)) {
+                                // Set random avatar, only demo use it, you should remove it
+                                avatar = String.valueOf(new TestAvatarRepository().getAvatar());
                             }
+                            user.setAvatar(avatar);
                         }
                         DemoHelper.getInstance().getUserInfoManager().updateUserAvatar(user.getAvatar());
                         if(!TextUtils.isEmpty(nickname) && !TextUtils.equals(user.getNickname(), nickname)) {
@@ -622,7 +624,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                                 @Override
                                 public void onSuccess(String value) {
                                     EMLog.d(TAG, "update nickname success");
-                                    DemoHelper.getInstance().getUserInfoManager().updateUserNickname(info.getNickName());
+                                    DemoHelper.getInstance().getUserInfoManager().updateUserNickname(nickname);
                                     if(callBack != null) {
                                         callBack.onSuccess(DemoHelper.getInstance().getUserInfoManager().getCurrentUserInfo());
                                     }

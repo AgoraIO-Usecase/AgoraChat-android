@@ -76,7 +76,7 @@ public class ChatActivity extends BaseInitActivity {
         super.initView(savedInstanceState);
         titleBar = findViewById(R.id.title_bar);
         titleBar.setRightImageResource(R.drawable.chat_settings_more);
-        titleBar.getIcon().setVisibility(View.VISIBLE);
+        titleBar.getIcon().setVisibility(View.GONE);
         titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
         initChatFragment();
     }

@@ -17,10 +17,10 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.notification.viewmodels.NewFriendsViewModel;
-import io.agora.chatdemo.notification.viewmodels.NotifiationMsgsViewModel;
+import io.agora.chatdemo.notification.viewmodels.NotificationMsgsViewModel;
 
 public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage> implements EaseBaseRecyclerViewAdapter.OnItemSubViewClickListener {
-    private NotifiationMsgsViewModel mMsgsViewModel;
+    private NotificationMsgsViewModel mMsgsViewModel;
     private NewFriendsViewModel mNewFriendViewModel;
     private List<ChatMessage> mData;
     @Override
@@ -33,12 +33,16 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        mMsgsViewModel = new ViewModelProvider(this).get(NotifiationMsgsViewModel.class);
+        mMsgsViewModel = new ViewModelProvider(this).get(NotificationMsgsViewModel.class);
         mNewFriendViewModel=new ViewModelProvider(this).get(NewFriendsViewModel.class);
         mMsgsViewModel.getChatMessageObservable().observe(this, datas -> {
             srlContactRefresh.setRefreshing(false);
             mData = datas;
             mListAdapter.setData(datas);
+        });
+
+        mMsgsViewModel.getSearchResultObservable().observe(this, response -> {
+            mListAdapter.setData(response);
         });
 
         mNewFriendViewModel.agreeObservable().observe(this, response -> {

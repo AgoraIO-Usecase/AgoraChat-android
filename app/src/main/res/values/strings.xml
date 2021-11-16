@@ -5,6 +5,7 @@
     <string name="request">requesting&#8230;</string>
     <string name="ok">Enter</string>
     <string name="Network_error">Network error</string>
+    <string name="network_disconnect">Network disconnect</string>
 
     <string name="search_text_hint">Search</string>
 

@@ -76,7 +76,7 @@ public class ChatActivity extends BaseInitActivity {
         super.initView(savedInstanceState);
         titleBar = findViewById(R.id.title_bar);
         titleBar.setRightImageResource(R.drawable.chat_settings_more);
-        titleBar.getIcon().setVisibility(View.VISIBLE);
+        titleBar.getIcon().setVisibility(View.GONE);
         titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
         initChatFragment();
     }
@@ -277,7 +277,18 @@ public class ChatActivity extends BaseInitActivity {
                 finish();
             }
         });
+        checkUnreadCount();
         setDefaultTitle();
+    }
+
+    /**
+     * If conversation's unread count is not 0, then should notify to refresh
+     */
+    private void checkUnreadCount() {
+        Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
+        if(conversation != null && conversation.getUnreadMsgCount() > 0) {
+            LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
+        }
     }
 
     private void showSnackBar(String event) {

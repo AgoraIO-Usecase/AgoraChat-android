@@ -6,6 +6,7 @@
     <string name="ok">Enter</string>
     <string name="Network_error">Network error</string>
     <string name="network_disconnect">Network disconnect</string>
+    <string name="username_too_long">Change a short one please.</string>
 
     <string name="search_text_hint">Search</string>
 

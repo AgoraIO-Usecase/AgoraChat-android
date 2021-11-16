@@ -22,6 +22,7 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
+import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.DemoCallBack;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -322,6 +323,11 @@ public class EMClientRepository extends BaseEMRepository{
 
                                 @Override
                                 public void onError(int code, String error) {
+                                    if(code == 408) {
+                                        error = DemoApplication.getInstance().getString(R.string.network_disconnect);
+                                    }else if(code == 500 && !TextUtils.isEmpty(error) && error.contains("RES_REQUEST_PARAM_ERROR")) {
+                                        error = DemoApplication.getInstance().getString(R.string.username_too_long);
+                                    }
                                     callBack.onError(code, error);
                                     closeDb();
                                 }

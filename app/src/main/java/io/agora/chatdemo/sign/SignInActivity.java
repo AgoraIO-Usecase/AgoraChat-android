@@ -125,11 +125,7 @@ public class SignInActivity extends BaseInitActivity {
                     super.onError(code, message);
                     runOnUiThread(()-> {
                         btn_login.setEnabled(true);
-                        if(code == 408) {
-                            setErrorHint(getString(R.string.network_disconnect));
-                        }else {
-                            setErrorHint(message);
-                        }
+                        setErrorHint(message);
                     });
                 }
             });

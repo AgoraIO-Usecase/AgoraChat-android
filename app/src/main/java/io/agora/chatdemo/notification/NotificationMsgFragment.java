@@ -109,11 +109,9 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
     private void checkSearchContent(String content) {
         if(TextUtils.isEmpty(content)) {
             mListAdapter.setData(mData);
-            sideBarContact.setVisibility(View.VISIBLE);
             srlContactRefresh.setEnabled(true);
         }else {
             mMsgsViewModel.searchMsgs(content);
-            sideBarContact.setVisibility(View.GONE);
             srlContactRefresh.setEnabled(false);
         }
     }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 import io.agora.chatdemo.R;
@@ -69,8 +70,17 @@ public class SignInActivity extends BaseInitActivity {
                     btn_login.setEnabled(true);
                     return;
                 }
-                if(!TextUtils.isEmpty(content) && !patternID(content)) {
+                if(!patternID(content)) {
                     setErrorHint(getString(R.string.sign_error_illegal_character));
+                    btn_login.setEnabled(false);
+                }else {
+                    setErrorHint("");
+                    btn_login.setEnabled(true);
+                }
+
+                byte[] contentBytes = content.getBytes(StandardCharsets.UTF_8);
+                if(contentBytes.length > 64) {
+                    setErrorHint(getString(R.string.username_too_long));
                     btn_login.setEnabled(false);
                 }
             }

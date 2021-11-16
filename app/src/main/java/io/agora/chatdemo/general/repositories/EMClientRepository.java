@@ -325,8 +325,6 @@ public class EMClientRepository extends BaseEMRepository{
                                 public void onError(int code, String error) {
                                     if(code == 408) {
                                         error = DemoApplication.getInstance().getString(R.string.network_disconnect);
-                                    }else if(code == 500 && !TextUtils.isEmpty(error) && error.contains("RES_REQUEST_PARAM_ERROR")) {
-                                        error = DemoApplication.getInstance().getString(R.string.username_too_long);
                                     }
                                     callBack.onError(code, error);
                                     closeDb();

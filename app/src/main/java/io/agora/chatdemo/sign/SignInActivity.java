@@ -82,6 +82,7 @@ public class SignInActivity extends BaseInitActivity {
                 if(contentBytes.length > 64) {
                     setErrorHint(getString(R.string.username_too_long));
                     btn_login.setEnabled(false);
+                    return;
                 }
             }
         });
@@ -92,7 +93,6 @@ public class SignInActivity extends BaseInitActivity {
                 String agoraID = et_agora_id.getText().toString().trim();
                 if(TextUtils.isEmpty(agoraID)) {
                     setErrorHint(getString(R.string.sign_error_not_id));
-                    btn_login.setEnabled(false);
                     return;
                 }
                 String nickname = et_nickname.getText().toString().trim();

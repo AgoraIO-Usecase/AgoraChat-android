@@ -93,7 +93,8 @@
         <!-- Sign in -->
         <activity
             android:name=".sign.SignInActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!--Main-->
         <activity android:name=".main.MainActivity"
             android:screenOrientation="portrait" />

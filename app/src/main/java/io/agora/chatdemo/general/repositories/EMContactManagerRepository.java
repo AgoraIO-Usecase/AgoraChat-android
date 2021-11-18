@@ -622,7 +622,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                                 @Override
                                 public void onSuccess(String value) {
                                     EMLog.d(TAG, "update nickname success");
-                                    DemoHelper.getInstance().getUsersManager().updateUserNickname(info.getNickName());
+                                    DemoHelper.getInstance().getUsersManager().updateUserNickname(nickname);
                                     if(callBack != null) {
                                         callBack.onSuccess(DemoHelper.getInstance().getUsersManager().getCurrentUserInfo());
                                     }

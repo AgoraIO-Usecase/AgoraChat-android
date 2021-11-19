@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/ll_root"
     android:gravity="center_horizontal">
 
     <View
@@ -48,7 +49,7 @@
         android:layout_marginTop="18dp"
         android:hint="@string/ease_sign_nickname"
         style="@style/sign_edit_style"
-        android:imeOptions="actionNone"
+        android:imeOptions="actionSend"
         android:inputType="text"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"/>

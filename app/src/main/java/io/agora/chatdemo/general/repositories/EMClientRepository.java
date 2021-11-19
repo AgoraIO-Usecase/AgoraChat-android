@@ -355,6 +355,7 @@ public class EMClientRepository extends BaseEMRepository{
         initLocalDb();
         DemoHelper.getInstance().getUsersManager().initUserInfo();
         // get current user
+        DemoHelper.getInstance().getUsersManager().reload();
         new EMContactManagerRepository().updateCurrentUserNickname(nickname, null);
         callBack.onSuccess(createLiveData(true));
     }

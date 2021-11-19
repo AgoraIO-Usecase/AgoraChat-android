@@ -50,6 +50,17 @@ public class UsersManager {
 		return currentUser;
 	}
 
+	/**
+	 * After the account is changed, call this method after the successful login to ensure that the information is correct
+	 */
+	public synchronized void reload() {
+		String username = ChatClient.getInstance().getCurrentUser();
+		currentUser = new EaseUser(username);
+		String nick = getCurrentUserNick();
+		currentUser.setNickname((nick != null) ? nick : username);
+		currentUser.setAvatar(getCurrentUserAvatar());
+	}
+
 	public String getCurrentUserID() {
 		return ChatClient.getInstance().getCurrentUser();
 	}

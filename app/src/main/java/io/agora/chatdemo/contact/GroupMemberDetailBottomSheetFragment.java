@@ -4,6 +4,7 @@ import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 import static io.agora.chatdemo.general.utils.ToastUtils.showToast;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-
 import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
 import io.agora.chatdemo.chat.ChatActivity;
@@ -61,13 +61,9 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
     protected void initData() {
         super.initData();
         if(user!=null) {
-            Glide.with(getContext())
-                    .load(user.getAvatar())
-                    .placeholder(R.drawable.ease_default_avatar)
-                    .error(R.drawable.ease_default_avatar)
-                    .into(mBinding.ivAvatar);
+            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(user.getNickname())?
+                    user.getNickname():user.getUsername(), mBinding.tvNickname, mBinding.ivAvatar);
         }
-        mBinding.tvNickname.setText(user.getNickname());
         mBinding.tvId.setText(getString(R.string.show_agora_chat_id, user.getUsername()));
         setTopOffset((int) (EaseUtils.getScreenInfo(getContext())[1]-UIUtils.dp2px(getContext(),387)));
     }

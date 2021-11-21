@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import io.agora.CallBack;
 import io.agora.Error;
@@ -23,6 +24,7 @@ import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.DemoHelper;
+import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.dao.EmUserDao;
@@ -36,6 +38,20 @@ import io.agora.util.EMLog;
 
 public class EMContactManagerRepository extends BaseEMRepository{
     private static final String TAG = EMContactManagerRepository.class.getSimpleName();
+    private int[] defaultAvatars=new int[]{
+        R.drawable.avatar_1,
+        R.drawable.avatar_2,
+        R.drawable.avatar_3,
+        R.drawable.avatar_4,
+        R.drawable.avatar_5,
+        R.drawable.avatar_6,
+        R.drawable.avatar_7,
+        R.drawable.avatar_8,
+        R.drawable.avatar_9,
+        R.drawable.avatar_10,
+        R.drawable.avatar_11,
+        R.drawable.avatar_12,
+    };
 
     public LiveData<Resource<Boolean>> addContact(String username, String reason) {
         return new NetworkOnlyResource<Boolean>() {
@@ -110,16 +126,15 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 runOnIOThread(()-> {
                     try {
                         List<String> usernames = getContactManager().getAllContactsFromServer();
-                        List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
+//                        List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
+                        List<String> ids = new ArrayList<>();
                         if(usernames == null) {
                             usernames = new ArrayList<>();
                         }
                         if(ids != null && !ids.isEmpty()) {
                             usernames.addAll(ids);
                         }
-
                         callBack.onSuccess(createLiveData(updateData(usernames)));
-
                     } catch (ChatException e) {
                         e.printStackTrace();
                         callBack.onError(e.getErrorCode(), e.getDescription());
@@ -131,11 +146,18 @@ public class EMContactManagerRepository extends BaseEMRepository{
             protected void saveCallResult(List<EaseUser> items) {
                 if(getUserDao() != null) {
                     getUserDao().clearUsers();
+                    addDefaultAvatar(items);
                     getUserDao().insert(EmUserEntity.parseList(items));
                 }
             }
 
         }.asLiveData();
+    }
+
+    private void addDefaultAvatar(List<EaseUser> items) {
+        for (EaseUser item : items) {
+            item.setAvatar(defaultAvatars[new Random().nextInt(12)]+"");
+        }
     }
 
     /**

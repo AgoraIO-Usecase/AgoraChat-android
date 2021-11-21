@@ -10,9 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +20,7 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 
 public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
@@ -160,11 +158,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             if(TextUtils.equals(owner, username)) {
                 setLabel(label, mContext.getString(R.string.group_role_owner));
             }
-            mName.setText(item.getNickname());
-            Glide.with(mContext)
-                    .load(item.getAvatar())
-                    .error(ContextCompat.getDrawable(mContext, R.drawable.ease_default_avatar))
-                    .into(mAvatar);
+            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
             if(isCheckModel) {
                 cb_select.setVisibility(View.VISIBLE);
                 if(checkedList!=null&&checkedList.contains(username)) {

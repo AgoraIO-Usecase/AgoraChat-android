@@ -23,7 +23,7 @@ import io.agora.chatdemo.DemoHelper;
 public class GroupHelper {
 
     /**
-     * 是否是群主
+     * Whether is group owner
      * @return
      */
     public static boolean isOwner(Group group) {
@@ -32,6 +32,18 @@ public class GroupHelper {
             return false;
         }
         return TextUtils.equals(group.getOwner(), DemoHelper.getInstance().getUsersManager().getCurrentUserID());
+    }
+
+    /**
+     * Whether is group owner
+     * @return
+     */
+    public static boolean isOwner(Group group, String username) {
+        if(group == null ||
+                TextUtils.isEmpty(group.getOwner()) || TextUtils.isEmpty(username)) {
+            return false;
+        }
+        return TextUtils.equals(group.getOwner(), username);
     }
 
     /**

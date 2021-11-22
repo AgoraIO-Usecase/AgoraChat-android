@@ -67,7 +67,7 @@ public class GroupAdminsFragment extends GroupBaseManageFragment {
         if(TextUtils.equals(username, DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
             return new ArrayList<>();
         }
-        if(!GroupHelper.isOwner(group)) {
+        if(!GroupHelper.isOwner(group) || GroupHelper.isOwner(group, username)) {
             return new ArrayList<>();
         }
         List<GroupManageItemBean> data = new ArrayList<>();

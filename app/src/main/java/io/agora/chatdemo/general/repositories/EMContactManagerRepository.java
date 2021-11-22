@@ -212,6 +212,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         easeUsers.addAll(exitUsers);
                     }
                     sortData(easeUsers);
+                    addDefaultAvatar(easeUsers);
                     callBack.onSuccess(createLiveData(easeUsers));
                 }
             }
@@ -223,6 +224,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 if(callback){
                     easeUsers.addAll(exitUsers);
                     sortData(easeUsers);
+                    addDefaultAvatar(easeUsers);
                     callBack.onSuccess(createLiveData(easeUsers));
                 }
             }
@@ -241,7 +243,8 @@ public class EMContactManagerRepository extends BaseEMRepository{
         runOnIOThread(()-> {
             try {
                 List<String> usernames = getContactManager().getAllContactsFromServer();
-                List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
+//                List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
+                List<String> ids = new ArrayList<>();
                 if(usernames == null) {
                     usernames = new ArrayList<>();
                 }
@@ -260,6 +263,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     }
                 }
                 sortData(easeUsers);
+                addDefaultAvatar(easeUsers);
                 if(callBack != null) {
                     callBack.onSuccess(easeUsers);
                 }
@@ -513,6 +517,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     }
                     if(list != null && list.size() > 1) {
                         sortData(list);
+                        addDefaultAvatar(list);
                     }
                     callBack.onSuccess(createLiveData(list));
                 });

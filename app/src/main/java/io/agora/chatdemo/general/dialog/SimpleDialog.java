@@ -283,7 +283,7 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
         public BaseActivity context;
         private OnConfirmClickListener listener;
         private onCancelClickListener cancelClickListener;
-        private Bundle bundle;
+        protected Bundle bundle;
 
         public Builder(BaseActivity context) {
             this.context = context;

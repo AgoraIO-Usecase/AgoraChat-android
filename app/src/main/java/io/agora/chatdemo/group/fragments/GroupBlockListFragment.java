@@ -50,7 +50,21 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
                 }
             });
         });
+        viewModel.getRefreshObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(@Nullable String data) {
+                    viewModel.getBlockMembers(groupId);
+                }
+            });
+        });
 
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        viewModel.getBlockMembers(groupId);
     }
 
     @Override

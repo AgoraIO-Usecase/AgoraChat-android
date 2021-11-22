@@ -275,6 +275,11 @@
     <string name="group_detail_disband_hint_content">Delete this group and associated Chats.</string>
     <string name="group_detail_disband_hint_confirm">Disband</string>
     <string name="group_detail_disband_hint_transfer">Transfer Ownership n’ Leave</string>
+    <string name="group_detail_change_group_name">Change Group Name</string>
+    <string name="group_detail_change_description">Change the Description</string>
+    <string name="group_detail_copy_group_id">Copy GroupID</string>
+    <string name="group_detail_chang_group_name_dialog_title">Change Group Name</string>
+    <string name="group_detail_chang_group_name_dialog_hint">Latin letters and numbers only</string>
 
     <string name="group_members_tab_title_all">All</string>
     <string name="group_members_tab_title_admin">Admin</string>

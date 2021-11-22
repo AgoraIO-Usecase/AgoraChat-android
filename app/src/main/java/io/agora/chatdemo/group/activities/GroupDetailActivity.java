@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,11 +22,14 @@ import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.databinding.ActivityGroupDetailBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.group.dialog.DisbandGroupDialog;
+import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.group.dialog.DisbandGroupDialog;
+import io.agora.chatdemo.group.dialog.EditGroupInfoDialog;
 import io.agora.chatdemo.group.viewmodel.GroupDetailViewModel;
 
 public class GroupDetailActivity extends BaseInitActivity implements View.OnClickListener {
@@ -34,6 +39,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     protected ActivityGroupDetailBinding binding;
     private GroupDetailViewModel viewModel;
     private boolean fromChat;
+    private AlertDialog dialog;
 
     public static void actionStart(Context context, String groupId) {
         actionStart(context, groupId, false);
@@ -211,8 +217,57 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
 
     private void showEditDialog() {
         if(GroupHelper.isOwner(group) || GroupHelper.isAdmin(group)) {
-            //
+            dialog = new AlertDialog.Builder(mContext)
+                    .setContentView(R.layout.dialog_group_info_edit)
+                    .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    .setGravity(Gravity.BOTTOM)
+                    .setCancelable(true)
+                    .setOnClickListener(R.id.btn_cancel, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setOnClickListener(R.id.tv_change_group_name, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            showModifyGroupNameDialog();
+                        }
+                    })
+                    .setOnClickListener(R.id.tv_change_description, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setOnClickListener(R.id.tv_copy_id, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            CommonUtils.copyContentToClipboard(mContext, groupId);
+                        }
+                    })
+                    .show();
         }
+    }
+
+    private void showModifyGroupNameDialog() {
+        new EditGroupInfoDialog.Builder(mContext)
+                .setConfirmClickListener(new EditGroupInfoDialog.ConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view, String content) {
+                        if(!TextUtils.equals(group.getGroupName(), content)) {
+                            viewModel.setGroupName(groupId, content);
+                            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP ));
+                        }
+                    }
+                })
+                .setHint(getString(R.string.group_detail_chang_group_name_dialog_hint))
+                .setContent(group.getGroupName())
+                .setTitle(R.string.group_detail_chang_group_name_dialog_title)
+                .showCancelButton(true)
+                .show();
     }
 
     protected void skipToMemberList() {

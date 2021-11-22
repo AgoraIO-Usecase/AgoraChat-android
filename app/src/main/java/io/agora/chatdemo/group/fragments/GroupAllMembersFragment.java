@@ -158,6 +158,9 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
         if(TextUtils.equals(username, DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
             return new ArrayList<>();
         }
+        if(GroupHelper.isOwner(group, username)) {
+            return new ArrayList<>();
+        }
         if(!GroupHelper.isOwner(group) && !GroupHelper.isAdmin(group)) {
             return new ArrayList<>();
         }

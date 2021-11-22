@@ -155,14 +155,18 @@ public class UsersManager {
 	public void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
 		String name = username;
 		String userAvatar= "";
-		EaseUserProfileProvider userProvider = EaseUIKit.getInstance().getUserProvider();
-		if(userProvider != null) {
-			EaseUser user = userProvider.getUser(username);
-			if(user != null) {
-				if(!TextUtils.isEmpty(user.getNickname())) {
-					name = user.getNickname();
+		if(TextUtils.equals(name,getCurrentUserID())) {
+		    userAvatar=getCurrentUserAvatar();
+		}else{
+			EaseUserProfileProvider userProvider = EaseUIKit.getInstance().getUserProvider();
+			if(userProvider != null) {
+				EaseUser user = userProvider.getUser(username);
+				if(user != null) {
+					if(!TextUtils.isEmpty(user.getNickname())) {
+						name = user.getNickname();
+					}
+					userAvatar = user.getAvatar();
 				}
-				userAvatar = user.getAvatar();
 			}
 		}
 		if(tvName != null && !TextUtils.isEmpty(name)) {

@@ -1,5 +1,7 @@
 package io.agora.chatdemo.general.repositories;
 
+import static io.agora.chatdemo.general.constant.DemoConstant.DEFAULT_AVATARS;
+
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -24,7 +26,6 @@ import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.DemoHelper;
-import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.dao.EmUserDao;
@@ -38,20 +39,6 @@ import io.agora.util.EMLog;
 
 public class EMContactManagerRepository extends BaseEMRepository{
     private static final String TAG = EMContactManagerRepository.class.getSimpleName();
-    private int[] defaultAvatars=new int[]{
-        R.drawable.avatar_1,
-        R.drawable.avatar_2,
-        R.drawable.avatar_3,
-        R.drawable.avatar_4,
-        R.drawable.avatar_5,
-        R.drawable.avatar_6,
-        R.drawable.avatar_7,
-        R.drawable.avatar_8,
-        R.drawable.avatar_9,
-        R.drawable.avatar_10,
-        R.drawable.avatar_11,
-        R.drawable.avatar_12,
-    };
 
     public LiveData<Resource<Boolean>> addContact(String username, String reason) {
         return new NetworkOnlyResource<Boolean>() {
@@ -162,10 +149,10 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 if(!TextUtils.isEmpty(avatar)) {
                     item.setAvatar(avatar);
                 }else {
-                    item.setAvatar(defaultAvatars[new Random().nextInt(12)]+"");
+                    item.setAvatar(DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
                 }
             }else{
-                item.setAvatar(defaultAvatars[new Random().nextInt(12)]+"");
+                item.setAvatar(DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
             }
         }
     }
@@ -650,7 +637,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             EaseUser userInfo = DemoHelper.getInstance().getUsersManager().getCurrentUserInfo();
                             if(TextUtils.isEmpty(userInfo.getAvatar())) {
                                 // Set random avatar, you should remove it
-                                user.setAvatar(String.valueOf(new TestAvatarRepository().getAvatar()));
+                                user.setAvatar( DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
+                            }else{
+                                user.setAvatar(userInfo.getAvatar());
                             }
                         }
                         DemoHelper.getInstance().getUsersManager().updateUserAvatar(user.getAvatar());

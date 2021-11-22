@@ -145,18 +145,28 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void saveCallResult(List<EaseUser> items) {
                 if(getUserDao() != null) {
-                    getUserDao().clearUsers();
                     addDefaultAvatar(items);
+                    getUserDao().clearUsers();
                     getUserDao().insert(EmUserEntity.parseList(items));
                 }
             }
-
         }.asLiveData();
     }
 
     private void addDefaultAvatar(List<EaseUser> items) {
+        List<String> localUsers = getUserDao().loadAllUsers();
+
         for (EaseUser item : items) {
-            item.setAvatar(defaultAvatars[new Random().nextInt(12)]+"");
+            if(localUsers.contains(item.getUsername())) {
+                String avatar = getUserDao().loadUserByUserId(item.getUsername()).get(0).getAvatar();
+                if(!TextUtils.isEmpty(avatar)) {
+                    item.setAvatar(avatar);
+                }else {
+                    item.setAvatar(defaultAvatars[new Random().nextInt(12)]+"");
+                }
+            }else{
+                item.setAvatar(defaultAvatars[new Random().nextInt(12)]+"");
+            }
         }
     }
 

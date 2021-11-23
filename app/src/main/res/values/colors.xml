@@ -56,6 +56,7 @@
     <color name="dialog_color_normal">@color/color_main_blue</color>
     <color name="dialog_color_btn_brand">@color/ease_color_brand</color>
     <color name="dialog_color_btn_warning">@color/white</color>
+    <color name="dialog_edit_color_bg">#ddF2F2F2</color>
 
     <color name="layout_empty_content">#979797</color>
 

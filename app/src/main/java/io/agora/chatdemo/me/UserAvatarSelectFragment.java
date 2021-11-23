@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.DemoHelper;
-import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseListFragment;
 import io.agora.chatdemo.databinding.FragmentUserAvaterSelectBinding;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -30,7 +28,6 @@ import io.agora.chatdemo.general.utils.UIUtils;
 
 public class UserAvatarSelectFragment extends BaseListFragment<Integer> implements SwipeRefreshLayout.OnRefreshListener {
 
-    private List<Integer> avaterImages;
     private UserAvatarSelectViewModel mViewModel;
     private FragmentUserAvaterSelectBinding mBinding;
     private GridLayoutManager gridLayoutManager;
@@ -68,20 +65,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
     @Override
     protected void initData() {
         super.initData();
-        avaterImages=new ArrayList<>();
-        avaterImages.add(R.drawable.avatar_1);
-        avaterImages.add(R.drawable.avatar_2);
-        avaterImages.add(R.drawable.avatar_3);
-        avaterImages.add(R.drawable.avatar_4);
-        avaterImages.add(R.drawable.avatar_5);
-        avaterImages.add(R.drawable.avatar_6);
-        avaterImages.add(R.drawable.avatar_7);
-        avaterImages.add(R.drawable.avatar_8);
-        avaterImages.add(R.drawable.avatar_9);
-        avaterImages.add(R.drawable.avatar_10);
-        avaterImages.add(R.drawable.avatar_11);
-        avaterImages.add(R.drawable.avatar_12);
-        mListAdapter.setData(avaterImages);
+        mListAdapter.setData(Arrays.asList(DemoConstant.DEFAULT_AVATARS));
     }
 
     @Override
@@ -102,7 +86,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
 
     @Override
     public void onItemClick(View view, int position) {
-        Integer headImg = avaterImages.get(position);
+        Integer headImg = mListAdapter.getData().get(position);
         PreferenceManager.getInstance().setCurrentUserAvatar(headImg.toString());
         DemoHelper.getInstance().getUsersManager().updateUserAvatar(headImg.toString());
         EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
@@ -117,7 +101,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
     @Override
     public void onRefresh() {
         //just it temp
-        mListAdapter.setData(avaterImages);
+        mListAdapter.setData(Arrays.asList(DemoConstant.DEFAULT_AVATARS));
         mBinding.srlContactRefresh.setEnabled(false);
     }
 }

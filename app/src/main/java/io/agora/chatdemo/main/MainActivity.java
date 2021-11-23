@@ -67,24 +67,28 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         navView.setOnNavigationItemSelectedListener(this);
         mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
         mainViewModel.getConversationObservable().observe(this,conversation->{
-            initRedDot(conversation);
+            initContactsRedDot(conversation);
         });
-
+        mainViewModel.homeUnReadObservable().observe(this,unReadCount->{
+            initChatRedDot(unReadCount);
+        });
         LiveDataBus messageChange =  LiveDataBus.get();
         messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, this::loadData);
-        messageChange.with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, event -> {
-            if(event != null && event.isMessageChange()) {
-                refreshConversation();
-            }
-        });
+        messageChange.with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this,this::loadData);
+
+        messageChange.with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(this, this::loadData);
+        messageChange.with(DemoConstant.CONVERSATION_READ, EaseEvent.class).observe(this, this::loadData);
     }
 
     private void loadData(EaseEvent easeEvent) {
-        mainViewModel.getMsgConversation();
+        if(easeEvent!=null&&!easeEvent.isMessageChange()) {
+            mainViewModel.getMsgConversation();
+        }
         refreshConversation();
+        mainViewModel.checkUnreadMsg();
     }
 
     private void refreshConversation() {
@@ -93,7 +97,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         }
     }
 
-    private void initRedDot(Conversation conversation) {
+    private void initContactsRedDot(Conversation conversation) {
         int visible;
         int unreadMsgCount = conversation.getUnreadMsgCount();
         if(unreadMsgCount>0) {
@@ -104,9 +108,19 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         showContactUnReadIcon(visible);
     }
 
+    private void initChatRedDot(String unReadCount) {
+        if(!TextUtils.isEmpty(unReadCount)) {
+            mTvMainHomeMsg.setVisibility(View.VISIBLE);
+            mTvMainHomeMsg.setText(unReadCount);
+        }else {
+            mTvMainHomeMsg.setVisibility(View.GONE);
+        }
+    }
+
     public void initData() {
 
         mainViewModel.getMsgConversation();
+        mainViewModel.checkUnreadMsg();
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
         checkNeedPermission();
 
@@ -224,15 +238,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         }
         invalidateOptionsMenu();
         return showNavigation;
-    }
-
-    private void showMainUnReadMsg(String unReadCount) {
-        if(!TextUtils.isEmpty(unReadCount)) {
-            mTvMainHomeMsg.setVisibility(View.VISIBLE);
-            mTvMainHomeMsg.setText(unReadCount);
-        }else {
-            mTvMainHomeMsg.setVisibility(View.GONE);
-        }
     }
 
     public void showContactUnReadIcon(int visibility) {

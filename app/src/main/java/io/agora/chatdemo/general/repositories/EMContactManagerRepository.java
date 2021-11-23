@@ -539,7 +539,11 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     public void onSuccess(Map<String, UserInfo> value) {
                         Log.e("TAG", "getUserInfoById success");
                         if(callBack != null) {
-                            callBack.onSuccess(createLiveData(transformEMUserInfo(value.get(finalUserId))));
+                            EaseUser easeUser = transformEMUserInfo(value.get(finalUserId));
+                            ArrayList<EaseUser> easeUsers = new ArrayList<>();
+                            easeUsers.add(easeUser);
+                            addDefaultAvatar(easeUsers);
+                            callBack.onSuccess(createLiveData(easeUser));
                         }
                     }
 

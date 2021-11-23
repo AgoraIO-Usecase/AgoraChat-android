@@ -26,13 +26,13 @@ import io.agora.chatdemo.general.widget.ArrowItemView;
 
 public class ContactDetailActivity extends BaseInitActivity implements View.OnClickListener {
     private String username;
-    private EaseTitleBar toolbar_contact_detail;
-    private EaseImageView iv_avatar;
-    private TextView tv_nickname;
-    private TextView tv_id;
-    private EaseImageView iv_chat;
-    private ArrowItemView item_block_contact;
-    private ArrowItemView item_delete_block;
+    private EaseTitleBar toolbarContactDetail;
+    private EaseImageView ivAvatar;
+    private TextView tvNickname;
+    private TextView tvId;
+    private EaseImageView ivChat;
+    private ArrowItemView itemBlockContact;
+    private ArrowItemView itemDeleteBlock;
     private ContactDetailViewModel viewModel;
     private boolean fromChat;
 
@@ -62,28 +62,28 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        toolbar_contact_detail = findViewById(R.id.toolbar_contact_detail);
-        iv_avatar = findViewById(R.id.iv_avatar);
-        tv_nickname = findViewById(R.id.tv_name);
-        tv_id = findViewById(R.id.tv_id);
-        iv_chat = findViewById(R.id.iv_chat);
-        TextView tv_chat = findViewById(R.id.tv_chat);
-        item_block_contact = findViewById(R.id.item_block_contact);
-        item_delete_block = findViewById(R.id.item_delete_block);
+        toolbarContactDetail = findViewById(R.id.toolbar_contact_detail);
+        ivAvatar = findViewById(R.id.iv_avatar);
+        tvNickname = findViewById(R.id.tv_nickname);
+        tvId = findViewById(R.id.tv_id);
+        ivChat = findViewById(R.id.iv_chat);
+        TextView tvChat = findViewById(R.id.tv_chat);
+        itemBlockContact = findViewById(R.id.item_block_contact);
+        itemDeleteBlock = findViewById(R.id.item_delete_block);
         if(fromChat) {
-            iv_chat.setVisibility(View.GONE);
-            tv_chat.setVisibility(View.GONE);
+            ivChat.setVisibility(View.GONE);
+            tvChat.setVisibility(View.GONE);
         }
-        EaseUserUtils.setUserAvatarStyle(iv_avatar);
+        EaseUserUtils.setUserAvatarStyle(ivAvatar);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        iv_chat.setOnClickListener(this);
-        item_block_contact.setOnClickListener(this);
-        item_delete_block.setOnClickListener(this);
-        toolbar_contact_detail.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
+        ivChat.setOnClickListener(this);
+        itemBlockContact.setOnClickListener(this);
+        itemDeleteBlock.setOnClickListener(this);
+        toolbarContactDetail.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
             @Override
             public void onBackPress(View view) {
                 finish();
@@ -131,8 +131,8 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     }
 
     private void updateLayout(EaseUser user) {
-        DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, username, tv_nickname, iv_avatar);
-        tv_id.setText(getString(R.string.show_agora_chat_id, user.getUsername()));
+        DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, username, tvNickname, ivAvatar);
+        tvId.setText(getString(R.string.show_agora_chat_id, user.getUsername()));
     }
 
     @Override

@@ -122,7 +122,12 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
         if(!hasSet) {
             mBinding.layoutUserinfo.tvNickname.setText(groupName);
         }
-        mBinding.tvDescription.setText(groupDes);
+        if(!TextUtils.isEmpty(groupDes)) {
+            mBinding.tvDescription.setVisibility(View.VISIBLE);
+            mBinding.tvDescription.setText(groupDes);
+        }else {
+            mBinding.tvDescription.setVisibility(View.GONE);
+        }
     }
 
 

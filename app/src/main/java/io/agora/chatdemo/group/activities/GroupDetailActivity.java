@@ -206,7 +206,11 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             setGroupInfo();
         }
         binding.includeInfo.tvId.setText(getString(R.string.show_agora_chat_id, groupId));
-        binding.includeInfo.tvDescription.setText(group.getDescription());
+        if(!TextUtils.isEmpty(group.getDescription())) {
+            binding.includeInfo.tvDescription.setVisibility(View.VISIBLE);
+            binding.includeInfo.tvDescription.setText(group.getDescription());
+        }
+
         binding.itemGroupMembers.setContent(String.valueOf(group.getMemberCount()));
     }
 

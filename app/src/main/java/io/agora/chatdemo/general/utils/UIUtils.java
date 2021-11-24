@@ -31,6 +31,10 @@ public class UIUtils {
     public static String getString(Context context, int resId){
         return context.getResources().getString(resId);
     }
+
+    public static String getString(int resId){
+        return getString(DemoApplication.getInstance(),resId);
+    }
     public static float getAbsDimen(Context context, int resId){
         return context.getResources().getDimension(resId);
     }

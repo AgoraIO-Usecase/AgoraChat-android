@@ -44,7 +44,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private int[] badgeIds = {R.layout.badge_home, R.layout.badge_contacts};
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_contacts_msg};
     private MainViewModel mainViewModel;
-    
+
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
@@ -84,7 +84,10 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     private void loadData(EaseEvent easeEvent) {
-        if(easeEvent!=null&&!easeEvent.isMessageChange()) {
+        if(easeEvent==null) {
+            return;
+        }
+        if(!easeEvent.isMessageChange()) {
             mainViewModel.getMsgConversation();
         }
         refreshConversation();

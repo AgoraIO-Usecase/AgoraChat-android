@@ -25,9 +25,11 @@ import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
+import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.db.dao.EmUserDao;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
@@ -138,23 +140,6 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 }
             }
         }.asLiveData();
-    }
-
-    private void addDefaultAvatar(List<EaseUser> items) {
-        List<String> localUsers = getUserDao().loadAllUsers();
-
-        for (EaseUser item : items) {
-            if(localUsers.contains(item.getUsername())) {
-                String avatar = getUserDao().loadUserByUserId(item.getUsername()).get(0).getAvatar();
-                if(!TextUtils.isEmpty(avatar)) {
-                    item.setAvatar(avatar);
-                }else {
-                    item.setAvatar(DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
-                }
-            }else{
-                item.setAvatar(DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
-            }
-        }
     }
 
     /**
@@ -540,9 +525,8 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         Log.e("TAG", "getUserInfoById success");
                         if(callBack != null) {
                             EaseUser easeUser = transformEMUserInfo(value.get(finalUserId));
-                            ArrayList<EaseUser> easeUsers = new ArrayList<>();
-                            easeUsers.add(easeUser);
-                            addDefaultAvatar(easeUsers);
+                            addDefaultAvatar(easeUser,null);
+                            getUserDao().insert(EmUserEntity.parseParent(easeUser));
                             callBack.onSuccess(createLiveData(easeUser));
                         }
                     }
@@ -562,6 +546,34 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 DemoHelper.getInstance().updateContactList();
             }
         }.asLiveData();
+    }
+
+    public void fetchUserInfoFromServer(final String username,ResultCallBack<EaseUser> callBack){
+        String userId = username;
+        if(DemoHelper.getInstance().getUsersManager().isCurrentUserFromOtherDevice(username)) {
+            userId = ChatClient.getInstance().getCurrentUser();
+        }
+        String[] userIds = new String[]{userId};
+        String finalUserId = userId;
+        ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(userIds, new ValueCallBack<Map<String, UserInfo>>() {
+            @Override
+            public void onSuccess(Map<String, UserInfo> value) {
+                Log.e("TAG", "getUserInfoById success");
+                EaseUser easeUser  = transformEMUserInfo(value.get(finalUserId));
+                addDefaultAvatar(easeUser,null);
+                getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                if(callBack != null) {
+                    callBack.onSuccess(easeUser);
+                }
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                if(callBack != null) {
+                    callBack.onError(error, errorMsg);
+                }
+            }
+        });
     }
 
     /**
@@ -724,5 +736,41 @@ public class EMContactManagerRepository extends BaseEMRepository{
             }
         }
         return users;
+    }
+
+    public void insert(Object object) {
+        DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
+        if(object instanceof EmUserEntity) {
+            if(dbHelper.getUserDao() != null) {
+                EmUserEntity userEntity = (EmUserEntity) object;
+                if(TextUtils.isEmpty(userEntity.getAvatar())) {
+                    addDefaultAvatar(userEntity,null);
+                }
+                dbHelper.getUserDao().insert(userEntity);
+            }
+        }
+    }
+    private void addDefaultAvatar(EaseUser item,List<String> localUsers){
+        if(localUsers==null) {
+            localUsers=getUserDao().loadAllUsers();
+        }
+        if(TextUtils.isEmpty(item.getAvatar())) {
+            if(localUsers.contains(item.getUsername())) {
+                String avatar = getUserDao().loadUserByUserId(item.getUsername()).get(0).getAvatar();
+                if(!TextUtils.isEmpty(avatar)) {
+                    item.setAvatar(avatar);
+                }else {
+                    item.setAvatar(DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
+                }
+            }else{
+                item.setAvatar(DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
+            }
+        }
+    }
+    private void addDefaultAvatar(List<EaseUser> items) {
+        List<String> localUsers = getUserDao().loadAllUsers();
+        for (EaseUser item : items) {
+            addDefaultAvatar(item,localUsers);
+        }
     }
 }

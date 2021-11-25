@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,9 +20,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 
 import io.agora.CallBack;
-import io.agora.ValueCallBack;
-import io.agora.chat.ChatClient;
-import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoHelper;
@@ -34,7 +32,6 @@ import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.general.manager.PreferenceManager;
 import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.sign.SignInActivity;
@@ -63,25 +60,20 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     protected void initViewModel() {
         super.initViewModel();
         mViewModel = new ViewModelProvider(this).get(MeViewModel.class);
-        mViewModel.getUpdatePushNicknameObservable().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<Boolean>() {
+        mViewModel.getUpdateNicknameObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<EaseUser>() {
                 @Override
-                public void onSuccess(Boolean data) {
-//                    dismissLoading();
+                public void onSuccess(EaseUser data) {
+                    setUserInfo();
                 }
 
-                @Override
-                public void onLoading(Boolean data) {
-                    super.onLoading(data);
-//                    showLoading();
-                }
-
-                @Override
-                public void onHideLoading() {
-                    super.onHideLoading();
-//                    dismissLoading();
-                }
             });
+        });
+        LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.class).observe(mContext, event -> {
+            if (event != null) {
+                EMLog.e(TAG, "receive CURRENT_USER_INFO_CHANGE");
+                setUserInfo();
+            }
         });
     }
 
@@ -96,23 +88,20 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         mBinding.layoutUserinfo.ivAvatar.setOnClickListener(this);
         mBinding.layoutUserinfo.tvNickname.setOnClickListener(this);
         mBinding.layoutUserinfo.tvId.setOnClickListener(this);
-
-        LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.class).observe(this, event -> {
-            if (event != null) {
-                mBinding.layoutUserinfo.tvNickname.setText(event.message);
-            }
-        });
     }
 
     @Override
     protected void initData() {
         super.initData();
+        mBinding.settingAbout.setContent("V" + DemoHelper.getInstance().getAppVersionName(mContext));
+        setUserInfo();
+    }
+
+    private void setUserInfo() {
         currentUser = DemoHelper.getInstance().getUsersManager().getCurrentUserID();
         userInfo = DemoHelper.getInstance().getUsersManager().getCurrentUserInfo();
         mBinding.layoutUserinfo.tvId.setText(getString(R.string.show_agora_chat_id, userInfo.getUsername()));
-        mBinding.layoutUserinfo.tvNickname.setText(userInfo.getNickname());
         DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, currentUser, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivAvatar);
-        mBinding.settingAbout.setContent("V" + DemoHelper.getInstance().getAppVersionName(mContext));
     }
 
     @Override
@@ -180,37 +169,16 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 .setOnClickListener(R.id.iv_nickname_delete, this)
                 .show();
         edtNickName = nickDialog.getViewById(R.id.edt_target_nickname);
+        edtNickName.setText(userInfo.getNickname());
         remind = nickDialog.getViewById(R.id.tv_remind);
         edtNickName.addTextChangedListener(this);
     }
 
     private void changeNickName() {
         String nick = edtNickName.getText().toString().trim();
-        if (nick != null && nick.length() > 0) {
-            ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nick, new ValueCallBack<String>() {
-                @Override
-                public void onSuccess(String value) {
-                    EMLog.d(TAG, "fetchUserInfoById :" + value);
-                    showToast(R.string.nickname_update_success);
-                    PreferenceManager.getInstance().setCurrentUserNick(nick);
-
-                    EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
-                    event.message = nick;
-                    LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE).postValue(event);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            mViewModel.updatePushNickname(nick);
-                        }
-                    });
-                }
-
-                @Override
-                public void onError(int error, String errorMsg) {
-                    EMLog.d(TAG, "fetchUserInfoById  error:" + error + " errorMsg:" + errorMsg);
-                    showToast(R.string.nickname_update_failed);
-                }
-            });
-        } else {
+        if(!TextUtils.isEmpty(nick)) {
+            mViewModel.updateNickname(nick);
+        }else {
             showToast(R.string.nickname_is_empty);
         }
     }

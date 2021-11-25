@@ -6,22 +6,28 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import io.agora.chat.UserInfo;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
+import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 import io.agora.chatdemo.general.repositories.EMPushManagerRepository;
 
 public class MeViewModel extends AndroidViewModel {
     private EMPushManagerRepository repository;
-    private SingleSourceLiveData<Resource<Boolean>> updatePushNicknameObservable;
+    private EMContactManagerRepository contactManagerRepository;
+    private SingleSourceLiveData<Resource<EaseUser>> updateNicknameObservable;
     public MeViewModel(@NonNull  Application application) {
         super(application);
         repository = new EMPushManagerRepository();
-        updatePushNicknameObservable = new SingleSourceLiveData<>();
+        contactManagerRepository= new EMContactManagerRepository();
+        updateNicknameObservable = new SingleSourceLiveData<>();
     }
-    public LiveData<Resource<Boolean>> getUpdatePushNicknameObservable() {
-        return updatePushNicknameObservable;
+    public LiveData<Resource<EaseUser>> getUpdateNicknameObservable() {
+        return updateNicknameObservable;
     }
-    public void updatePushNickname(String nickname) {
-        updatePushNicknameObservable.setSource(repository.updatePushNickname(nickname));
+    public void updateNickname(String nickname) {
+        repository.updatePushNickname(nickname);
+        updateNicknameObservable.setSource(contactManagerRepository.updateCurrentUserInfo(UserInfo.UserInfoType.NICKNAME, nickname));
     }
 }

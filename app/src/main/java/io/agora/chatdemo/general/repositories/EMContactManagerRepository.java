@@ -608,9 +608,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void saveCallResult(String item) {
                 if(attribute == UserInfo.UserInfoType.AVATAR_URL) {
-                    DemoHelper.getInstance().getUsersManager().updateUserAvatar(item);
+                    DemoHelper.getInstance().getUsersManager().updateUserAvatar(value);
                 }else if(attribute == UserInfo.UserInfoType.NICKNAME){
-                    DemoHelper.getInstance().getUsersManager().updateUserNickname(item);
+                    DemoHelper.getInstance().getUsersManager().updateUserNickname(value);
                 }
             }
         }.asLiveData();
@@ -653,6 +653,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
                                 public void onSuccess(String value) {
                                     EMLog.d(TAG, "update nickname success");
                                     DemoHelper.getInstance().getUsersManager().updateUserNickname(nickname);
+                                    EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
+                                    LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE).postValue(event);
+                                    EMLog.e(TAG, "send CURRENT_USER_INFO_CHANGE");
                                     if(callBack != null) {
                                         callBack.onSuccess(DemoHelper.getInstance().getUsersManager().getCurrentUserInfo());
                                     }

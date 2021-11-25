@@ -19,7 +19,10 @@ import io.agora.chat.uikit.widget.dialog.EaseAlertDialog;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.BaseContactListFragment;
 import io.agora.chatdemo.contact.ContactListAdapter;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.dialog.GroupMemberManageDialog;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
 import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
@@ -48,6 +51,19 @@ public class GroupBaseManageFragment extends BaseContactListFragment<EaseUser> {
         group = ChatClient.getInstance().groupManager().getGroup(groupId);
         etSearch.setVisibility(View.VISIBLE);
         listAdapter = (ContactListAdapter) mListAdapter;
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+              listAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

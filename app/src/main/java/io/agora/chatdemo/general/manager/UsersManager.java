@@ -2,6 +2,7 @@ package io.agora.chatdemo.general.manager;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 import io.agora.chatdemo.general.repositories.EMGroupManagerRepository;
 import io.agora.chatdemo.general.repositories.EMPushManagerRepository;
+import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.util.EMLog;
 
 public class UsersManager {
@@ -210,7 +212,20 @@ public class UsersManager {
 		return user;
 	}
 	private void getUserInfoFromServer(String username) {
-		new EMContactManagerRepository().getUserInfoById(username, DemoHelper.getInstance().getModel().isContact(username));
+		new EMContactManagerRepository().fetchUserInfoFromServer(username, new ResultCallBack<EaseUser>() {
+			@Override
+			public void onSuccess(EaseUser value) {
+				Log.e(TAG,UIUtils.getString(R.string.fetch_userinfo_success));
+				Log.e(TAG,value.toString());
+				LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE)
+						.postValue(EaseEvent.create(DemoConstant.CONTACT_UPDATE, EaseEvent.TYPE.CONTACT));
+			}
+
+			@Override
+			public void onError(int error, String errorMsg) {
+				Log.e(TAG,UIUtils.getString(R.string.fetch_userinfo_fail));
+			}
+		});
 	}
 	/**
 	 * Determine if it is from the current user account of another device

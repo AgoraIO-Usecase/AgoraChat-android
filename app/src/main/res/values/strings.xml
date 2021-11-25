@@ -342,5 +342,7 @@
     <string name="nickname_update_failed">Nickname Update Failed</string>
     <string name="nickname_is_empty">Nickname Is Empty</string>
 
+    <string name="fetch_userinfo_success">fetch userinfo success </string>
+    <string name="fetch_userinfo_fail">fetch userinfo fail </string>
 
 </resources>

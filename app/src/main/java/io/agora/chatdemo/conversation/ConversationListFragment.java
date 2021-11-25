@@ -12,6 +12,9 @@ import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.ChatActivity;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.global.BottomSheetContainerFragment;
 
 public class ConversationListFragment extends EaseConversationListFragment {
@@ -37,6 +40,14 @@ public class ConversationListFragment extends EaseConversationListFragment {
             @Override
             public void onRightClick(View view) {
                 new BottomSheetContainerFragment().show(getChildFragmentManager(),"ContainerFragment");
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                refreshList();
             }
         });
     }

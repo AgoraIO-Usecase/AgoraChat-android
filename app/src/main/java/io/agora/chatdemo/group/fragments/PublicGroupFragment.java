@@ -30,7 +30,8 @@ import io.agora.chatdemo.group.adapter.PublicGroupAdapter;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 
-public class PublicGroupFragment extends SearchFragment<GroupInfo> implements OnRefreshLoadMoreListener, OnItemClickListener, BottomSheetChildHelper {
+public class PublicGroupFragment extends SearchFragment<GroupInfo> implements OnRefreshLoadMoreListener,
+        OnItemClickListener, BottomSheetChildHelper {
     public RecyclerView rvList;
     private static final int PAGE_SIZE = 20;
     private String cursor;
@@ -169,11 +170,15 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
             publicGroupDetailFragment.setArguments(bundle);
             startFragment(publicGroupDetailFragment,null);
         }
-
     }
 
     @Override
     public boolean isShowTitlebarLeftLayout() {
         return true;
+    }
+
+    @Override
+    public int getTitlebarTitle() {
+        return R.string.group_public_group;
     }
 }

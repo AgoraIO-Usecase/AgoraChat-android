@@ -15,11 +15,13 @@ import io.agora.chatdemo.general.db.dao.EmUserDao;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
 import io.agora.chatdemo.general.manager.OptionsHelper;
 import io.agora.chatdemo.general.manager.PreferenceManager;
+import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 
 /**
  * DemoModel主要用于SP存取及一些数据库的存取
  */
 public class DemoModel {
+    private final EMContactManagerRepository mRepository;
     EmUserDao dao = null;
     protected Context context = null;
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
@@ -31,6 +33,7 @@ public class DemoModel {
     public DemoModel(Context ctx){
         context = ctx;
         PreferenceManager.init(context);
+        mRepository = new EMContactManagerRepository();
     }
 
     public long getUserInfoTimeOut() {
@@ -132,12 +135,7 @@ public class DemoModel {
      * @param object
      */
     public void insert(Object object) {
-        DemoDbHelper dbHelper = getDbHelper();
-        if(object instanceof EmUserEntity) {
-            if(dbHelper.getUserDao() != null) {
-                dbHelper.getUserDao().insert((EmUserEntity) object);
-            }
-        }
+        mRepository.insert(object);
     }
 
     /**

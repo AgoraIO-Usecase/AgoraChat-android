@@ -113,6 +113,9 @@ public class GroupBaseManageFragment extends BaseContactListFragment<EaseUser> {
             case R.id.action_group_manage_move_to_block:
                 showMoveToBlockedList(bean);
                 break;
+            case R.id.action_group_manage_remove_from_block:
+                viewModel.unblockUser(groupId, bean.getUsername());
+                break;
             case R.id.action_group_manage_remove_from_group:
                 showRemoveFromGroup(bean);
                 break;

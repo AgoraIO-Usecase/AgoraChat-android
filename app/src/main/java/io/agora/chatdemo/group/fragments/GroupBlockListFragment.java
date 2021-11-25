@@ -13,6 +13,9 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
 import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
@@ -28,8 +31,7 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
             parseResource(response, new OnResourceParseCallback<List<String>>() {
                 @Override
                 public void onSuccess(@Nullable List<String> data) {
-                    finishRefresh();
-                    if(data != null && data.isEmpty()) {
+                    if(data != null && !data.isEmpty()) {
                         List<EaseUser> users = new ArrayList<>();
                         for (String username : data){
                             EaseUser user = DemoHelper.getInstance().getUsersManager().getUserInfo(username);
@@ -40,12 +42,15 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
                         sortData(users);
                         mDataList = users;
                         listAdapter.setData(users);
+                    }else {
+                        mDataList = null;
+                        listAdapter.clearData();
                     }
                 }
 
                 @Override
-                public void onError(int code, String message) {
-                    super.onError(code, message);
+                public void onHideLoading() {
+                    super.onHideLoading();
                     runOnUiThread(()->finishRefresh());
                 }
             });
@@ -55,6 +60,9 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
                 @Override
                 public void onSuccess(@Nullable String data) {
                     viewModel.getBlockMembers(groupId);
+                    EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+                    easeEvent.message = groupId;
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
                 }
             });
         });

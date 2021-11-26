@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.Arrays;
-
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.base.BaseListFragment;
@@ -23,6 +21,7 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.PreferenceManager;
+import io.agora.chatdemo.general.repositories.TestAvatarRepository;
 import io.agora.chatdemo.general.utils.UIUtils;
 
 
@@ -42,7 +41,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        mRecyclerView.addItemDecoration(new AvaterSelectItemDecoration(UIUtils.dp2px(mContext,7)));
+        mRecyclerView.addItemDecoration(new AvatarSelectItemDecoration(UIUtils.dp2px(mContext,7)));
     }
 
     @Override
@@ -65,7 +64,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
     @Override
     protected void initData() {
         super.initData();
-        mListAdapter.setData(Arrays.asList(DemoConstant.DEFAULT_AVATARS));
+        mListAdapter.setData(new TestAvatarRepository().getAvatarList());
     }
 
     @Override
@@ -81,7 +80,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
 
     @Override
     protected EaseBaseRecyclerViewAdapter<Integer> initAdapter() {
-        return new AvaterSelectAdapter();
+        return new AvatarSelectAdapter();
     }
 
     @Override
@@ -101,7 +100,7 @@ public class UserAvatarSelectFragment extends BaseListFragment<Integer> implemen
     @Override
     public void onRefresh() {
         //just it temp
-        mListAdapter.setData(Arrays.asList(DemoConstant.DEFAULT_AVATARS));
+        mListAdapter.setData(new TestAvatarRepository().getAvatarList());
         mBinding.srlContactRefresh.setEnabled(false);
     }
 }

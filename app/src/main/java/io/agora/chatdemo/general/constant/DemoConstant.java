@@ -2,7 +2,6 @@ package io.agora.chatdemo.general.constant;
 
 
 import io.agora.chat.uikit.constants.EaseConstant;
-import io.agora.chatdemo.R;
 
 public interface DemoConstant extends EaseConstant {
     String ACCOUNT_CHANGE = "account_change";
@@ -102,20 +101,5 @@ public interface DemoConstant extends EaseConstant {
      int GROUP_ROLE_OWNER = 1;
      int GROUP_ROLE_ADMIN = 2;
      int GROUP_ROLE_MEMBER = 0;
-
-     Integer[] DEFAULT_AVATARS =new Integer[]{
-            R.drawable.avatar_1,
-            R.drawable.avatar_2,
-            R.drawable.avatar_3,
-            R.drawable.avatar_4,
-            R.drawable.avatar_5,
-            R.drawable.avatar_6,
-            R.drawable.avatar_7,
-            R.drawable.avatar_8,
-            R.drawable.avatar_9,
-            R.drawable.avatar_10,
-            R.drawable.avatar_11,
-            R.drawable.avatar_12,
-    };
 
 }

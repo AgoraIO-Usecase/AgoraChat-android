@@ -6,7 +6,7 @@ import io.agora.ValueCallBack;
 public abstract class ResultCallBack<T> implements ValueCallBack<T> {
 
     /**
-     * 针对只返回error code的情况
+     * For situations where only error code is returned
      * @param error
      */
     public void onError(int error) {

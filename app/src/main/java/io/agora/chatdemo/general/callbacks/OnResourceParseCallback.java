@@ -13,32 +13,32 @@ public abstract class OnResourceParseCallback<T> {
     public OnResourceParseCallback() {}
 
     /**
-     * 是否展示错误信息
+     * Whether to display error messages
      * @param hideErrorMsg
      */
     public OnResourceParseCallback(boolean hideErrorMsg) {
         this.hideErrorMsg = hideErrorMsg;
     }
     /**
-     * 成功
+     * success
      * @param data
      */
     public abstract void onSuccess(@Nullable T data);
 
     /**
-     * 失败
+     * fail
      * @param code
      * @param message
      */
     public void onError(int code, String message){}
 
     /**
-     * 加载中
+     * in progress
      */
     public void onLoading(@Nullable T data){}
 
     /**
-     * 隐藏加载
+     * hide loading
      */
     public void onHideLoading(){}
 }

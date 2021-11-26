@@ -1,6 +1,5 @@
 package io.agora.chatdemo.contact;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,17 +60,13 @@ public class AddAdapter extends EaseBaseRecyclerViewAdapter<String> {
                     }
                 }
             });
-            String prefix="";
+            String showID="";
             if(mType==AddType.CONTACT) {
-                prefix="AgoraID:";
+                showID = mContext.getString(R.string.show_agora_chat_id, item);
             }else if(mType==AddType.GROUP) {
-                prefix="GroupID:";
+                showID = mContext.getString(R.string.show_agora_group_id, item);
             }
-            if(TextUtils.isEmpty(item)) {
-                mTvName.setText(prefix+"");
-                return;
-            }
-            mTvName.setText(prefix+item);
+            mTvName.setText(showID);
             if(mAddedDatas != null && mAddedDatas.contains(item)) {
                 mtvAdd.setText(mType==AddType.CONTACT?R.string.contact_added:R.string.group_applied);
                 mtvAdd.setTextColor(ContextCompat.getColor(mContext,R.color.color_light_gray_999999));

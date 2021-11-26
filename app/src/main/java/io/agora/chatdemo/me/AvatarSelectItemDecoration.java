@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
-public class AvaterSelectItemDecoration extends RecyclerView.ItemDecoration {
+public class AvatarSelectItemDecoration extends RecyclerView.ItemDecoration {
     private int space;
-    public AvaterSelectItemDecoration(int space) {
+    public AvatarSelectItemDecoration(int space) {
         this.space=space;
     }
 

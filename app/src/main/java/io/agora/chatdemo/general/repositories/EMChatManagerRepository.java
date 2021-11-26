@@ -1,15 +1,10 @@
 package io.agora.chatdemo.general.repositories;
 
-import android.text.TextUtils;
-import android.util.Pair;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,14 +12,13 @@ import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.conversation.model.EaseConversationInfo;
-import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.exceptions.ChatException;
 
 /**
- * 处理与chat相关的逻辑
+ * Handle the logic related to chat
  */
 public class EMChatManagerRepository extends BaseEMRepository{
 
@@ -45,7 +39,7 @@ public class EMChatManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 将会话置为已读
+     * Make conversation as read
      * @param conversationId
      * @return
      */
@@ -65,7 +59,7 @@ public class EMChatManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取会话列表
+     * Get conversations from server
      * @return
      */
     public LiveData<Resource<List<EaseConversationInfo>>> fetchConversationsFromServer() {
@@ -102,7 +96,7 @@ public class EMChatManagerRepository extends BaseEMRepository{
 
 
     /**
-     * 调用api请求将会话置为已读
+     * Call the api request to set the session as read
      * @param conversationId
      * @return
      */
@@ -124,10 +118,10 @@ public class EMChatManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 设置单聊用户聊天免打扰
+     * Set Do Not Disturb for Single Chat User Chat
      *
-     * @param userId 用户名
-     * @param noPush 是否免打扰
+     * @param userId
+     * @param noPush
      */
     public LiveData<Resource<Boolean>> setUserNotDisturb(String userId, boolean noPush) {
         return new NetworkOnlyResource<Boolean>() {
@@ -153,7 +147,7 @@ public class EMChatManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取聊天免打扰用户
+     * Get chat do not disturb users
      */
     public LiveData<Resource<List<String>>> getNoPushUsers() {
         return new NetworkOnlyResource<List<String>>() {

@@ -69,7 +69,7 @@ public class PreferenceManager {
 	}
 
 	/**
-	 * get instance of PreferenceManager
+	 * Get instance of PreferenceManager
 	 *
 	 * @param
 	 * @return
@@ -260,7 +260,7 @@ public class PreferenceManager {
 	}
 
 	/**
-	 * 设置是否自动登录,只有登录成功后，此值才能设置为true
+	 * Set whether to log in automatically, only after successful login, this value can be set to true
 	 * @param autoLogin
 	 */
 	public void setAutoLogin(boolean autoLogin) {
@@ -269,7 +269,7 @@ public class PreferenceManager {
 	}
 
 	/**
-	 * 获取是否是自动登录
+	 * Get whether it is automatic login
 	 * @return
 	 */
 	public boolean getAutoLogin() {
@@ -312,7 +312,7 @@ public class PreferenceManager {
 	}
 
 	/**
-	 * 是否允许token登录
+	 * Whether to allow token login
 	 * @param isChecked
 	 */
 	public void setEnableTokenLogin(boolean isChecked) {

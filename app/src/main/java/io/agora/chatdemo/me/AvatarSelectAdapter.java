@@ -15,17 +15,17 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.databinding.ItemAvatarSelectBinding;
 import io.agora.chatdemo.general.utils.UIUtils;
 
-public class AvaterSelectAdapter extends EaseBaseRecyclerViewAdapter<Integer> {
+public class AvatarSelectAdapter extends EaseBaseRecyclerViewAdapter<Integer> {
     @Override
     public ViewHolder<Integer> getViewHolder(ViewGroup parent, int viewType) {
 
-        return new AvaterViewHolder(ItemAvatarSelectBinding.inflate(LayoutInflater.from(mContext), parent, false));
+        return new AvatarViewHolder(ItemAvatarSelectBinding.inflate(LayoutInflater.from(mContext), parent, false));
     }
-    class AvaterViewHolder extends ViewHolder<Integer>{
+    class AvatarViewHolder extends ViewHolder<Integer>{
         private ItemAvatarSelectBinding mBinding;
         private final RequestOptions requestOptions;
 
-        public AvaterViewHolder(@NonNull  ItemAvatarSelectBinding binding) {
+        public AvatarViewHolder(@NonNull  ItemAvatarSelectBinding binding) {
             super( binding.getRoot());
             this.mBinding=binding;
             RoundedCorners roundedCorners = new RoundedCorners(UIUtils.dp2px(mContext, 5));

@@ -3,8 +3,8 @@ package io.agora.chatdemo.general.net;
 
 
 /**
- * 结果基础类
- * @param <T> 请求结果的实体类
+ * Result base class
+ * @param <T> The entity class of the request result
  */
 public class Result<T> {
     public int code;

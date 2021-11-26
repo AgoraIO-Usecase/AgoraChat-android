@@ -27,11 +27,6 @@ class DialogViewHelper {
         this.mContentView = LayoutInflater.from(mContext).inflate(contentViewId, null);
     }
 
-    /**
-     * 设置点击事件
-     * @param viewId
-     * @param onClickListener
-     */
     public void setOnClickListener(int viewId, View.OnClickListener onClickListener) {
         View view = getViewById(viewId);
         view.setOnClickListener(onClickListener);
@@ -50,32 +45,18 @@ class DialogViewHelper {
 
     }
 
-    /**
-     * 设置文本
-     * @param viewId
-     * @param text
-     */
     public void setText(int viewId, CharSequence text) {
         TextView view = getViewById(viewId);
         if (view != null) {
             view.setText(text);
-            //设置超链接可点击
             view.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
-    /**
-     * @return dialog的布局view
-     */
     public View getContentView() {
         return mContentView;
     }
 
-    /**
-     * 设置图片
-     * @param viewId
-     * @param resId
-     */
     public void setImageView(int viewId, int resId) {
         ImageView imageView = getViewById(viewId);
         if(imageView!=null) {

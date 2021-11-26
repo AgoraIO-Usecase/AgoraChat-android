@@ -52,8 +52,8 @@ public class DemoApplication extends Application {
     }
 
     /**
-     * 解决androidP 第一次打开程序出现莫名弹窗
-     * 弹窗内容“detected problems with api ”
+     * Solve the inexplicable pop-up window when androidP opens the program for the first time
+     * The content of the pop-up window "detected problems with api"
      */
     private void closeAndroidPDialog(){
         if(Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
@@ -78,6 +78,9 @@ public class DemoApplication extends Application {
         }
     }
 
+    /**
+     * Set default settings for SmartRefreshLayout
+     */
     static {
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
             @NonNull

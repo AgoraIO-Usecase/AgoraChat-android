@@ -1,5 +1,13 @@
 package io.agora.chatdemo.notification;
 
+import static io.agora.chatdemo.general.constant.DemoConstant.SYSTEM_MESSAGE_FROM;
+import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAGREED;
+import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAPPLYED;
+import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEINVITEED;
+import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.GROUPINVITATION;
+import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.REFUSED;
+import static io.agora.chatdemo.general.manager.PushAndMessageHelper.getSystemMessage;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +22,7 @@ import io.agora.chatdemo.databinding.ItemNotificationMsgBinding;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
 
-import static io.agora.chatdemo.general.constant.DemoConstant.SYSTEM_MESSAGE_FROM;
-import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAGREED;
-import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAPPLYED;
-import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEINVITEED;
-import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.GROUPINVITATION;
-import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.REFUSED;
-import static io.agora.chatdemo.general.manager.PushAndMessageHelper.getSystemMessage;
-
-class NotaficationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
+class NotificationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
 
     @Override
     public ViewHolder<ChatMessage> getViewHolder(ViewGroup parent, int viewType) {

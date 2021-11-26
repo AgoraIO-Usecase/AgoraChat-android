@@ -15,7 +15,7 @@ import io.agora.util.EMLog;
 
 
 /**
- * 此类用于从环信SDK拉取异步数据或者其他耗时操作
+ * This class is used to pull asynchronous data from Agora Chat SDK or other time-consuming operations
  * @param <ResultType>
  */
 public abstract class NetworkOnlyResource<ResultType> {
@@ -36,7 +36,6 @@ public abstract class NetworkOnlyResource<ResultType> {
      * work on main thread
      */
     private void init() {
-        // 通知UI开始加载
         result.setValue(Resource.loading(null));
         fetchFromNetwork();
     }
@@ -48,19 +47,16 @@ public abstract class NetworkOnlyResource<ResultType> {
         createCall(new ResultCallBack<LiveData<ResultType>>() {
             @Override
             public void onSuccess(LiveData<ResultType> apiResponse) {
-                // 保证回调后在主线程
                 mThreadManager.runOnMainThread(() -> {
                     result.addSource(apiResponse, response-> {
                         result.removeSource(apiResponse);
                         if(response != null) {
-                            // 如果结果是EmResult结构，需要判断code，是否请求成功
                             if(response instanceof Result) {
                                 int code = ((Result) response).code;
                                 if(code != ErrorCode.EM_NO_ERROR) {
                                     fetchFailed(code, null);
                                 }
                             }
-                            // 在异步线程中处理保存的逻辑
                             mThreadManager.runOnIOThread(() -> {
                                 try {
                                     saveCallResult(processResponse(response));
@@ -112,7 +108,7 @@ public abstract class NetworkOnlyResource<ResultType> {
     }
 
     /**
-     * 此处设计为回调模式，方便在此方法中进行异步操作
+     * This is designed as a callback mode to facilitate asynchronous operations in this method
      * @return
      */
     @MainThread

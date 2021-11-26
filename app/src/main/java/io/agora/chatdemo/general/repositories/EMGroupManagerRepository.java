@@ -35,7 +35,7 @@ import io.agora.exceptions.ChatException;
 public class EMGroupManagerRepository extends BaseEMRepository{
 
     /**
-     * 获取所有的群组列表
+     * Get all groups
      * @return
      */
     public LiveData<Resource<List<Group>>> getAllGroups() {
@@ -79,7 +79,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取所有群组列表
+     * Get all groups
      * @param callBack
      */
     public void getAllGroups(ResultCallBack<List<Group>> callBack) {
@@ -105,7 +105,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 从服务器分页获取加入的群组
+     * Get joined groups from the server page
      * @param pageIndex
      * @param pageSize
      * @return
@@ -130,7 +130,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取公开群
+     * Get public groups from server by page
      * @param pageSize
      * @param cursor
      * @return
@@ -155,7 +155,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取群组信息
+     * Get group info from server
      * @param groupId
      * @return
      */
@@ -185,7 +185,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 加入群组
+     * Join group
      * @param group
      * @param reason
      * @return
@@ -270,7 +270,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取群组成员列表(包含管理员和群主)
+     * Get a list of group members (including administrators and owners)
      * @param groupId
      * @return
      */
@@ -311,7 +311,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取群组成员列表(包含管理员和群主)
+     * Get a list of group members (including administrators and owners)
      * @param groupId
      * @return
      */
@@ -353,7 +353,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取群组成员列表(不包含管理员和群主)
+     * Get a list of group members (excluding administrators and owners)
      * @param groupId
      * @return
      */
@@ -431,7 +431,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取禁言列表
+     * Get group muted map
      * @param groupId
      * @return
      */
@@ -465,7 +465,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取群组黑名单列表
+     * Get group blacklist
      * @param groupId
      * @return
      */
@@ -508,7 +508,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取群公告
+     * Get group announcement
      * @param groupId
      * @return
      */
@@ -550,7 +550,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取所有成员
+     * Get group all members from server
      * @param groupId
      * @return
      */
@@ -599,7 +599,6 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     manageGroups.add(group);
                 }
             }
-            // 对数据进行排序
             sortData(manageGroups);
             return manageGroups;
         }
@@ -618,7 +617,6 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     joinGroups.add(group);
                 }
             }
-            // 对数据进行排序
             sortData(joinGroups);
             return joinGroups;
         }
@@ -626,7 +624,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 对数据进行排序
+     * Sort by group name
      * @param groups
      */
     private void sortData(List<Group> groups) {
@@ -650,7 +648,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 设置群组名称
+     * Set group name
      * @param groupId
      * @param groupName
      * @return
@@ -680,7 +678,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 设置群公告
+     * Set group announcement
      * @param groupId
      * @param announcement
      * @return
@@ -710,7 +708,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 设置群描述
+     * Set group description
      * @param groupId
      * @param description
      * @return
@@ -740,7 +738,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取共享文件
+     * Get group shared files
      * @param groupId
      * @param pageNum
      * @param pageSize
@@ -766,7 +764,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 下载共享文件
+     * Download shared files
      * @param groupId
      * @param fileId
      * @param localFile
@@ -797,7 +795,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 删除服务器端的文件
+     * Delete the file on the server side
      * @param groupId
      * @param fileId
      * @return
@@ -827,7 +825,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 上传文件
+     * Upload file to server
      * @param groupId
      * @param filePath
      * @return
@@ -857,7 +855,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 邀请群成员
+     * Invite group members
      * @param isOwner
      * @param groupId
      * @param members
@@ -907,7 +905,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移交群主权限
+     * Transfer group own permissions
      * @param groupId
      * @param username
      * @return
@@ -932,7 +930,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 设为群管理员
+     * Set as group manager
      * @param groupId
      * @param username
      * @return
@@ -957,7 +955,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移除群管理员
+     * Remove group manager
      * @param groupId
      * @param username
      * @return
@@ -982,7 +980,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移出群
+     * Remove from group
      * @param groupId
      * @param username
      * @return
@@ -1012,7 +1010,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 添加到群黑名单
+     * Add to group blacklist
      * @param groupId
      * @param username
      * @return
@@ -1042,7 +1040,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移出群黑名单
+     * Remove from group blacklist
      * @param groupId
      * @param username
      * @return
@@ -1072,7 +1070,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 禁言
+     * Mute group members
      * @param groupId
      * @param usernames
      * @return
@@ -1097,7 +1095,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 禁言
+     * UnMute group members
      * @param groupId
      * @param usernames
      * @return
@@ -1122,7 +1120,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 退群
+     * Leave from group
      * @param groupId
      * @return
      */
@@ -1151,7 +1149,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 解散群
+     * Destroy group
      * @param groupId
      * @return
      */
@@ -1208,7 +1206,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 屏蔽群消息
+     * Block group messages
      * @param groupId
      * @return
      */
@@ -1237,7 +1235,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 取消屏蔽群消息
+     * Unblock group messages
      * @param groupId
      * @return
      */

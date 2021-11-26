@@ -120,7 +120,7 @@
             app:layout_constraintLeft_toRightOf="@id/avatar"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name"
-            tools:text="历史记录路上的风景四六级零售价分离老司机代理费是的了房间数量的风景" />
+            tools:text="Contact test info" />
 
         <TextView
             android:id="@+id/unread_msg_number"

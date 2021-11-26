@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer;
  * Used when setting up and listening to a single data source: LiveData
  * It is convenient to automatically cancel the listening of the previous data source when you need to switch data sources
  *
- * @param <T> 监听的数据源类型
+ * @param <T> Type of data source to monitor
  */
 public class SingleSourceLiveData<T> extends MutableLiveData<T> {
     private LiveData<T> lastSource;

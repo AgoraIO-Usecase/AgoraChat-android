@@ -126,7 +126,7 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
 
     @Override
     protected EaseBaseRecyclerViewAdapter<ChatMessage> initAdapter() {
-        return new NotaficationMsgAdapter();
+        return new NotificationMsgAdapter();
     }
 
     @Override

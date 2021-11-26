@@ -16,14 +16,12 @@ import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 
 public class MainViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Conversation> conversationObservable;
-    private SingleSourceLiveData<Integer> switchObservable;
     private MutableLiveData<String> homeUnReadObservable;
     private EaseNotificationMsgManager msgManager;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
         conversationObservable = new SingleSourceLiveData<>();
-        switchObservable = new SingleSourceLiveData<>();
         homeUnReadObservable = new MutableLiveData<>();
         msgManager= EaseNotificationMsgManager.getInstance();
     }
@@ -33,18 +31,6 @@ public class MainViewModel extends AndroidViewModel {
 
     public void getMsgConversation() {
         conversationObservable.setValue(msgManager.getConversation());
-    }
-
-    public LiveData<Integer> getSwitchObservable() {
-        return switchObservable;
-    }
-
-    /**
-     * 设置可见的fragment
-     * @param title
-     */
-    public void setVisibleFragment(Integer title) {
-        switchObservable.setValue(title);
     }
 
     public LiveData<String> homeUnReadObservable() {
@@ -63,7 +49,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     /**
-     * 获取未读消息数目
+     * Get unread count
      * @param count
      * @return
      */

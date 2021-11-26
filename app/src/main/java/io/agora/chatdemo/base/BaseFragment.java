@@ -34,7 +34,7 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
+     * Get the current view control by id, which needs to be called in the life cycle after onViewCreated()
      * @param id
      * @param <T>
      * @return
@@ -60,7 +60,7 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     * 判断当前activity是否可用
+     * Determine whether the current activity is available
      * @return
      */
     public boolean isActivityDisable() {
@@ -69,7 +69,7 @@ public class BaseFragment extends Fragment {
 
 
     /**
-     * 切换到UI线程
+     * Switch to UI thread
      * @param runnable
      */
     public void runOnUiThread(Runnable runnable) {
@@ -77,7 +77,7 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     * 设置返回按钮的颜色
+     * Set the color of the return icon
      * @param mContext
      * @param colorId
      */
@@ -123,7 +123,7 @@ public class BaseFragment extends Fragment {
         new AlertDialog.Builder(mContext)
                     .setTitle(title)
                     .setMessage(message)
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(callBack != null) {
@@ -131,12 +131,12 @@ public class BaseFragment extends Fragment {
                             }
                         }
                     })
-                    .setNegativeButton("取消", null)
+                    .setNegativeButton(getResources().getString(R.string.cancel), null)
                     .show();
     }
 
     /**
-     * 解析Resource<T>
+     * Parse Resource<T>
      * @param response
      * @param callback
      * @param <T>

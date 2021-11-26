@@ -69,7 +69,7 @@ public class SidebarPresenter implements EaseSidebar.OnTouchEventListener{
     }
 
     /**
-     * 展示滑动的字符
+     * Show sliding characters
      * @param pointer
      */
     private void showFloatingHeader(String pointer) {

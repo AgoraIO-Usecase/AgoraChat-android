@@ -127,7 +127,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取聊天室公告内容
+     * Get chat room announcement content
      * @param roomId
      * @return
      */
@@ -231,7 +231,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 判断是否是管理员或者群主
+     * Determine whether it is an administrator or group owner
      * @param room
      * @return
      */
@@ -240,7 +240,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移交聊天室群主权限
+     * Transfer chat room owner permissions
      * @param groupId
      * @param username
      * @return
@@ -269,7 +269,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取聊天室禁言列表
+     * Get the list of banned chat rooms
      * @param groupId
      * @return
      */
@@ -303,7 +303,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取聊天室黑名单列表
+     * Get the blacklist of chat rooms
      * @param groupId
      * @return
      */
@@ -337,7 +337,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 设为聊天室管理员
+     * Set as chat room manager
      * @param groupId
      * @param username
      * @return
@@ -362,7 +362,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移除聊天室管理员
+     * Remove chat room manager
      * @param groupId
      * @param username
      * @return
@@ -387,7 +387,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移出聊天室
+     * Move out of chat room
      * @param groupId
      * @param usernames
      * @return
@@ -412,8 +412,8 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 添加到聊天室黑名单
-     * 需要拥有者或者管理员权限
+     * Add to chat room blacklist
+     * Requires owner or administrator rights
      * @param groupId
      * @param username
      * @return
@@ -438,7 +438,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移出聊天室黑名单
+     * Remove from the chat room blacklist
      * @param groupId
      * @param username
      * @return
@@ -463,8 +463,8 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 禁言
-     * 需要聊天室拥有者或者管理员权限
+     * Mute
+     * Requires chat room owner or administrator permissions
      * @param groupId
      * @param usernames
      * @return
@@ -489,7 +489,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 禁言
+     * UnMute
      * @param groupId
      * @param usernames
      * @return
@@ -514,7 +514,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 退群
+     * Leave chat room
      * @param groupId
      * @return
      */
@@ -529,7 +529,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 解散群
+     * Destroy chat room
      * @param groupId
      * @return
      */

@@ -86,6 +86,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/color_light_gray_999999"
             android:textSize="@dimen/text_size_normal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/name"
             app:layout_constraintTop_toTopOf="@id/name"
             app:layout_constraintStart_toEndOf="@id/name"

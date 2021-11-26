@@ -77,11 +77,7 @@ public class BottomSheetMenuFragment extends ContactListFragment implements View
     }
 
     protected void checkSearchContent(String content) {
-        if (TextUtils.isEmpty(content)) {
-            srlContactRefresh.setEnabled(true);
-        } else {
-            srlContactRefresh.setEnabled(false);
-        }
+        srlContactRefresh.setEnabled(TextUtils.isEmpty(content));
     }
 
     @Override

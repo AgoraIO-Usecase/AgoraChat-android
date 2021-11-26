@@ -36,7 +36,6 @@ public class SearchContactFragment extends SearchFragment<String> implements Add
     protected void initData() {
         super.initData();
 
-        //获取本地的好友列表
         List<String> localUsers = null;
         if (DemoDbHelper.getInstance(mContext).getUserDao() != null) {
             localUsers = DemoDbHelper.getInstance(mContext).getUserDao().loadContactUsers();
@@ -70,13 +69,11 @@ public class SearchContactFragment extends SearchFragment<String> implements Add
 
     @Override
     public void onItemSubViewClick(View view, int position) {
-        // 添加好友
         mViewModel.addContact((String) mListAdapter.getItem(position), getResources().getString(R.string.em_add_contact_add_a_friend));
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        // 跳转到好友页面
         String username = (String) mListAdapter.getItem(position);
         ContactDetailActivity.actionStart(mContext, username);
     }

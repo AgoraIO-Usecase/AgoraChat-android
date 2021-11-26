@@ -15,9 +15,9 @@ import io.agora.util.EMLog;
 
 
 /**
- * 作为服务器拉取数据和本地数据融合类
- * @param <ResultType> 本地数据库中拉取的数据
- * @param <RequestType> 服务器中拉取的数据
+ * As a server to pull data and local data fusion class
+ * @param <ResultType> Pulled data from the local database
+ * @param <RequestType> Data pulled from the server
  */
 public abstract class NetworkBoundResource<ResultType, RequestType> {
     private static final String TAG = "NetworkBoundResource";
@@ -38,7 +38,6 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
      * work on main thread
      */
     private void init() {
-        // 通知UI开始加载
         result.setValue(Resource.loading(null));
         LiveData<ResultType> dbSource = safeLoadFromDb();
         result.addSource(dbSource, data -> {
@@ -56,32 +55,34 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
      * @param dbSource
      */
     private void fetchFromNetwork(LiveData<ResultType> dbSource) {
-        // 先展示数据库中的数据，处理完网络请求数据后，再从数据库中取出一次进行展示
+        // First display the data in the database, and after processing the network request data,
+        // take it out of the database and display it again
         result.addSource(dbSource, newData-> setValue(Resource.loading(newData)));
         createCall(new ResultCallBack<LiveData<RequestType>>() {
             @Override
             public void onSuccess(LiveData<RequestType> apiResponse) {
-                // 保证回调后在主线程
+                // Ensure that it is in the main thread after the callback
                 mThreadManager.runOnMainThread(() -> {
                     result.addSource(apiResponse, response-> {
                         result.removeSource(apiResponse);
                         result.removeSource(dbSource);
                         if(response != null) {
-                            // 如果结果是EmResult结构，需要判断code，是否请求成功
+                            // If the result is an Result structure, you need to determine the code, whether the request is successful
                             if(response instanceof Result) {
                                 int code = ((Result) response).code;
                                 if(code != ErrorCode.EM_NO_ERROR) {
                                     fetchFailed(code, dbSource, null);
                                 }
                             }
-                            // 在异步线程中处理保存到数据库的逻辑
+                            // Handle the logic of saving to the database in an asynchronous thread
                             mThreadManager.runOnIOThread(() -> {
                                 try {
                                     saveCallResult(processResponse(response));
                                 } catch (Exception e) {
                                     EMLog.e(TAG, "save call result failed: " + e.toString());
                                 }
-                                //为了获取最新的数据，需要从数据库重新取一次数据，保证页面与数据的一致性
+                                //In order to obtain the latest data, it is necessary to retrieve the data from the database
+                                // again to ensure the consistency of the page and the data
                                 mThreadManager.runOnMainThread(() ->
                                         result.addSource(safeLoadFromDb(), newData -> {
                                             setValue(Resource.success(newData));
@@ -108,7 +109,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     }
 
     /**
-     * 安全从数据库加载数据，如果加载失败，则数据返回null。
+     * Safely load data from the database. If the load fails, the data returns null.
      * @return
      */
     private LiveData<ResultType> safeLoadFromDb() {
@@ -166,7 +167,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     protected abstract LiveData<ResultType> loadFromDb();
 
     /**
-     * 此处设计为回调模式，方便在此方法中进行异步操作
+     * This is designed as a callback mode to facilitate asynchronous operations in this method
      * @return
      */
     @MainThread

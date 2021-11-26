@@ -74,7 +74,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
     }
 
     /**
-     * 跳转到目标activity
+     * Jump to target activity
      * @param cls
      */
     public void skipToTarget(Class<?> cls) {
@@ -102,7 +102,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
     }
 
     /**
-     * 判断app是否在前台
+     * Determine whether the app is in the foreground
      * @return
      */
     public boolean isOnForeground() {

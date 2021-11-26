@@ -37,11 +37,9 @@ import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.manager.EaseNotifier;
-import io.agora.chat.uikit.models.EaseEmojicon;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.options.EaseAvatarOptions;
-import io.agora.chat.uikit.provider.EaseEmojiconInfoProvider;
 import io.agora.chat.uikit.provider.EaseFileIconProvider;
 import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
@@ -50,8 +48,8 @@ import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
-import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
+import io.agora.chatdemo.group.GroupHelper;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -60,12 +58,12 @@ import io.agora.util.EMLog;
 
 
 /**
- * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
+ * Demo's helper class, such as initialize Agora Chat SDK
  */
 public class DemoHelper {
     private static final String TAG = DemoHelper.class.getSimpleName();
 
-    public boolean isSDKInit;//SDK是否初始化
+    public boolean isSDKInit;
     private static DemoHelper mInstance;
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
@@ -86,44 +84,42 @@ public class DemoHelper {
 
     public void init(Context context) {
         demoModel = new DemoModel(context);
-        //初始化IM SDK
+        //Initialize Agora Chat SDK
         if(initSDK(context)) {
             // debug mode, you'd better set it to false, if you want release your App officially.
             ChatClient.getInstance().setDebugMode(true);
-            //初始化推送
+            // Initialize Push
             initPush(context);
-            //注册call Receiver
-            //initReceiver(context);
-            //初始化ease ui相关
-            initEaseUI(context);
+            // Initialize UIKit
+            initEaseUIKit(context);
         }
 
     }
 
     /**
-     * 初始化SDK
+     * Initialize Agora Chat SDK
      * @param context
      * @return
      */
     private boolean initSDK(Context context) {
-        // 根据项目需求对SDK进行配置
+        // Set Chat Options
         ChatOptions options = initChatOptions(context);
         if(options == null) {
             return false;
         }
-        //配置自定义的rest server和im server
+        // Configure custom rest server and im server
         options.setRestServer("a61.easemob.com");
         //options.setIMServer("106.75.100.247");
         //options.setImPort(6717);
         options.setUsingHttpsOnly(true);
-        // 初始化SDK
+        // Call UIKit to initialize Agora Chat SDK
         isSDKInit = EaseUIKit.getInstance().init(context, options);
         return isSDKInit();
     }
 
 
     /**
-     * 判断是否之前登录过
+     * Determine if you have logged in before
      * @return
      */
     public boolean isLoggedIn() {
@@ -131,7 +127,7 @@ public class DemoHelper {
     }
 
     /**
-     * 获取IM SDK的入口类
+     * Get ChatClient's entity
      * @return
      */
     public ChatClient getChatClient() {
@@ -139,7 +135,7 @@ public class DemoHelper {
     }
 
     /**
-     * 获取contact manager
+     * Get the entity of contact manager
      * @return
      */
     public ContactManager getContactManager() {
@@ -147,7 +143,7 @@ public class DemoHelper {
     }
 
     /**
-     * 获取group manager
+     * Get the entity of group manager
      * @return
      */
     public GroupManager getGroupManager() {
@@ -155,7 +151,7 @@ public class DemoHelper {
     }
 
     /**
-     * 获取chatroom manager
+     * Get the entity of chatroom manager
      * @return
      */
     public ChatRoomManager getChatroomManager() {
@@ -164,7 +160,7 @@ public class DemoHelper {
 
 
     /**
-     * get EMChatManager
+     * Get the entity of EMChatManager
      * @return
      */
     public ChatManager getChatManager() {
@@ -172,7 +168,7 @@ public class DemoHelper {
     }
 
     /**
-     * get push manager
+     * Get the entity of push manager
      * @return
      */
     public PushManager getPushManager() {
@@ -180,10 +176,11 @@ public class DemoHelper {
     }
 
     /**
+     * Initialize UIKit
      * @param context
      */
-    private void initEaseUI(Context context) {
-        //添加ChatPresenter,ChatPresenter中添加了网络连接状态监听，
+    private void initEaseUIKit(Context context) {
+        //Set custom chat presenter
         EaseUIKit.getInstance().addChatPresenter(GlobalEventsMonitor.getInstance());
         EaseUIKit.getInstance()
                 .setSettingsProvider(new EaseSettingsProvider() {
@@ -227,23 +224,6 @@ public class DemoHelper {
                     @Override
                     public boolean isSpeakerOpened() {
                         return demoModel.getSettingMsgSpeaker();
-                    }
-                })
-                .setEmojiconInfoProvider(new EaseEmojiconInfoProvider() {
-                    @Override
-                    public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
-//                        EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
-//                        for(EaseEmojicon emojicon : data.getEmojiconList()){
-//                            if(emojicon.getIdentityCode().equals(emojiconIdentityCode)){
-//                                return emojicon;
-//                            }
-//                        }
-                        return null;
-                    }
-
-                    @Override
-                    public Map<String, Object> getTextEmojiconMapping() {
-                        return null;
                     }
                 })
                 .setUserProvider(new EaseUserProfileProvider() {
@@ -355,16 +335,6 @@ public class DemoHelper {
         builder.enableFCM("142290967082");
         options.setPushConfig(builder.build());
 
-        // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
-        options.allowChatroomOwnerLeave(demoModel.isChatroomOwnerLeaveAllowed());
-        // 设置退出(主动和被动退出)群组时是否删除聊天消息
-        options.setDeleteMessagesAsExitGroup(demoModel.isDeleteMessagesAsExitGroup());
-        // 设置是否自动接受加群邀请
-        options.setAutoAcceptGroupInvitation(demoModel.isAutoAcceptGroupInvitation());
-        // 是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载
-        options.setAutoTransferMessageAttachments(demoModel.isSetTransferFileByUser());
-        // 是否自动下载缩略图，默认是true为自动下载
-        options.setAutoDownloadThumbnail(demoModel.isSetAutodownloadThumbnail());
         return options;
     }
 
@@ -454,7 +424,7 @@ public class DemoHelper {
     }
 
     /**
-     * 关闭当前进程
+     * Kill current process
      */
     public void killApp() {
         List<Activity> activities = DemoApplication.getInstance().getLifecycleCallbacks().getActivityList();
@@ -470,13 +440,17 @@ public class DemoHelper {
 
 
     /**
-     * 退出登录后，需要处理的业务逻辑
+     * Set custom logic that needs to be processed after logout
      */
     public void logoutSuccess() {
         Log.d(TAG, "logout: onSuccess");
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
     }
 
+    /**
+     * Get avatar's options
+     * @return
+     */
     public EaseAvatarOptions getEaseAvatarOptions() {
         return EaseUIKit.getInstance().getAvatarOptions();
     }
@@ -497,27 +471,19 @@ public class DemoHelper {
     }
 
     /**
-     * 获取本地标记，是否自动登录
+     * Whether to log in automatically
      * @return
      */
     public boolean getAutoLogin() {
         return ChatClient.getInstance().getOptions().getAutoLogin();
     }
 
-    /**
-     * 设置SDK是否初始化
-     * @param init
-     */
-    public void setSDKInit(boolean init) {
-        isSDKInit = init;
-    }
-
     public boolean isSDKInit() {
-        return isSDKInit;
+        return ChatClient.getInstance().isSdkInited();
     }
 
     /**
-     * 向数据库中插入数据
+     * Insert data into the database
      * @param object
      */
     public void insert(Object object) {
@@ -525,7 +491,7 @@ public class DemoHelper {
     }
 
     /**
-     * update
+     * Update the data int the database
      * @param object
      */
     public void update(Object object) {
@@ -533,7 +499,7 @@ public class DemoHelper {
     }
 
     /**
-     * get contact list
+     * Get contact list
      *
      * @return
      */
@@ -551,7 +517,7 @@ public class DemoHelper {
     }
 
     /**
-     * update contact list
+     * Update contact list
      */
     public void updateContactList() {
         if(isLoggedIn()) {
@@ -560,7 +526,7 @@ public class DemoHelper {
     }
 
     /**
-     * 删除联系人
+     * Delete contact
      * @param username
      * @return
      */

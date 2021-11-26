@@ -12,7 +12,6 @@
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorTextPrimary">#ffffff</color>
-    <color name="tab_indicator">#ffffff</color>
 
     <color name="color_main_blue">#005FFF</color>
     <color name="color_main_text">#0D0D0D</color>
@@ -26,6 +25,12 @@
     <color name="color_window_bg">@color/white</color>
     <color name="color_divider">#fff2f2f2</color>
     <color name="color_text_cursor">#114eff</color>
+    <color name="color_light_gray_999999">#999999</color>
+    <color name="color_light_gray_88111111">#88111111</color>
+    <color name="color_light_gray_cccccc">#cccccc</color>
+    <color name="color_black_333333">#333333</color>
+
+    <color name="tab_indicator">#ffffff</color>
 
     <color name="sign_edit_text_bg">#F2F2F2</color>
     <color name="sign_btn_bg">#FF114EFF</color>
@@ -40,10 +45,6 @@
     <color name="contact_color_item_title">#ff333333</color>
     <color name="contact_base_color_divider">#fff2f2f2</color>
     <color name="contact_color_block">@color/color_alert</color>
-    <color name="color_light_gray_999999">#999999</color>
-    <color name="color_light_gray_88111111">#88111111</color>
-    <color name="color_light_gray_cccccc">#cccccc</color>
-    <color name="color_black_333333">#333333</color>
 
     <color name="group_blue_154dfe">#154dfe</color>
     <color name="contacts_blue_005fff">#005fff</color>
@@ -58,8 +59,8 @@
     <color name="dialog_color_btn_warning">@color/white</color>
     <color name="dialog_edit_color_bg">#ddF2F2F2</color>
 
-    <color name="layout_empty_content">#979797</color>
-
     <color name="dialog_change_nickname_bg">#F2F2F2</color>
     <color name="dialog_change_nickname_divider">#363c3c43</color>
+
+    <color name="layout_empty_content">#979797</color>
 </resources>

@@ -50,14 +50,16 @@ import io.agora.chatdemo.sign.SignInActivity;
 import io.agora.util.EMLog;
 
 /**
- * 作为基础activity,放置一些公共的方法
+ * As a basic activity, place some public methods
  */
 public class BaseActivity extends AppCompatActivity {
     public BaseActivity mContext;
     private EaseProgressDialog dialog;
     private AlertDialog logoutDialog;
-    private long dialogCreateTime;//dialog生成事件，用以判断dialog的展示时间
-    private Handler handler = new Handler();//用于dialog延迟消失
+    //Dialog generation time, used to determine the display time of the dialog
+    private long dialogCreateTime;
+    // Used for the dialog delay to disappear
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 添加账号异常监听
+     * Add account exception monitoring
      */
     protected void registerAccountObservable() {
         LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE, EaseEvent.class).observe(this, event -> {
@@ -151,7 +153,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 结束除了当前Activity外的其他Activity
+     * Finish other activities except the current Activity
      */
     protected void finishOtherActivities() {
         UserActivityLifecycleCallbacks lifecycleCallbacks = DemoApplication.getInstance().getLifecycleCallbacks();
@@ -173,14 +175,14 @@ public class BaseActivity extends AppCompatActivity {
 
 
     /**
-     * 初始化toolbar
+     * Initialize toolbar
      * @param toolbar
      */
     public void initToolBar(Toolbar toolbar) {
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);//有返回
-            getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示title
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);//not show title
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +194,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 设置返回按钮的颜色
+     * Set the color of the return icon
      * @param mContext
      * @param colorId
      */
@@ -262,7 +264,7 @@ public class BaseActivity extends AppCompatActivity {
 
         if(null != this.getCurrentFocus()){
             /**
-             * 点击空白位置 隐藏软键盘
+             * Click on the blank position to hide the soft keyboard
              */
             InputMethodManager mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             return mInputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
@@ -273,7 +275,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     /**
-     * 通用页面设置
+     * General page settings
      */
     public void setFitSystemForTheme() {
         setFitSystemForTheme(true, R.color.white);
@@ -281,7 +283,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 通用页面，需要设置沉浸式
+     * General page settings
      * @param fitSystemForTheme
      */
     public void setFitSystemForTheme(boolean fitSystemForTheme) {
@@ -290,7 +292,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 通用页面，需要设置沉浸式
+     * General page settings
      * @param fitSystemForTheme
      */
     public void setFitSystemForTheme2(boolean fitSystemForTheme) {
@@ -299,19 +301,18 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 设置是否是沉浸式，并可设置状态栏颜色
+     * Set whether it is immersive, and set the status bar color
      * @param fitSystemForTheme
-     * @param colorId 颜色资源路径
+     * @param colorId Color resource id
      */
     public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId) {
         setFitSystem(fitSystemForTheme);
-        //初始设置
         StatusBarCompat.compat(this, ContextCompat.getColor(mContext, colorId));
     }
 
     /**
-     * 修改状态栏文字颜色
-     * @param isLight 是否是浅色字体
+     * Modify the text color of the status bar
+     * @param isLight Is it a light font
      */
     public void setStatusBarTextColor(boolean isLight) {
         StatusBarCompat.setLightStatusBar(mContext, !isLight);
@@ -319,18 +320,17 @@ public class BaseActivity extends AppCompatActivity {
 
 
     /**
-     * 设置是否是沉浸式，并可设置状态栏颜色
-     * @param fitSystemForTheme true 不是沉浸式
-     * @param color 状态栏颜色
+     * Set whether it is immersive, and set the status bar color
+     * @param fitSystemForTheme true is not immersive
+     * @param color Status bar color
      */
     public void setFitSystemForTheme(boolean fitSystemForTheme, String color) {
         setFitSystem(fitSystemForTheme);
-        //初始设置
         StatusBarCompat.compat(mContext, Color.parseColor(color));
     }
 
     /**
-     * 设置是否是沉浸式
+     * Whether the setting is immersive
      * @param fitSystemForTheme
      */
     public void setFitSystem(boolean fitSystemForTheme) {
@@ -354,7 +354,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 解析Resource<T>
+     * Parse Resource<T>
      * @param response
      * @param callback
      * @param <T>
@@ -438,7 +438,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public void dismissLoading() {
         if(dialog != null && dialog.isShowing()) {
-            //如果dialog的展示时间过短，则延迟1s再消失
             if(System.currentTimeMillis() - dialogCreateTime < 500 && !isFinishing()) {
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -458,7 +457,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 处理因为Activity重建导致的fragment叠加问题
+     * Deal with the fragment overlay problem caused by Activity reconstruction
      */
     public void clearFragmentsBeforeCreate() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();

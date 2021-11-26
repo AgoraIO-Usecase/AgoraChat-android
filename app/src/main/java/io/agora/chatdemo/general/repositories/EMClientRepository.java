@@ -30,7 +30,6 @@ import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
-import io.agora.chatdemo.general.manager.PreferenceManager;
 import io.agora.chatdemo.general.models.LoginBean;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
@@ -40,14 +39,14 @@ import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
 
 /**
- * 作为ChatClient的repository,处理ChatClient相关的逻辑
+ * Handle ChatClient related logic
  */
 public class EMClientRepository extends BaseEMRepository{
 
     private static final String TAG = EMClientRepository.class.getSimpleName();
 
     /**
-     * 登录过后需要加载的数据
+     * Data to be loaded after login
      * @return
      */
     public LiveData<Resource<Boolean>> loadAllInfoFromHX() {
@@ -78,7 +77,7 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     /**
-     * 注册
+     * Sign in
      * @param userName
      * @param pwd
      * @return
@@ -88,7 +87,7 @@ public class EMClientRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
-                //注册之前先判断SDK是否已经初始化，如果没有先进行SDK的初始化
+                //Before registering, determine whether the SDK has been initialized. If not, perform SDK initialization first.
                 if(!DemoHelper.getInstance().isSDKInit) {
                     DemoHelper.getInstance().init(DemoApplication.getInstance());
                 }
@@ -106,8 +105,9 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     /**
-     * 登录到服务器，可选择密码登录或者token登录
-     * 登录之前先初始化数据库，如果登录失败，再关闭数据库;如果登录成功，则再次检查是否初始化数据库
+     * Log in to the server, you can choose password login or token login
+     * Initialize the database before logging in, if the login fails, then close the database;
+     * if the login is successful, check again whether the database is initialized
      * @param userName
      * @param pwd
      * @param isTokenFlag
@@ -186,7 +186,7 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     /**
-     * 退出登录
+     * Sign out
      * @param unbindDeviceToken
      * @return
      */
@@ -222,18 +222,10 @@ public class EMClientRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
-    /**
-     * 设置本地标记，是否自动登录
-     * @param autoLogin
-     */
-    public void setAutoLogin(boolean autoLogin) {
-        PreferenceManager.getInstance().setAutoLogin(autoLogin);
-    }
-
     private void successForCallBack(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
         // ** manually load all local groups and conversation
         initLocalDb();
-        //从服务器拉取加入的群，防止进入会话页面只显示id
+        //Pull the joined group from the server to prevent only the id from entering the conversation page
         DemoHelper.getInstance().getUsersManager().initUserInfo();
         // get current user id
         String currentUser = ChatClient.getInstance().getCurrentUser();
@@ -262,7 +254,7 @@ public class EMClientRepository extends BaseEMRepository{
         new EMGroupManagerRepository().getAllGroups(new ResultCallBack<List<Group>>() {
             @Override
             public void onSuccess(List<Group> value) {
-                //加载完群组信息后，刷新会话列表页面，保证展示群组名称
+                //After loading the group information, refresh the session list page to ensure that the group name is displayed
                 EMLog.i("ChatPresenter", "login isGroupsSyncedWithServer success");
                 EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
                 LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(event);

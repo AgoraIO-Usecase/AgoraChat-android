@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.agora.chat.ChatRoom;
+import io.agora.chat.uikit.manager.EasePreferenceManager;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.general.db.DemoDbHelper;
@@ -18,7 +19,7 @@ import io.agora.chatdemo.general.manager.PreferenceManager;
 import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 
 /**
- * DemoModel主要用于SP存取及一些数据库的存取
+ * DemoModel is mainly used for SP access and access to some databases
  */
 public class DemoModel {
     private final EMContactManagerRepository mRepository;
@@ -27,7 +28,7 @@ public class DemoModel {
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
     public List<ChatRoom> chatRooms;
 
-    //用户属性数据过期时间设置
+    //User attribute data expiration time setting
     public static long userInfoTimeOut =  7 * 24 * 60 * 60 * 1000;
     
     public DemoModel(Context ctx){
@@ -46,7 +47,6 @@ public class DemoModel {
         }
     }
 
-
     public boolean updateContactList(List<EaseUser> contactList) {
         List<EmUserEntity> userEntities = EmUserEntity.parseList(contactList);
         EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
@@ -57,6 +57,10 @@ public class DemoModel {
         return false;
     }
 
+    /**
+     * Get all contacts, include friends and blacklist
+     * @return
+     */
     public Map<String, EaseUser> getContactList() {
         EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
         if(dao == null) {
@@ -72,7 +76,10 @@ public class DemoModel {
         return map;
     }
 
-
+    /**
+     * Get all users
+     * @return
+     */
     public Map<String, EaseUser> getAllUserList() {
         EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
         if(dao == null) {
@@ -88,7 +95,10 @@ public class DemoModel {
         return map;
     }
 
-
+    /**
+     * Get contacts who are friends
+     * @return
+     */
     public Map<String, EaseUser> getFriendContactList() {
         EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
         if(dao == null) {
@@ -105,7 +115,7 @@ public class DemoModel {
     }
 
     /**
-     * 判断是否是联系人
+     * Determine whether it is a contact
      * @param userId
      * @return
      */
@@ -113,7 +123,11 @@ public class DemoModel {
         Map<String, EaseUser> contactList = getFriendContactList();
         return contactList.keySet().contains(userId);
     }
-    
+
+    /**
+     * Save contact to the database
+     * @param user
+     */
     public void saveContact(EaseUser user){
         EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
         if(dao == null) {
@@ -131,7 +145,7 @@ public class DemoModel {
     }
 
     /**
-     * 向数据库中插入数据
+     * Insert data into the database
      * @param object
      */
     public void insert(Object object) {
@@ -153,8 +167,7 @@ public class DemoModel {
 
 
     /**
-     * 查找有关用户用户属性过期的用户ID
-     *
+     * Find out the user ID about the user's user attribute expired
      */
     public List<String> selectTimeOutUsers() {
         DemoDbHelper dbHelper = getDbHelper();
@@ -166,7 +179,7 @@ public class DemoModel {
     }
 
     /**
-     * 保存是否删除联系人的状态
+     * Save whether to delete the status of the contact
      * @param username
      * @param isDelete
      */
@@ -178,7 +191,7 @@ public class DemoModel {
     }
 
     /**
-     * 查看联系人是否删除
+     * Check if the contact is deleted
      * @param username
      * @return
      */
@@ -187,30 +200,6 @@ public class DemoModel {
         return sp.getBoolean(username, false);
     }
 
-    /**
-     * 设置昵称
-     * @param nickname
-     */
-    public void setCurrentUserNick(String nickname) {
-        PreferenceManager.getInstance().setCurrentUserNick(nickname);
-    }
-
-    public String getCurrentUserNick() {
-        return PreferenceManager.getInstance().getCurrentUserNick();
-    }
-
-    /**
-     * 设置头像
-     * @param avatar
-     */
-    private void setCurrentUserAvatar(String avatar) {
-        PreferenceManager.getInstance().setCurrentUserAvatar(avatar);
-    }
-
-    private String getCurrentUserAvatar() {
-        return PreferenceManager.getInstance().getCurrentUserAvatar();
-    }
-    
     public void setSettingMsgNotification(boolean paramBoolean) {
         PreferenceManager.getInstance().setSettingMsgNotification(paramBoolean);
         valueCache.put(Key.VibrateAndPlayToneOn, paramBoolean);
@@ -293,7 +282,8 @@ public class DemoModel {
 
 
     /**
-     * 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
+     * Set whether to allow the chat room owner to leave and delete the conversation record,
+     * which means that the owner will never receive any messages
      * @param value
      */
     public void allowChatroomOwnerLeave(boolean value){
@@ -301,7 +291,7 @@ public class DemoModel {
     }
 
     /**
-     * 获取聊天室owner离开时的设置
+     * Get the settings when the chat room owner leaves
      * @return
      */
     public boolean isChatroomOwnerLeaveAllowed(){
@@ -309,7 +299,7 @@ public class DemoModel {
     }
 
     /**
-     * 设置退出(主动和被动退出)群组时是否删除聊天消息
+     * Set whether to delete chat messages when exiting (active and passive exit) groups
      * @param value
      */
     public void setDeleteMessagesAsExitGroup(boolean value) {
@@ -317,7 +307,7 @@ public class DemoModel {
     }
 
     /**
-     * 获取退出(主动和被动退出)群组时是否删除聊天消息
+     * Get whether to delete chat messages when exiting (active and passive exit) groups
      * @return
      */
     public boolean isDeleteMessagesAsExitGroup() {
@@ -325,7 +315,7 @@ public class DemoModel {
     }
 
     /**
-     * 设置退出（主动和被动）聊天室时是否删除聊天信息
+     * Set whether to delete chat messages when exiting (active and passive exit) chatroom
      * @param value
      */
     public void setDeleteMessagesAsExitChatRoom(boolean value) {
@@ -333,7 +323,7 @@ public class DemoModel {
     }
 
     /**
-     * 获取退出(主动和被动退出)聊天室时是否删除聊天消息
+     * Get whether to delete chat messages when exiting (active and passive exit) chatroom
      * @return
      */
     public boolean isDeleteMessagesAsExitChatRoom() {
@@ -341,7 +331,7 @@ public class DemoModel {
     }
 
     /**
-     * 设置是否自动接受加群邀请
+     * Set whether to automatically accept group invitations
      * @param value
      */
     public void setAutoAcceptGroupInvitation(boolean value) {
@@ -349,7 +339,7 @@ public class DemoModel {
     }
 
     /**
-     * 获取是否自动接受加群邀请
+     * Get whether to automatically accept group invitation
      * @return
      */
     public boolean isAutoAcceptGroupInvitation() {
@@ -357,15 +347,17 @@ public class DemoModel {
     }
 
     /**
-     * 设置是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载
+     * Set whether to automatically upload message attachments to the ring letter server,
+     * the default is True is to use the ring letter server to upload and download
      * @param value
      */
-    public void setTransfeFileByUser(boolean value) {
-        OptionsHelper.getInstance().setTransfeFileByUser(value);
+    public void setTransferFileByUser(boolean value) {
+        OptionsHelper.getInstance().setTransferFileByUser(value);
     }
 
     /**
-     * 获取是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载
+     * Get whether to automatically upload the message attachment to the ring letter server,
+     * the default is True is to use the ring letter server to upload and download
      * @return
      */
     public boolean isSetTransferFileByUser() {
@@ -373,7 +365,7 @@ public class DemoModel {
     }
 
     /**
-     * 是否自动下载缩略图，默认是true为自动下载
+     * Set whether to download thumbnails automatically, the default is true for automatic download
      * @param autodownload
      */
     public void setAutodownloadThumbnail(boolean autodownload) {
@@ -381,7 +373,7 @@ public class DemoModel {
     }
 
     /**
-     * 获取是否自动下载缩略图
+     * Get whether to download thumbnails automatically
      * @return
      */
     public boolean isSetAutodownloadThumbnail() {
@@ -390,7 +382,7 @@ public class DemoModel {
 
 
     /**
-     * 设置是否只使用Https
+     * Set whether to use Https only
      * @param usingHttpsOnly
      */
     public void setUsingHttpsOnly(boolean usingHttpsOnly) {
@@ -398,7 +390,7 @@ public class DemoModel {
     }
 
     /**
-     * 获取是否只使用Https
+     * Get whether to use Https only
      * @return
      */
     public boolean getUsingHttpsOnly() {
@@ -414,17 +406,16 @@ public class DemoModel {
     }
 
     /**
-     * 保存未发送的文本消息内容
+     * Save unsent text message content
      * @param toChatUsername
      * @param content
      */
     public void saveUnSendMsg(String toChatUsername, String content) {
-        //EasePreferenceManager.getInstance().saveUnSendMsgInfo(toChatUsername, content);
+        EasePreferenceManager.getInstance().saveUnSendMsgInfo(toChatUsername, content);
     }
 
     public String getUnSendMsg(String toChatUsername) {
-        //return EasePreferenceManager.getInstance().getUnSendMsgInfo(toChatUsername);
-        return "";
+        return EasePreferenceManager.getInstance().getUnSendMsgInfo(toChatUsername);
     }
 
 

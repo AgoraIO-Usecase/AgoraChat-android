@@ -109,7 +109,7 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
 
 
     /**
-     * 解析Resource<T>
+     * Parse Resource<T>
      * @param response
      * @param callback
      * @param <T>

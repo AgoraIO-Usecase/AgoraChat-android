@@ -22,7 +22,7 @@ public class OptionsHelper {
     }
 
     /**
-     * 设置是否只使用Https
+     * Set whether to use Https only
      * @param usingHttpsOnly
      */
     public void setUsingHttpsOnly(boolean usingHttpsOnly) {
@@ -30,7 +30,7 @@ public class OptionsHelper {
     }
 
     /**
-     * 获取是否只使用Https
+     * Get whether to use Https only
      * @return
      */
     public boolean getUsingHttpsOnly() {
@@ -38,7 +38,8 @@ public class OptionsHelper {
     }
 
     /**
-     * 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
+     * Set whether to allow the chat room owner to leave and delete the conversation record,
+     * which means that the owner will never receive any messages
      * @param value
      */
     public void allowChatroomOwnerLeave(boolean value){
@@ -46,7 +47,7 @@ public class OptionsHelper {
     }
 
     /**
-     * 获取聊天室owner离开时的设置
+     * Get the settings when the chat room owner leaves
      * @return
      */
     public boolean isChatroomOwnerLeaveAllowed(){
@@ -54,7 +55,7 @@ public class OptionsHelper {
     }
 
     /**
-     * 设置退出(主动和被动退出)群组时是否删除聊天消息
+     * Set whether to delete chat messages when exiting (active and passive exit) groups
      * @param value
      */
     public void setDeleteMessagesAsExitGroup(boolean value) {
@@ -62,24 +63,31 @@ public class OptionsHelper {
     }
 
     /**
-     * 获取退出(主动和被动退出)群组时是否删除聊天消息
+     * Get whether to delete chat messages when exiting (active and passive exit) groups
      * @return
      */
     public boolean isDeleteMessagesAsExitGroup() {
         return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
     }
 
-
+    /**
+     * Set whether to delete chat messages when exiting (active and passive exit) chatroom
+     * @param value
+     */
     public void setDeleteMessagesAsExitChatRoom(boolean value){
         PreferenceManager.getInstance().setDeleteMessagesAsExitChatRoom(value);
     }
 
+    /**
+     * Get whether to delete chat messages when exiting (active and passive exit) chatroom
+     * @return
+     */
     public boolean isDeleteMessagesAsExitChatRoom() {
         return PreferenceManager.getInstance().isDeleteMessagesAsExitChatRoom();
     }
 
     /**
-     * 设置是否自动接受加群邀请
+     * Set whether to automatically accept group invitations
      * @param value
      */
     public void setAutoAcceptGroupInvitation(boolean value) {
@@ -87,7 +95,7 @@ public class OptionsHelper {
     }
 
     /**
-     * 获取是否自动接受加群邀请
+     * Get whether to automatically accept group invitation
      * @return
      */
     public boolean isAutoAcceptGroupInvitation() {
@@ -95,15 +103,17 @@ public class OptionsHelper {
     }
 
     /**
-     * 设置是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载
+     * Set whether to automatically upload message attachments to the ring letter server,
+     * the default is True is to use the ring letter server to upload and download
      * @param value
      */
-    public void setTransfeFileByUser(boolean value) {
+    public void setTransferFileByUser(boolean value) {
         PreferenceManager.getInstance().setTransferFileByUser(value);
     }
 
     /**
-     * 获取是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载
+     * Get whether to automatically upload the message attachment to the ring letter server,
+     * the default is True is to use the ring letter server to upload and download
      * @return
      */
     public boolean isSetTransferFileByUser() {
@@ -111,7 +121,7 @@ public class OptionsHelper {
     }
 
     /**
-     * 是否自动下载缩略图，默认是true为自动下载
+     * Set whether to download thumbnails automatically, the default is true for automatic download
      * @param autodownload
      */
     public void setAutodownloadThumbnail(boolean autodownload) {
@@ -119,17 +129,25 @@ public class OptionsHelper {
     }
 
     /**
-     * 获取是否自动下载缩略图
+     * Get whether to download thumbnails automatically
      * @return
      */
     public boolean isSetAutodownloadThumbnail() {
         return PreferenceManager.getInstance().isSetAutodownloadThumbnail();
     }
 
+    /**
+     * Set whether sort messages by server time
+     * @param sortByServerTime
+     */
     public void setSortMessageByServerTime(boolean sortByServerTime) {
         PreferenceManager.getInstance().setSortMessageByServerTime(sortByServerTime);
     }
 
+    /**
+     * Get whether sort messages by server time
+     * @return
+     */
     public boolean isSortMessageByServerTime() {
         return PreferenceManager.getInstance().isSortMessageByServerTime();
     }

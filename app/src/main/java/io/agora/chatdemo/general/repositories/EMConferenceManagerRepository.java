@@ -29,15 +29,14 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
                 EaseThreadManager.getInstance().runOnIOThread(() -> {
                     List<String> contactList = new ArrayList<>();
                     if(TextUtils.isEmpty(groupId)) {
-                        //从本地加载好友联系人
+                        //Load contacts from local
                         if(getUserDao() != null) {
                             contactList.addAll(getUserDao().loadContactUsers());
                         }
                     }else {
-                        // 根据groupId获取群组中所有成员
+                        // Get all members in the group according to groupId
                         contactList = new EMGroupManagerRepository().getAllGroupMemberByServer(groupId);
                     }
-                    //获取管理员列表
                     try {
                         Group group = ChatClient.getInstance().groupManager().getGroupFromServer(groupId, true);
                         if(group != null) {

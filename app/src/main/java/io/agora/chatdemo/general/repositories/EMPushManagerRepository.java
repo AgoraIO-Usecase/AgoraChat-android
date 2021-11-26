@@ -19,7 +19,7 @@ import io.agora.exceptions.ChatException;
 public class EMPushManagerRepository extends BaseEMRepository {
 
     /**
-     * 获取推送配置
+     * Get push configuration
      * @return
      */
     public LiveData<Resource<PushConfigs>> getPushConfigsFromServer() {
@@ -56,7 +56,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
     }
 
     /**
-     * 获取推送配置
+     * Get push configuration
      * @return
      */
     public PushConfigs fetchPushConfigsFromServer() {
@@ -69,8 +69,8 @@ public class EMPushManagerRepository extends BaseEMRepository {
     }
 
     /**
-     * 设置免打扰时间段
-     * 如果end小于start,则end为第二天的hour
+     * Set Do Not Disturb Time Period
+     * If end is less than start, then end is the hour of the next day
      * @param start
      * @param end
      * @return
@@ -93,7 +93,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
     }
 
     /**
-     * 允许离线推送
+     * Allow offline push
      * @return
      */
     public LiveData<Resource<Boolean>> enableOfflinePush() {
@@ -114,7 +114,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
     }
 
     /**
-     * 更新推送昵称
+     * Update push nickname
      * @param nickname
      * @return
      */
@@ -143,7 +143,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
     }
 
     /**
-     * 设置推送消息样式
+     * Set push message style
      * @param style
      * @return
      */
@@ -172,10 +172,10 @@ public class EMPushManagerRepository extends BaseEMRepository {
     }
 
     /**
-     * 设置单聊用户聊天免打扰
+     * Set Do Not Disturb for Single Chat User Chat
      *
-     * @param userId 用户名
-     * @param noPush 是否免打扰
+     * @param userId
+     * @param noPush
      */
     public LiveData<Resource<Boolean>> setUserNotDisturb(String userId, boolean noPush) {
         return new NetworkOnlyResource<Boolean>() {
@@ -201,7 +201,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
     }
 
     /**
-     * 获取聊天免打扰用户
+     * Get chat do not disturb users
      */
     public LiveData<Resource<List<String>>> getNoPushUsers() {
         return new NetworkOnlyResource<List<String>>() {

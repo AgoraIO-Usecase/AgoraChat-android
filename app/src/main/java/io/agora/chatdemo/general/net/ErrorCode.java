@@ -5,62 +5,61 @@ import io.agora.Error;
 import io.agora.chatdemo.R;
 
 /**
- * 定义一些本地的错误code
+ * Define some local error codes
  */
 public class ErrorCode extends Error {
     /**
-     * 当前网络不可用
+     * Network is unavailable
      */
     public static final int NETWORK_ERROR = -2;
 
     /**
-     * 未登录过环信
+     * Haven't logged in to Agora Chat SDK
      */
     public static final int NOT_LOGIN = -8;
 
     /**
-     * result解析错误
+     * result parsing error
      */
     public static final int PARSE_ERROR = -10;
 
     /**
-     * 网络问题请稍后重试
+     * Network problem, please try again later
      */
     public static final int ERR_UNKNOWN = -20;
 
     /**
-     * 安卓版本问题,只支持4.4以上
+     * Android version issue, only supports above 4.4
      */
     public static final int ERR_IMAGE_ANDROID_MIN_VERSION = -50;
 
     /**
-     * 文件不存在
+     * file does not exist
      */
     public static final int ERR_FILE_NOT_EXIST = -55;
 
     /**
-     * 添加自己为好友
+     * Add self as a friend
      */
     public static final int ADD_SELF_ERROR = -100;
 
     /**
-     * 已经是好友
+     * Already friends
      */
     public static final int FRIEND_ERROR = -101;
 
     /**
-     * 已经添加到黑名单中
+     * Has been added to the blacklist
      */
     public static final int FRIEND_BLACK_ERROR = -102;
 
     /**
-     * 没有群组成员
+     * No group members
      */
     public static final int ERR_GROUP_NO_MEMBERS = -105;
 
-
     /**
-     * 删除对话失败
+     * Failed to delete conversation
      */
     public static final int DELETE_CONVERSATION_ERROR = -110;
 

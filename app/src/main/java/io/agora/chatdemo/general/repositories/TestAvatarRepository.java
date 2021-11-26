@@ -40,6 +40,13 @@ public class TestAvatarRepository {
             fillIndexList();
             return getAvatar();
         }
+    }
 
+    public String getAvatarUrl() {
+        return String.valueOf(getAvatar());
+    }
+
+    public List<Integer> getAvatarList() {
+        return avatarlist;
     }
 }

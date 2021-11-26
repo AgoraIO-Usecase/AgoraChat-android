@@ -1,7 +1,5 @@
 package io.agora.chatdemo.general.repositories;
 
-import static io.agora.chatdemo.general.constant.DemoConstant.DEFAULT_AVATARS;
-
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -15,7 +13,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import io.agora.CallBack;
 import io.agora.Error;
@@ -143,7 +140,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 从服务器批量获取用户信息
+     * Obtain user information in batches from the server
      */
     private void fetchUserInfoByIds(String[] users, List<String> blackList, List<EaseUser> easeUsers, List<EaseUser> exitUsers, ResultCallBack<LiveData<List<EaseUser>>> callBack, boolean callback){
         ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(users, new ValueCallBack<Map<String, UserInfo>>() {
@@ -204,7 +201,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取联系人列表
+     * Get contact list
      * @param callBack
      */
     public void getContactList(ResultCallBack<List<EaseUser>> callBack) {
@@ -272,7 +269,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取黑名单
+     * Get blacklist
      * @return
      */
     public LiveData<Resource<List<EaseUser>>> getBlackContactList() {
@@ -297,7 +294,6 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(List<String> value) {
                         if(value != null && value.size()> 0) {
-                            //回调返回的数据
                             List<EaseUser> easeUsers = new ArrayList<>();
                             int size = value.size();
                             int index = 0;
@@ -346,7 +342,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 获取黑名单用户列表
+     * Get the list of blacklisted users
      * @param callBack
      */
     public void getBlackContactList(ResultCallBack<List<EaseUser>> callBack) {
@@ -378,7 +374,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 删除联系人
+     * Delete contact
      * @param username
      * @return
      */
@@ -409,10 +405,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 添加到黑名单
+     * Add to blacklist
      * @param username
-     * @param both 把用户加入黑民单时，如果是both双方发消息时对方都收不到；如果不是，
-     *             则我能给黑名单的中用户发消息，但是对方发给我时我是收不到的
+     * @param both
      * @return
      */
     public LiveData<Resource<Boolean>> addUserToBlackList(String username, boolean both) {
@@ -441,7 +436,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移出黑名单
+     * Remove from blacklist
      * @param username
      * @return
      */
@@ -653,7 +648,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             EaseUser userInfo = DemoHelper.getInstance().getUsersManager().getCurrentUserInfo();
                             if(TextUtils.isEmpty(userInfo.getAvatar())) {
                                 // Set random avatar, you should remove it
-                                user.setAvatar( DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
+                                user.setAvatar( new TestAvatarRepository().getAvatarUrl());
                             }else{
                                 user.setAvatar(userInfo.getAvatar());
                             }
@@ -763,10 +758,10 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 if(!TextUtils.isEmpty(avatar)) {
                     item.setAvatar(avatar);
                 }else {
-                    item.setAvatar(DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
+                    item.setAvatar(new TestAvatarRepository().getAvatarUrl());
                 }
             }else{
-                item.setAvatar(DEFAULT_AVATARS[new Random().nextInt(DEFAULT_AVATARS.length)]+"");
+                item.setAvatar(new TestAvatarRepository().getAvatarUrl());
             }
         }
     }

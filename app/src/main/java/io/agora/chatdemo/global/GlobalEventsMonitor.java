@@ -53,8 +53,7 @@ import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
 
 /**
- * 主要用于chat过程中的全局监听，并对相应的事件进行处理
- * {@link #init()}方法建议在登录成功以后进行调用
+ * Mainly used to set up the global monitoring of Agora Chat SDK in the project
  */
 public class GlobalEventsMonitor extends EaseChatPresenter {
     private static final String TAG = GlobalEventsMonitor.class.getSimpleName();
@@ -74,17 +73,17 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         appContext = DemoApplication.getInstance();
         initHandler(appContext.getMainLooper());
         messageChangeLiveData = LiveDataBus.get();
-        //添加网络连接状态监听
+        //Add network connection status monitoring
         EaseUIKit.getInstance().setOnEaseChatConnectionListener(new ChatConnectionListener());
-        //添加多端登录监听
+        //Add multi-terminal login monitoring
         DemoHelper.getInstance().getChatClient().addMultiDeviceListener(new ChatMultiDeviceListener());
-        //添加群组监听
+        //Add group change listener
         DemoHelper.getInstance().getGroupManager().addGroupChangeListener(new ChatGroupListener());
-        //添加联系人监听
+        //Add contact listener
         DemoHelper.getInstance().getContactManager().setContactListener(new ChatContactListener());
-        //添加聊天室监听
+        //Add chat room change listener
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
-        //添加对会话的监听（监听已读回执）
+        //Add monitoring of conversation (listening to read receipts)
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
     }
 
@@ -97,13 +96,6 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             }
         }
         return instance;
-    }
-
-    /**
-     * 将需要登录成功进入MainActivity中初始化的逻辑，放到此处进行处理
-     */
-    public void init() {
-
     }
 
     public void initHandler(Looper looper) {
@@ -149,7 +141,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         for (ChatMessage message : messages) {
             EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
             EMLog.d(TAG, "onMessageReceived: " + message.getType());
-            // 如果设置群组离线消息免打扰，则不进行消息通知
+            // If you set the group offline message do not disturb, no message notification will be made
             List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
             if(disabledIds != null && disabledIds.contains(message.conversationId())) {
                 return;
@@ -166,7 +158,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
 
     /**
-     * 判断是否已经启动了MainActivity
+     * Determine whether MainActivity has been started
      * @return
      */
     private synchronized boolean isAppLaunchMain() {
@@ -268,8 +260,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
             super.onInvitationReceived(groupId, groupName, inviter, reason);
-            //移除相同的请求
-
+            // Remove the same request
             List<ChatMessage> allMessages = EaseNotificationMsgManager.getInstance().getAllMessages();
             if(allMessages != null && !allMessages.isEmpty()) {
                 for (ChatMessage message : allMessages) {
@@ -367,7 +358,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         @Override
         public void onRequestToJoinReceived(String groupId, String groupName, String applicant, String reason) {
             super.onRequestToJoinReceived(groupId, groupName, applicant, reason);
-            //移除相同的请求
+            //Remove the same request
             List<ChatMessage> allMessages = EaseNotificationMsgManager.getInstance().getAllMessages();
             if(allMessages != null && !allMessages.isEmpty()) {
                 for (ChatMessage message : allMessages) {
@@ -708,19 +699,18 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
             String message = null;
             switch (event) {
-                case CONTACT_REMOVE: //好友已经在其他机子上被移除
+                case CONTACT_REMOVE: //The friend has been removed from another devices
                     EMLog.i("ChatMultiDeviceListener", "CONTACT_REMOVE");
                     message = DemoConstant.CONTACT_REMOVE;
                     if(dbHelper.getUserDao() != null) {
                         dbHelper.getUserDao().deleteUser(target);
                     }
                     removeTargetSystemMessage(target, DemoConstant.SYSTEM_MESSAGE_FROM);
-                    // TODO: 2020/1/16 0016 确认此处逻辑，是否是删除当前的target
                     DemoHelper.getInstance().getChatManager().deleteConversation(target, false);
 
                     showToast("CONTACT_REMOVE");
                     break;
-                case CONTACT_ACCEPT: //好友请求已经在其他机子上被同意
+                case CONTACT_ACCEPT: //The friend request has been approved on another devices
                     EMLog.i("ChatMultiDeviceListener", "CONTACT_ACCEPT");
                     message = DemoConstant.CONTACT_ACCEPT;
                     EmUserEntity  entity = new EmUserEntity();
@@ -732,14 +722,14 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
                     showToast("CONTACT_ACCEPT");
                     break;
-                case CONTACT_DECLINE: //好友请求已经在其他机子上被拒绝
+                case CONTACT_DECLINE: //The friend request has been rejected on other devices
                     EMLog.i("ChatMultiDeviceListener", "CONTACT_DECLINE");
                     message = DemoConstant.CONTACT_DECLINE;
                     updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_DECLINE);
 
                     showToast("CONTACT_DECLINE");
                     break;
-                case CONTACT_BAN: //当前用户在其他设备加某人进入黑名单
+                case CONTACT_BAN: //The current user adds someone to the blacklist on other devices
                     EMLog.i("ChatMultiDeviceListener", "CONTACT_BAN");
                     message = DemoConstant.CONTACT_BAN;
                     if(dbHelper.getUserDao() != null) {
@@ -751,7 +741,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
                     showToast("CONTACT_BAN");
                     break;
-                case CONTACT_ALLOW: // 好友在其他设备被移出黑名单
+                case CONTACT_ALLOW: // Friends are removed from the blacklist on other devices
                     EMLog.i("ChatMultiDeviceListener", "CONTACT_ALLOW");
                     message = DemoConstant.CONTACT_ALLOW;
                     updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_ALLOW);
@@ -926,7 +916,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
     }
 
     /**
-     * 移除目标所有的消息记录，如果目标被删除
+     * Remove all message records of the target, if the target is deleted
      * @param target
      */
     private void removeTargetSystemMessage(String target, String params) {
@@ -948,7 +938,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
     }
 
     /**
-     * 移除目标所有的消息记录，如果目标被删除
+     * Remove all message records of the target, if the target is deleted
      * @param target1
      */
     private void removeTargetSystemMessage(String target1, String params1, String target2, String params2) {

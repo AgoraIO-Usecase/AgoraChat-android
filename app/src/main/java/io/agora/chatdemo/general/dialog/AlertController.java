@@ -83,7 +83,7 @@ class AlertController {
                 viewHelper = new DialogViewHelper(mContext, contentViewId);
             }
             if (viewHelper == null) {
-                throw new IllegalArgumentException("未设置布局");
+                throw new IllegalArgumentException("Not set layout");
             }
             //给dialog设置布局
             mAlert.getDialog().setContentView(viewHelper.getContentView());

@@ -3,9 +3,6 @@ package io.agora.chatdemo.general.callbacks;
 
 import io.agora.CallBack;
 
-/**
- * 作为EMCallBack的抽象类，onError()和onProgress()根据情况进行重写
- */
 public abstract class DemoCallBack implements CallBack {
 
     @Override

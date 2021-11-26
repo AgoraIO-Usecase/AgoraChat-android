@@ -44,11 +44,7 @@ public class AlertDialog extends Dialog {
         return mAlert.getViewById(viewId);
     }
 
-    /**
-     * 建造者模式的实现
-     */
     public static class Builder {
-        //容器 用来存储事先设置的参数
         private final AlertController.AlertParams P;
         private AlertDialog dialog;
 
@@ -61,35 +57,16 @@ public class AlertDialog extends Dialog {
                     context, themeResId);
         }
 
-        /**
-         * 以资源id形式设置布局
-         *
-         * @param contentViewId
-         * @return
-         */
         public Builder setContentView(int contentViewId) {
             P.contentViewId = contentViewId;
             return this;
         }
 
-        /**
-         * 以view对象形式设置布局
-         *
-         * @param contentView
-         * @return
-         */
         public Builder setContentView(View contentView) {
             P.contentView = contentView;
             return this;
         }
 
-        /**
-         * 根据控件id来设置文字内容
-         *
-         * @param viewId
-         * @param text
-         * @return
-         */
         public Builder setText(int viewId, String text) {
             P.texts.put(viewId, text);
             return this;
@@ -99,25 +76,12 @@ public class AlertDialog extends Dialog {
             P.texts.put(viewId, text);
             return this;
         }
-        /**
-         * 根据控件id来设置图片
-         *
-         * @param viewId
-         * @param imageId
-         * @return
-         */
+
         public Builder setImageview(int viewId, int imageId) {
             P.imageViews.put(viewId, imageId);
             return this;
         }
 
-        /**
-         * 根据控件id来设置监听
-         *
-         * @param viewId
-         * @param listener
-         * @return
-         */
         public Builder setOnClickListener(int viewId, View.OnClickListener listener) {
             P.listeners.put(viewId, listener);
             return this;
@@ -169,55 +133,26 @@ public class AlertDialog extends Dialog {
             }
         }
 
-        /**
-         * 设置全宽
-         *
-         * @return
-         */
         public Builder setFullWidth() {
             P.mWidth = ViewGroup.LayoutParams.MATCH_PARENT;
             return this;
         }
 
-        /**
-         * 设置底部弹出动画
-         *
-         * @return
-         */
         public Builder setFromBottomAnimation() {
             P.mAnimation = R.style.dialog_from_bottom_anim;
             return this;
         }
 
-        /**
-         * 设置gravity等属性
-         *
-         * @param gravity
-         * @return
-         */
         public Builder setGravity(int gravity) {
             P.mGravity = gravity;
             return this;
         }
 
-        /**
-         * 设置动画效果
-         *
-         * @param animation
-         * @return
-         */
         public Builder setAnimation(int animation) {
             P.mAnimation = animation;
             return this;
         }
 
-        /**
-         * 设置布局宽高等参数
-         *
-         * @param width
-         * @param height
-         * @return
-         */
         public Builder setLayoutParams(int width, int height) {
             P.mWidth = width;
             P.mHeight = height;

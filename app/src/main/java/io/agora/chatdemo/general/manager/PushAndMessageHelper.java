@@ -24,7 +24,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.exceptions.ChatException;
 
 /**
- * 用于处理推送及消息相关
+ * Used to handle push and message related
  */
 public class PushAndMessageHelper {
 
@@ -32,7 +32,7 @@ public class PushAndMessageHelper {
 
 
     /**
-     * 转发消息
+     * Forward message
      * @param toChatUsername
      * @param msgId
      */
@@ -61,7 +61,7 @@ public class PushAndMessageHelper {
                     sendImageMessage(toChatUsername, uri);
                 }else {
                     LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD)
-                            .postValue(new EaseEvent("不存在图片资源", EaseEvent.TYPE.MESSAGE));
+                            .postValue(new EaseEvent("No image resource", EaseEvent.TYPE.MESSAGE));
                 }
                 break;
         }
@@ -85,7 +85,7 @@ public class PushAndMessageHelper {
 
 
     /**
-     * 获取系统消息内容
+     * Get system message content
      * @param msg
      * @return
      */
@@ -152,7 +152,7 @@ public class PushAndMessageHelper {
     }
 
     /**
-     * 获取系统消息内容
+     * Get system message content
      * @param msg
      * @return
      */
@@ -231,7 +231,7 @@ public class PushAndMessageHelper {
     }
 
     /**
-     * 发送文本消息
+     * Send text message
      * @param toChatUsername
      * @param content
      */

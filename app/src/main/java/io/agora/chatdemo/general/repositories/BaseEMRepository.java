@@ -37,7 +37,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * 获取本地标记，是否自动登录
+     * Whether to log in automatically
      * @return
      */
     public boolean isAutoLogin() {
@@ -45,7 +45,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * 获取当前用户
+     * Get current user
      * @return
      */
     public String getCurrentUser() {
@@ -109,7 +109,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * 在主线程执行
+     * Run on UI thread
      * @param runnable
      */
     public void runOnMainThread(Runnable runnable) {
@@ -117,7 +117,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * 在异步线程
+     * In asynchronous thread
      * @param runnable
      */
     public void runOnIOThread(Runnable runnable) {

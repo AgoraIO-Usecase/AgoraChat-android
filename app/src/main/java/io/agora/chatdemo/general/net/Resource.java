@@ -48,7 +48,7 @@ public class Resource<T> {
     }
 
     /**
-     * 获取错误信息
+     * Get error message
      * @return
      */
     public String getMessage() {

@@ -59,7 +59,6 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
         RelativeLayout middleParent = view.findViewById(R.id.rl_dialog_middle);
         if(middleParent != null) {
             LayoutInflater.from(mContext).inflate(layoutId, middleParent);
-            //同时使middleParent可见
             view.findViewById(R.id.rl_dialog_middle).setVisibility(View.VISIBLE);
         }
     }
@@ -67,7 +66,6 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
     @Override
     public void onStart() {
         super.onStart();
-        //宽度填满，高度自适应
         try {
             Window dialogWindow = getDialog().getWindow();
             WindowManager.LayoutParams lp = dialogWindow.getAttributes();
@@ -130,10 +128,6 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
         return mBackStackId;
     }
 
-    /**
-     * 获取中间布局的id
-     * @return
-     */
     public int getMiddleLayoutId() {
         return 0;
     }
@@ -227,26 +221,14 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
         }
     }
 
-    /**
-     * 设置确定按钮的点击事件
-     * @param listener
-     */
     private void setOnConfirmClickListener(OnConfirmClickListener listener) {
         this.mOnConfirmClickListener = listener;
     }
 
-    /**
-     * 设置取消事件
-     * @param cancelClickListener
-     */
     private void setOnCancelClickListener(onCancelClickListener cancelClickListener) {
         this.mOnCancelClickListener = cancelClickListener;
     }
 
-    /**
-     * 点击了取消按钮
-     * @param v
-     */
     public void onCancelClick(View v) {
         dismiss();
         if(mOnCancelClickListener != null) {
@@ -254,10 +236,6 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
         }
     }
 
-    /**
-     * 点击了确认按钮
-     * @param v
-     */
     public void onConfirmClick(View v) {
         dismiss();
         if(mOnConfirmClickListener != null) {
@@ -265,16 +243,10 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
         }
     }
 
-    /**
-     * 确定事件的点击事件
-     */
     public interface OnConfirmClickListener {
         void onConfirmClick(View view);
     }
 
-    /**
-     * 点击取消
-     */
     public interface onCancelClickListener {
         void onCancelClick(View view);
     }

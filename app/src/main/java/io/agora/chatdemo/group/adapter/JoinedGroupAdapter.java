@@ -58,7 +58,7 @@ public class JoinedGroupAdapter extends EaseBaseRecyclerViewAdapter<Group> {
 //                mLabel.setVisibility(View.VISIBLE);
 //                mLabel.setText(R.string.group_owner);
 //            }
-            memberNum.setText("("+item.getMemberCount()+")");
+//            memberNum.setText("("+item.getMemberCount()+")");
         }
     }
 

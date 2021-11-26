@@ -103,7 +103,6 @@ public class JoinedGroupFragment extends PublicGroupFragment {
 
     @Override
     public void onItemClick(View view, int position) {
-        //跳转到群聊页面
         Group group = mAdapter.getItem(position);
         GroupDetailActivity.actionStart(mContext, group.getGroupId());
     }

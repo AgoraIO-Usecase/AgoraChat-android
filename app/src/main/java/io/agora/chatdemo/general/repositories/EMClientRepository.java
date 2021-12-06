@@ -22,7 +22,6 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
-import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.DemoCallBack;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -214,7 +213,7 @@ public class EMClientRepository extends BaseEMRepository{
                     public void onError(int code, String error) {
                         //reset();
                         if (callBack != null) {
-                            callBack.onError(code, error);
+                            callBack.onError(code, getErrorMsg(code, error));
                         }
                     }
                 });
@@ -292,7 +291,7 @@ public class EMClientRepository extends BaseEMRepository{
 
                     @Override
                     public void onError(int error, String errorMsg) {
-                        callBack.onError(error, errorMsg);
+                        callBack.onError(error, getErrorMsg(error, errorMsg));
                     }
                 });
             }
@@ -315,10 +314,7 @@ public class EMClientRepository extends BaseEMRepository{
 
                                 @Override
                                 public void onError(int code, String error) {
-                                    if(code == 408) {
-                                        error = DemoApplication.getInstance().getString(R.string.network_disconnect);
-                                    }
-                                    callBack.onError(code, error);
+                                    callBack.onError(code, getErrorMsg(code, error));
                                     closeDb();
                                 }
 
@@ -335,13 +331,13 @@ public class EMClientRepository extends BaseEMRepository{
 
                     @Override
                     public void onError(int error, String errorMsg) {
-                        callBack.onError(error, errorMsg);
+                        callBack.onError(error, getErrorMsg(error, errorMsg));
                     }
                 });
             }
         }.asLiveData();
     }
-
+    
     private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
         // ** manually load all local groups and conversation
         initLocalDb();

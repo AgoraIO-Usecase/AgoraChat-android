@@ -1,6 +1,7 @@
 package io.agora.chatdemo.general.repositories;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,6 +14,7 @@ import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chatdemo.DemoApplication;
+import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.db.dao.EmUserDao;
 
@@ -126,6 +128,13 @@ public class BaseEMRepository {
 
     public Context getContext() {
         return DemoApplication.getInstance().getApplicationContext();
+    }
+
+    public String getErrorMsg(int code, String errorMsg) {
+        if(code == 408 && !TextUtils.isEmpty(errorMsg) && errorMsg.contains("Unable to resolve host")) {
+            errorMsg = DemoApplication.getInstance().getString(R.string.network_disconnect);
+        }
+        return errorMsg;
     }
 
 }

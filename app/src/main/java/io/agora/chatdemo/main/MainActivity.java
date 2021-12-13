@@ -140,7 +140,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         if(mConversationListFragment == null) {
             mConversationListFragment = new EaseConversationListFragment.Builder()
                                             .setCustomFragment(new ConversationListFragment())
-                                            .setUseHeader(true)
+                                            .useHeader(true)
                                             .setUnreadPosition(EaseConversationSetStyle.UnreadDotPosition.RIGHT)
                                             .setUnreadStyle(EaseConversationSetStyle.UnreadStyle.NUM)
                                             .build();

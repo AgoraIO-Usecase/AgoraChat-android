@@ -10,7 +10,7 @@
 
     <string name="search_text_hint">Search</string>
 
-    <string name="check_appkey_error">Please check whether Agora Chat AppKey is set in androidmanifest.xml</string>
+    <string name="please_check">Key verification error! Please check key settings in the AndroidManifest.xml file.</string>
     <string name="ease_sign_agora_id">AgoraID</string>
     <string name="ease_sign_nickname">Nickname</string>
     <string name="ease_sign_login">Log In</string>
@@ -247,7 +247,7 @@
     <string name="quiting_the_chat_room">正在退出聊天室……</string>
     <string name="be_kicked_for_offline">离线被踢出聊天室</string>
 
-    <string name="has_been_send">已发送</string>
+    <string name="has_been_send">Sent</string>
     <string name="group_create_title">Create</string>
     <string name="group_done_title">Done</string>
     <string name="group_next">Next</string>

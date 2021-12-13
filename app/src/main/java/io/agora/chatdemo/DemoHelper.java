@@ -228,8 +228,8 @@ public class DemoHelper {
                 })
                 .setUserProvider(new EaseUserProfileProvider() {
                     @Override
-                    public EaseUser getUser(String username) {
-                        return getUsersManager().getUserInfo(username);
+                    public EaseUser getUser(String userID) {
+                        return getUsersManager().getUserInfo(userID);
                     }
 
                 })
@@ -314,7 +314,7 @@ public class DemoHelper {
         boolean hasAppkey = checkAgoraChatAppKey(context);
         // You can set your AppKey by options.setAppKey(appkey)
         if(!hasAppkey) {
-            String error = context.getString(R.string.check_appkey_error);
+            String error = context.getString(R.string.please_check);
             EMLog.e(TAG, error);
             Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
             return null;

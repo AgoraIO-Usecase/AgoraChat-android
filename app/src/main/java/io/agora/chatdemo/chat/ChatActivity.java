@@ -23,7 +23,7 @@ import io.agora.chat.Conversation;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
-import io.agora.chat.uikit.chat.interfaces.OnChatItemClickListener;
+import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.constants.EaseConstant;
@@ -47,7 +47,6 @@ import io.agora.util.EMLog;
 public class ChatActivity extends BaseInitActivity {
     private String conversationId;
     private int chatType;
-    private String historyMsgId;
     private EaseTitleBar titleBar;
     private ChatViewModel viewModel;
 
@@ -68,7 +67,6 @@ public class ChatActivity extends BaseInitActivity {
         super.initIntent(intent);
         conversationId = intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID);
         chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-        historyMsgId = intent.getStringExtra(DemoConstant.HISTORY_MSG_ID);
     }
 
     @Override
@@ -82,9 +80,8 @@ public class ChatActivity extends BaseInitActivity {
     }
 
     private void initChatFragment() {
-        EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType, historyMsgId)
-                .setUseHeader(false)
-                .setUseRoamMessage(DemoHelper.getInstance().getModel().isMsgRoaming())
+        EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType)
+                .useHeader(false)
                 .setEmptyLayout(R.layout.ease_layout_no_data_show_nothing)
                 .setOnChatExtendMenuItemClickListener(new OnChatExtendMenuItemClickListener() {
                     @Override
@@ -127,12 +124,12 @@ public class ChatActivity extends BaseInitActivity {
                         if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.RECORD_AUDIO)) {
                             PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
                                     , new String[]{Manifest.permission.RECORD_AUDIO}, null);
-                            return false;
+                            return true;
                         }
-                        return true;
+                        return false;
                     }
                 })
-                .setOnChatItemClickListener(new OnChatItemClickListener() {
+                .setOnMessageItemClickListener(new OnMessageItemClickListener() {
                     @Override
                     public boolean onBubbleClick(ChatMessage message) {
                         return false;
@@ -161,8 +158,6 @@ public class ChatActivity extends BaseInitActivity {
                             bundle.putSerializable(GROUP_MEMBER_USER,user);
                             fragment.setArguments(bundle);
                             fragment.show(getSupportFragmentManager(),"ContainerFragment");
-                        }else{
-//                            UserDetailActivity.actionStart(mContext,null,null);
                         }
                     }
 
@@ -174,17 +169,17 @@ public class ChatActivity extends BaseInitActivity {
                 .setOnMessageSendCallBack(new OnMessageSendCallBack() {
 
                     @Override
-                    public void onChatSuccess(ChatMessage message) {
+                    public void onSuccess(ChatMessage message) {
                         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE,EaseEvent.TYPE.MESSAGE));
                     }
 
                     @Override
-                    public void onChatError(int code, String errorMsg) {
+                    public void onError(int code, String errorMsg) {
                         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE,EaseEvent.TYPE.MESSAGE));
                         showToast(getString(R.string.chat_msg_error_toast, code, errorMsg));
                     }
                 })
-                .hideChatSendAvatar(true)
+                .hideSenderAvatar(true)
                 .build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }

@@ -109,7 +109,7 @@ public class BottomSheetMenuFragment extends ContactListFragment implements View
 
     @Override
     public int getTitleBarRightText() {
-        return R.string.cancel;
+        return R.string.ease_cancel;
     }
 
     @Override

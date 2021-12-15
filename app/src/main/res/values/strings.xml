@@ -11,9 +11,9 @@
     <string name="search_text_hint">Search</string>
 
     <string name="please_check">Key verification error! Please check key settings in the AndroidManifest.xml file.</string>
-    <string name="ease_sign_agora_id">AgoraID</string>
-    <string name="ease_sign_nickname">Nickname</string>
-    <string name="ease_sign_login">Log In</string>
+    <string name="sign_agora_id">AgoraID</string>
+    <string name="sign_nickname">Nickname</string>
+    <string name="sign_login">Log In</string>
     <string name="sign_error_illegal_character">Latin letters and numbers only.</string>
     <string name="sign_error_not_id">Please enter an AgoraID.</string>
     <string name="sign_error_not_nickname">Please enter a nickname.</string>

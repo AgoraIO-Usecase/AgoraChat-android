@@ -67,7 +67,7 @@
         android:layout_marginTop="7dp"
         android:background="@drawable/shape_white_corner_14"
         android:gravity="center"
-        android:text="@string/cancel"
+        android:text="@string/ease_cancel"
         android:textAllCaps="false"
         android:textColor="@color/group_blue_154dfe"
         android:textSize="@dimen/text_size_big_18" />

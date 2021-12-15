@@ -131,7 +131,7 @@ public class BaseFragment extends Fragment {
                             }
                         }
                     })
-                    .setNegativeButton(getResources().getString(R.string.cancel), null)
+                    .setNegativeButton(getResources().getString(R.string.ease_cancel), null)
                     .show();
     }
 

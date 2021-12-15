@@ -185,10 +185,10 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
 
     private void logout() {
         new SimpleDialog.Builder(mContext)
-                .setTitle(R.string.em_login_out_hint)
+                .setTitle(R.string.login_out_hint)
                 .showCancelButton(true)
                 .hideConfirmButton(false)
-                .setOnConfirmClickListener(R.string.em_dialog_btn_confirm, new SimpleDialog.OnConfirmClickListener() {
+                .setOnConfirmClickListener(R.string.dialog_btn_to_confirm, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
                         DemoHelper.getInstance().logout(true, new CallBack() {

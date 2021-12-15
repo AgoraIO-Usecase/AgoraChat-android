@@ -16,7 +16,7 @@ public interface BottomSheetChildHelper {
 
     default @StringRes
     int getTitleBarRightText() {
-        return R.string.cancel;
+        return R.string.ease_cancel;
     }
 
     default @ColorRes

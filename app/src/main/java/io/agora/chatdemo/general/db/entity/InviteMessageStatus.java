@@ -9,15 +9,15 @@ public enum InviteMessageStatus {
 
         //==contact
         /**being invited*/
-        BEINVITEED(R.string.demo_contact_listener_onContactInvited),
+        BEINVITEED(R.string.contact_listener_onContactInvited),
         /**being refused*/
-        BEREFUSED(R.string.demo_contact_listener_onFriendRequestDeclined),
+        BEREFUSED(R.string.contact_listener_onFriendRequestDeclined),
         /**remote user already agreed*/
-        BEAGREED(R.string.demo_contact_listener_onFriendRequestAccepted),
+        BEAGREED(R.string.contact_listener_onFriendRequestAccepted),
 
         //==group application
         /**remote user apply to join*/
-        BEAPPLYED(R.string.demo_group_listener_onRequestToJoinReceived),
+        BEAPPLYED(R.string.group_listener_onRequestToJoinReceived),
         /**you have agreed to join*/
         AGREED(R.string.Has_agreed_to),
         /**you refused the join request*/
@@ -25,11 +25,11 @@ public enum InviteMessageStatus {
 
         //==group invitation
         /**received remote user's invitation**/
-        GROUPINVITATION(R.string.demo_group_listener_onInvitationReceived),
+        GROUPINVITATION(R.string.group_listener_onInvitationReceived),
         /**remote user accept your invitation**/
-        GROUPINVITATION_ACCEPTED(R.string.demo_group_listener_onInvitationAccepted),
+        GROUPINVITATION_ACCEPTED(R.string.group_listener_onInvitationAccepted),
         /**remote user declined your invitation**/
-        GROUPINVITATION_DECLINED(R.string.demo_system_other_decline_received_remote_user_invitation),
+        GROUPINVITATION_DECLINED(R.string.system_other_decline_received_remote_user_invitation),
 
         //==multi-device
         /**current user accept contact invitation in other device**/

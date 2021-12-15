@@ -50,7 +50,7 @@ public class AddContactOrGroupFragment extends BaseInitFragment implements Botto
 
     @Override
     public int getTitleBarRightText() {
-        return R.string.cancel;
+        return R.string.ease_cancel;
     }
 
     @Override

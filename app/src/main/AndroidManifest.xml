@@ -94,6 +94,7 @@
         <activity
             android:name=".sign.SignInActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!--Main-->
         <activity android:name=".main.MainActivity"

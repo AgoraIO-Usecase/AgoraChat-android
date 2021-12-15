@@ -89,7 +89,7 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
 
         String groupName = edtGroupName.getText().toString().trim();
         if(TextUtils.isEmpty(groupName)) {
-            ToastUtils.showToast(R.string.em_group_new_name_cannot_be_empty);
+            ToastUtils.showToast(R.string.group_new_name_cannot_be_empty);
             return true;
         }
         String memberNumber = edtGroupNumber.getText().toString().trim();
@@ -102,12 +102,12 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
                 e.printStackTrace();
             }
             if(maxUsers < MIN_GROUP_USERS || maxUsers > MAX_GROUP_USERS) {
-                showToast(R.string.em_group_new_member_limit);
+                showToast(R.string.group_new_member_limit);
                 return true;
             }
         }
         String desc = edtDesc.getText().toString();
-        String reason = getString(R.string.em_group_new_invite_join_group, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), groupName);
+        String reason = getString(R.string.group_new_invite_join_group, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), groupName);
         NewGroupSelectContactsFragment fragment = new NewGroupSelectContactsFragment();
         Bundle bundle=new Bundle();
         bundle.putString(DemoConstant.GROUP_NAME,groupName);

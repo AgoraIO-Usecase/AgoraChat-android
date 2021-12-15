@@ -167,7 +167,7 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
         switch (v.getId()) {
             case R.id.item_join:
                 if (group != null) {
-                    String reason = getString(R.string.demo_group_listener_onRequestToJoinReceived, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), group.getGroupName());
+                    String reason = getString(R.string.group_listener_onRequestToJoinReceived, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), group.getGroupName());
                     viewModel.joinGroup(group, reason);
                 }
                 break;

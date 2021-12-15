@@ -26,7 +26,7 @@ public class SearchContactFragment extends SearchFragment<String> implements Add
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    showToast(getResources().getString(R.string.em_add_contact_send_successful));
+                    showToast(getResources().getString(R.string.add_contact_send_successful));
                 }
             });
         });
@@ -69,7 +69,7 @@ public class SearchContactFragment extends SearchFragment<String> implements Add
 
     @Override
     public void onItemSubViewClick(View view, int position) {
-        mViewModel.addContact((String) mListAdapter.getItem(position), getResources().getString(R.string.em_add_contact_add_a_friend));
+        mViewModel.addContact((String) mListAdapter.getItem(position), getResources().getString(R.string.add_contact_add_a_friend));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SearchContactFragment extends SearchFragment<String> implements Add
 
     @Override
     public int getTitleBarRightText() {
-        return R.string.cancel;
+        return R.string.ease_cancel;
     }
 
     @Override

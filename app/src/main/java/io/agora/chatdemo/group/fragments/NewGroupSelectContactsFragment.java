@@ -76,7 +76,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
             parseResource(response, new OnResourceParseCallback<Group>() {
                 @Override
                 public void onSuccess(Group data) {
-                    showToast(R.string.em_group_new_success);
+                    showToast(R.string.group_new_success);
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                     // Skip to chat activity
                     ChatActivity.actionStart(mContext, data.getGroupId(), DemoConstant.CHATTYPE_GROUP);

@@ -74,7 +74,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
         mViewModel = new ViewModelProvider(this).get(ContactDetailViewModel.class);
         mViewModel.getAddContact().observe(this, response -> {
             if(response.status== Status.SUCCESS) {
-                showToast(getResources().getString(R.string.em_add_contact_send_successful));
+                showToast(getResources().getString(R.string.add_contact_send_successful));
                 hide();
             }
 
@@ -87,7 +87,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
                         ChatActivity.actionStart(getContext(), user.getUsername(), EaseConstant.CHATTYPE_SINGLE);
                         hide();
                     } else if (user.getContact()==3) {
-                        mViewModel.addContact(user.getUsername(), getResources().getString(R.string.em_add_contact_add_a_friend));
+                        mViewModel.addContact(user.getUsername(), getResources().getString(R.string.add_contact_add_a_friend));
                     }
                 }
             }

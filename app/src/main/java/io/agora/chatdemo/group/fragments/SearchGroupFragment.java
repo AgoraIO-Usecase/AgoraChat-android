@@ -13,6 +13,7 @@ import io.agora.chat.Group;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.contact.AddAdapter;
 import io.agora.chatdemo.contact.SearchFragment;
@@ -35,6 +36,12 @@ public class SearchGroupFragment extends SearchFragment<String> implements Botto
                 public void onSuccess(Group data) {
                     String reason = getString(R.string.group_listener_onRequestToJoinReceived, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), data.getGroupName());
                     viewModel.joinGroup(data, reason);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    ToastUtils.showToast(message);
                 }
             });
         });
@@ -61,6 +68,12 @@ public class SearchGroupFragment extends SearchFragment<String> implements Botto
         });
         groupViewModel.loadAllGroups();
 
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        mListAdapter.setOnItemSubViewClickListener(this);
     }
 
     private void getGroupIDs(List<Group> datas) {

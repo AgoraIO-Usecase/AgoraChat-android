@@ -10,19 +10,19 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chatdemo.general.constant.DemoConstant;
-import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
+import io.agora.chatdemo.general.livedatas.SingleLiveEvent;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 
 
 public class AddContactViewModel extends AndroidViewModel {
     private EMContactManagerRepository mRepository;
-    private SingleSourceLiveData<Resource<Boolean>> addContactObservable;
+    private SingleLiveEvent<Resource<Boolean>> addContactObservable;
 
     public AddContactViewModel(@NonNull Application application) {
         super(application);
         mRepository = new EMContactManagerRepository();
-        addContactObservable = new SingleSourceLiveData<>();
+        addContactObservable = new SingleLiveEvent<>();
     }
 
     public LiveData<Resource<Boolean>> getAddContact() {

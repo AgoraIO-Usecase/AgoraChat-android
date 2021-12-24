@@ -108,7 +108,7 @@ public class DemoHelper {
             return false;
         }
         // Configure custom rest server and im server
-        options.setRestServer("a61.easemob.com");
+        options.setRestServer(BuildConfig.APP_SERVER_DOMAIN);
         //options.setIMServer("106.75.100.247");
         //options.setImPort(6717);
         options.setUsingHttpsOnly(true);

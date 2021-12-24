@@ -28,7 +28,9 @@ android {
         }
         // If you use your own Agora Chat appkey, you should deploy your own App Server.
         // See:
-        buildConfigField ("String", "APP_SERVER_URL", "\"https://a41.easemob.com/app/chat/user/login\"")
+        buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
+        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a41.easemob.com\"")
+        buildConfigField ("String", "APP_SERVER_URL", "\"/app/chat/user/login\"")
 
         manifestPlaceholders = [AGORA_CHAT_APPKEY: properties.getProperty("AGORA_CHAT_APPKEY", "******")]
     }
@@ -94,8 +96,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
     // room
-    implementation "androidx.room:room-runtime:2.2.5"
-    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    implementation "androidx.room:room-runtime:2.4.0-alpha03"
+    annotationProcessor "androidx.room:room-compiler:2.4.0-alpha03"
     // swipe refresh layout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     // Glide

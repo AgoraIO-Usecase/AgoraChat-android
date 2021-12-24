@@ -358,7 +358,8 @@ public class EMClientRepository extends BaseEMRepository{
                 request.putOpt("userAccount", username);
                 request.putOpt("userNickname", nickname);
 
-                HttpResponse response = HttpClientManager.httpExecute(BuildConfig.APP_SERVER_URL, headers, request.toString(), Method_POST);
+                String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_URL;
+                HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {

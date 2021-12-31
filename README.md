@@ -24,7 +24,7 @@ With this sample app, you can:
 Follow these steps to run the sample project:\
 ### 1. Clone the repository to your local machine.
 ```java
-    git clone https://github.com/HyphenateInc/Hyphenate-Demo-Android.git
+    git clone git@github.com:AgoraIO-Usecase/AgoraChat-android.git
 ```
 
 ### 2. Open the Android project with Android Studio.

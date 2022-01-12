@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
+import io.agora.Error;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
@@ -176,6 +177,9 @@ public class ChatActivity extends BaseInitActivity {
                     @Override
                     public void onError(int code, String errorMsg) {
                         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE,EaseEvent.TYPE.MESSAGE));
+                        if(code== Error.MESSAGE_EXTERNAL_LOGIC_BLOCKED) {
+                            errorMsg=getString(R.string.error_message_external_logic_blocked);
+                        }
                         showToast(getString(R.string.chat_msg_error_toast, code, errorMsg));
                     }
                 })

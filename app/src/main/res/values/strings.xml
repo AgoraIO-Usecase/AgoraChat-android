@@ -31,6 +31,7 @@
     <string name="error_group_no_members">No group members</string>
     <string name="error_user_already_exist">Username already exists, please enter another one.</string>
     <string name="error_delete_conversation">Failed to delete conversation or this conversation does not exist</string>
+    <string name="error_message_external_logic_blocked">Message blocked by content moderation</string>
 
     <string name="dialog_default_title">Prompt</string>
 

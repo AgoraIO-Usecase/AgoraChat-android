@@ -4,3 +4,5 @@
 /schemas
 /keystore/hyphenate.keystore
 /outputs
+/release
+/debug

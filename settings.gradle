@@ -1,5 +1,5 @@
 include ':app'
-include ':chat-uikit'
-project(':chat-uikit').projectDir = new File('../AgoraChatUIKit/chat-uikit')
+//include ':chat-uikit'
+//project(':chat-uikit').projectDir = new File('../AgoraChat-UIKit-android/chat-uikit')
 //include ':hyphenatechatsdk'
 //project(':hyphenatechatsdk').projectDir = new File('../emclient-android/hyphenatechatsdk')

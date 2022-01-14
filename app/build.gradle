@@ -106,8 +106,11 @@ dependencies {
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'
     implementation  'com.scwang.smart:refresh-header-material:2.0.3'
     implementation  'com.scwang.smart:refresh-header-classics:2.0.3'
+    // Agora Chat SDK
+    implementation 'io.agora.rtc:chat-sdk:1.0.1'
     // Agora Chat Uikit
-    implementation project(path: ':chat-uikit')
+    implementation 'io.agora.rtc:chat-uikit:1.0.1'
+    //implementation project(path: ':chat-uikit')
 }
 
 task copyApp(type: Copy) {

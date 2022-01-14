@@ -103,6 +103,7 @@ public class UsersManager {
 		if(!DemoHelper.getInstance().isLoggedIn()) {
 			return;
 		}
+		DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
 		if(!isGroupsSyncedWithServer) {
 			EMLog.i(TAG, "isGroupsSyncedWithServer");
 			new EMGroupManagerRepository().getAllGroups(new ResultCallBack<List<Group>>() {

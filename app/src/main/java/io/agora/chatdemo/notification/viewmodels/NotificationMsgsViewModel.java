@@ -94,7 +94,7 @@ public class NotificationMsgsViewModel extends AndroidViewModel {
                             result.add(message);
                             continue;
                         }
-                        EaseUser user = DemoHelper.getInstance().getUsersManager().getUserInfo(groupId);
+                        EaseUser user = DemoHelper.getInstance().getUsersManager().getUserInfo(from, false);
                         if(user != null && user.getNickname().contains(keyword)) {
                             result.add(message);
                             continue;

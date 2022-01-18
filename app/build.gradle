@@ -86,8 +86,6 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    // RecyclerView
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
     //ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     // Google firebase cloud messaging
@@ -108,10 +106,8 @@ dependencies {
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'
     implementation  'com.scwang.smart:refresh-header-material:2.0.3'
     implementation  'com.scwang.smart:refresh-header-classics:2.0.3'
-    // Agora Chat SDK
-    implementation 'io.agora.rtc:chat-sdk:1.0.1'
     // Agora Chat Uikit
-    implementation 'io.agora.rtc:chat-uikit:1.0.1'
+    implementation 'io.agora.rtc:chat-uikit:1.0.1.1'
     //implementation project(path: ':chat-uikit')
 }
 

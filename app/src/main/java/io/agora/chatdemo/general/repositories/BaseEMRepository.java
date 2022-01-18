@@ -35,7 +35,7 @@ public class BaseEMRepository {
      * @return
      */
     public boolean isLoggedIn() {
-        return ChatClient.getInstance().isLoggedInBefore();
+        return ChatClient.getInstance().isSdkInited() && ChatClient.getInstance().isLoggedInBefore();
     }
 
     /**
@@ -43,7 +43,7 @@ public class BaseEMRepository {
      * @return
      */
     public boolean isAutoLogin() {
-        return ChatClient.getInstance().getOptions().getAutoLogin();
+        return ChatClient.getInstance().isSdkInited() && ChatClient.getInstance().getOptions().getAutoLogin();
     }
 
     /**

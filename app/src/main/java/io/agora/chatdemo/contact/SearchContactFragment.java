@@ -58,10 +58,10 @@ public class SearchContactFragment extends SearchFragment<String> implements Add
     @Override
     public void searchText(String query) {
         // you can search the user from your app server here.
+        if (mListAdapter.getData() != null && !mListAdapter.getData().isEmpty()) {
+            mListAdapter.clearData();
+        }
         if (!TextUtils.isEmpty(query)) {
-            if (mListAdapter.getData() != null && !mListAdapter.getData().isEmpty()) {
-                mListAdapter.clearData();
-            }
             mListAdapter.addData(query);
         }
     }

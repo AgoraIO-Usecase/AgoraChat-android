@@ -28,6 +28,7 @@ import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.contact.ContactFragment;
+import io.agora.chatdemo.conversation.ChatConversationChangeListener;
 import io.agora.chatdemo.conversation.ConversationListFragment;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
@@ -140,6 +141,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         if(mConversationListFragment == null) {
             mConversationListFragment = new EaseConversationListFragment.Builder()
                                             .setCustomFragment(new ConversationListFragment())
+                                            .setConversationChangeListener(new ChatConversationChangeListener())
                                             .useHeader(true)
                                             .setUnreadPosition(EaseConversationSetStyle.UnreadDotPosition.RIGHT)
                                             .setUnreadStyle(EaseConversationSetStyle.UnreadStyle.NUM)

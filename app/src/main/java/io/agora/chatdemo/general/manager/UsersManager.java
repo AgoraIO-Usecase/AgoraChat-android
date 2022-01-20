@@ -196,6 +196,10 @@ public class UsersManager {
 	}
 
 	public EaseUser getUserInfo(String username) {
+		return getUserInfo(username, true);
+	}
+
+	public EaseUser getUserInfo(String username, boolean fetchFromServer) {
 		if(TextUtils.isEmpty(username)) {
 			return null;
 		}
@@ -207,11 +211,14 @@ public class UsersManager {
 		// If do not contains the key, will return null
 		user = DemoHelper.getInstance().getContactList().get(username);
 		if(user == null) {
-			getUserInfoFromServer(username);
+			if(fetchFromServer) {
+				getUserInfoFromServer(username);
+			}
 			user = new EaseUser(username);
 		}
 		return user;
 	}
+
 	private void getUserInfoFromServer(String username) {
 		new EMContactManagerRepository().fetchUserInfoFromServer(username, new ResultCallBack<EaseUser>() {
 			@Override

@@ -341,9 +341,9 @@ public class EMClientRepository extends BaseEMRepository{
     private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
         // ** manually load all local groups and conversation
         initLocalDb();
-        DemoHelper.getInstance().getUsersManager().initUserInfo();
         // get current user
         DemoHelper.getInstance().getUsersManager().reload();
+        DemoHelper.getInstance().getUsersManager().initUserInfo();
         new EMContactManagerRepository().updateCurrentUserNickname(nickname, null);
         callBack.onSuccess(createLiveData(true));
     }

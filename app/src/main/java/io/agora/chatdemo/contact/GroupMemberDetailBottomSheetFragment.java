@@ -53,6 +53,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
             mBinding.itemChat.setAvatar(R.drawable.group_member_add);
             mBinding.itemChat.setTitle(UIUtils.getString(getContext(),R.string.contact_detail_add_contact));
             mBinding.itemChat.getRightTitle().setVisibility(View.VISIBLE);
+            mBinding.itemChat.getRightTitle().setText(UIUtils.getString(getContext(),R.string.contact_add));
             mBinding.itemChat.setArrowVisiable(View.GONE);
         }
     }

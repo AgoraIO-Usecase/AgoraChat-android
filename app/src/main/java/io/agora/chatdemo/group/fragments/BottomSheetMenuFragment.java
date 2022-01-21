@@ -72,12 +72,19 @@ public class BottomSheetMenuFragment extends ContactListFragment implements View
         super.initView(savedInstanceState);
         etSearch.setVisibility(View.VISIBLE);
         sideBarContact.setVisibility(View.GONE);
-        ((EaseRecyclerView) mRecyclerView).addHeaderView(headView);
-        mRecyclerView.setNestedScrollingEnabled(false);
     }
 
     protected void checkSearchContent(String content) {
-        srlContactRefresh.setEnabled(TextUtils.isEmpty(content));
+        super.checkSearchContent(content);
+        sideBarContact.setVisibility(View.GONE);
+        if(TextUtils.isEmpty(content)) {
+            if(headView.getParent()==null) {
+                ((EaseRecyclerView) mRecyclerView).addHeaderView(headView);
+                mRecyclerView.setNestedScrollingEnabled(false);
+            }
+        }else{
+            ((EaseRecyclerView) mRecyclerView).removeHeaderViews();
+        }
     }
 
     @Override

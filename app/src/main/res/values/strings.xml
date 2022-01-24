@@ -90,7 +90,7 @@
 
     <string name="group_new_success">Group created</string>
     <string name="group_new_invite_join_group">%1$s invited you to join group: %2$s</string>
-    <string name="group_new_member_limit">Member quantity: 3 to 2,000</string>
+    <string name="group_new_member_limit">Member quantity: 3 to 3,000</string>
     <string name="group_new_name_cannot_be_empty">Complete the group info</string>
 
     <string name="show_agora_chat_id">AgoraID: %1$s</string>

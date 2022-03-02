@@ -85,14 +85,12 @@ public class SearchGroupFragment extends SearchFragment<String> implements Botto
 
     @Override
     protected void searchText(String search) {
-
+        if (mListAdapter.getData() != null && !mListAdapter.getData().isEmpty()) {
+            mListAdapter.clearData();
+        }
         if (!TextUtils.isEmpty(search)) {
-            if (mListAdapter.getData() != null && !mListAdapter.getData().isEmpty()) {
-                mListAdapter.clearData();
-            }
             mListAdapter.addData(search);
         }
-
     }
 
     @Override

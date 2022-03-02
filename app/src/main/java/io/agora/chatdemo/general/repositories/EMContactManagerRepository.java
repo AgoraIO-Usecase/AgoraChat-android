@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.google.android.gms.common.util.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -706,7 +708,15 @@ public class EMContactManagerRepository extends BaseEMRepository{
             userEntity.setSign(info.getSignature());
             EaseUtils.setUserInitialLetter(userEntity);
             try {
-                userEntity.setContact(getUserDao().getUserContactById(info.getUserId()));
+                List<EaseUser> easeUsers = getUserDao().loadUserByUserId(info.getUserId());
+                if(CollectionUtils.isEmpty(easeUsers)) {
+                    //strange
+                    userEntity.setContact(3);
+                }else{
+                    //friend or blacklist
+                    int id = getUserDao().getUserContactById(info.getUserId());
+                    userEntity.setContact(id);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

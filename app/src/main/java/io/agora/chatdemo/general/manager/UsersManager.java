@@ -61,6 +61,11 @@ public class UsersManager {
 		String nick = getCurrentUserNick();
 		currentUser.setNickname((nick != null) ? nick : username);
 		currentUser.setAvatar(getCurrentUserAvatar());
+
+		isGroupsSyncedWithServer=false;
+		isContactsSyncedWithServer=false;
+		isBlackListSyncedWithServer=false;
+		isPushConfigsWithServer=false;
 	}
 
 	public String getCurrentUserID() {

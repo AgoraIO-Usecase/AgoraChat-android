@@ -149,6 +149,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     protected void searchText(String content) {
         checkSearchContent(content);
     }
+
     protected void checkSearchContent(String content) {
         if(TextUtils.isEmpty(content)) {
             mListAdapter.setData(mData);

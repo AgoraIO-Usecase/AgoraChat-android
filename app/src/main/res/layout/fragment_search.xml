@@ -9,6 +9,7 @@
         android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="32dp"
+        android:singleLine="true"
         android:focusableInTouchMode="true"
         android:visibility="visible"
         android:layout_marginStart="@dimen/margin_view_distance_border"

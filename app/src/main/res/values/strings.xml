@@ -297,6 +297,7 @@
     <string name="me_setting_change_avatar">Change Avatar</string>
     <string name="me_setting_change_nickname">Change Nickname</string>
     <string name="me_setting_copy_agoraid">Copy AgoraID</string>
+    <string name="me_setting_set_status">Set Status</string>
 
     <string name="me_copy_success">Copy Success</string>
 
@@ -320,5 +321,7 @@
 
     <string name="fetch_userinfo_success">fetch userinfo success </string>
     <string name="fetch_userinfo_fail">fetch userinfo fail </string>
+
+    <string name="dialog_change_presence_title">status </string>
 
 </resources>

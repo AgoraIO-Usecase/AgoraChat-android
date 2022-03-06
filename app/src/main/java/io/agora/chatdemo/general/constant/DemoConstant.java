@@ -98,8 +98,14 @@ public interface DemoConstant extends EaseConstant {
 
      String GROUP_MEMBER_USER="group_member_user";
 
+     String PRESENCES_CHANGED="presences_changed";
+     String PRESENCE_CUSTOM = "PRESENCE_CUSTOM";
+     int PRESENCE_CUSTOM_REQUESTCODE = 3;
+     int PRESENCE_RESULTCODE = 4;
+
      int GROUP_ROLE_OWNER = 1;
      int GROUP_ROLE_ADMIN = 2;
      int GROUP_ROLE_MEMBER = 0;
+
 
 }

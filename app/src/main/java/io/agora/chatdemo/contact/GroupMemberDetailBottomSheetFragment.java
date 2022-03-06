@@ -13,16 +13,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.List;
+
+import io.agora.chat.Presence;
 import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
 import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.viewmodels.ContactDetailViewModel;
+import io.agora.chatdemo.conversation.viewmodel.PresenceViewModel;
 import io.agora.chatdemo.databinding.FragmentGroupMemberDetailBottomSheetBinding;
+import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.enums.Status;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.utils.UIUtils;
 
 
@@ -31,6 +39,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
     private FragmentGroupMemberDetailBottomSheetBinding mBinding;
     private ContactDetailViewModel mViewModel;
     private EaseUser user;
+    private PresenceViewModel presenceViewModel;
 
     @Nullable
     @Override
@@ -63,7 +72,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
         super.initData();
         if(user!=null) {
             DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(user.getNickname())?
-                    user.getNickname():user.getUsername(), mBinding.tvNickname, mBinding.ivAvatar);
+                    user.getNickname():user.getUsername(), mBinding.tvNickname, mBinding.ivUserAvatar);
         }
         mBinding.tvId.setText(getString(R.string.show_agora_chat_id, user.getUsername()));
         setTopOffset((int) (EaseUtils.getScreenInfo(getContext())[1]-UIUtils.dp2px(getContext(),387)));
@@ -73,6 +82,15 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
     protected void initListener() {
         super.initListener();
         mViewModel = new ViewModelProvider(this).get(ContactDetailViewModel.class);
+        presenceViewModel=new ViewModelProvider(this).get(PresenceViewModel.class);
+        presenceViewModel.presencesObservable().observe(this,response->{
+            parseResource(response, new OnResourceParseCallback<List<Presence>>() {
+                @Override
+                public void onSuccess(@Nullable List<Presence> data) {
+                    updatePresence();
+                }
+            });
+        });
         mViewModel.getAddContact().observe(this, response -> {
             if(response.status== Status.SUCCESS) {
                 showToast(getResources().getString(R.string.add_contact_send_successful));
@@ -94,5 +112,14 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
             }
         });
 
+        LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(mContext, event -> {
+            updatePresence();
+        });
+
+    }
+
+    private void updatePresence() {
+        Presence presence = DemoHelper.getInstance().getPresences().get(user.getUsername());
+        mBinding.ivPresence.setImageResource(EasePresenceUtil.getPresenceIcon(mContext,presence));
     }
 }

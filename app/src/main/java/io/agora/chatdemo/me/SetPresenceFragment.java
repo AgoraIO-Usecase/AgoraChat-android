@@ -22,6 +22,7 @@ import io.agora.chatdemo.base.BaseInitFragment;
 import io.agora.chatdemo.conversation.viewmodel.PresenceViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.general.utils.UIUtils;
 
@@ -96,13 +97,19 @@ public class SetPresenceFragment extends BaseInitFragment implements View.OnClic
     protected void initListener() {
         super.initListener();
         titleBar.setOnBackPressListener(this);
-        radioGroup.setOnCheckedChangeListener(this);
         titleBar.setOnRightClickListener(this);
+        rbCustom.setOnClickListener(this);
+        radioGroup.setOnCheckedChangeListener(this);
     }
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.rb_custom:
+                Intent intent = new Intent(mContext, CustomPresenceActivity.class);
+                startActivityForResult(intent, DemoConstant.PRESENCE_CUSTOM_REQUESTCODE_FORM_SETPRESENCEFRAGAGMENT);
+                break;
+        }
     }
 
     @Override
@@ -118,11 +125,10 @@ public class SetPresenceFragment extends BaseInitFragment implements View.OnClic
             radioGroup.check(R.id.rb_not_disturb);
         } else if (TextUtils.equals(presenceString, getString(PresenceData.LEAVE.getPresence()))) {
             radioGroup.check(R.id.rb_leave);
-        } else if (TextUtils.equals(presenceString, getString(PresenceData.CUSTOM.getPresence()))) {
+        } else {
             radioGroup.check(R.id.rb_custom);
             rbCustom.setText(presenceString);
         }
-
     }
 
     @Override
@@ -132,11 +138,31 @@ public class SetPresenceFragment extends BaseInitFragment implements View.OnClic
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        currentSelectedId = checkedId;
-        if (currentSelectedId == R.id.rb_custom) {
-            Intent intent = new Intent(mContext, CustomPresenceActivity.class);
-            startActivityForResult(intent, DemoConstant.PRESENCE_CUSTOM_REQUESTCODE);
+        if(currentSelectedId==R.id.rb_custom&&checkedId!=currentSelectedId) {
+            showDialog();
         }
+        currentSelectedId = checkedId;
+    }
+
+    private void showDialog() {
+       new SimpleDialog.Builder(mContext)
+                .setTitle(R.string.dialog_clear_presence_title)
+                .setContent(getString(R.string.dialog_clear_presence_content, rbCustom.getText().toString().trim()))
+                .showCancelButton(true)
+                .hideConfirmButton(false)
+                .setOnConfirmClickListener(R.string.dialog_btn_to_confirm, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        rbCustom.setText(R.string.ease_presence_custom);
+                    }
+                })
+                .setOnCancelClickListener(new SimpleDialog.onCancelClickListener() {
+                    @Override
+                    public void onCancelClick(View view) {
+                        radioGroup.check(R.id.rb_custom);
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -163,7 +189,7 @@ public class SetPresenceFragment extends BaseInitFragment implements View.OnClic
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == DemoConstant.PRESENCE_CUSTOM_REQUESTCODE && resultCode == DemoConstant.PRESENCE_RESULTCODE) {
+        if (requestCode == DemoConstant.PRESENCE_CUSTOM_REQUESTCODE_FORM_SETPRESENCEFRAGAGMENT && resultCode == DemoConstant.PRESENCE_RESULTCODE) {
             String customPresence = data.getStringExtra(DemoConstant.PRESENCE_CUSTOM);
             if (!TextUtils.isEmpty(customPresence)) {
                 rbCustom.setText(customPresence);

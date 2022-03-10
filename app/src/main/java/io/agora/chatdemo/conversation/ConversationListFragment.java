@@ -184,7 +184,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                 break;
             case R.id.tv_online:
                 if (currentPresence == R.id.tv_custom) {
-                    showConfirmDialog(v.getId());
+                    showConfirmDialog(v.getId(),getString(PresenceData.ONLINE.getPresence()));
                 }else {
                     viewModel.publishPresence("");
                     changePresenceDialog.dismiss();
@@ -193,7 +193,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                 break;
             case R.id.tv_busy:
                 if (currentPresence == R.id.tv_custom) {
-                    showConfirmDialog(v.getId());
+                    showConfirmDialog(v.getId(),getString(PresenceData.BUSY.getPresence()));
                 }else {
                     viewModel.publishPresence(getString(PresenceData.BUSY.getPresence()));
                     changePresenceDialog.dismiss();
@@ -202,7 +202,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                 break;
             case R.id.tv_not_disturb:
                 if (currentPresence == R.id.tv_custom) {
-                    showConfirmDialog(v.getId());
+                    showConfirmDialog(v.getId(),getString(PresenceData.DO_NOT_DISTURB.getPresence()));
                 }else {
                     viewModel.publishPresence(getString(PresenceData.DO_NOT_DISTURB.getPresence()));
                     changePresenceDialog.dismiss();
@@ -211,7 +211,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                 break;
             case R.id.tv_leave:
                 if (currentPresence == R.id.tv_custom) {
-                    showConfirmDialog(v.getId());
+                    showConfirmDialog(v.getId(),getString(PresenceData.LEAVE.getPresence()));
                 }else {
                     viewModel.publishPresence(getString(PresenceData.LEAVE.getPresence()));
                     changePresenceDialog.dismiss();
@@ -228,10 +228,10 @@ public class ConversationListFragment extends EaseConversationListFragment imple
 
     }
 
-    private void showConfirmDialog(int id) {
+    private void showConfirmDialog(int id,String target) {
         new SimpleDialog.Builder((BaseActivity) mContext)
                 .setTitle(R.string.dialog_clear_presence_title)
-                .setContent(getString(R.string.dialog_clear_presence_content, customView.getText().toString().trim()))
+                .setContent(getString(R.string.dialog_clear_presence_content, customView.getText().toString().trim(),target))
                 .showCancelButton(true)
                 .hideConfirmButton(false)
                 .setOnConfirmClickListener(R.string.dialog_btn_to_confirm, new SimpleDialog.OnConfirmClickListener() {

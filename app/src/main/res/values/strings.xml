@@ -324,6 +324,6 @@
 
     <string name="dialog_change_presence_title">status </string>
     <string name="dialog_clear_presence_title">Clear your Custom Status? </string>
-    <string name="dialog_clear_presence_content">Clear ”%1$s”, change to Online. </string>
+    <string name="dialog_clear_presence_content">Clear ”%1$s”, change to %2$s. </string>
 
 </resources>

@@ -138,35 +138,40 @@ public class SetPresenceFragment extends BaseInitFragment implements View.OnClic
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if(currentSelectedId==R.id.rb_custom&&checkedId!=currentSelectedId) {
-            showDialog();
-        }
         currentSelectedId = checkedId;
     }
 
     private void showDialog() {
-       new SimpleDialog.Builder(mContext)
+        String target= getTargetString(currentSelectedId);
+        new SimpleDialog.Builder(mContext)
                 .setTitle(R.string.dialog_clear_presence_title)
-                .setContent(getString(R.string.dialog_clear_presence_content, rbCustom.getText().toString().trim()))
+                .setContent(getString(R.string.dialog_clear_presence_content, rbCustom.getText().toString().trim(),target))
                 .showCancelButton(true)
                 .hideConfirmButton(false)
                 .setOnConfirmClickListener(R.string.dialog_btn_to_confirm, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
-                        rbCustom.setText(R.string.ease_presence_custom);
-                    }
-                })
-                .setOnCancelClickListener(new SimpleDialog.onCancelClickListener() {
-                    @Override
-                    public void onCancelClick(View view) {
-                        radioGroup.check(R.id.rb_custom);
+                        publishPresence();
                     }
                 })
                 .show();
     }
 
-    @Override
-    public void onRightClick(View view) {
+    private String getTargetString(int currentSelectedId) {
+        switch (currentSelectedId) {
+            case R.id.rb_online:
+                return getString(PresenceData.ONLINE.getPresence());
+            case R.id.rb_busy:
+                return getString(PresenceData.BUSY.getPresence());
+            case R.id.rb_not_disturb:
+                return getString(PresenceData.DO_NOT_DISTURB.getPresence());
+            case R.id.rb_leave:
+                return getString(PresenceData.LEAVE.getPresence());
+        }
+        return "";
+    }
+
+    private void publishPresence() {
         switch (currentSelectedId) {
             case R.id.rb_online:
                 viewModel.publishPresence("");
@@ -183,6 +188,15 @@ public class SetPresenceFragment extends BaseInitFragment implements View.OnClic
             case R.id.rb_custom:
                 viewModel.publishPresence(rbCustom.getText().toString().trim());
                 break;
+        }
+    }
+
+    @Override
+    public void onRightClick(View view) {
+        if (!TextUtils.equals(rbCustom.getText(), getString(R.string.ease_presence_custom))&&currentSelectedId!=R.id.rb_custom) {
+            showDialog();
+        } else {
+            publishPresence();
         }
     }
 

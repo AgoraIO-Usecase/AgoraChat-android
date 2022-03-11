@@ -32,15 +32,17 @@
 
     <TextView
         android:id="@+id/tv_type"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:maxLines="2"
         android:textAllCaps="false"
         android:textColor="@color/color_main_text"
         android:textSize="14sp"
-        app:layout_constraintLeft_toRightOf="@id/iv_from"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/tv_name"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
-        tools:text="aaaaaaaaaaaaaaaa" />
+        tools:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
 
     <TextView
         android:id="@+id/tv_time"

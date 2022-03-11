@@ -61,6 +61,11 @@ public class UsersManager {
 		String nick = getCurrentUserNick();
 		currentUser.setNickname((nick != null) ? nick : username);
 		currentUser.setAvatar(getCurrentUserAvatar());
+
+		isGroupsSyncedWithServer=false;
+		isContactsSyncedWithServer=false;
+		isBlackListSyncedWithServer=false;
+		isPushConfigsWithServer=false;
 	}
 
 	public String getCurrentUserID() {
@@ -103,6 +108,7 @@ public class UsersManager {
 		if(!DemoHelper.getInstance().isLoggedIn()) {
 			return;
 		}
+		DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
 		if(!isGroupsSyncedWithServer) {
 			EMLog.i(TAG, "isGroupsSyncedWithServer");
 			new EMGroupManagerRepository().getAllGroups(new ResultCallBack<List<Group>>() {

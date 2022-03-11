@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Collections;
 import java.util.List;
 
 import io.agora.chat.ChatMessage;
@@ -37,6 +38,7 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
         mNewFriendViewModel=new ViewModelProvider(this).get(NewFriendsViewModel.class);
         mMsgsViewModel.getChatMessageObservable().observe(this, datas -> {
             srlContactRefresh.setRefreshing(false);
+            Collections.reverse(datas);
             mData = datas;
             mListAdapter.setData(datas);
         });

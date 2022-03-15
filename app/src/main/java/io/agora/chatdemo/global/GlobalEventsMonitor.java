@@ -22,12 +22,15 @@ import io.agora.ContactListener;
 import io.agora.ConversationListener;
 import io.agora.Error;
 import io.agora.MultiDeviceListener;
+import io.agora.ThreadChangeListener;
+import io.agora.ThreadNotifyListener;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.MucSharedFile;
 import io.agora.chat.TextMessageBody;
+import io.agora.chat.ThreadEvent;
 import io.agora.chat.UserInfo;
 import io.agora.chat.adapter.EMAChatRoomManagerListener;
 import io.agora.chat.uikit.EaseUIKit;
@@ -36,6 +39,7 @@ import io.agora.chat.uikit.interfaces.OnEaseChatConnectionListener;
 import io.agora.chat.uikit.manager.EaseAtMessageHelper;
 import io.agora.chat.uikit.manager.EaseChatPresenter;
 import io.agora.chat.uikit.manager.EaseNotificationMsgManager;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -85,6 +89,10 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
         //Add monitoring of conversation (listening to read receipts)
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
+        //Add thread notify listener
+        DemoHelper.getInstance().getThreadManager().addThreadNotifyListener(new ChatThreadNotifyListener());
+        //Add thread change listener
+        DemoHelper.getInstance().getThreadManager().addThreadChangeListener(new ChatThreadChangeListener());
     }
 
     public static GlobalEventsMonitor getInstance() {
@@ -682,6 +690,64 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         }
     }
 
+    private class ChatThreadNotifyListener implements ThreadNotifyListener {
+
+        @Override
+        public void onThreadNotify(ThreadEvent event) {
+            ThreadEvent.TYPE type = event.getType();
+            if(type == ThreadEvent.TYPE.CREATE) {
+                createThreadCreatedMsg(event);
+            }
+        }
+    }
+
+    private class ChatThreadChangeListener implements ThreadChangeListener {
+
+        @Override
+        public void onThreadNameUpdated(String parentId, String threadId, String operator, String newThreadName) {
+
+        }
+
+        @Override
+        public void onThreadDestroyed(String parentId, String threadId, String threadName, String operator) {
+
+        }
+
+        @Override
+        public void onMemberJoined(String parentId, String threadId, String threadName, String username) {
+
+        }
+
+        @Override
+        public void onMemberExited(String parentId, String threadId, String threadName, String operator, String username) {
+
+        }
+
+        @Override
+        public void onUserRemoved(String parentId, String threadId, String threadName, String operator) {
+
+        }
+    }
+
+    private void createThreadCreatedMsg(ThreadEvent event) {
+        ChatMessage msg = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
+        msg.setChatType(ChatMessage.ChatType.GroupChat);
+        msg.setFrom(event.getOperatorId());
+        msg.setTo(event.getThreadId());
+        msg.setMsgId(UUID.randomUUID().toString());
+        msg.setAttribute(DemoConstant.EM_THREAD_NOTIFICATION_TYPE, true);
+        StringBuilder builder = new StringBuilder();
+        EaseUser userInfo = DemoHelper.getInstance().getUsersManager().getUserInfo(event.getOperatorId(), false);
+        builder.append(userInfo != null ? userInfo.getNickname() : event.getOperatorId());
+        builder.append(" ");
+        builder.append(appContext.getResources().getString(R.string.start_a_thread));
+        builder.append(event.getThreadName());
+        builder.append("\n");
+        builder.append(appContext.getResources().getString(R.string.see_all_threads));
+        msg.addBody(new TextMessageBody(builder.toString()));
+        msg.setStatus(ChatMessage.Status.SUCCESS);
+        ChatClient.getInstance().chatManager().saveMessage(msg);
+    }
 
     private void updateMessage(ChatMessage message) {
         message.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.BEAGREED.name());

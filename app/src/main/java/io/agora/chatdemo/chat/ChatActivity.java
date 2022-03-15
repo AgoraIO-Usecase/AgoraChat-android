@@ -184,6 +184,7 @@ public class ChatActivity extends BaseInitActivity {
                     }
                 })
                 .hideSenderAvatar(true)
+                .setCustomAdapter(new CustomMessageAdapter())
                 .build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }

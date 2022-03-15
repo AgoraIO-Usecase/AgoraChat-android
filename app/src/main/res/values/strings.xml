@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">AgoraChat</string>
 
     <string name="loading">Loading&#8230;</string>
@@ -320,5 +320,7 @@
 
     <string name="fetch_userinfo_success">fetch userinfo success </string>
     <string name="fetch_userinfo_fail">fetch userinfo fail </string>
+    <string name="start_a_thread">Started a Thread:</string>
+    <string name="see_all_threads">See all Threads</string>
 
 </resources>

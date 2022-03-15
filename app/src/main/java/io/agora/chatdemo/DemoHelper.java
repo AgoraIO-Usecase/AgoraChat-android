@@ -35,6 +35,7 @@ import io.agora.chat.ContactManager;
 import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
+import io.agora.chat.ThreadManager;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseGroupInfo;
@@ -173,6 +174,14 @@ public class DemoHelper {
      */
     public PushManager getPushManager() {
         return getChatClient().pushManager();
+    }
+
+    /**
+     * Get the entity of ThreadManager
+     * @return
+     */
+    public ThreadManager getThreadManager() {
+        return null;
     }
 
     /**

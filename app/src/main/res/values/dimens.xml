@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingDefaultResource">
     <dimen name="main_badge_size">25dp</dimen>
     <dimen name="main_badge_margin_left">32dp</dimen>
     <dimen name="main_badge_margin_top">9dp</dimen>

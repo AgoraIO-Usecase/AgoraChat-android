@@ -979,6 +979,11 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                 messageChangeLiveData.with(message).postValue(easeEvent);
             }
         }
+
+        @Override
+        public void onThreadEvent(int event, String target, List<String> usernames) {
+
+        }
     }
 
     /**

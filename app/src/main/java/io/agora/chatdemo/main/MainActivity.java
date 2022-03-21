@@ -96,7 +96,8 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     private void refreshConversation() {
-        if(mConversationListFragment != null && mConversationListFragment instanceof EaseConversationListFragment) {
+        if(mConversationListFragment != null && mConversationListFragment instanceof EaseConversationListFragment
+                && mConversationListFragment.isAdded()) {
             ((EaseConversationListFragment) mConversationListFragment).refreshList();
         }
     }

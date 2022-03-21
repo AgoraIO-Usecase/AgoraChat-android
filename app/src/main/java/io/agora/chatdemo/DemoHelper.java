@@ -181,7 +181,7 @@ public class DemoHelper {
      * @return
      */
     public ThreadManager getThreadManager() {
-        return null;
+        return getChatClient().threadManager();
     }
 
     /**

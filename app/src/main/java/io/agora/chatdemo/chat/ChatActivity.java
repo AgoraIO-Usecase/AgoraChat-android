@@ -21,6 +21,7 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
+import io.agora.chat.uikit.activities.EaseThreadListActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
@@ -29,6 +30,7 @@ import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.utils.StatusBarCompat;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -36,6 +38,7 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.contact.ContactDetailActivity;
 import io.agora.chatdemo.contact.GroupMemberDetailBottomSheetFragment;
+import io.agora.chatdemo.databinding.ActivityChatBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
@@ -48,8 +51,8 @@ import io.agora.util.EMLog;
 public class ChatActivity extends BaseInitActivity {
     private String conversationId;
     private int chatType;
-    private EaseTitleBar titleBar;
     private ChatViewModel viewModel;
+    private ActivityChatBinding binding;
 
     public static void actionStart(Context context, String conversationId, int chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -59,8 +62,9 @@ public class ChatActivity extends BaseInitActivity {
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_chat;
+    protected View getContentView() {
+        binding = ActivityChatBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
     }
 
     @Override
@@ -73,10 +77,28 @@ public class ChatActivity extends BaseInitActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        titleBar = findViewById(R.id.title_bar);
-        //titleBar.setRightImageResource(R.drawable.chat_settings_more);
-        titleBar.getIcon().setVisibility(View.GONE);
-        titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
+        binding.rightImage.setImageResource(R.drawable.chat_settings_more);
+        if(mContext.getSupportActionBar() == null) {
+            setSupportActionBar(binding.toolbar);
+            if(getSupportActionBar() != null) {
+                // Show back icon
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                // Not show title
+                getSupportActionBar().setDisplayShowTitleEnabled(false);
+                StatusBarCompat.setToolbarCustomColor(mContext, R.color.black);
+            }
+            binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
+        if(chatType == EaseConstant.CHATTYPE_GROUP) {
+            binding.llTitleRight.setVisibility(View.VISIBLE);
+        }else {
+            binding.llTitleRight.setVisibility(View.GONE);
+        }
         initChatFragment();
     }
 
@@ -192,15 +214,9 @@ public class ChatActivity extends BaseInitActivity {
     @Override
     protected void initListener() {
         super.initListener();
-        titleBar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
+        binding.rightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onBackPress(View view) {
-                onBackPressed();
-            }
-        });
-        titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
-            @Override
-            public void onRightClick(View view) {
+            public void onClick(View v) {
                 // Skip to chat settings fragment
                 Bundle bundle = new Bundle();
                 bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
@@ -210,13 +226,21 @@ public class ChatActivity extends BaseInitActivity {
                 fragment.show(getSupportFragmentManager(), "chat_settings");
             }
         });
-        titleBar.setOnIconClickListener(new EaseTitleBar.OnIconClickListener() {
+        binding.ivIcon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onIconClick(View view) {
+            public void onClick(View v) {
                 if(chatType == DemoConstant.CHATTYPE_SINGLE) {
                     ContactDetailActivity.actionStart(mContext, conversationId, true);
                 }else if(chatType == DemoConstant.CHATTYPE_GROUP){
                     GroupDetailActivity.actionStart(mContext, conversationId, true);
+                }
+            }
+        });
+        binding.llTitleRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(chatType == EaseConstant.CHATTYPE_GROUP) {
+                    EaseThreadListActivity.actionStart(mContext, conversationId);
                 }
             }
         });
@@ -292,17 +316,17 @@ public class ChatActivity extends BaseInitActivity {
     }
 
     private void showSnackBar(String event) {
-        Snackbar.make(titleBar, event, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.clTitle, event, Snackbar.LENGTH_SHORT).show();
     }
 
     private void setDefaultTitle() {
         if(chatType != DemoConstant.CHATTYPE_SINGLE) {
-            boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
+            boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, binding.title, binding.ivIcon);
             if(!hasProvided) {
                 setGroupInfo();
             }
         }else {
-            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
+            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, binding.title, binding.ivIcon);
         }
     }
 
@@ -310,7 +334,7 @@ public class ChatActivity extends BaseInitActivity {
         String title = "";
         if(chatType == DemoConstant.CHATTYPE_GROUP) {
             title = GroupHelper.getGroupName(conversationId);
-            titleBar.setIcon(R.drawable.icon);
+            binding.ivIcon.setImageResource(R.drawable.icon);
         }else if(chatType == DemoConstant.CHATTYPE_CHATROOM) {
             ChatRoom room = ChatClient.getInstance().chatroomManager().getChatRoom(conversationId);
             if(room == null) {
@@ -318,8 +342,8 @@ public class ChatActivity extends BaseInitActivity {
                 return;
             }
             title =  TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
-            titleBar.setIcon(R.drawable.icon);
+            binding.ivIcon.setImageResource(R.drawable.icon);
         }
-        titleBar.setTitle(title);
+        binding.title.setText(title);
     }
 }

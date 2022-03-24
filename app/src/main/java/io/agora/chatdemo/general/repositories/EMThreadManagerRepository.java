@@ -201,5 +201,34 @@ public class EMThreadManagerRepository extends BaseEMRepository {
         });
     }
 
+    /**
+     * Remove member from thread
+     * @param threadId
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> removeThreadMember(String threadId, String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getThreadManager().removeMemberFromThread(threadId, username, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
 
 }

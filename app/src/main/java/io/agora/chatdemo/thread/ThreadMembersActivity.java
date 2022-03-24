@@ -3,6 +3,9 @@ package io.agora.chatdemo.thread;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,16 +17,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import io.agora.chat.ChatClient;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.thread.EaseThreadRole;
 import io.agora.chat.uikit.widget.EaseTitleBar;
+import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.databinding.ActivityThreadMembersBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.thread.adapter.ThreadMemberAdapter;
+import io.agora.chatdemo.thread.bean.MenuItemBean;
+import io.agora.chatdemo.thread.dialog.MenuDialog;
 import io.agora.chatdemo.thread.viewmodel.ThreadMemberListViewModel;
 
 public class ThreadMembersActivity extends BaseInitActivity {
@@ -31,10 +40,13 @@ public class ThreadMembersActivity extends BaseInitActivity {
     private ThreadMemberAdapter mAdapter;
     private String threadId;
     private ThreadMemberListViewModel viewModel;
+    private List<EaseUser> mData = new ArrayList<>();
+    private EaseThreadRole threadRole;
 
-    public static void actionStart(Context context, String threadId) {
+    public static void actionStart(Context context, String threadId, int role) {
         Intent intent = new Intent(context, ThreadMembersActivity.class);
         intent.putExtra("threadId", threadId);
+        intent.putExtra("threadRole", role);
         context.startActivity(intent);
     }
 
@@ -48,6 +60,8 @@ public class ThreadMembersActivity extends BaseInitActivity {
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         threadId = intent.getStringExtra("threadId");
+        int role = intent.getIntExtra("threadRole", EaseThreadRole.MEMBER.ordinal());
+        threadRole = EaseThreadRole.getThreadRole(role);
     }
 
     @Override
@@ -70,7 +84,12 @@ public class ThreadMembersActivity extends BaseInitActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                if(threadRole == EaseThreadRole.GROUP_ADMIN) {
+                    String username = mData.get(position).getUsername();
+                    if(!TextUtils.equals(username, ChatClient.getInstance().getCurrentUser())) {
+                        showRemoveDialog(username);
+                    }
+                }
             }
         });
         binding.srlRefresh.setOnRefreshListener(new OnRefreshListener() {
@@ -79,6 +98,32 @@ public class ThreadMembersActivity extends BaseInitActivity {
                 viewModel.getThreadMembers(threadId);
             }
         });
+        binding.etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkSearchContent(s.toString().trim());
+            }
+        });
+    }
+
+    protected void checkSearchContent(String content) {
+        if(TextUtils.isEmpty(content)) {
+            mAdapter.setData(mData);
+            binding.srlRefresh.setEnabled(true);
+        }else {
+            viewModel.searchContact(mData, content);
+            binding.srlRefresh.setEnabled(false);
+        }
     }
 
     @Override
@@ -91,6 +136,7 @@ public class ThreadMembersActivity extends BaseInitActivity {
                 parseResource(listResource, new OnResourceParseCallback<List<EaseUser>>() {
                     @Override
                     public void onSuccess(@Nullable List<EaseUser> data) {
+                        mData = data;
                         mAdapter.setData(data);
                     }
 
@@ -102,6 +148,12 @@ public class ThreadMembersActivity extends BaseInitActivity {
                 });
             }
         });
+        viewModel.getSearchResultObservable().observe(this, new Observer<List<EaseUser>>() {
+            @Override
+            public void onChanged(List<EaseUser> easeUsers) {
+                mAdapter.setData(easeUsers);
+            }
+        });
         viewModel.getThreadMembers(threadId);
     }
 
@@ -109,5 +161,24 @@ public class ThreadMembersActivity extends BaseInitActivity {
         if(binding.srlRefresh != null) {
             binding.srlRefresh.finishRefresh();
         }
+    }
+
+    public void showRemoveDialog(String username) {
+        MenuItemBean item = new MenuItemBean();
+        item.setIcon(R.drawable.group_manage_remove_admin);
+        item.setTitle("Remove From Thread");
+        item.setAlert(true);
+        List<MenuItemBean> data = new ArrayList<>();
+        data.add(item);
+        new MenuDialog.Builder(mContext)
+                .setTitle("Augustine")
+                .setMenus(data)
+                .setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        viewModel.removeThreadMember(threadId, username);
+                    }
+                })
+                .show();
     }
 }

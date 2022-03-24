@@ -1,6 +1,5 @@
 package io.agora.chatdemo.thread;
 
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -225,7 +224,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
     }
 
     private void skipToThreadMembers() {
-        ThreadMembersActivity.actionStart(mContext, conversationId);
+        ThreadMembersActivity.actionStart(mContext, conversationId, threadRole.ordinal());
     }
 
     private void skipToEditLayout() {

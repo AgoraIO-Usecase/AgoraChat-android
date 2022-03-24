@@ -123,6 +123,14 @@
         <activity
             android:name=".contact.ContactDetailActivity"
             android:screenOrientation="portrait" />
+        <!-- Thread member list -->
+        <activity
+            android:name=".thread.ThreadMembersActivity"
+            android:screenOrientation="portrait"/>
+        <!-- Thread edit -->
+        <activity
+            android:name=".thread.ThreadEditActivity"
+            android:screenOrientation="portrait"/>
 
     </application>
 

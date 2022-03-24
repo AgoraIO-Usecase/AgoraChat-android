@@ -323,4 +323,17 @@
     <string name="start_a_thread">Started a Thread:</string>
     <string name="see_all_threads">See all Threads</string>
 
+    <string name="thread_menu_members">Thread members</string>
+    <string name="thread_menu_notifications">Thread Notifications</string>
+    <string name="thread_menu_edit">Edit Thread</string>
+    <string name="thread_menu_leave">Leave Thread</string>
+    <string name="thread_menu_disband">Disband Thread</string>
+    <string name="thread_leave_hint_title">Leave this Thread?</string>
+    <string name="thread_disband_hint_title">Disband this Thread?</string>
+    <string name="thread_leave_hint_confirm">Leave</string>
+    <string name="thread_disband_hint_confirm">Disband</string>
+    <string name="thread_edit_title">Edit Thread</string>
+    <string name="thread_edit_title_done">Done</string>
+    <string name="thread_member_title">Thread members</string>
+
 </resources>

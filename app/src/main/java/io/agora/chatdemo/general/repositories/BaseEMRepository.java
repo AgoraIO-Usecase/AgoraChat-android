@@ -12,6 +12,7 @@ import io.agora.chat.ChatRoomManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
+import io.agora.chat.ThreadManager;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.R;
@@ -55,7 +56,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * EMChatManager
+     * ChatManager
      * @return
      */
     public ChatManager getChatManager() {
@@ -63,7 +64,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * EMContactManager
+     * ContactManager
      * @return
      */
     public ContactManager getContactManager() {
@@ -71,7 +72,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * EMGroupManager
+     * GroupManager
      * @return
      */
     public GroupManager getGroupManager() {
@@ -79,7 +80,15 @@ public class BaseEMRepository {
     }
 
     /**
-     * EMChatRoomManager
+     * ThreadManager
+     * @return
+     */
+    public ThreadManager getThreadManager() {
+        return ChatClient.getInstance().threadManager();
+    }
+
+    /**
+     * ChatRoomManager
      * @return
      */
     public ChatRoomManager getChatRoomManager() {
@@ -88,7 +97,7 @@ public class BaseEMRepository {
 
 
     /**
-     * EMPushManager
+     * PushManager
      * @return
      */
     public PushManager getPushManager() {

@@ -324,7 +324,12 @@ public class DemoHelper {
         // Set whether read confirmation is required by the recipient
         options.setRequireAck(true);
         // Set whether confirmation of delivery is required by the recipient. Default: false
-        options.setRequireDeliveryAck(false);
+        options.setRequireDeliveryAck(true);
+        // Set whether to delete chat messages when exiting (actively and passively) a group
+        options.setDeleteMessagesAsExitGroup(demoModel.isDeleteMessagesAsExitGroup());
+        // Set whether to automatically accept group invitations
+        options.setAutoAcceptGroupInvitation(demoModel.isAutoAcceptGroupInvitation());
+
 
         /**
          * NOTE:You need to set up your own account to use the three-way push function, see the integration documentation

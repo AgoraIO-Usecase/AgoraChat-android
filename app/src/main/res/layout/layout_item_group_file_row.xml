@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/ease_chat_file_icon_size"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10">
+
+        <ImageView
+            android:id="@+id/iv_file_icon"
+            android:layout_width="@dimen/ease_chat_file_icon_size"
+            android:layout_height="@dimen/ease_chat_file_icon_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_file_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toRightOf="@id/iv_file_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_file_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_2"
+            android:textColor="@color/ease_gray_normal"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@id/tv_file_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_file_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/list_delete_bg"
+            android:gravity="center"
+            android:text="@string/group_file_delete_confirm_text"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_normal" />
+    </LinearLayout>
+</LinearLayout>
+

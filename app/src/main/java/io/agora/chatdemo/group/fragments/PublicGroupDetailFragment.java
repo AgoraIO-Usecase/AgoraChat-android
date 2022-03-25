@@ -58,6 +58,8 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
                 @Override
                 public void onSuccess(Boolean data) {
                     showToast(getResources().getString(R.string.group_application_send));
+                    EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(event);
                     back();
                 }
 

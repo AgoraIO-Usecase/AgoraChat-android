@@ -93,7 +93,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     @Override
     protected void initData() {
         super.initData();
-        mBinding.settingAbout.setContent("V" + DemoHelper.getInstance().getAppVersionName(mContext));
+        mBinding.settingAbout.setContent("AgoraChat v" + DemoHelper.getInstance().getAppVersionName(mContext));
         setUserInfo();
     }
 
@@ -114,13 +114,16 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 showSettingUserInfoDialog();
                 break;
             case R.id.setting_general:
-
+                intent = new Intent(mContext, GeneralActivity.class);
+                startActivity(intent);
                 break;
             case R.id.setting_notifications:
-
+                intent = new Intent(mContext, NotificationActivity.class);
+                startActivity(intent);
                 break;
             case R.id.setting_privacy:
-
+                intent = new Intent(mContext, PrivacyActivity.class);
+                startActivity(intent);
                 break;
             case R.id.setting_about:
                 intent = new Intent(mContext, AboutActivity.class);

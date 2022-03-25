@@ -22,11 +22,13 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.chat.EaseChatFragment;
+import io.agora.chat.uikit.chat.EaseChatLayout;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
+import io.agora.chat.uikit.chat.interfaces.OnPeerTypingListener;
 import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.widget.EaseTitleBar;
@@ -74,7 +76,7 @@ public class ChatActivity extends BaseInitActivity {
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBar = findViewById(R.id.title_bar);
-        //titleBar.setRightImageResource(R.drawable.chat_settings_more);
+        titleBar.setRightImageResource(R.drawable.chat_settings_more);
         titleBar.getIcon().setVisibility(View.GONE);
         titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
         initChatFragment();
@@ -181,6 +183,17 @@ public class ChatActivity extends BaseInitActivity {
                             errorMsg=getString(R.string.error_message_external_logic_blocked);
                         }
                         showToast(getString(R.string.chat_msg_error_toast, code, errorMsg));
+                    }
+                })
+                .turnOnTypingMonitor(DemoHelper.getInstance().getModel().isShowMsgTyping())
+                .setOnPeerTypingListener(new OnPeerTypingListener() {
+                    @Override
+                    public void onPeerTyping(String action) {
+                        if (TextUtils.equals(action, EaseChatLayout.ACTION_TYPING_BEGIN)) {
+                            titleBar.setTitle(getString(R.string.alert_during_typing));
+                        } else if (TextUtils.equals(action, EaseChatLayout.ACTION_TYPING_END)) {
+                            setDefaultTitle();
+                        }
                     }
                 })
                 .hideSenderAvatar(true)

@@ -22,7 +22,7 @@
     <dimen name="margin_40">40dp</dimen>
     <dimen name="margin_view_distance_border">16dp</dimen>
 
-    <dimen name="common_serch_text_height">32dp</dimen>
+    <dimen name="common_search_text_height">32dp</dimen>
     <dimen name="common_arrow_item_avatar_height">40dp</dimen>
     <dimen name="common_arrow_item_view_height">54dp</dimen>
 
@@ -40,5 +40,7 @@
     <dimen name="dialog_middle_margin_left">31dp</dimen>
     <dimen name="dialog_middle_margin_right">31dp</dimen>
     <dimen name="dialog_drawable_padding">18dp</dimen>
+
+    <dimen name="about_me_avatar_size">25dp</dimen>
 
 </resources>

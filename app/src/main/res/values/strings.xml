@@ -232,6 +232,7 @@
     <string name="group_application_send">The group application has been sent</string>
 
     <string name="chat_msg_error_toast">Send message failed, error code: %1$d, error message: %2$s</string>
+    <string name="chat_setting_search">Search Message History</string>
     <string name="chat_setting_clear">Clear Message History</string>
     <string name="chat_setting_mute_notification">Mute Notification</string>
     <string name="chat_setting_to_top">Sticky on Top</string>
@@ -258,6 +259,7 @@
     <string name="group_detail_copy_group_id">Copy GroupID</string>
     <string name="group_detail_chang_group_name_dialog_title">Change Group Name</string>
     <string name="group_detail_chang_group_name_dialog_hint">Latin letters and numbers only</string>
+    <string name="group_detail_change_description_dialog_title">Group Description</string>
 
     <string name="group_members_tab_title_all">All</string>
     <string name="group_members_tab_title_admin">Admin</string>
@@ -283,6 +285,8 @@
     <string name="group_members_action_transfer_and_leave_title">Transfer Ownership to %1$s and Leave this Group?</string>
     <string name="group_members_action_transfer_and_leave_confirm">Yes</string>
 
+    <string name="group_edit_notice_dialog_title">Edit Notice</string>
+
     <string name="group_transfer_title">Transfer Ownership</string>
 
     <string name="me_setting">Settings</string>
@@ -299,6 +303,26 @@
     <string name="me_setting_copy_agoraid">Copy AgoraID</string>
 
     <string name="me_copy_success">Copy Success</string>
+
+    <string name="general_show_typing">Show Typing</string>
+    <string name="general_add_group_request">Add Group Request</string>
+    <string name="general_delete_after_leaving_group">Delete the Chat after Leaving Group</string>
+
+    <string name="notification_push_title">Push Notifications</string>
+    <string name="notification_setting">Notification Setting</string>
+    <string name="notification_setting_all_message">All Messages</string>
+    <string name="notification_setting_only_metions">Only @Metions</string>
+    <string name="notification_setting_nothing">Nothing</string>
+    <string name="notification_do_not_disturb">Do Not Disturb</string>
+    <string name="notification_show_preview_text">Show Preview Text</string>
+    <string name="notification_app_setting_title">In-App Notifications</string>
+    <string name="notification_alert_sound">Alert Sound</string>
+    <string name="notification_vibrate">Vibrate</string>
+
+    <string name="privacy_blocked_list">Blocked List</string>
+    <string name="contact_move_out_blacklist_success">User removed from blocklist</string>
+    <string name="contact_unblock">Unblock</string>
+    <string name="contact_unblock_tip">Remove this user from blocklist?</string>
 
     <string name="about_title">About</string>
     <string name="about_sdk_version">SDK Version</string>
@@ -321,4 +345,16 @@
     <string name="fetch_userinfo_success">fetch userinfo success </string>
     <string name="fetch_userinfo_fail">fetch userinfo fail </string>
 
+    <string name="file_does_not_exist">File does not exist</string>
+    <string name="group_file_desc">From %1$s，%2$s</string>
+    <string name="group_file_download">Download</string>
+    <string name="group_file_upload_image">Upload Image</string>
+    <string name="group_file_upload_video">Upload Video</string>
+    <string name="group_file_upload_file">Upload File</string>
+    <string name="group_file_delete_content">Are you sure to delete %1$s ?</string>
+    <string name="group_file_delete_confirm_text">Delete</string>
+
+    <string name="title_bar_edit">Edit</string>
+    <string name="alert_during_typing">Entering &#8230;</string>
+    <string name="network_disconnected">Network Disconnected</string>
 </resources>

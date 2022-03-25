@@ -104,15 +104,43 @@
             android:name=".chat.ChatActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--Search message-->
+        <activity
+            android:name=".chat.SearchMessageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!--Chat history-->
+        <activity
+            android:name=".chat.ChatHistoryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Group detail -->
         <activity android:name=".group.activities.GroupDetailActivity"
             android:screenOrientation="portrait" />
         <!-- Group members -->
         <activity android:name=".group.activities.GroupMembersActivity"
             android:screenOrientation="portrait" />
+        <!-- Group notice -->
+        <activity android:name=".group.activities.GroupNoticeActivity"
+            android:screenOrientation="portrait" />
+        <!-- Group files -->
+        <activity android:name=".group.activities.GroupFilesActivity"
+            android:screenOrientation="portrait" />
         <!-- Transfer group owner -->
         <activity android:name=".group.activities.GroupTransferActivity"
             android:screenOrientation="portrait" />
+        <!--General-->
+        <activity android:name=".me.GeneralActivity"
+            android:screenOrientation="portrait"/>
+        <!--Notification-->
+        <activity android:name=".me.NotificationActivity"
+            android:screenOrientation="portrait"/>
+        <!--Privacy-->
+        <activity android:name=".me.PrivacyActivity"
+            android:screenOrientation="portrait"/>
+        <!--Contact Black List-->
+        <activity android:name=".me.ContactBlackListActivity"
+            android:screenOrientation="portrait"/>
         <!--About-->
         <activity android:name=".me.AboutActivity"
             android:screenOrientation="portrait"/>

@@ -38,7 +38,7 @@ public class AvatarSelectAdapter extends EaseBaseRecyclerViewAdapter<Integer> {
                     .load(item)
                     .apply(requestOptions)
                     .error(R.drawable.avatar_1)
-                    .into(mBinding.ivAvatar);
+                    .into(mBinding.ivUserAvatar);
         }
     }
 }

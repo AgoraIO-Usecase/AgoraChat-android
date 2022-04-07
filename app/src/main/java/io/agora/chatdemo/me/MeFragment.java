@@ -20,8 +20,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 
 import io.agora.CallBack;
+import io.agora.chat.Presence;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.utils.EasePresenceUtil;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
@@ -69,12 +71,6 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
 
             });
         });
-        LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.class).observe(mContext, event -> {
-            if (event != null) {
-                EMLog.e(TAG, "receive CURRENT_USER_INFO_CHANGE");
-                setUserInfo();
-            }
-        });
     }
 
     @Override
@@ -85,9 +81,19 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         mBinding.settingPrivacy.setOnClickListener(this);
         mBinding.settingAbout.setOnClickListener(this);
         mBinding.btnLogout.setOnClickListener(this);
-        mBinding.layoutUserinfo.ivAvatar.setOnClickListener(this);
+        mBinding.layoutUserinfo.ivUserAvatar.setOnClickListener(this);
         mBinding.layoutUserinfo.tvNickname.setOnClickListener(this);
         mBinding.layoutUserinfo.tvId.setOnClickListener(this);
+
+        LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.class).observe(mContext, event -> {
+            if (event != null) {
+                EMLog.e(TAG, "receive CURRENT_USER_INFO_CHANGE");
+                setUserInfo();
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(mContext, event -> {
+            updatePresence();
+        });
     }
 
     @Override
@@ -101,14 +107,20 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         currentUser = DemoHelper.getInstance().getUsersManager().getCurrentUserID();
         userInfo = DemoHelper.getInstance().getUsersManager().getCurrentUserInfo();
         mBinding.layoutUserinfo.tvId.setText(getString(R.string.show_agora_chat_id, userInfo.getUsername()));
-        DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, currentUser, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivAvatar);
+        DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, currentUser, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivUserAvatar);
+        updatePresence();
+    }
+
+    private void updatePresence() {
+        Presence presence = DemoHelper.getInstance().getPresences().get(DemoHelper.getInstance().getUsersManager().getCurrentUserID());
+        mBinding.layoutUserinfo.ivPresence.setImageResource(EasePresenceUtil.getPresenceIcon(mContext,presence));
     }
 
     @Override
     public void onClick(View v) {
         Intent intent = null;
         switch (v.getId()) {
-            case R.id.iv_avatar:
+            case R.id.iv_user_avatar:
             case R.id.tv_nickname:
             case R.id.tv_id:
                 showSettingUserInfoDialog();
@@ -155,6 +167,10 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 break;
             case R.id.iv_nickname_delete:
                 edtNickName.setText("");
+                break;
+            case R.id.tv_set_status:
+                SetPresenceActivity.actionStart(mContext);
+                settingUserInfoDialog.dismiss();
                 break;
         }
 
@@ -223,6 +239,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 .setOnClickListener(R.id.tv_change_avatar, this)
                 .setOnClickListener(R.id.tv_change_nickname, this)
                 .setOnClickListener(R.id.tv_copy_id, this)
+                .setOnClickListener(R.id.tv_set_status, this)
                 .show();
     }
 
@@ -233,7 +250,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         if ((requestCode == REQUEST_CODE && resultCode == RESULT_OK)) {
             if (data != null) {
                 int headImg = data.getIntExtra("headImage", R.drawable.ease_default_avatar);
-                Glide.with(mContext).load(headImg).placeholder(R.drawable.ease_default_avatar).into(mBinding.layoutUserinfo.ivAvatar);
+                Glide.with(mContext).load(headImg).placeholder(R.drawable.ease_default_avatar).into(mBinding.layoutUserinfo.ivUserAvatar);
             }
         }
     }

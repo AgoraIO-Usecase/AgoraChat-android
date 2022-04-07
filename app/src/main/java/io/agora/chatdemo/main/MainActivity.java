@@ -16,9 +16,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailabilityLight;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
@@ -36,6 +42,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.me.MeFragment;
+import io.agora.util.EMLog;
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
@@ -127,6 +134,28 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         mainViewModel.checkUnreadMsg();
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
         checkNeedPermission();
+
+        if(GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
+            // 启用 FCM 自动初始化
+            if(!FirebaseMessaging.getInstance().isAutoInitEnabled()){
+                FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+                FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
+            }
+            // 获取FCM 推送 token 并上传
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        EMLog.d("FCM", "Fetching FCM registration token failed:"+task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+                    EMLog.d("FCM", token);
+                    ChatClient.getInstance().sendFCMTokenToServer(token);
+                }
+            });
+        }
 
     }
 

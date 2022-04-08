@@ -120,7 +120,7 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
             return;
         }
         mBinding.layoutUserinfo.tvId.setText(getString(R.string.show_agora_group_id, groupId));
-        boolean hasSet = DemoHelper.getInstance().setGroupInfo(mContext, groupId, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivAvatar);
+        boolean hasSet = DemoHelper.getInstance().setGroupInfo(mContext, groupId, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivUserAvatar);
         if(!hasSet) {
             mBinding.layoutUserinfo.tvNickname.setText(groupName);
         }

@@ -9,7 +9,8 @@
         android:id="@+id/toolbar_group_detail"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ease_common_title_bar_height"
-        app:titleBarDisplayHomeAsUpEnabled="true" />
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -117,5 +118,4 @@
                 app:arrowItemTitle="@string/group_detail_disband_group" />
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

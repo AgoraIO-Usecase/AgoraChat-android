@@ -210,7 +210,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             binding.itemDisbandGroup.setVisibility(View.GONE);
         }
 
-        boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, groupId, binding.includeInfo.tvName, binding.includeInfo.ivAvatar);
+        boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, groupId, binding.includeInfo.tvName, binding.includeInfo.ivUserAvatar);
         if(!hasProvided) {
             setGroupInfo();
         }

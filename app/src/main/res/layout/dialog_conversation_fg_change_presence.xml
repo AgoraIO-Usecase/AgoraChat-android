@@ -4,8 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="@dimen/margin_15"
-    android:paddingBottom="33dp"
-    android:paddingRight="@dimen/margin_15">
+    android:paddingRight="@dimen/margin_15"
+    android:paddingBottom="33dp">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,54 +18,79 @@
         android:showDividers="middle">
 
         <TextView
-            android:id="@+id/tv_change_avatar"
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:background="@drawable/shape_white_corner_14"
-            android:drawableLeft="@drawable/dialog_change_avatar"
-            android:drawablePadding="@dimen/dialog_drawable_padding"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:text="@string/dialog_change_presence_title"
+            android:textAllCaps="false"
+            android:textColor="@color/color_light_gray_999999"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <TextView
+            android:id="@+id/tv_online"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:drawableLeft="@drawable/ease_presence_online"
+            android:drawablePadding="@dimen/presence_drawable_padding"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dialog_drawable_padding"
-            android:text="@string/me_setting_change_avatar"
+            android:text="@string/ease_presence_online"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_big_18" />
 
         <TextView
-            android:id="@+id/tv_change_nickname"
+            android:id="@+id/tv_busy"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:drawableLeft="@drawable/dialog_edit"
-            android:drawablePadding="@dimen/dialog_drawable_padding"
+            android:drawableLeft="@drawable/ease_presence_busy"
+            android:drawablePadding="@dimen/presence_drawable_padding"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dialog_drawable_padding"
-            android:text="@string/me_setting_change_nickname"
+            android:text="@string/ease_presence_busy"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_big_18" />
 
         <TextView
-            android:id="@+id/tv_copy_id"
+            android:id="@+id/tv_not_disturb"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:drawableLeft="@drawable/dialog_copy"
-            android:drawablePadding="@dimen/dialog_drawable_padding"
+            android:drawableLeft="@drawable/ease_presence_do_not_disturb"
+            android:drawablePadding="@dimen/presence_drawable_padding"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dialog_drawable_padding"
-            android:text="@string/me_setting_copy_agoraid"
+            android:text="@string/ease_presence_do_not_disturb"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_big_18" />
+
         <TextView
-            android:id="@+id/tv_set_status"
+            android:id="@+id/tv_leave"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:drawableLeft="@drawable/ease_presence_leave"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:text="@string/ease_presence_leave"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <TextView
+            android:id="@+id/tv_custom"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:background="@drawable/shape_white_corner_14"
-            android:drawableLeft="@drawable/dialog_set_status"
-            android:drawablePadding="@dimen/dialog_drawable_padding"
+            android:drawableLeft="@drawable/ease_presence_custom"
+            android:drawablePadding="@dimen/presence_drawable_padding"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dialog_drawable_padding"
-            android:text="@string/me_setting_set_status"
+            android:text="@string/ease_presence_custom"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_big_18" />

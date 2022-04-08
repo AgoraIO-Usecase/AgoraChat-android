@@ -42,5 +42,6 @@
     <dimen name="dialog_drawable_padding">18dp</dimen>
 
     <dimen name="about_me_avatar_size">25dp</dimen>
+    <dimen name="presence_drawable_padding">14dp</dimen>
 
 </resources>

@@ -40,7 +40,6 @@
             android:paddingLeft="@dimen/dialog_drawable_padding"
             android:text="@string/group_detail_change_description"
             android:textAllCaps="false"
-            android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_big_18" />
 

@@ -24,8 +24,10 @@ import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.CallBack;
+import io.agora.PresenceListener;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatManager;
 import io.agora.chat.ChatMessage;
@@ -34,6 +36,7 @@ import io.agora.chat.ChatRoomManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
+import io.agora.chat.Presence;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.manager.EaseNotifier;
@@ -45,7 +48,9 @@ import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
@@ -68,6 +73,8 @@ public class DemoHelper {
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
     private UsersManager usersManager;
+
+    private ConcurrentHashMap<String,Presence> mPresences=new ConcurrentHashMap<>();
 
     private DemoHelper() {}
 
@@ -92,8 +99,27 @@ public class DemoHelper {
             initPush(context);
             // Initialize UIKit
             initEaseUIKit(context);
+            //Initialize presence
+            initPresence();
         }
 
+    }
+
+    private void initPresence() {
+        ChatClient.getInstance().presenceManager().addListener(new PresenceListener() {
+            @Override
+            public void onPresenceUpdated(List<Presence> presences) {
+                for (Presence presence : presences) {
+                    Log.d("TAG", presence.toString());
+                    mPresences.put(presence.getPublisher(),presence);
+                }
+                LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).postValue(mPresences);
+            }
+        });
+    }
+
+    public ConcurrentHashMap<String, Presence> getPresences() {
+        return mPresences;
     }
 
     /**

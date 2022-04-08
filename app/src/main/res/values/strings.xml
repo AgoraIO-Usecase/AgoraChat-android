@@ -75,7 +75,7 @@
     <string name="group_description">GROUP DESCRIPTION, NOT REQUIRED</string>
     <string name="group_maximum_member">MAXIMUM MEMBER</string>
     <string name="group_set_to_a_public_group">Set to a Public Group</string>
-    <string name="group_no_more_than">No More Than 2000</string>
+    <string name="group_no_more_than">No More Than 3000</string>
     <string name="group_allow_members_to_invite">Allow Members to Invite</string>
 
     <string name="public_group_information">Public group info</string>
@@ -90,7 +90,7 @@
 
     <string name="group_new_success">Group created</string>
     <string name="group_new_invite_join_group">%1$s invited you to join group: %2$s</string>
-    <string name="group_new_member_limit">Member quantity: 3 to 2,000</string>
+    <string name="group_new_member_limit">Member quantity: 3 to 3,000</string>
     <string name="group_new_name_cannot_be_empty">Complete the group info</string>
 
     <string name="show_agora_chat_id">AgoraID: %1$s</string>
@@ -297,6 +297,7 @@
     <string name="me_setting_change_avatar">Change Avatar</string>
     <string name="me_setting_change_nickname">Change Nickname</string>
     <string name="me_setting_copy_agoraid">Copy AgoraID</string>
+    <string name="me_setting_set_status">Set Status</string>
 
     <string name="me_copy_success">Copy Success</string>
 
@@ -320,5 +321,9 @@
 
     <string name="fetch_userinfo_success">fetch userinfo success </string>
     <string name="fetch_userinfo_fail">fetch userinfo fail </string>
+
+    <string name="dialog_change_presence_title">status </string>
+    <string name="dialog_clear_presence_title">Clear your Custom Status? </string>
+    <string name="dialog_clear_presence_content">Clear ”%1$s”, change to %2$s. </string>
 
 </resources>

@@ -41,4 +41,6 @@
     <dimen name="dialog_middle_margin_right">31dp</dimen>
     <dimen name="dialog_drawable_padding">18dp</dimen>
 
+    <dimen name="presence_drawable_padding">14dp</dimen>
+
 </resources>

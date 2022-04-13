@@ -102,6 +102,19 @@
         app:arrowItemTitle="@string/contact_detail_block_contact" />
 
     <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_notifications"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:foreground="@drawable/ease_ripple_click_gray"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarSrc="@drawable/notifications"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowArrow="true"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemTitle="@string/me_setting_notifications"
+        app:arrowItemTitleSize="@dimen/text_size_big" />
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
         android:id="@+id/item_delete_block"
         android:layout_width="match_parent"
         android:layout_height="54dp"

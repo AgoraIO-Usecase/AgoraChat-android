@@ -5,11 +5,16 @@ import androidx.lifecycle.LiveData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.CallBack;
+import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
+import io.agora.chat.Conversation;
 import io.agora.chat.PushConfigs;
 import io.agora.chat.PushManager;
+import io.agora.chat.SilentModeResult;
+import io.agora.chat.SilentModeParam;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.net.Resource;
@@ -282,6 +287,202 @@ public class EMPushManagerRepository extends BaseEMRepository {
                     }
                 });
 
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Example Set the DND Settings for the current login user
+     * @param param
+     */
+    public LiveData<Resource<SilentModeResult>> setSilentModeForAll(SilentModeParam param) {
+        return new NetworkOnlyResource<SilentModeResult>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<SilentModeResult>> callBack) {
+                ChatClient.getInstance().pushManager().setSilentModeForAll(param, new ValueCallBack<SilentModeResult>() {
+                    @Override
+                    public void onSuccess(SilentModeResult value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Set the DND of the conversation
+     * @param conversationId
+     * @param type
+     * @param param
+     */
+    public LiveData<Resource<SilentModeResult>> setSilentModeForConversation(String conversationId, Conversation.ConversationType type, SilentModeParam param) {
+        return new NetworkOnlyResource<SilentModeResult>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<SilentModeResult>> callBack) {
+                ChatClient.getInstance().pushManager().setSilentModeForConversation(conversationId, type, param, new ValueCallBack<SilentModeResult>() {
+                    @Override
+                    public void onSuccess(SilentModeResult value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Gets the DND Settings of the current login user
+     */
+    public LiveData<Resource<SilentModeResult>> getSilentModeForAll() {
+        return new NetworkOnlyResource<SilentModeResult>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<SilentModeResult>> callBack) {
+                ChatClient.getInstance().pushManager().getSilentModeForAll(new ValueCallBack<SilentModeResult>() {
+                    @Override
+                    public void onSuccess(SilentModeResult value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Gets the DND setting of the conversation
+     * @param conversationId
+     * @param type
+     */
+    public LiveData<Resource<SilentModeResult>> getSilentModeForConversation(String conversationId, Conversation.ConversationType type) {
+        return new NetworkOnlyResource<SilentModeResult>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<SilentModeResult>> callBack) {
+                ChatClient.getInstance().pushManager().getSilentModeForConversation(conversationId, type, new ValueCallBack<SilentModeResult>() {
+                    @Override
+                    public void onSuccess(SilentModeResult value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Clear the setting of offline push notification type for the conversation
+     * @param conversationId
+     * @param type
+     */
+    public LiveData<Resource<Boolean>> clearRemindTypeForConversation(String conversationId, Conversation.ConversationType type) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                ChatClient.getInstance().pushManager().clearRemindTypeForConversation(conversationId, type, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Obtain the DND Settings of specified sessions in batches
+     * @param conversations
+     */
+    public LiveData<Resource<Map<String, SilentModeResult>>> getSilentModeForConversations(List<Conversation> conversations) {
+        return new NetworkOnlyResource<Map<String, SilentModeResult>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String, SilentModeResult>>> callBack) {
+                ChatClient.getInstance().pushManager().getSilentModeForConversations(conversations, new ValueCallBack<Map<String, SilentModeResult>>() {
+                    @Override
+                    public void onSuccess(Map<String, SilentModeResult> value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Set user push translation language
+     * @param languageCode
+     */
+    public LiveData<Resource<Boolean>> setPushPerformLanguage(String languageCode) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                ChatClient.getInstance().pushManager().setPreferredNotificationLanguage(languageCode, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Get the push translation language set by the user
+     */
+    public LiveData<Resource<String>> getPushPerformLanguage() {
+        return new NetworkOnlyResource<String>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                ChatClient.getInstance().pushManager().getPreferredNotificationLanguage(new ValueCallBack<String>() {
+                    @Override
+                    public void onSuccess(String value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
             }
         }.asLiveData();
     }

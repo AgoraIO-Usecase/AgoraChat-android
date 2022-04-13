@@ -10,14 +10,19 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.agora.chat.Presence;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.contact.viewmodels.ContactsListViewModel;
+import io.agora.chatdemo.conversation.viewmodel.PresenceViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     private ContactsListViewModel mViewModel;
+    private PresenceViewModel presenceViewModel;
     private List<EaseUser> mData = new ArrayList<>();
 
     @Override
@@ -30,26 +35,38 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     protected void initViewModel() {
         super.initViewModel();
         mViewModel = new ViewModelProvider(this).get(ContactsListViewModel.class);
+        presenceViewModel= new ViewModelProvider(this).get(PresenceViewModel.class);
+        presenceViewModel.presencesObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<List<Presence>>() {
+                @Override
+                public void onSuccess(@Nullable List<Presence> data) {
+                    ((ContactListAdapter) mListAdapter).setPresences(DemoHelper.getInstance().getPresences());
+//                    checkSearchContent(etSearch.getText().toString().trim());
+                    mListAdapter.setData(mData);
+                    checkView(etSearch.getText().toString().trim());
+                }
+            });
+        });
         mViewModel.getContactObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
                     srlContactRefresh.setRefreshing(false);
                     mData = data;
-                    checkSearchContent(etSearch.getText().toString().trim());
+                    presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
                 }
 
                 @Override
                 public void onLoading(@Nullable List<EaseUser> data) {
                     super.onLoading(data);
                     mData = data;
-                    mListAdapter.setData(data);
+                    presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
                 }
 
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
-                    runOnUiThread(()-> srlContactRefresh.setRefreshing(false));
+                    runOnUiThread(() -> srlContactRefresh.setRefreshing(false));
                 }
             });
         });
@@ -75,56 +92,65 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
             parseResource(result, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
-                    mListAdapter.setData(data);
+                    presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
                 }
             });
         });
 
         mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(false);
             }
         });
 
         mViewModel.messageChangeObservable().with(DemoConstant.REMOVE_BLACK, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(true);
             }
         });
 
 
         mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(false);
             }
         });
 
 
         mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_DELETE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(false);
             }
         });
 
         mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(false);
             }
+        });
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(getViewLifecycleOwner(), event -> {
+            ((ContactListAdapter) mListAdapter).setPresences(DemoHelper.getInstance().getPresences());
+            mListAdapter.setData(mData);
         });
     }
 
@@ -148,17 +174,25 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     @Override
     protected void searchText(String content) {
         checkSearchContent(content);
+        checkView(content);
     }
 
     protected void checkSearchContent(String content) {
-        if(TextUtils.isEmpty(content)) {
+        if (TextUtils.isEmpty(content)) {
             mListAdapter.setData(mData);
+        } else {
+            mViewModel.searchContact(content);
+        }
+    }
+
+    protected void checkView(String content) {
+        if (TextUtils.isEmpty(content)) {
             sideBarContact.setVisibility(View.VISIBLE);
             srlContactRefresh.setEnabled(true);
-        }else {
-            mViewModel.searchContact(content);
+        } else {
             sideBarContact.setVisibility(View.GONE);
             srlContactRefresh.setEnabled(false);
         }
     }
+
 }

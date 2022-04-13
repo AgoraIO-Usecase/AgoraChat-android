@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        android:background="@color/white"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back"
+        app:titleBarTitle="@string/me_setting_general"
+        app:titleBarTitlePosition="left"
+        app:titleBarTitleTextColor="@color/color_main_text" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <io.agora.chatdemo.general.widget.SwitchItemView
+                android:id="@+id/item_switch_show_typing"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:switchItemShowDivider="false"
+                app:switchItemTitle="@string/general_show_typing"
+                app:switchItemTitleSize="@dimen/text_size_normal" />
+
+            <io.agora.chatdemo.general.widget.SwitchItemView
+                android:id="@+id/item_switch_add_group_request"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_switch_show_typing"
+                app:switchItemShowDivider="false"
+                app:switchItemTitle="@string/general_add_group_request"
+                app:switchItemTitleSize="@dimen/text_size_normal" />
+
+            <io.agora.chatdemo.general.widget.SwitchItemView
+                android:id="@+id/item_switch_delete_after_leaving_group"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_switch_add_group_request"
+                app:switchItemShowDivider="false"
+                app:switchItemTitle="@string/general_delete_after_leaving_group"
+                app:switchItemTitleSize="@dimen/text_size_normal" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

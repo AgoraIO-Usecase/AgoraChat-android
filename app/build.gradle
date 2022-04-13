@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
 }
+apply plugin: 'com.google.gms.google-services'
 
 android {
     // Read local.properties
@@ -90,7 +91,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     // Google firebase cloud messaging
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:28.2.1')
+    implementation platform('com.google.firebase:firebase-bom:29.1.0')
     // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-messaging'
@@ -119,7 +120,4 @@ task copyApp(type: Copy) {
     File file = new File('outputs')
     into file
 }
-
-// ADD THIS AT THE BOTTOM
-apply plugin: 'com.google.gms.google-services'
 

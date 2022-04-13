@@ -71,4 +71,8 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
+    <style name="silent_radio_button" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="colorControlActivated">@color/ease_btn_blue_normal</item>
+    </style>
+
 </resources>

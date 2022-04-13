@@ -11,14 +11,18 @@ import java.util.List;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.Presence;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.repositories.EMChatManagerRepository;
 import io.agora.chatdemo.general.repositories.EMChatRoomManagerRepository;
+import io.agora.chatdemo.general.repositories.EMPresenceManagerRepository;
 
 public class ChatViewModel extends AndroidViewModel {
     private EMChatRoomManagerRepository chatRoomManagerRepository;
     private EMChatManagerRepository chatManagerRepository;
+    private EMPresenceManagerRepository presenceManagerRepository;
+    private SingleSourceLiveData<Resource<List<Presence>>> presenceObservable;
     private SingleSourceLiveData<Resource<ChatRoom>> chatRoomObservable;
     private SingleSourceLiveData<Resource<Boolean>> makeConversationReadObservable;
     private SingleSourceLiveData<Resource< List<String>>> getNoPushUsersObservable;
@@ -28,12 +32,19 @@ public class ChatViewModel extends AndroidViewModel {
         super(application);
         chatRoomManagerRepository = new EMChatRoomManagerRepository();
         chatManagerRepository = new EMChatManagerRepository();
+        presenceManagerRepository=new EMPresenceManagerRepository();
         chatRoomObservable = new SingleSourceLiveData<>();
         makeConversationReadObservable = new SingleSourceLiveData<>();
         getNoPushUsersObservable = new SingleSourceLiveData<>();
         setNoPushUsersObservable = new SingleSourceLiveData<>();
+        presenceObservable = new SingleSourceLiveData<>();
     }
-
+    public LiveData<Resource<List<Presence>>> getPresenceObservable(){
+        return presenceObservable;
+    }
+    public void fetchPresenceStatus(List<String> userIds){
+        presenceObservable.setSource(presenceManagerRepository.fetchPresenceStatus(userIds));
+    }
     public LiveData<Resource<ChatRoom>> getChatRoomObservable() {
         return chatRoomObservable;
     }

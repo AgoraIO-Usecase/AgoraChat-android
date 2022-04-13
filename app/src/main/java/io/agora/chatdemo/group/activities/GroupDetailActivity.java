@@ -29,8 +29,12 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.dialog.DisbandGroupDialog;
+import io.agora.chatdemo.general.dialog.EditInfoDialog;
 import io.agora.chatdemo.group.dialog.EditGroupInfoDialog;
 import io.agora.chatdemo.group.viewmodel.GroupDetailViewModel;
+import io.agora.chatdemo.me.NotificationActivity;
+
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_GROUP;
 
 public class GroupDetailActivity extends BaseInitActivity implements View.OnClickListener {
 
@@ -72,7 +76,9 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
         binding.itemGroupTransfer.setVisibility(View.GONE);
         binding.itemDisbandGroup.setVisibility(View.GONE);
         binding.itemLeaveGroup.setVisibility(View.GONE);
-        if(fromChat) {
+        binding.itemGroupNotice.setVisibility(View.VISIBLE);
+        binding.itemGroupFiles.setVisibility(View.VISIBLE);
+        if (fromChat) {
             binding.includeInfo.ivChat.setVisibility(View.GONE);
             binding.includeInfo.tvChat.setVisibility(View.GONE);
         }
@@ -96,6 +102,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             }
         });
         binding.includeInfo.ivChat.setOnClickListener(this);
+        binding.itemGroupNotification.setOnClickListener(this);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -113,6 +120,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 break;
             case R.id.item_group_files:
                 skipToFiles();
+                break;
             case R.id.item_group_transfer:
                 skipToTransfer(false);
                 break;
@@ -125,6 +133,9 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             case R.id.iv_chat:
                 ChatActivity.actionStart(mContext, groupId, DemoConstant.CHATTYPE_GROUP);
                 break;
+            case R.id.item_group_notification:
+                skipToNotificationSetting();
+                break;
         }
     }
 
@@ -136,7 +147,12 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(@Nullable String data) {
-                    binding.tvNotice.setText(data);
+                    if (TextUtils.isEmpty(data)) {
+                        binding.tvNotice.setVisibility(View.GONE);
+                    } else {
+                        binding.tvNotice.setVisibility(View.VISIBLE);
+                        binding.tvNotice.setText(data);
+                    }
                 }
             });
         });
@@ -201,7 +217,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             binding.itemDisbandGroup.setVisibility(View.GONE);
         }
 
-        boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, groupId, binding.includeInfo.tvName, binding.includeInfo.ivAvatar);
+        boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, groupId, binding.includeInfo.tvName, binding.includeInfo.ivUserAvatar);
         if(!hasProvided) {
             setGroupInfo();
         }
@@ -242,6 +258,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                     .setOnClickListener(R.id.tv_change_description, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            showModifyGroupDescriptionDialog();
                             dialog.dismiss();
                         }
                     })
@@ -274,16 +291,33 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 .show();
     }
 
+    private void showModifyGroupDescriptionDialog() {
+        new EditInfoDialog.Builder(mContext)
+                .setOnConfirmClickListener(new EditInfoDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view, String content) {
+                        if (!TextUtils.equals(group.getGroupName(), content)) {
+                            viewModel.setGroupDescription(groupId, content);
+                            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                        }
+                    }
+                })
+                .setContent(group.getDescription())
+                .setTitle(R.string.group_detail_change_description_dialog_title)
+                .showCancelButton(true)
+                .show();
+    }
+
     protected void skipToMemberList() {
         GroupMembersActivity.actionStart(mContext, groupId);
     }
 
     private void skipToNotice() {
-
+        GroupNoticeActivity.actionStart(mContext, groupId);
     }
 
     private void skipToFiles() {
-
+        GroupFilesActivity.actionStart(mContext, groupId);
     }
 
     private void skipToTransfer(boolean leave) {
@@ -291,6 +325,10 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             // Skip to transfer activity
             GroupTransferActivity.actionStart(mContext, groupId, leave);
         }
+    }
+
+    private void skipToNotificationSetting(){
+        NotificationActivity.actionStart(mContext, DETAIL_TYPE_GROUP, groupId);
     }
 
     private void leaveGroup() {

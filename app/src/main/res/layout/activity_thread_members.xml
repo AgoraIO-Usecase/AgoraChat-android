@@ -17,7 +17,7 @@
         android:layout_height="32dp"
         android:focusableInTouchMode="true"
         android:layout_marginTop="6dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:singleLine="true"
         android:layout_marginStart="@dimen/margin_view_distance_border"
         android:layout_marginEnd="@dimen/margin_view_distance_border"

@@ -13,15 +13,17 @@ import io.agora.chatdemo.general.repositories.EMThreadManagerRepository;
 public class ThreadChatViewModel extends AndroidViewModel {
     private EMThreadManagerRepository threadRepository;
     private SingleSourceLiveData<Resource<Boolean>> resultObservable;
+    private SingleSourceLiveData<Resource<Boolean>> disbandObservable;
 
     public ThreadChatViewModel(@NonNull Application application) {
         super(application);
         threadRepository = new EMThreadManagerRepository();
         resultObservable = new SingleSourceLiveData<>();
+        disbandObservable = new SingleSourceLiveData<>();
     }
 
     /**
-     * Get no push user list
+     * Get result observable
      */
     public LiveData<Resource<Boolean>> getResultObservable() {
         return resultObservable;
@@ -36,11 +38,20 @@ public class ThreadChatViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get disband observable
+     * @return
+     */
+    public LiveData<Resource<Boolean>> getDisbandObservable() {
+        return disbandObservable;
+    }
+
+    /**
      * Disband thread
      * @param threadId
+     * @param parentMsgId
      */
-    public void disbandThread(String threadId) {
-        resultObservable.setSource(threadRepository.destroyThread(threadId));
+    public void disbandThread(String threadId, String parentMsgId) {
+        resultObservable.setSource(threadRepository.destroyThread(threadId, parentMsgId));
     }
 
 }

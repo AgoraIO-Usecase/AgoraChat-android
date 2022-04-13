@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.thread.EaseThreadRole;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
@@ -154,6 +156,17 @@ public class ThreadMembersActivity extends BaseInitActivity {
                 mAdapter.setData(easeUsers);
             }
         });
+        viewModel.getRemoveResultObservable().observe(this, new Observer<Resource<Boolean>>() {
+            @Override
+            public void onChanged(Resource<Boolean> booleanResource) {
+                parseResource(booleanResource, new OnResourceParseCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(@Nullable Boolean data) {
+                        viewModel.getThreadMembers(threadId);
+                    }
+                });
+            }
+        });
         viewModel.getThreadMembers(threadId);
     }
 
@@ -164,14 +177,19 @@ public class ThreadMembersActivity extends BaseInitActivity {
     }
 
     public void showRemoveDialog(String username) {
+        String title = username;
+        EaseUser userInfo = EaseUserUtils.getUserInfo(username);
+        if(userInfo != null) {
+            title = userInfo.getNickname();
+        }
         MenuItemBean item = new MenuItemBean();
         item.setIcon(R.drawable.group_manage_remove_admin);
-        item.setTitle("Remove From Thread");
+        item.setTitle(getString(R.string.thread_remove_member_hint));
         item.setAlert(true);
         List<MenuItemBean> data = new ArrayList<>();
         data.add(item);
         new MenuDialog.Builder(mContext)
-                .setTitle("Augustine")
+                .setTitle(title)
                 .setMenus(data)
                 .setOnItemClickListener(new OnItemClickListener() {
                     @Override
@@ -179,6 +197,8 @@ public class ThreadMembersActivity extends BaseInitActivity {
                         viewModel.removeThreadMember(threadId, username);
                     }
                 })
+                .setFullWidth()
+                .setGravity(Gravity.BOTTOM)
                 .show();
     }
 }

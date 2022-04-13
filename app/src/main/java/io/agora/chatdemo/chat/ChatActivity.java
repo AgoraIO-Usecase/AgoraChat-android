@@ -23,8 +23,10 @@ import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.activities.EaseThreadListActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
+import io.agora.chat.uikit.chat.EaseChatLayout;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
+import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
@@ -45,6 +47,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
+import io.agora.chatdemo.thread.ThreadChatActivity;
 import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity {
@@ -52,6 +55,7 @@ public class ChatActivity extends BaseInitActivity {
     private int chatType;
     private ChatViewModel viewModel;
     private ActivityChatBinding binding;
+    private EaseChatLayout mChatLayout;
 
     public static void actionStart(Context context, String conversationId, int chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -187,6 +191,12 @@ public class ChatActivity extends BaseInitActivity {
                     public void onUserAvatarLongClick(String username) {
 
                     }
+
+                    @Override
+                    public boolean onThreadClick(String messageId, String threadId) {
+                        ThreadChatActivity.actionStart(mContext, messageId, threadId);
+                        return true;
+                    }
                 })
                 .setOnMessageSendCallBack(new OnMessageSendCallBack() {
 
@@ -204,7 +214,14 @@ public class ChatActivity extends BaseInitActivity {
                         showToast(getString(R.string.chat_msg_error_toast, code, errorMsg));
                     }
                 })
+                .setOnChatLayoutFinishInflateListener(new OnChatLayoutFinishInflateListener() {
+                    @Override
+                    public void onChatListFinishInflate(EaseChatLayout chatLayout) {
+                        mChatLayout = chatLayout;
+                    }
+                })
                 .hideSenderAvatar(true)
+                .sendMessageByOriginalImage(true)
                 .setCustomAdapter(new CustomMessageAdapter())
                 .build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
@@ -300,6 +317,12 @@ public class ChatActivity extends BaseInitActivity {
                 finish();
             }
         });
+        LiveDataBus.get().with(DemoConstant.THREAD_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            mChatLayout.getChatMessageListLayout().refreshMessages();
+        });
         checkUnreadCount();
         setDefaultTitle();
     }
@@ -345,4 +368,5 @@ public class ChatActivity extends BaseInitActivity {
         }
         binding.title.setText(title);
     }
+
 }

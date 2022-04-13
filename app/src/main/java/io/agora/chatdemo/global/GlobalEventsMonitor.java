@@ -18,19 +18,20 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import io.agora.ChatRoomChangeListener;
+import io.agora.ChatThreadChangeListener;
 import io.agora.ContactListener;
 import io.agora.ConversationListener;
 import io.agora.Error;
 import io.agora.MultiDeviceListener;
-import io.agora.ThreadChangeListener;
-import io.agora.ThreadNotifyListener;
+import io.agora.ChatThreadChangeListener;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
+import io.agora.chat.ChatThreadEvent;
 import io.agora.chat.Conversation;
 import io.agora.chat.MucSharedFile;
 import io.agora.chat.TextMessageBody;
-import io.agora.chat.ThreadEvent;
+import io.agora.chat.ChatThreadEvent;
 import io.agora.chat.UserInfo;
 import io.agora.chat.adapter.EMAChatRoomManagerListener;
 import io.agora.chat.uikit.EaseUIKit;
@@ -89,10 +90,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
         //Add monitoring of conversation (listening to read receipts)
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
-        //Add thread notify listener
-        DemoHelper.getInstance().getThreadManager().addThreadNotifyListener(new ChatThreadNotifyListener());
         //Add thread change listener
-        DemoHelper.getInstance().getThreadManager().addThreadChangeListener(new ChatThreadChangeListener());
+        DemoHelper.getInstance().getThreadManager().addChatThreadChangeListener(new ThreadChangeListener());
     }
 
     public static GlobalEventsMonitor getInstance() {
@@ -690,58 +689,43 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         }
     }
 
-    private class ChatThreadNotifyListener implements ThreadNotifyListener {
+    private class ThreadChangeListener implements ChatThreadChangeListener {
 
         @Override
-        public void onThreadNotify(ThreadEvent event) {
-            ThreadEvent.TYPE type = event.getType();
-            if(type == ThreadEvent.TYPE.CREATE) {
-                createThreadCreatedMsg(event);
-            }
-        }
-    }
-
-    private class ChatThreadChangeListener implements ThreadChangeListener {
-
-        @Override
-        public void onThreadNameUpdated(String parentId, String threadId, String operator, String newThreadName) {
+        public void onChatThreadCreated(ChatThreadEvent event) {
 
         }
 
         @Override
-        public void onThreadDestroyed(String parentId, String threadId, String threadName, String operator) {
+        public void onChatThreadUpdated(ChatThreadEvent event) {
 
         }
 
         @Override
-        public void onMemberJoined(String parentId, String threadId, String threadName, String username) {
+        public void onChatThreadDestroyed(ChatThreadEvent event) {
 
         }
 
         @Override
-        public void onMemberExited(String parentId, String threadId, String threadName, String operator, String username) {
-
-        }
-
-        @Override
-        public void onUserRemoved(String parentId, String threadId, String threadName, String operator) {
+        public void onChatThreadUserRemoved(ChatThreadEvent event) {
 
         }
     }
 
-    private void createThreadCreatedMsg(ThreadEvent event) {
+    private void createThreadCreatedMsg(ChatThreadEvent event) {
         ChatMessage msg = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
         msg.setChatType(ChatMessage.ChatType.GroupChat);
         msg.setFrom(event.getOperatorId());
-        msg.setTo(event.getThreadId());
-        msg.setMsgId(UUID.randomUUID().toString());
+        msg.setTo(event.getParentId());
+        // 将thread id设置消息id，方便后面移除
+        msg.setMsgId(event.getChatThreadId());
         msg.setAttribute(DemoConstant.EM_THREAD_NOTIFICATION_TYPE, true);
         StringBuilder builder = new StringBuilder();
         EaseUser userInfo = DemoHelper.getInstance().getUsersManager().getUserInfo(event.getOperatorId(), false);
         builder.append(userInfo != null ? userInfo.getNickname() : event.getOperatorId());
         builder.append(" ");
         builder.append(appContext.getResources().getString(R.string.start_a_thread));
-        builder.append(event.getThreadName());
+        builder.append(event.getChatThreadName());
         builder.append("\n");
         builder.append(appContext.getResources().getString(R.string.see_all_threads));
         msg.addBody(new TextMessageBody(builder.toString()));
@@ -982,7 +966,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
         @Override
         public void onThreadEvent(int event, String target, List<String> usernames) {
-
+            EMLog.i(TAG, "onThreadEvent event"+event);
         }
     }
 

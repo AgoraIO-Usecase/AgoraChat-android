@@ -1,5 +1,7 @@
 package io.agora.chatdemo.thread;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,6 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import io.agora.chat.ChatClient;
+import io.agora.chat.ChatMessage;
+import io.agora.chat.ChatThread;
+import io.agora.chat.Conversation;
 import io.agora.chat.uikit.activities.EaseThreadChatActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
@@ -29,16 +36,19 @@ import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.thread.viewmodel.ThreadChatViewModel;
 import io.agora.util.EMLog;
 
+/**
+ * The example that how to extends EaseThreadChatActivity, developer can extends {@link io.agora.chat.uikit.thread.EaseThreadChatFragment}
+ * and load it to your activity also.
+ */
 public class ThreadChatActivity extends EaseThreadChatActivity {
     private EaseTitleBar titleBar;
     private ThreadChatViewModel viewModel;
 
-    @Override
-    public void initView() {
-        super.initView();
-        if(titleBar != null) {
-            titleBar.setRightImageResource(R.drawable.chat_settings_more);
-        }
+    public static void actionStart(Context context, String parentMsgId, String conversationId) {
+        Intent intent = new Intent(context, ThreadChatActivity.class);
+        intent.putExtra("parentMsgId", parentMsgId);
+        intent.putExtra("conversationId", conversationId);
+        context.startActivity(intent);
     }
 
     @Override
@@ -49,14 +59,14 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
             @Override
             public void onTitleBarFinishInflate(EaseTitleBar titleBar) {
                 ThreadChatActivity.this.titleBar = titleBar;
+                setThreadTitle();
             }
         });
     }
 
-    @Override
-    public void initListener() {
-        super.initListener();
+    private void setThreadTitle() {
         if(titleBar != null) {
+            titleBar.setRightImageResource(R.drawable.chat_settings_more);
             titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
                 @Override
                 public void onRightClick(View view) {
@@ -94,6 +104,40 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
                 });
             }
         });
+        viewModel.getDisbandObservable().observe(this, new Observer<Resource<Boolean>>() {
+            @Override
+            public void onChanged(Resource<Boolean> booleanResource) {
+                parseResource(booleanResource, new OnResourceParseCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(@Nullable Boolean data) {
+                        removeLocalMessage();
+                        finish();
+                        LiveDataBus.get().with(DemoConstant.THREAD_CHANGE).postValue(EaseEvent.create(DemoConstant.THREAD_LEAVE, EaseEvent.TYPE.THREAD, conversationId));
+                    }
+
+                    @Override
+                    public void onLoading(@Nullable Boolean data) {
+                        super.onLoading(data);
+                        showLoading();
+                    }
+
+                    @Override
+                    public void onHideLoading() {
+                        super.onHideLoading();
+                        dismissLoading();
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void removeLocalMessage() {
+        ChatMessage message = ChatClient.getInstance().chatManager().getMessage(parentMsgId);
+        if(message != null) {
+            Conversation conversation = ChatClient.getInstance().chatManager().getConversation(message.conversationId());
+            conversation.removeMessage(conversationId);
+        }
     }
 
     private void leaveThread() {
@@ -117,7 +161,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
                 .setOnConfirmClickListener(R.string.thread_disband_hint_confirm, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
-                        viewModel.disbandThread(conversationId);
+                        viewModel.disbandThread(conversationId, parentMsgId);
                     }
                 })
                 .setConfirmColor(R.color.color_main_blue)
@@ -189,6 +233,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
         menuBinding.itemThreadMembers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pMenu.dismiss();
                 skipToThreadMembers();
             }
         });
@@ -196,13 +241,14 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
         menuBinding.itemThreadNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                pMenu.dismiss();
             }
         });
 
         menuBinding.itemThreadEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pMenu.dismiss();
                 skipToEditLayout();
             }
         });
@@ -210,6 +256,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
         menuBinding.itemThreadLeave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pMenu.dismiss();
                 leaveThread();
             }
         });
@@ -217,6 +264,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
         menuBinding.itemThreadDisband.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pMenu.dismiss();
                 disbandThread();
             }
         });
@@ -228,8 +276,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
     }
 
     private void skipToEditLayout() {
-        String content = titleBar.getSubTitle().getText().toString().trim();
-        String threadName = content.replace("#", "").trim();
+        String threadName = titleBar.getTitle().getText().toString().trim();
         ThreadEditActivity.actionStart(mContext, conversationId, threadName);
     }
 

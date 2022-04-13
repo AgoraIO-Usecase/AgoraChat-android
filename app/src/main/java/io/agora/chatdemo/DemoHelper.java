@@ -31,16 +31,18 @@ import io.agora.chat.ChatManager;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatOptions;
 import io.agora.chat.ChatRoomManager;
+import io.agora.chat.ChatThreadManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
-import io.agora.chat.ThreadManager;
 import io.agora.chat.uikit.EaseUIKit;
+import io.agora.chat.uikit.activities.EaseThreadChatActivity;
 import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.options.EaseAvatarOptions;
+import io.agora.chat.uikit.provider.EaseActivityProvider;
 import io.agora.chat.uikit.provider.EaseFileIconProvider;
 import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
@@ -51,6 +53,7 @@ import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.thread.ThreadChatActivity;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -109,11 +112,13 @@ public class DemoHelper {
             return false;
         }
         // Configure custom rest server and im server
-        //options.setRestServer(BuildConfig.APP_SERVER_DOMAIN);
-        //options.setIMServer("106.75.100.247");
-        //options.setImPort(6717);
+        options.setRestServer("a1-hsb.easemob.com");
+        options.setAppKey("easemob-demo#chatdemoui");
+        options.setIMServer("106.75.35.59");
+        options.setImPort(6717);
         options.setUsingHttpsOnly(true);
         // Call UIKit to initialize Agora Chat SDK
+
         isSDKInit = EaseUIKit.getInstance().init(context, options);
         return isSDKInit();
     }
@@ -180,7 +185,7 @@ public class DemoHelper {
      * Get the entity of ThreadManager
      * @return
      */
-    public ThreadManager getThreadManager() {
+    public ChatThreadManager getThreadManager() {
         return getChatClient().threadManager();
     }
 
@@ -262,6 +267,15 @@ public class DemoHelper {
                     @Override
                     public Drawable getFileIcon(String filename) {
                         return getFileDrawable(filename);
+                    }
+                })
+                .setActivityProvider(new EaseActivityProvider() {
+                    @Override
+                    public Class getActivity(String activityName) {
+                        if(TextUtils.equals(activityName, EaseThreadChatActivity.class.getSimpleName())) {
+                            return ThreadChatActivity.class;
+                        }
+                        return null;
                     }
                 });
     }

@@ -131,6 +131,11 @@
         <activity
             android:name=".thread.ThreadEditActivity"
             android:screenOrientation="portrait"/>
+        <!-- Thread chat -->
+        <activity
+            android:name=".thread.ThreadChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
 
     </application>
 

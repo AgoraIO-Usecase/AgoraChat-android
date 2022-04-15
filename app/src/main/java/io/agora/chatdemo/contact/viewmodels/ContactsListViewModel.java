@@ -17,6 +17,7 @@ import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 
 public class ContactsListViewModel extends AndroidViewModel {
     private EMContactManagerRepository mRepository;
+
     private SingleSourceLiveData<Resource<List<EaseUser>>> contactObservable;
     private MediatorLiveData<Resource<List<EaseUser>>> blackObservable;
     private SingleSourceLiveData<Resource<Boolean>> blackResultObservable;
@@ -76,4 +77,6 @@ public class ContactsListViewModel extends AndroidViewModel {
     public void addUserToBlackList(String username, boolean both) {
         blackResultObservable.setSource(mRepository.addUserToBlackList(username, both));
     }
+
+
 }

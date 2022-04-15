@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back" />
+
+    <RadioGroup
+        android:id="@+id/rg_presence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerPadding="1dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/title_bar">
+
+        <RadioButton
+            android:id="@+id/rb_online"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:button="@null"
+            android:checked="true"
+            android:drawableLeft="@drawable/ease_presence_online"
+            android:drawableRight="@drawable/ease_presence_check_selector"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:paddingRight="@dimen/ease_chat_primary_margin_right"
+            android:text="@string/ease_presence_online"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <RadioButton
+            android:id="@+id/rb_busy"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:button="@null"
+            android:drawableLeft="@drawable/ease_presence_busy"
+            android:drawableRight="@drawable/ease_presence_check_selector"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:paddingRight="@dimen/ease_chat_primary_margin_right"
+            android:text="@string/ease_presence_busy"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <RadioButton
+            android:id="@+id/rb_not_disturb"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:button="@null"
+            android:drawableLeft="@drawable/ease_presence_do_not_disturb"
+            android:drawableRight="@drawable/ease_presence_check_selector"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:paddingRight="@dimen/ease_chat_primary_margin_right"
+            android:text="@string/ease_presence_do_not_disturb"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <RadioButton
+            android:id="@+id/rb_leave"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:button="@null"
+            android:drawableLeft="@drawable/ease_presence_leave"
+            android:drawableRight="@drawable/ease_presence_check_selector"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:paddingRight="@dimen/ease_chat_primary_margin_right"
+            android:text="@string/ease_presence_leave"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <RadioButton
+            android:id="@+id/rb_custom"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:button="@null"
+            android:drawableLeft="@drawable/ease_presence_custom"
+            android:drawableRight="@drawable/ease_presence_check_selector"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:paddingRight="@dimen/ease_chat_primary_margin_right"
+            android:text="@string/ease_presence_custom"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

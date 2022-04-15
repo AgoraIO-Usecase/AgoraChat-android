@@ -30,7 +30,6 @@ public class MenuDialog extends EaseAlertDialog implements OnItemClickListener {
     private Button btnCancel;
     private OnItemClickListener itemClickListener;
     private List<MenuItemBean> data;
-    private String username;
     private TextView tvName;
     private String title;
 
@@ -83,8 +82,8 @@ public class MenuDialog extends EaseAlertDialog implements OnItemClickListener {
             }
         });
 
-        if(!TextUtils.isEmpty(username)) {
-            tvName.setText(username);
+        if(!TextUtils.isEmpty(title)) {
+            tvName.setText(title);
         }
     }
 
@@ -112,9 +111,11 @@ public class MenuDialog extends EaseAlertDialog implements OnItemClickListener {
         private List<MenuItemBean> mData;
         private String title;
         private OnItemClickListener itemClickListener;
+        private Context context;
 
         public Builder(Context context) {
             super(context);
+            this.context = context;
         }
 
         public Builder(Context context, int themeResId) {
@@ -138,11 +139,13 @@ public class MenuDialog extends EaseAlertDialog implements OnItemClickListener {
 
         @Override
         public MenuDialog create() {
-            MenuDialog menuDialog = super.create();
+            MenuDialog menuDialog = new MenuDialog(context);
+            setCustomDialog(menuDialog);
             menuDialog.setData(this.mData);
             menuDialog.setTitle(this.title);
             menuDialog.setOnItemClickListener(this.itemClickListener);
-            return menuDialog;
+            menuDialog.init();
+            return super.create();
         }
     }
 }

@@ -23,7 +23,7 @@ import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 
-public class ThreadMemberAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
+public class ChatThreadMemberAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private boolean showInitials;
     private List<String> adminList;
     private String owner;

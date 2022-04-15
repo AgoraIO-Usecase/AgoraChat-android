@@ -14,13 +14,13 @@ import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.repositories.EMThreadManagerRepository;
 
-public class ThreadMemberListViewModel extends AndroidViewModel {
+public class ChatThreadMemberListViewModel extends AndroidViewModel {
     private EMThreadManagerRepository threadRepository;
     private SingleSourceLiveData<Resource<List<EaseUser>>> resultObservable;
     private SingleSourceLiveData<List<EaseUser>> searchResultObservable;
     private SingleSourceLiveData<Resource<Boolean>> removeResultObservable;
 
-    public ThreadMemberListViewModel(@NonNull Application application) {
+    public ChatThreadMemberListViewModel(@NonNull Application application) {
         super(application);
         threadRepository = new EMThreadManagerRepository();
         resultObservable = new SingleSourceLiveData<>();

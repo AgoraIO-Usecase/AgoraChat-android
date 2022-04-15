@@ -9,10 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatManager;
 import io.agora.chat.ChatRoomManager;
+import io.agora.chat.ChatThreadManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
-import io.agora.chat.ThreadManager;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.R;
@@ -83,8 +83,8 @@ public class BaseEMRepository {
      * ThreadManager
      * @return
      */
-    public ThreadManager getThreadManager() {
-        return ChatClient.getInstance().threadManager();
+    public ChatThreadManager getThreadManager() {
+        return ChatClient.getInstance().chatThreadManager();
     }
 
     /**

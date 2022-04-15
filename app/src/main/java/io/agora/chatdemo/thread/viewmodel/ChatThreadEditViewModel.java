@@ -10,37 +10,29 @@ import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.repositories.EMThreadManagerRepository;
 
-public class ThreadChatViewModel extends AndroidViewModel {
+public class ChatThreadEditViewModel extends AndroidViewModel {
     private EMThreadManagerRepository threadRepository;
     private SingleSourceLiveData<Resource<Boolean>> resultObservable;
 
-    public ThreadChatViewModel(@NonNull Application application) {
+    public ChatThreadEditViewModel(@NonNull Application application) {
         super(application);
         threadRepository = new EMThreadManagerRepository();
         resultObservable = new SingleSourceLiveData<>();
     }
 
     /**
-     * Get no push user list
+     * Get result observable
      */
     public LiveData<Resource<Boolean>> getResultObservable() {
         return resultObservable;
     }
 
     /**
-     * Leave thread
+     * Change thread name
      * @param threadId
      */
-    public void leaveThread(String threadId) {
-        resultObservable.setSource(threadRepository.leaveThread(threadId));
-    }
-
-    /**
-     * Disband thread
-     * @param threadId
-     */
-    public void disbandThread(String threadId) {
-        resultObservable.setSource(threadRepository.destroyThread(threadId));
+    public void changeThreadName(String threadId, String threadName) {
+        resultObservable.setSource(threadRepository.changeThreadName(threadId, threadName));
     }
 
 }

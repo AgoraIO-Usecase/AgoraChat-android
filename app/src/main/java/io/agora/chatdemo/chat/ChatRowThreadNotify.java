@@ -52,12 +52,12 @@ public class ChatRowThreadNotify extends EaseChatRowText {
         SpannableStringBuilder builder = new SpannableStringBuilder(message);
         builder.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.ease_color_brand)), message.length() - 7, message.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        builder.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View widget) {
-                // 跳转到指定页面
-            }
-        }, message.length() - 7, message.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        builder.setSpan(new ClickableSpan() {
+//            @Override
+//            public void onClick(@NonNull View widget) {
+//                // 跳转到指定页面
+//            }
+//        }, message.length() - 7, message.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tv_thread_notify.setText(builder);
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import io.agora.CallBack;
 import io.agora.ValueCallBack;
+import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatThread;
 import io.agora.chat.CursorResult;
 import io.agora.chat.UserInfo;
@@ -35,7 +36,7 @@ public class EMThreadManagerRepository extends BaseEMRepository {
                     callBack.onError(ErrorCode.NOT_LOGIN);
                     return;
                 }
-                DemoHelper.getInstance().getThreadManager().getThreadFromServer(threadId, new ValueCallBack<ChatThread>() {
+                DemoHelper.getInstance().getThreadManager().getChatThreadFromServer(threadId, new ValueCallBack<ChatThread>() {
                     @Override
                     public void onSuccess(ChatThread value) {
                         callBack.onSuccess(createLiveData(value));
@@ -60,7 +61,7 @@ public class EMThreadManagerRepository extends BaseEMRepository {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getThreadManager().leaveThread(threadId, new CallBack() {
+                getThreadManager().leaveChatThread(threadId, new CallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));
@@ -83,15 +84,20 @@ public class EMThreadManagerRepository extends BaseEMRepository {
     /**
      * Destroy thread
      * @param threadId
+     * @param parentMsgId
      * @return
      */
-    public LiveData<Resource<Boolean>> destroyThread(String threadId) {
+    public LiveData<Resource<Boolean>> destroyThread(String threadId, String parentMsgId) {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getThreadManager().destroyThread(threadId, new CallBack() {
+                getThreadManager().destroyChatThread(threadId, new CallBack() {
                     @Override
                     public void onSuccess() {
+                        ChatMessage message = getChatManager().getMessage(parentMsgId);
+                        if(message != null) {
+                            removeLocalNotifyMessage(message.conversationId(), threadId);
+                        }
                         callBack.onSuccess(createLiveData(true));
                     }
 
@@ -109,6 +115,10 @@ public class EMThreadManagerRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
+    private void removeLocalNotifyMessage(String conversationId, String threadId) {
+        getChatManager().getConversation(conversationId).removeMessage(threadId);
+    }
+
     /**
      * Change thread name
      * @param threadId
@@ -118,7 +128,7 @@ public class EMThreadManagerRepository extends BaseEMRepository {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getThreadManager().changeThreadName(threadId, newThreadName, new CallBack() {
+                getThreadManager().changeChatThreadName(threadId, newThreadName, new CallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));
@@ -149,7 +159,7 @@ public class EMThreadManagerRepository extends BaseEMRepository {
         return new NetworkOnlyResource<CursorResult<String>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<CursorResult<String>>> callBack) {
-                getThreadManager().getThreadMembers(threadId, limit, cursor, new ValueCallBack<CursorResult<String>>() {
+                getThreadManager().getChatThreadMembers(threadId, limit, cursor, new ValueCallBack<CursorResult<String>>() {
                     @Override
                     public void onSuccess(CursorResult<String> value) {
                         callBack.onSuccess(createLiveData(value));
@@ -211,7 +221,7 @@ public class EMThreadManagerRepository extends BaseEMRepository {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getThreadManager().removeMemberFromThread(threadId, username, new CallBack() {
+                getThreadManager().removeMemberFromChatThread(threadId, username, new CallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));

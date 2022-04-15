@@ -19,12 +19,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 public abstract class BaseDialogFragment extends DialogFragment {
-    public BaseActivity mContext;
+    public Activity mContext;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mContext = (BaseActivity) context;
+        mContext = (Activity) context;
     }
 
     @Nullable

@@ -53,7 +53,7 @@ import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
-import io.agora.chatdemo.thread.ThreadChatActivity;
+import io.agora.chatdemo.thread.ChatThreadActivity;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -186,7 +186,7 @@ public class DemoHelper {
      * @return
      */
     public ChatThreadManager getThreadManager() {
-        return getChatClient().threadManager();
+        return getChatClient().chatThreadManager();
     }
 
     /**
@@ -273,7 +273,7 @@ public class DemoHelper {
                     @Override
                     public Class getActivity(String activityName) {
                         if(TextUtils.equals(activityName, EaseThreadChatActivity.class.getSimpleName())) {
-                            return ThreadChatActivity.class;
+                            return ChatThreadActivity.class;
                         }
                         return null;
                     }

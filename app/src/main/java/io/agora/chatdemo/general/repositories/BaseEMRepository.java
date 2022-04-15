@@ -84,7 +84,7 @@ public class BaseEMRepository {
      * @return
      */
     public ChatThreadManager getThreadManager() {
-        return ChatClient.getInstance().threadManager();
+        return ChatClient.getInstance().chatThreadManager();
     }
 
     /**

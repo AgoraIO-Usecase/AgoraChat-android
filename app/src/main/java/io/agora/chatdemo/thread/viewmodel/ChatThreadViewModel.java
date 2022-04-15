@@ -10,14 +10,16 @@ import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.repositories.EMThreadManagerRepository;
 
-public class ThreadEditViewModel extends AndroidViewModel {
+public class ChatThreadViewModel extends AndroidViewModel {
     private EMThreadManagerRepository threadRepository;
     private SingleSourceLiveData<Resource<Boolean>> resultObservable;
+    private SingleSourceLiveData<Resource<Boolean>> disbandObservable;
 
-    public ThreadEditViewModel(@NonNull Application application) {
+    public ChatThreadViewModel(@NonNull Application application) {
         super(application);
         threadRepository = new EMThreadManagerRepository();
         resultObservable = new SingleSourceLiveData<>();
+        disbandObservable = new SingleSourceLiveData<>();
     }
 
     /**
@@ -28,11 +30,28 @@ public class ThreadEditViewModel extends AndroidViewModel {
     }
 
     /**
-     * Change thread name
+     * Leave thread
      * @param threadId
      */
-    public void changeThreadName(String threadId, String threadName) {
-        resultObservable.setSource(threadRepository.changeThreadName(threadId, threadName));
+    public void leaveThread(String threadId) {
+        resultObservable.setSource(threadRepository.leaveThread(threadId));
+    }
+
+    /**
+     * Get disband observable
+     * @return
+     */
+    public LiveData<Resource<Boolean>> getDisbandObservable() {
+        return disbandObservable;
+    }
+
+    /**
+     * Disband thread
+     * @param threadId
+     * @param parentMsgId
+     */
+    public void disbandThread(String threadId, String parentMsgId) {
+        resultObservable.setSource(threadRepository.destroyThread(threadId, parentMsgId));
     }
 
 }

@@ -14,13 +14,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
-import io.agora.chat.ChatThread;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.activities.EaseThreadChatActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
+import io.agora.chat.uikit.chatthread.EaseChatThreadFragment;
 import io.agora.chat.uikit.menu.EasePopupWindow;
-import io.agora.chat.uikit.thread.EaseThreadRole;
+import io.agora.chat.uikit.chatthread.EaseChatThreadRole;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
@@ -33,19 +33,19 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.utils.ToastUtils;
-import io.agora.chatdemo.thread.viewmodel.ThreadChatViewModel;
+import io.agora.chatdemo.thread.viewmodel.ChatThreadViewModel;
 import io.agora.util.EMLog;
 
 /**
- * The example that how to extends EaseThreadChatActivity, developer can extends {@link io.agora.chat.uikit.thread.EaseThreadChatFragment}
+ * The example that how to extends EaseThreadChatActivity, developer can extends {@link EaseChatThreadFragment}
  * and load it to your activity also.
  */
-public class ThreadChatActivity extends EaseThreadChatActivity {
+public class ChatThreadActivity extends EaseThreadChatActivity {
     private EaseTitleBar titleBar;
-    private ThreadChatViewModel viewModel;
+    private ChatThreadViewModel viewModel;
 
     public static void actionStart(Context context, String parentMsgId, String conversationId) {
-        Intent intent = new Intent(context, ThreadChatActivity.class);
+        Intent intent = new Intent(context, ChatThreadActivity.class);
         intent.putExtra("parentMsgId", parentMsgId);
         intent.putExtra("conversationId", conversationId);
         context.startActivity(intent);
@@ -58,7 +58,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
 
             @Override
             public void onTitleBarFinishInflate(EaseTitleBar titleBar) {
-                ThreadChatActivity.this.titleBar = titleBar;
+                ChatThreadActivity.this.titleBar = titleBar;
                 setThreadTitle();
             }
         });
@@ -79,7 +79,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
     @Override
     public void initData() {
         super.initData();
-        viewModel = new ViewModelProvider(this).get(ThreadChatViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChatThreadViewModel.class);
         viewModel.getResultObservable().observe(this, new Observer<Resource<Boolean>>() {
             @Override
             public void onChanged(Resource<Boolean> booleanResource) {
@@ -195,7 +195,7 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
     }
 
     private void showSettingMenu() {
-        if(threadRole == EaseThreadRole.UNKNOWN) {
+        if(threadRole == EaseChatThreadRole.UNKNOWN) {
             EMLog.e("ThreadChatActivity", "Unknown thread role!");
             return;
         }
@@ -219,10 +219,10 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
             }
         });
 
-        if(threadRole == EaseThreadRole.GROUP_ADMIN) {
+        if(threadRole == EaseChatThreadRole.GROUP_ADMIN) {
             menuBinding.itemThreadEdit.setVisibility(View.VISIBLE);
             menuBinding.itemThreadDisband.setVisibility(View.VISIBLE);
-        }else if(threadRole == EaseThreadRole.CREATOR) {
+        }else if(threadRole == EaseChatThreadRole.CREATOR) {
             menuBinding.itemThreadEdit.setVisibility(View.VISIBLE);
             menuBinding.itemThreadDisband.setVisibility(View.GONE);
         }else {
@@ -272,12 +272,12 @@ public class ThreadChatActivity extends EaseThreadChatActivity {
     }
 
     private void skipToThreadMembers() {
-        ThreadMembersActivity.actionStart(mContext, conversationId, threadRole.ordinal());
+        ChatThreadMembersActivity.actionStart(mContext, conversationId, threadRole.ordinal());
     }
 
     private void skipToEditLayout() {
         String threadName = titleBar.getTitle().getText().toString().trim();
-        ThreadEditActivity.actionStart(mContext, conversationId, threadName);
+        ChatThreadEditActivity.actionStart(mContext, conversationId, threadName);
     }
 
 }

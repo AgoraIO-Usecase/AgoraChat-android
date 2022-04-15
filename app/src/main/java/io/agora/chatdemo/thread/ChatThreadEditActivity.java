@@ -24,17 +24,17 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.net.Resource;
-import io.agora.chatdemo.thread.viewmodel.ThreadEditViewModel;
+import io.agora.chatdemo.thread.viewmodel.ChatThreadEditViewModel;
 
-public class ThreadEditActivity extends BaseInitActivity {
+public class ChatThreadEditActivity extends BaseInitActivity {
     private ActivityThreadEditBinding binding;
     private String threadId;
     private String threadName;
     private Drawable clearDrawable;
-    private ThreadEditViewModel viewModel;
+    private ChatThreadEditViewModel viewModel;
 
     public static void actionStart(Context context, String threadId, String threadName) {
-        Intent intent = new Intent(context, ThreadEditActivity.class);
+        Intent intent = new Intent(context, ChatThreadEditActivity.class);
         intent.putExtra("threadId", threadId);
         intent.putExtra("threadName", threadName);
         context.startActivity(intent);
@@ -102,7 +102,7 @@ public class ThreadEditActivity extends BaseInitActivity {
     @Override
     protected void initData() {
         super.initData();
-        viewModel = new ViewModelProvider(this).get(ThreadEditViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChatThreadEditViewModel.class);
         viewModel.getResultObservable().observe(this, new Observer<Resource<Boolean>>() {
             @Override
             public void onChanged(Resource<Boolean> booleanResource) {

@@ -24,7 +24,7 @@ import java.util.List;
 import io.agora.chat.ChatClient;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.thread.EaseThreadRole;
+import io.agora.chat.uikit.chatthread.EaseChatThreadRole;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
@@ -32,21 +32,21 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.databinding.ActivityThreadMembersBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.net.Resource;
-import io.agora.chatdemo.thread.adapter.ThreadMemberAdapter;
+import io.agora.chatdemo.thread.adapter.ChatThreadMemberAdapter;
 import io.agora.chatdemo.thread.bean.MenuItemBean;
 import io.agora.chatdemo.thread.dialog.MenuDialog;
-import io.agora.chatdemo.thread.viewmodel.ThreadMemberListViewModel;
+import io.agora.chatdemo.thread.viewmodel.ChatThreadMemberListViewModel;
 
-public class ThreadMembersActivity extends BaseInitActivity {
+public class ChatThreadMembersActivity extends BaseInitActivity {
     private ActivityThreadMembersBinding binding;
-    private ThreadMemberAdapter mAdapter;
+    private ChatThreadMemberAdapter mAdapter;
     private String threadId;
-    private ThreadMemberListViewModel viewModel;
+    private ChatThreadMemberListViewModel viewModel;
     private List<EaseUser> mData = new ArrayList<>();
-    private EaseThreadRole threadRole;
+    private EaseChatThreadRole threadRole;
 
     public static void actionStart(Context context, String threadId, int role) {
-        Intent intent = new Intent(context, ThreadMembersActivity.class);
+        Intent intent = new Intent(context, ChatThreadMembersActivity.class);
         intent.putExtra("threadId", threadId);
         intent.putExtra("threadRole", role);
         context.startActivity(intent);
@@ -62,15 +62,15 @@ public class ThreadMembersActivity extends BaseInitActivity {
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         threadId = intent.getStringExtra("threadId");
-        int role = intent.getIntExtra("threadRole", EaseThreadRole.MEMBER.ordinal());
-        threadRole = EaseThreadRole.getThreadRole(role);
+        int role = intent.getIntExtra("threadRole", EaseChatThreadRole.MEMBER.ordinal());
+        threadRole = EaseChatThreadRole.getThreadRole(role);
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         binding.rvList.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new ThreadMemberAdapter();
+        mAdapter = new ChatThreadMemberAdapter();
         binding.rvList.setAdapter(mAdapter);
     }
 
@@ -86,7 +86,7 @@ public class ThreadMembersActivity extends BaseInitActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if(threadRole == EaseThreadRole.GROUP_ADMIN) {
+                if(threadRole == EaseChatThreadRole.GROUP_ADMIN) {
                     String username = mData.get(position).getUsername();
                     if(!TextUtils.equals(username, ChatClient.getInstance().getCurrentUser())) {
                         showRemoveDialog(username);
@@ -131,7 +131,7 @@ public class ThreadMembersActivity extends BaseInitActivity {
     @Override
     protected void initData() {
         super.initData();
-        viewModel = new ViewModelProvider(this).get(ThreadMemberListViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChatThreadMemberListViewModel.class);
         viewModel.getResultObservable().observe(this, new Observer<Resource<List<EaseUser>>>() {
             @Override
             public void onChanged(Resource<List<EaseUser>> listResource) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.multidex.MultiDexApplication;
 
 import com.haoge.easyandroid.EasyAndroid;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
@@ -21,8 +22,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import io.agora.chatdemo.general.manager.UserActivityLifecycleCallbacks;
+import io.stipop.Stipop;
 
-public class DemoApplication extends Application {
+public class DemoApplication extends MultiDexApplication {
     private static DemoApplication instance;
     private UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
 
@@ -38,6 +40,16 @@ public class DemoApplication extends Application {
 
     private void initAgoraChatSDK() {
         DemoHelper.getInstance().init(this);
+
+        Stipop.Companion.configure(this, null);
+//        Stipop.Companion.configure(this, (isConfigured) -> {
+//            if (isConfigured) {
+//                //todo
+//            } else {
+//                //todo
+//            }
+//            return null;
+//        });
     }
 
     public static DemoApplication getInstance() {

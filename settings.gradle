@@ -1,3 +1,4 @@
+include ':emoji-sdk'
 include ':app'
 //include ':chat-uikit'
 //project(':chat-uikit').projectDir = new File('../AgoraChat-UIKit-android/chat-uikit')

@@ -21,7 +21,7 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
-import io.agora.chat.uikit.activities.EaseThreadListActivity;
+import io.agora.chat.uikit.activities.EaseChatThreadListActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.EaseChatLayout;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
@@ -256,7 +256,7 @@ public class ChatActivity extends BaseInitActivity {
             @Override
             public void onClick(View v) {
                 if(chatType == EaseConstant.CHATTYPE_GROUP) {
-                    EaseThreadListActivity.actionStart(mContext, conversationId);
+                    EaseChatThreadListActivity.actionStart(mContext, conversationId);
                 }
             }
         });

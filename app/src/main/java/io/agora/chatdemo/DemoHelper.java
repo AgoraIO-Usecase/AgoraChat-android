@@ -37,7 +37,7 @@ import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
-import io.agora.chat.uikit.activities.EaseThreadChatActivity;
+import io.agora.chat.uikit.activities.EaseChatThreadActivity;
 import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
@@ -112,9 +112,10 @@ public class DemoHelper {
             return false;
         }
         // Configure custom rest server and im server
-        //options.setRestServer(BuildConfig.APP_SERVER_DOMAIN);
-        //options.setIMServer("106.75.100.247");
-        //options.setImPort(6717);
+        options.setRestServer("a1-hsb.easemob.com");
+        options.setAppKey("easemob-demo#chatdemoui");
+        options.setIMServer("106.75.35.59");
+        options.setImPort(6717);
         options.setUsingHttpsOnly(true);
         // Call UIKit to initialize Agora Chat SDK
         isSDKInit = EaseUIKit.getInstance().init(context, options);
@@ -270,7 +271,7 @@ public class DemoHelper {
                 .setActivityProvider(new EaseActivityProvider() {
                     @Override
                     public Class getActivity(String activityName) {
-                        if(TextUtils.equals(activityName, EaseThreadChatActivity.class.getSimpleName())) {
+                        if(TextUtils.equals(activityName, EaseChatThreadActivity.class.getSimpleName())) {
                             return ChatThreadActivity.class;
                         }
                         return null;

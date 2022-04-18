@@ -203,6 +203,11 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             ChatMessage msgNotification = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
             TextMessageBody txtBody = new TextMessageBody(String.format(context.getString(R.string.ease_msg_recall_by_user), msg.getFrom()));
             msgNotification.addBody(txtBody);
+            if(TextUtils.equals(msg.getFrom(), ChatClient.getInstance().getCurrentUser())) {
+                msgNotification.setDirection(ChatMessage.Direct.SEND);
+            }else {
+                msgNotification.setDirection(ChatMessage.Direct.RECEIVE);
+            }
             msgNotification.setFrom(msg.getFrom());
             msgNotification.setTo(msg.getTo());
             msgNotification.setUnread(false);
@@ -211,6 +216,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             msgNotification.setChatType(msg.getChatType());
             msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALL, true);
             msgNotification.setStatus(ChatMessage.Status.SUCCESS);
+            msgNotification.setIsThread(msg.isThread());
             ChatClient.getInstance().chatManager().saveMessage(msgNotification);
         }
     }
@@ -693,7 +699,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
         @Override
         public void onChatThreadCreated(ChatThreadEvent event) {
-
+            createThreadCreatedMsg(event);
         }
 
         @Override
@@ -703,7 +709,10 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
         @Override
         public void onChatThreadDestroyed(ChatThreadEvent event) {
-
+            Conversation conversation = ChatClient.getInstance().chatManager().getConversation(event.getParentId());
+            if(conversation != null) {
+                conversation.removeMessage(event.getChatThreadId());
+            }
         }
 
         @Override
@@ -967,6 +976,15 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         @Override
         public void onThreadEvent(int event, String target, List<String> usernames) {
             EMLog.i(TAG, "onThreadEvent event"+event);
+            if(event == THREAD_DESTROY || event == THREAD_LEAVE) {
+                ChatMessage message = ChatClient.getInstance().chatManager().getMessage(target);
+                if(message != null) {
+                    Conversation conversation = ChatClient.getInstance().chatManager().getConversation(message.conversationId());
+                    if(conversation != null) {
+                        conversation.removeMessage(target);
+                    }
+                }
+            }
         }
     }
 

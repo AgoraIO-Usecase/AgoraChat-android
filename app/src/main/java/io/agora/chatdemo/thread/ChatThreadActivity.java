@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
-import io.agora.chat.uikit.activities.EaseThreadChatActivity;
+import io.agora.chat.uikit.activities.EaseChatThreadActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
 import io.agora.chat.uikit.chatthread.EaseChatThreadFragment;
@@ -40,7 +40,7 @@ import io.agora.util.EMLog;
  * The example that how to extends EaseThreadChatActivity, developer can extends {@link EaseChatThreadFragment}
  * and load it to your activity also.
  */
-public class ChatThreadActivity extends EaseThreadChatActivity {
+public class ChatThreadActivity extends EaseChatThreadActivity {
     private EaseTitleBar titleBar;
     private ChatThreadViewModel viewModel;
 

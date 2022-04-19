@@ -1,4 +1,4 @@
-package io.agora.chatdemo.thread;
+package io.agora.chatdemo.chatthread;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,10 +32,10 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.databinding.ActivityThreadMembersBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.net.Resource;
-import io.agora.chatdemo.thread.adapter.ChatThreadMemberAdapter;
-import io.agora.chatdemo.thread.bean.MenuItemBean;
-import io.agora.chatdemo.thread.dialog.MenuDialog;
-import io.agora.chatdemo.thread.viewmodel.ChatThreadMemberListViewModel;
+import io.agora.chatdemo.chatthread.adapter.ChatThreadMemberAdapter;
+import io.agora.chatdemo.chatthread.bean.MenuItemBean;
+import io.agora.chatdemo.chatthread.dialog.MenuDialog;
+import io.agora.chatdemo.chatthread.viewmodel.ChatThreadMemberListViewModel;
 
 public class ChatThreadMembersActivity extends BaseInitActivity {
     private ActivityThreadMembersBinding binding;

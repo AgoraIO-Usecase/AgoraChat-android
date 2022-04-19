@@ -1,4 +1,4 @@
-package io.agora.chatdemo.thread.bean;
+package io.agora.chatdemo.chatthread.bean;
 
 import java.io.Serializable;
 

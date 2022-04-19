@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.me.MeFragment;
+import io.agora.util.EMLog;
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
@@ -123,7 +125,23 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     public void initData() {
-
+        int code = 403;
+        int error_code = 4003;
+        switch (code) {
+            case 403 :
+                EMLog.e("tag", "403");
+                if(error_code == 4004) {
+                    EMLog.e("tag", "error_code");
+                    break;
+                }
+            case 503 :
+                EMLog.e("tag", "503");
+            case 603 :
+                EMLog.e("tag", "603");
+            default:
+                EMLog.e("tag", "default");
+                break;
+        }
         mainViewModel.getMsgConversation();
         mainViewModel.checkUnreadMsg();
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());

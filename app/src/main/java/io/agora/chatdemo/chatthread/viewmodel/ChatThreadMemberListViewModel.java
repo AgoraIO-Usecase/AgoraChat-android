@@ -1,4 +1,4 @@
-package io.agora.chatdemo.thread.viewmodel;
+package io.agora.chatdemo.chatthread.viewmodel;
 
 import android.app.Application;
 

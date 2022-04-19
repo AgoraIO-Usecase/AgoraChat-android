@@ -1,4 +1,4 @@
-package io.agora.chatdemo.thread.adapter;
+package io.agora.chatdemo.chatthread.adapter;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.agora.chat.uikit.EaseUIKit;

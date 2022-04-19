@@ -125,15 +125,15 @@
             android:screenOrientation="portrait" />
         <!-- Thread member list -->
         <activity
-            android:name=".thread.ChatThreadMembersActivity"
+            android:name=".chatthread.ChatThreadMembersActivity"
             android:screenOrientation="portrait"/>
         <!-- Thread edit -->
         <activity
-            android:name=".thread.ChatThreadEditActivity"
+            android:name=".chatthread.ChatThreadEditActivity"
             android:screenOrientation="portrait"/>
         <!-- Thread chat -->
         <activity
-            android:name=".thread.ChatThreadActivity"
+            android:name=".chatthread.ChatThreadActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 

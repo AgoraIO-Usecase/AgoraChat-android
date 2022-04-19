@@ -1,4 +1,4 @@
-package io.agora.chatdemo.thread;
+package io.agora.chatdemo.chatthread;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +24,7 @@ import io.agora.chat.uikit.chatthread.EaseChatThreadRole;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.chatthread.adapter.ChatThreadCustomMessageAdapter;
 import io.agora.chatdemo.databinding.LayoutThreadSettingMenuBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -33,7 +34,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.utils.ToastUtils;
-import io.agora.chatdemo.thread.viewmodel.ChatThreadViewModel;
+import io.agora.chatdemo.chatthread.viewmodel.ChatThreadViewModel;
 import io.agora.util.EMLog;
 
 /**
@@ -61,7 +62,8 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
                 ChatThreadActivity.this.titleBar = titleBar;
                 setThreadTitle();
             }
-        });
+        })
+        .setCustomAdapter(new ChatThreadCustomMessageAdapter());
     }
 
     private void setThreadTitle() {

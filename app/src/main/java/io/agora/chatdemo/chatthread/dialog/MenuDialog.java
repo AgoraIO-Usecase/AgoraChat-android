@@ -1,4 +1,4 @@
-package io.agora.chatdemo.thread.dialog;
+package io.agora.chatdemo.chatthread.dialog;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -21,8 +21,8 @@ import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.widget.dialog.EaseAlertDialog;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.widget.DividerItemDecoration;
-import io.agora.chatdemo.thread.adapter.MenuListAdapter;
-import io.agora.chatdemo.thread.bean.MenuItemBean;
+import io.agora.chatdemo.chatthread.adapter.MenuListAdapter;
+import io.agora.chatdemo.chatthread.bean.MenuItemBean;
 
 public class MenuDialog extends EaseAlertDialog implements OnItemClickListener {
     private MenuListAdapter adapter;

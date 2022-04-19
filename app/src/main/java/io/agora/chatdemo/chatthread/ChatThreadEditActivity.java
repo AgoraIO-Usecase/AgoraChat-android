@@ -1,4 +1,4 @@
-package io.agora.chatdemo.thread;
+package io.agora.chatdemo.chatthread;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.net.Resource;
-import io.agora.chatdemo.thread.viewmodel.ChatThreadEditViewModel;
+import io.agora.chatdemo.chatthread.viewmodel.ChatThreadEditViewModel;
 
 public class ChatThreadEditActivity extends BaseInitActivity {
     private ActivityThreadEditBinding binding;

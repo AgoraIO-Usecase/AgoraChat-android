@@ -1,4 +1,4 @@
-package io.agora.chatdemo.thread.adapter;
+package io.agora.chatdemo.chatthread.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +11,7 @@ import androidx.core.content.ContextCompat;
 
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.group.model.GroupManageItemBean;
-import io.agora.chatdemo.thread.bean.MenuItemBean;
+import io.agora.chatdemo.chatthread.bean.MenuItemBean;
 
 public class MenuListAdapter extends EaseBaseRecyclerViewAdapter<MenuItemBean> {
     @Override

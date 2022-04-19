@@ -47,7 +47,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
-import io.agora.chatdemo.thread.ChatThreadActivity;
+import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity {

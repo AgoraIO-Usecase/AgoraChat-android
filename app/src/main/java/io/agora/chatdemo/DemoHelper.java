@@ -53,7 +53,7 @@ import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
-import io.agora.chatdemo.thread.ChatThreadActivity;
+import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;

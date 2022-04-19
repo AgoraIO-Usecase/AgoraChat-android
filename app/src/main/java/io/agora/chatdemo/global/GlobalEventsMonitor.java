@@ -201,13 +201,16 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                 EaseAtMessageHelper.get().removeAtMeGroup(msg.getTo());
             }
             ChatMessage msgNotification = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
-            TextMessageBody txtBody = new TextMessageBody(String.format(context.getString(R.string.ease_msg_recall_by_user), msg.getFrom()));
-            msgNotification.addBody(txtBody);
+            String content;
             if(TextUtils.equals(msg.getFrom(), ChatClient.getInstance().getCurrentUser())) {
                 msgNotification.setDirection(ChatMessage.Direct.SEND);
+                content = context.getString(R.string.ease_msg_recall_by_self);
             }else {
                 msgNotification.setDirection(ChatMessage.Direct.RECEIVE);
+                content = String.format(context.getString(R.string.ease_msg_recall_by_user), msg.getFrom());
             }
+            TextMessageBody txtBody = new TextMessageBody(content);
+            msgNotification.addBody(txtBody);
             msgNotification.setFrom(msg.getFrom());
             msgNotification.setTo(msg.getTo());
             msgNotification.setUnread(false);
@@ -975,7 +978,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
         @Override
         public void onThreadEvent(int event, String target, List<String> usernames) {
-            EMLog.i(TAG, "onThreadEvent event"+event);
+            EMLog.i(TAG, "onThreadEvent event: "+event);
             if(event == THREAD_DESTROY || event == THREAD_LEAVE) {
                 ChatMessage message = ChatClient.getInstance().chatManager().getMessage(target);
                 if(message != null) {

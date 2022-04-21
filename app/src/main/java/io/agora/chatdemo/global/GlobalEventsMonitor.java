@@ -153,6 +153,10 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             if(disabledIds != null && disabledIds.contains(message.conversationId())) {
                 return;
             }
+            // Not notify if message is chat thread message
+            if(message.isThread()) {
+                return;
+            }
             // in background, do not refresh UI, notify it in notification bar
             if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
                 getNotifier().notify(message);

@@ -43,6 +43,7 @@ import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.options.EaseAvatarOptions;
+import io.agora.chat.uikit.options.EaseReactionOptions;
 import io.agora.chat.uikit.provider.EaseFileIconProvider;
 import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
@@ -280,7 +281,8 @@ public class DemoHelper {
                     public Drawable getFileIcon(String filename) {
                         return getFileDrawable(filename);
                     }
-                });
+                })
+               .setReactionOptions(getReactionOptions());
     }
 
     private Drawable getFileDrawable(String filename) {
@@ -318,6 +320,16 @@ public class DemoHelper {
         EaseAvatarOptions avatarOptions = new EaseAvatarOptions();
         avatarOptions.setAvatarShape(1);
         return avatarOptions;
+    }
+
+    /**
+     * Reaction Configuration
+     * @return EaseReactionOptions
+     */
+    private EaseReactionOptions getReactionOptions() {
+        EaseReactionOptions reactionOptions = new EaseReactionOptions();
+        reactionOptions.setOpen(true);
+        return reactionOptions;
     }
 
     public UsersManager getUsersManager() {

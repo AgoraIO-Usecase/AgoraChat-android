@@ -8,6 +8,8 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.activities.EaseChatThreadListActivity;
 import io.agora.chat.uikit.chat.viewholder.EaseChatRowViewHolder;
 import io.agora.chat.uikit.interfaces.MessageListItemClickListener;
+import io.agora.chatdemo.chatthread.ChatThreadActivity;
+import io.agora.chatdemo.general.constant.DemoConstant;
 
 
 public class EaseThreadNotifyViewHolder extends EaseChatRowViewHolder {
@@ -18,8 +20,9 @@ public class EaseThreadNotifyViewHolder extends EaseChatRowViewHolder {
 
     @Override
     public void onBubbleClick(ChatMessage message) {
-        // 跳转到Thread列表页面
-        EaseChatThreadListActivity.actionStart(getContext(), message.conversationId());
+        // Skip to Chat thread activity
+        String parentMsgId = message.getStringAttribute(DemoConstant.EM_THREAD_PARENT_MSG_ID, "");
+        ChatThreadActivity.actionStart(getContext(), parentMsgId, message.getMsgId());
     }
 
 }

@@ -237,6 +237,8 @@
     <string name="chat_setting_to_top">Sticky on Top</string>
     <string name="chat_settings_clear_history_warning">Are you sure you want to delete all chat history？</string>
 
+    <string name="chat_thread_message_send_success">Send successfully</string>
+
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_confirm">OK</string>
 
@@ -321,7 +323,7 @@
     <string name="fetch_userinfo_success">fetch userinfo success </string>
     <string name="fetch_userinfo_fail">fetch userinfo fail </string>
     <string name="start_a_thread">Started a Thread:</string>
-    <string name="see_all_threads">See all Threads</string>
+    <string name="join_the_thread">Join the thread</string>
 
     <string name="thread_menu_members">Thread members</string>
     <string name="thread_menu_notifications">Thread Notifications</string>

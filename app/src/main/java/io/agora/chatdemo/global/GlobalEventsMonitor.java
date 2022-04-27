@@ -23,7 +23,6 @@ import io.agora.ContactListener;
 import io.agora.ConversationListener;
 import io.agora.Error;
 import io.agora.MultiDeviceListener;
-import io.agora.ChatThreadChangeListener;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
@@ -31,7 +30,6 @@ import io.agora.chat.ChatThreadEvent;
 import io.agora.chat.Conversation;
 import io.agora.chat.MucSharedFile;
 import io.agora.chat.TextMessageBody;
-import io.agora.chat.ChatThreadEvent;
 import io.agora.chat.UserInfo;
 import io.agora.chat.adapter.EMAChatRoomManagerListener;
 import io.agora.chat.uikit.EaseUIKit;
@@ -736,6 +734,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         // 将thread id设置消息id，方便后面移除
         msg.setMsgId(event.getChatThreadId());
         msg.setAttribute(DemoConstant.EM_THREAD_NOTIFICATION_TYPE, true);
+        msg.setAttribute(DemoConstant.EM_THREAD_PARENT_MSG_ID, event.getMessageId());
         StringBuilder builder = new StringBuilder();
         EaseUser userInfo = DemoHelper.getInstance().getUsersManager().getUserInfo(event.getOperatorId(), false);
         builder.append(userInfo != null ? userInfo.getNickname() : event.getOperatorId());
@@ -743,7 +742,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         builder.append(appContext.getResources().getString(R.string.start_a_thread));
         builder.append(event.getChatThreadName());
         builder.append("\n");
-        builder.append(appContext.getResources().getString(R.string.see_all_threads));
+        builder.append(appContext.getResources().getString(R.string.join_the_thread));
         msg.addBody(new TextMessageBody(builder.toString()));
         msg.setStatus(ChatMessage.Status.SUCCESS);
         ChatClient.getInstance().chatManager().saveMessage(msg);

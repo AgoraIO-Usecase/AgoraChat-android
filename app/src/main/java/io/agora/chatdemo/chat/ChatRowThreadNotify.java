@@ -50,14 +50,9 @@ public class ChatRowThreadNotify extends EaseChatRowText {
         TextMessageBody textBody = (TextMessageBody) message.getBody();
         String message = textBody.getMessage();
         SpannableStringBuilder builder = new SpannableStringBuilder(message);
-        builder.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.ease_color_brand)), message.length() - 7, message.length(),
+        int length = context.getString(R.string.join_the_thread).length();
+        builder.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.ease_color_brand)), message.length() - length, message.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        builder.setSpan(new ClickableSpan() {
-//            @Override
-//            public void onClick(@NonNull View widget) {
-//                // 跳转到指定页面
-//            }
-//        }, message.length() - 7, message.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tv_thread_notify.setText(builder);
     }
 }

@@ -18,6 +18,7 @@ import io.agora.chat.Conversation;
 import io.agora.chat.uikit.activities.EaseChatThreadActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
+import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.chatthread.EaseChatThreadFragment;
 import io.agora.chat.uikit.menu.EasePopupWindow;
 import io.agora.chat.uikit.chatthread.EaseChatThreadRole;
@@ -63,7 +64,18 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
                 setThreadTitle();
             }
         })
-        .setCustomAdapter(new ChatThreadCustomMessageAdapter());
+        .setCustomAdapter(new ChatThreadCustomMessageAdapter())
+        .setOnMessageSendCallBack(new OnMessageSendCallBack() {
+            @Override
+            public void onSuccess(ChatMessage message) {
+                ToastUtils.showToast(R.string.chat_thread_message_send_success);
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtils.showFailToast(errorMsg);
+            }
+        });
     }
 
     private void setThreadTitle() {

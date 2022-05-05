@@ -114,7 +114,7 @@ public class DemoHelper {
         // Configure custom rest server and im server
         options.setRestServer("a1-hsb.easemob.com");
         options.setAppKey("easemob-demo#chatdemoui");
-        options.setIMServer("106.75.35.59");
+        options.setIMServer("106.75.100.247");
         options.setImPort(6717);
         options.setUsingHttpsOnly(true);
         // Call UIKit to initialize Agora Chat SDK

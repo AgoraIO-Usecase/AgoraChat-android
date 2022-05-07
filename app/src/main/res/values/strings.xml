@@ -336,5 +336,6 @@
     <string name="thread_edit_title_done">Done</string>
     <string name="thread_member_title">Thread members</string>
     <string name="thread_remove_member_hint">Remove From Thread</string>
+    <string name="thread_unsent_message_success">You successfully unsent a message</string>
 
 </resources>

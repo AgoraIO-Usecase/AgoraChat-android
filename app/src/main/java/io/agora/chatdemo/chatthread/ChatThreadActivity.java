@@ -65,6 +65,7 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
             }
         })
         .setCustomAdapter(new ChatThreadCustomMessageAdapter())
+        .setCustomFragment(new ChatThreadFragment())
         .setOnMessageSendCallBack(new OnMessageSendCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {

@@ -84,6 +84,8 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
             titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
                 @Override
                 public void onRightClick(View view) {
+                    // hide soft keyboard first
+                    hideSoftKeyboard();
                     showSettingMenu();
                 }
             });
@@ -144,6 +146,12 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void joinChatThreadFailed(int errorCode, String message) {
+        super.joinChatThreadFailed(errorCode, message);
+        ToastUtils.showFailToast(message);
     }
 
     private void removeLocalMessage() {

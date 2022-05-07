@@ -78,8 +78,6 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         messageChangeLiveData = LiveDataBus.get();
         //Add network connection status monitoring
         EaseUIKit.getInstance().setOnEaseChatConnectionListener(new ChatConnectionListener());
-        //Add multi-terminal login monitoring
-        DemoHelper.getInstance().getChatClient().addMultiDeviceListener(new ChatMultiDeviceListener());
         //Add group change listener
         DemoHelper.getInstance().getGroupManager().addGroupChangeListener(new ChatGroupListener());
         //Add contact listener
@@ -88,8 +86,6 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
         //Add monitoring of conversation (listening to read receipts)
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
-        //Add thread change listener
-        DemoHelper.getInstance().getThreadManager().addChatThreadChangeListener(new ThreadChangeListener());
     }
 
     public static GlobalEventsMonitor getInstance() {
@@ -700,54 +696,6 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         }
     }
 
-    private class ThreadChangeListener implements ChatThreadChangeListener {
-
-        @Override
-        public void onChatThreadCreated(ChatThreadEvent event) {
-            createThreadCreatedMsg(event);
-        }
-
-        @Override
-        public void onChatThreadUpdated(ChatThreadEvent event) {
-
-        }
-
-        @Override
-        public void onChatThreadDestroyed(ChatThreadEvent event) {
-            Conversation conversation = ChatClient.getInstance().chatManager().getConversation(event.getParentId());
-            if(conversation != null) {
-                conversation.removeMessage(event.getChatThreadId());
-            }
-        }
-
-        @Override
-        public void onChatThreadUserRemoved(ChatThreadEvent event) {
-
-        }
-    }
-
-    private void createThreadCreatedMsg(ChatThreadEvent event) {
-        ChatMessage msg = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
-        msg.setChatType(ChatMessage.ChatType.GroupChat);
-        msg.setFrom(event.getOperatorId());
-        msg.setTo(event.getParentId());
-        // 将thread id设置消息id，方便后面移除
-        msg.setMsgId(event.getChatThreadId());
-        msg.setAttribute(DemoConstant.EM_THREAD_NOTIFICATION_TYPE, true);
-        msg.setAttribute(DemoConstant.EM_THREAD_PARENT_MSG_ID, event.getMessageId());
-        StringBuilder builder = new StringBuilder();
-        EaseUser userInfo = DemoHelper.getInstance().getUsersManager().getUserInfo(event.getOperatorId(), false);
-        builder.append(userInfo != null ? userInfo.getNickname() : event.getOperatorId());
-        builder.append(" ");
-        builder.append(appContext.getResources().getString(R.string.start_a_thread));
-        builder.append(event.getChatThreadName());
-        builder.append("\n");
-        builder.append(appContext.getResources().getString(R.string.join_the_thread));
-        msg.addBody(new TextMessageBody(builder.toString()));
-        msg.setStatus(ChatMessage.Status.SUCCESS);
-        ChatClient.getInstance().chatManager().saveMessage(msg);
-    }
-
     private void updateMessage(ChatMessage message) {
         message.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.BEAGREED.name());
         TextMessageBody body = new TextMessageBody(PushAndMessageHelper.getSystemMessage(message.ext()));
@@ -755,243 +703,231 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         EaseNotificationMsgManager.getInstance().updateMessage(message);
     }
 
-    private class ChatMultiDeviceListener implements MultiDeviceListener {
-
-
-        @Override
-        public void onContactEvent(int event, String target, String ext) {
-            EMLog.i(TAG, "onContactEvent event"+event);
-            DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
-            String message = null;
-            switch (event) {
-                case CONTACT_REMOVE: //The friend has been removed from another devices
-                    EMLog.i("ChatMultiDeviceListener", "CONTACT_REMOVE");
-                    message = DemoConstant.CONTACT_REMOVE;
-                    if(dbHelper.getUserDao() != null) {
-                        dbHelper.getUserDao().deleteUser(target);
-                    }
-                    removeTargetSystemMessage(target, DemoConstant.SYSTEM_MESSAGE_FROM);
-                    DemoHelper.getInstance().getChatManager().deleteConversation(target, false);
-
-                    showToast("CONTACT_REMOVE");
-                    break;
-                case CONTACT_ACCEPT: //The friend request has been approved on another devices
-                    EMLog.i("ChatMultiDeviceListener", "CONTACT_ACCEPT");
-                    message = DemoConstant.CONTACT_ACCEPT;
-                    EmUserEntity  entity = new EmUserEntity();
-                    entity.setUsername(target);
-                    if(dbHelper.getUserDao() != null) {
-                        dbHelper.getUserDao().insert(entity);
-                    }
-                    updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_ACCEPT);
-
-                    showToast("CONTACT_ACCEPT");
-                    break;
-                case CONTACT_DECLINE: //The friend request has been rejected on other devices
-                    EMLog.i("ChatMultiDeviceListener", "CONTACT_DECLINE");
-                    message = DemoConstant.CONTACT_DECLINE;
-                    updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_DECLINE);
-
-                    showToast("CONTACT_DECLINE");
-                    break;
-                case CONTACT_BAN: //The current user adds someone to the blacklist on other devices
-                    EMLog.i("ChatMultiDeviceListener", "CONTACT_BAN");
-                    message = DemoConstant.CONTACT_BAN;
-                    if(dbHelper.getUserDao() != null) {
-                        dbHelper.getUserDao().deleteUser(target);
-                    }
-                    removeTargetSystemMessage(target, DemoConstant.SYSTEM_MESSAGE_FROM);
-                    DemoHelper.getInstance().getChatManager().deleteConversation(target, false);
-                    updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_BAN);
-
-                    showToast("CONTACT_BAN");
-                    break;
-                case CONTACT_ALLOW: // Friends are removed from the blacklist on other devices
-                    EMLog.i("ChatMultiDeviceListener", "CONTACT_ALLOW");
-                    message = DemoConstant.CONTACT_ALLOW;
-                    updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_ALLOW);
-
-                    showToast("CONTACT_ALLOW");
-                    break;
-            }
-            if(!TextUtils.isEmpty(message)) {
-                EaseEvent easeEvent = EaseEvent.create(message, EaseEvent.TYPE.CONTACT);
-                messageChangeLiveData.with(message).postValue(easeEvent);
-            }
-        }
-
-        @Override
-        public void onGroupEvent(int event, String groupId, List<String> usernames) {
-            EMLog.i(TAG, "onGroupEvent event"+event);
-            String message = null;
-            switch (event) {
-                case GROUP_CREATE:
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_CREATE);
-
-                    showToast("GROUP_CREATE");
-                    break;
-                case GROUP_DESTROY:
-                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_DESTROY);
-                    message = DemoConstant.GROUP_CHANGE;
-
-                    showToast("GROUP_DESTROY");
-                    break;
-                case GROUP_JOIN:
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_JOIN);
-                    message = DemoConstant.GROUP_CHANGE;
-
-                    showToast("GROUP_JOIN");
-                    break;
-                case GROUP_LEAVE:
-                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_LEAVE);
-                    message = DemoConstant.GROUP_CHANGE;
-
-                    showToast("GROUP_LEAVE");
-                    break;
-                case GROUP_APPLY:
-                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY);
-
-                    showToast("GROUP_APPLY");
-                    break;
-                case GROUP_APPLY_ACCEPT:
-                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
-                    // TODO: person, reason from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_ACCEPT);
-
-                    showToast("GROUP_APPLY_ACCEPT");
-                    break;
-                case GROUP_APPLY_DECLINE:
-                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
-                    // TODO: person, reason from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE);
-
-                    showToast("GROUP_APPLY_DECLINE");
-                    break;
-                case GROUP_INVITE:
-                    // TODO: person, reason from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE);
-
-                    showToast("GROUP_INVITE");
-                    break;
-                case GROUP_INVITE_ACCEPT:
-                    String st3 = context.getString(R.string.Invite_you_to_join_a_group_chat);
-                    ChatMessage msg = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
-                    msg.setChatType(ChatMessage.ChatType.GroupChat);
-                    // TODO: person, reason from ext
-                    String from = "";
-                    if (usernames != null && usernames.size() > 0) {
-                        msg.setFrom(usernames.get(0));
-                    }
-                    msg.setTo(groupId);
-                    msg.setMsgId(UUID.randomUUID().toString());
-                    msg.setAttribute(DemoConstant.EM_NOTIFICATION_TYPE, true);
-                    msg.addBody(new TextMessageBody(msg.getFrom() + " " +st3));
-                    msg.setStatus(ChatMessage.Status.SUCCESS);
-                    // save invitation as messages
-                    ChatClient.getInstance().chatManager().saveMessage(msg);
-
-                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
-                    // TODO: person, reason from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_ACCEPT);
-                    message = DemoConstant.GROUP_CHANGE;
-
-                    showToast("GROUP_INVITE_ACCEPT");
-                    break;
-                case GROUP_INVITE_DECLINE:
-                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
-                    // TODO: person, reason from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE);
-
-                    showToast("GROUP_INVITE_DECLINE");
-                    break;
-                case GROUP_KICK:
-                    // TODO: person, reason from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_KICK);
-                    message = DemoConstant.GROUP_CHANGE;
-
-                    showToast("GROUP_KICK");
-                    break;
-                case GROUP_BAN:
-                    // TODO: person from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_BAN);
-                    message = DemoConstant.GROUP_CHANGE;
-
-                    showToast("GROUP_BAN");
-                    break;
-                case GROUP_ALLOW:
-                    // TODO: person from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ALLOW);
-
-                    showToast("GROUP_ALLOW");
-                    break;
-                case GROUP_BLOCK:
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_BLOCK);
-
-                    showToast("GROUP_BLOCK");
-                    break;
-                case GROUP_UNBLOCK:
-                    // TODO: person from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_UNBLOCK);
-
-                    showToast("GROUP_UNBLOCK");
-                    break;
-                case GROUP_ASSIGN_OWNER:
-                    // TODO: person from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ASSIGN_OWNER);
-
-                    showToast("GROUP_ASSIGN_OWNER");
-                    break;
-                case GROUP_ADD_ADMIN:
-                    // TODO: person from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_ADMIN);
-                    message = DemoConstant.GROUP_CHANGE;
-
-                    showToast("GROUP_ADD_ADMIN");
-                    break;
-                case GROUP_REMOVE_ADMIN:
-                    // TODO: person from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_ADMIN);
-                    message = DemoConstant.GROUP_CHANGE;
-
-                    showToast("GROUP_REMOVE_ADMIN");
-                    break;
-                case GROUP_ADD_MUTE:
-                    // TODO: person from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_MUTE);
-
-                    showToast("GROUP_ADD_MUTE");
-                    break;
-                case GROUP_REMOVE_MUTE:
-                    // TODO: person from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_MUTE);
-
-                    showToast("GROUP_REMOVE_MUTE");
-                    break;
-                default:
-                    break;
-            }
-            if(!TextUtils.isEmpty(message)) {
-                EaseEvent easeEvent = EaseEvent.create(message, EaseEvent.TYPE.GROUP);
-                messageChangeLiveData.with(message).postValue(easeEvent);
-            }
-        }
-
-        @Override
-        public void onThreadEvent(int event, String target, List<String> usernames) {
-            EMLog.i(TAG, "onThreadEvent event: "+event);
-            if(event == THREAD_DESTROY || event == THREAD_LEAVE) {
-                ChatMessage message = ChatClient.getInstance().chatManager().getMessage(target);
-                if(message != null) {
-                    Conversation conversation = ChatClient.getInstance().chatManager().getConversation(message.conversationId());
-                    if(conversation != null) {
-                        conversation.removeMessage(target);
-                    }
+    @Override
+    public void onContactEvent(int event, String target, String ext) {
+        EMLog.i(TAG, "onContactEvent event"+event);
+        DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
+        String message = null;
+        switch (event) {
+            case CONTACT_REMOVE: //The friend has been removed from another devices
+                EMLog.i("ChatMultiDeviceListener", "CONTACT_REMOVE");
+                message = DemoConstant.CONTACT_REMOVE;
+                if(dbHelper.getUserDao() != null) {
+                    dbHelper.getUserDao().deleteUser(target);
                 }
-            }
+                removeTargetSystemMessage(target, DemoConstant.SYSTEM_MESSAGE_FROM);
+                DemoHelper.getInstance().getChatManager().deleteConversation(target, false);
+
+                showToast("CONTACT_REMOVE");
+                break;
+            case CONTACT_ACCEPT: //The friend request has been approved on another devices
+                EMLog.i("ChatMultiDeviceListener", "CONTACT_ACCEPT");
+                message = DemoConstant.CONTACT_ACCEPT;
+                EmUserEntity  entity = new EmUserEntity();
+                entity.setUsername(target);
+                if(dbHelper.getUserDao() != null) {
+                    dbHelper.getUserDao().insert(entity);
+                }
+                updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_ACCEPT);
+
+                showToast("CONTACT_ACCEPT");
+                break;
+            case CONTACT_DECLINE: //The friend request has been rejected on other devices
+                EMLog.i("ChatMultiDeviceListener", "CONTACT_DECLINE");
+                message = DemoConstant.CONTACT_DECLINE;
+                updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_DECLINE);
+
+                showToast("CONTACT_DECLINE");
+                break;
+            case CONTACT_BAN: //The current user adds someone to the blacklist on other devices
+                EMLog.i("ChatMultiDeviceListener", "CONTACT_BAN");
+                message = DemoConstant.CONTACT_BAN;
+                if(dbHelper.getUserDao() != null) {
+                    dbHelper.getUserDao().deleteUser(target);
+                }
+                removeTargetSystemMessage(target, DemoConstant.SYSTEM_MESSAGE_FROM);
+                DemoHelper.getInstance().getChatManager().deleteConversation(target, false);
+                updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_BAN);
+
+                showToast("CONTACT_BAN");
+                break;
+            case CONTACT_ALLOW: // Friends are removed from the blacklist on other devices
+                EMLog.i("ChatMultiDeviceListener", "CONTACT_ALLOW");
+                message = DemoConstant.CONTACT_ALLOW;
+                updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_ALLOW);
+
+                showToast("CONTACT_ALLOW");
+                break;
         }
+        if(!TextUtils.isEmpty(message)) {
+            EaseEvent easeEvent = EaseEvent.create(message, EaseEvent.TYPE.CONTACT);
+            messageChangeLiveData.with(message).postValue(easeEvent);
+        }
+    }
+
+    @Override
+    public void onGroupEvent(int event, String groupId, List<String> usernames) {
+        EMLog.i(TAG, "onGroupEvent event"+event);
+        String message = null;
+        switch (event) {
+            case GROUP_CREATE:
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_CREATE);
+
+                showToast("GROUP_CREATE");
+                break;
+            case GROUP_DESTROY:
+                removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_DESTROY);
+                message = DemoConstant.GROUP_CHANGE;
+
+                showToast("GROUP_DESTROY");
+                break;
+            case GROUP_JOIN:
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_JOIN);
+                message = DemoConstant.GROUP_CHANGE;
+
+                showToast("GROUP_JOIN");
+                break;
+            case GROUP_LEAVE:
+                removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_LEAVE);
+                message = DemoConstant.GROUP_CHANGE;
+
+                showToast("GROUP_LEAVE");
+                break;
+            case GROUP_APPLY:
+                removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY);
+
+                showToast("GROUP_APPLY");
+                break;
+            case GROUP_APPLY_ACCEPT:
+                removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
+                // TODO: person, reason from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_ACCEPT);
+
+                showToast("GROUP_APPLY_ACCEPT");
+                break;
+            case GROUP_APPLY_DECLINE:
+                removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
+                // TODO: person, reason from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE);
+
+                showToast("GROUP_APPLY_DECLINE");
+                break;
+            case GROUP_INVITE:
+                // TODO: person, reason from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE);
+
+                showToast("GROUP_INVITE");
+                break;
+            case GROUP_INVITE_ACCEPT:
+                String st3 = context.getString(R.string.Invite_you_to_join_a_group_chat);
+                ChatMessage msg = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
+                msg.setChatType(ChatMessage.ChatType.GroupChat);
+                // TODO: person, reason from ext
+                String from = "";
+                if (usernames != null && usernames.size() > 0) {
+                    msg.setFrom(usernames.get(0));
+                }
+                msg.setTo(groupId);
+                msg.setMsgId(UUID.randomUUID().toString());
+                msg.setAttribute(DemoConstant.EM_NOTIFICATION_TYPE, true);
+                msg.addBody(new TextMessageBody(msg.getFrom() + " " +st3));
+                msg.setStatus(ChatMessage.Status.SUCCESS);
+                // save invitation as messages
+                ChatClient.getInstance().chatManager().saveMessage(msg);
+
+                removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
+                // TODO: person, reason from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_ACCEPT);
+                message = DemoConstant.GROUP_CHANGE;
+
+                showToast("GROUP_INVITE_ACCEPT");
+                break;
+            case GROUP_INVITE_DECLINE:
+                removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
+                // TODO: person, reason from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE);
+
+                showToast("GROUP_INVITE_DECLINE");
+                break;
+            case GROUP_KICK:
+                // TODO: person, reason from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_KICK);
+                message = DemoConstant.GROUP_CHANGE;
+
+                showToast("GROUP_KICK");
+                break;
+            case GROUP_BAN:
+                // TODO: person from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_BAN);
+                message = DemoConstant.GROUP_CHANGE;
+
+                showToast("GROUP_BAN");
+                break;
+            case GROUP_ALLOW:
+                // TODO: person from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ALLOW);
+
+                showToast("GROUP_ALLOW");
+                break;
+            case GROUP_BLOCK:
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_BLOCK);
+
+                showToast("GROUP_BLOCK");
+                break;
+            case GROUP_UNBLOCK:
+                // TODO: person from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_UNBLOCK);
+
+                showToast("GROUP_UNBLOCK");
+                break;
+            case GROUP_ASSIGN_OWNER:
+                // TODO: person from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ASSIGN_OWNER);
+
+                showToast("GROUP_ASSIGN_OWNER");
+                break;
+            case GROUP_ADD_ADMIN:
+                // TODO: person from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_ADMIN);
+                message = DemoConstant.GROUP_CHANGE;
+
+                showToast("GROUP_ADD_ADMIN");
+                break;
+            case GROUP_REMOVE_ADMIN:
+                // TODO: person from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_ADMIN);
+                message = DemoConstant.GROUP_CHANGE;
+
+                showToast("GROUP_REMOVE_ADMIN");
+                break;
+            case GROUP_ADD_MUTE:
+                // TODO: person from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_MUTE);
+
+                showToast("GROUP_ADD_MUTE");
+                break;
+            case GROUP_REMOVE_MUTE:
+                // TODO: person from ext
+                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_MUTE);
+
+                showToast("GROUP_REMOVE_MUTE");
+                break;
+            default:
+                break;
+        }
+        if(!TextUtils.isEmpty(message)) {
+            EaseEvent easeEvent = EaseEvent.create(message, EaseEvent.TYPE.GROUP);
+            messageChangeLiveData.with(message).postValue(easeEvent);
+        }
+    }
+
+    @Override
+    public void onThreadEvent(int event, String target, List<String> usernames) {
+        super.onThreadEvent(event, target, usernames);
+        EMLog.i(TAG, "onThreadEvent event: "+event);
     }
 
     /**

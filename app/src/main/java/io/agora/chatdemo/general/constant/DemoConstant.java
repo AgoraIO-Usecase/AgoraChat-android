@@ -29,9 +29,6 @@ public interface DemoConstant extends EaseConstant {
     String EM_MEMBER_NAME = "em_member_name";
     String EM_NOTIFICATION_TYPE = "em_notification_type";
 
-    String EM_THREAD_NOTIFICATION_TYPE = "em_thread_notification_type";
-    String EM_THREAD_PARENT_MSG_ID = "em_thread_parent_msg_id";
-
     String MSG_ATTR_CONF_ID = "conferenceId";
     String MSG_ATTR_CONF_PASS = EXTRA_CONFERENCE_PASS;
     String MSG_ATTR_EXTENSION = "msg_extension";

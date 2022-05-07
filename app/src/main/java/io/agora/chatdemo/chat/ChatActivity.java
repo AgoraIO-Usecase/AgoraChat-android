@@ -222,9 +222,6 @@ public class ChatActivity extends BaseInitActivity {
                 })
                 .hideSenderAvatar(true)
                 .sendMessageByOriginalImage(true)
-                .setCustomAdapter(new CustomMessageAdapter())
-                // Set your custom chat fragment
-                .setCustomFragment(new ChatFragment())
                 .build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }

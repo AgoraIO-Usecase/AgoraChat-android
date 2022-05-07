@@ -4,8 +4,6 @@ import android.view.ViewGroup;
 
 import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
-import io.agora.chatdemo.chat.ChatRowThreadNotify;
-import io.agora.chatdemo.chat.EaseThreadNotifyViewHolder;
 import io.agora.chatdemo.general.constant.DemoConstant;
 
 public class ChatThreadCustomMessageAdapter extends EaseMessageAdapter {

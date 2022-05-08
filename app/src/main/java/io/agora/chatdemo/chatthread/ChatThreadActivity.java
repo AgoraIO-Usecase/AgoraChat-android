@@ -46,10 +46,18 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
     private EaseTitleBar titleBar;
     private ChatThreadViewModel viewModel;
 
-    public static void actionStart(Context context, String parentMsgId, String conversationId) {
+    public static void actionStart(Context context, String conversationId, String parentMsgId) {
         Intent intent = new Intent(context, ChatThreadActivity.class);
         intent.putExtra("parentMsgId", parentMsgId);
         intent.putExtra("conversationId", conversationId);
+        context.startActivity(intent);
+    }
+
+    public static void actionStart(Context context, String conversationId, String parentMsgId, String parentId) {
+        Intent intent = new Intent(context, ChatThreadActivity.class);
+        intent.putExtra("parentMsgId", parentMsgId);
+        intent.putExtra("conversationId", conversationId);
+        intent.putExtra("parentId", parentId);
         context.startActivity(intent);
     }
 

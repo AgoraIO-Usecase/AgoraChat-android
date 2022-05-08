@@ -194,7 +194,7 @@ public class ChatActivity extends BaseInitActivity {
 
                     @Override
                     public boolean onThreadClick(String messageId, String threadId) {
-                        ChatThreadActivity.actionStart(mContext, messageId, threadId);
+                        ChatThreadActivity.actionStart(mContext, threadId, messageId);
                         return true;
                     }
                 })

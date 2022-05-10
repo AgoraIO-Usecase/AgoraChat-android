@@ -408,6 +408,9 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
             showToast(context.getString(R.string.group_listener_onRequestToJoinAccepted, accepter, groupName));
             EMLog.i(TAG, context.getString(R.string.group_listener_onRequestToJoinAccepted, accepter, groupName));
+
+            EaseEvent groupEvent = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(groupEvent);
         }
 
         @Override

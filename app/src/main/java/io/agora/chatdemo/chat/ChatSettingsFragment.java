@@ -56,11 +56,20 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
         String extField = conversation.getExtField();
         binding.itemToTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseUtils.isTimestamp(extField));
+        if (chatType == DemoConstant.CHATTYPE_SINGLE) {
+            binding.itemMuteNotification.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void initListener() {
         super.initListener();
+        binding.itemSearchMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchMessageActivity.actionStart(getActivity(), conversationId, chatType);
+            }
+        });
         binding.itemClearHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

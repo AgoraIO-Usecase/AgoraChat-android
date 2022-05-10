@@ -63,4 +63,5 @@
     <color name="dialog_change_nickname_divider">#363c3c43</color>
 
     <color name="layout_empty_content">#979797</color>
+    <color name="list_delete_bg">#FF14CC</color>
 </resources>

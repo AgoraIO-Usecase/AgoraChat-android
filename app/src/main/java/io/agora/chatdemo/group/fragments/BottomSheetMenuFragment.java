@@ -74,8 +74,8 @@ public class BottomSheetMenuFragment extends ContactListFragment implements View
         sideBarContact.setVisibility(View.GONE);
     }
 
-    protected void checkSearchContent(String content) {
-        super.checkSearchContent(content);
+    protected void checkView(String content) {
+        super.checkView(content);
         sideBarContact.setVisibility(View.GONE);
         if(TextUtils.isEmpty(content)) {
             if(headView.getParent()==null) {
@@ -86,6 +86,7 @@ public class BottomSheetMenuFragment extends ContactListFragment implements View
             ((EaseRecyclerView) mRecyclerView).removeHeaderViews();
         }
     }
+
 
     @Override
     public void onClick(View v) {

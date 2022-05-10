@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/margin_15"
+    android:paddingRight="@dimen/margin_15"
+    android:paddingBottom="33dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_white_corner_14"
+        android:divider="@drawable/shape_divider_gray"
+        android:dividerPadding="1dp"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/shape_white_corner_14"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:text="@string/dialog_change_presence_title"
+            android:textAllCaps="false"
+            android:textColor="@color/color_light_gray_999999"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <TextView
+            android:id="@+id/tv_online"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:drawableLeft="@drawable/ease_presence_online"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:text="@string/ease_presence_online"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <TextView
+            android:id="@+id/tv_busy"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:drawableLeft="@drawable/ease_presence_busy"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:text="@string/ease_presence_busy"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <TextView
+            android:id="@+id/tv_not_disturb"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:drawableLeft="@drawable/ease_presence_do_not_disturb"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:text="@string/ease_presence_do_not_disturb"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <TextView
+            android:id="@+id/tv_leave"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:drawableLeft="@drawable/ease_presence_leave"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:text="@string/ease_presence_leave"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+        <TextView
+            android:id="@+id/tv_custom"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/shape_white_corner_14"
+            android:drawableLeft="@drawable/ease_presence_custom"
+            android:drawablePadding="@dimen/presence_drawable_padding"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dialog_drawable_padding"
+            android:text="@string/ease_presence_custom"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_big_18" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/shape_white_corner_14"
+        android:gravity="center"
+        android:text="@string/ease_cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/group_blue_154dfe"
+        android:textSize="@dimen/text_size_big_18" />
+
+
+</LinearLayout>

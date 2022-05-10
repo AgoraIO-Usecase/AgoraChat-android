@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/ease_chat_extend_dialog_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textColor="#8F8F8F"
+            android:textSize="@dimen/text_size_normal" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider_dialog_menu_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="33dp"
+        android:background="@drawable/ease_chat_extend_dialog_cancel_bg"
+        android:foreground="@drawable/ease_ripple_click_gray"
+        android:text="@string/ease_cancel"
+        android:textColor="@color/ease_dialog_chat_extend_cancel"
+        android:textSize="20sp" />
+
+</LinearLayout>

@@ -63,6 +63,9 @@ public class GroupHelper {
      * @return
      */
     public synchronized static boolean isAdmin(Group group) {
+        if (null == group) {
+            return false;
+        }
         List<String> adminList = group.getAdminList();
         if(adminList != null && !adminList.isEmpty()) {
             return adminList.contains(DemoHelper.getInstance().getUsersManager().getCurrentUserID());

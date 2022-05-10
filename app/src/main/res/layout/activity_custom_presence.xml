@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".me.CustomPresenceActivity">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edt_custom"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape_edittext_bg"
+        android:hint="@string/ease_presence_custom"
+        android:paddingBottom="5dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/title_bar" />
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginRight="@dimen/margin_10"
+        android:src="@drawable/presence_custom_delete"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/edt_custom"
+        app:layout_constraintRight_toRightOf="@id/edt_custom"
+        app:layout_constraintTop_toTopOf="@id/edt_custom" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

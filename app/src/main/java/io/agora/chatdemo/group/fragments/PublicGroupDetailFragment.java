@@ -58,6 +58,8 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
                 @Override
                 public void onSuccess(Boolean data) {
                     showToast(getResources().getString(R.string.group_application_send));
+                    EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(event);
                     back();
                 }
 
@@ -118,7 +120,7 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
             return;
         }
         mBinding.layoutUserinfo.tvId.setText(getString(R.string.show_agora_group_id, groupId));
-        boolean hasSet = DemoHelper.getInstance().setGroupInfo(mContext, groupId, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivAvatar);
+        boolean hasSet = DemoHelper.getInstance().setGroupInfo(mContext, groupId, mBinding.layoutUserinfo.tvNickname, mBinding.layoutUserinfo.ivUserAvatar);
         if(!hasSet) {
             mBinding.layoutUserinfo.tvNickname.setText(groupName);
         }

@@ -7,6 +7,7 @@
 
     <io.agora.chat.uikit.widget.EaseTitleBar
         android:id="@+id/title_bar"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ease_common_title_bar_height"
         app:titleBarDisplayHomeAsUpEnabled="true"/>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        android:background="@color/white"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back"
+        app:titleBarTitle="@string/me_setting_notifications"
+        app:titleBarTitlePosition="left"
+        app:titleBarTitleTextColor="@color/color_main_text" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/push_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/notification_push_title"
+                android:textColor="@color/ease_gray_normal"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <io.agora.chatdemo.general.widget.ArrowItemView
+                android:id="@+id/item_notification_setting"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                android:foreground="@drawable/ease_ripple_click_gray"
+                app:arrowItemAvatarHeight="@dimen/about_me_avatar_size"
+                app:arrowItemAvatarWidth="@dimen/about_me_avatar_size"
+                app:arrowItemTitle="@string/notification_setting"
+                app:arrowItemTitleSize="@dimen/text_size_normal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/push_title" />
+
+            <io.agora.chatdemo.general.widget.ArrowItemView
+                android:id="@+id/item_notification_do_not_disturb"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                android:foreground="@drawable/ease_ripple_click_gray"
+                app:arrowItemAvatarHeight="@dimen/about_me_avatar_size"
+                app:arrowItemAvatarWidth="@dimen/about_me_avatar_size"
+                app:arrowItemTitle="@string/notification_do_not_disturb"
+                app:arrowItemTitleSize="@dimen/text_size_normal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_notification_setting" />
+
+            <TextView
+                android:id="@+id/tv_notification_do_not_disturb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="-15dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="17dp"
+                android:ellipsize="end"
+                android:textColor="@color/color_light_gray_999999"
+                android:textSize="@dimen/text_size_normal"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="@id/item_notification_do_not_disturb"
+                app:layout_constraintTop_toBottomOf="@id/item_notification_do_not_disturb" />
+
+            <io.agora.chatdemo.general.widget.SwitchItemView
+                android:id="@+id/item_switch_show_preview_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_notification_do_not_disturb"
+                app:switchItemShowDivider="false"
+                app:switchItemTitle="@string/notification_show_preview_text"
+                app:switchItemTitleSize="@dimen/text_size_normal" />
+
+            <TextView
+                android:id="@+id/app_setting_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/notification_app_setting_title"
+                android:textColor="@color/ease_gray_normal"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_switch_show_preview_text" />
+
+
+            <io.agora.chatdemo.general.widget.SwitchItemView
+                android:id="@+id/item_switch_alert_sound"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/app_setting_title"
+                app:switchItemShowDivider="false"
+                app:switchItemTitle="@string/notification_alert_sound"
+                app:switchItemTitleSize="@dimen/text_size_normal" />
+
+            <io.agora.chatdemo.general.widget.SwitchItemView
+                android:id="@+id/item_switch_vibrate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_item_height"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_switch_alert_sound"
+                app:switchItemShowDivider="false"
+                app:switchItemTitle="@string/notification_vibrate"
+                app:switchItemTitleSize="@dimen/text_size_normal" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

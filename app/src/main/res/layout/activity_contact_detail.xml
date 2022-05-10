@@ -2,61 +2,115 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <io.agora.chat.uikit.widget.EaseTitleBar
         android:id="@+id/toolbar_contact_detail"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ease_common_title_bar_height"
-        app:titleBarDisplayHomeAsUpEnabled="true"/>
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back" />
 
-    <include
+<!--    <include-->
+<!--        android:id="@+id/layout_userinfo"-->
+<!--        layout="@layout/layout_userinfo"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_userinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/layout_userinfo"/>
+        android:gravity="center_horizontal"
+        android:paddingBottom="5dp">
+
+        <io.agora.chat.uikit.widget.EaseImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/avatar_big_size"
+            android:layout_height="@dimen/avatar_big_size"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ease_default_avatar"
+            app:ease_shape_type="round"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <io.agora.chat.uikit.widget.EaseImageView
+            android:id="@+id/iv_user_presence"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:ease_shape_type="round"
+            app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
+            app:layout_constraintRight_toRightOf="@id/iv_avatar"
+            tools:src="@drawable/ease_presence_online" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/color_main_text"
+            android:textSize="@dimen/text_size_big_20"
+            app:layout_constraintLeft_toLeftOf="@id/iv_avatar"
+            app:layout_constraintRight_toRightOf="@id/iv_avatar"
+            app:layout_constraintTop_toBottomOf="@id/iv_avatar"
+            tools:text="Maria Troncatti" />
+
+        <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/color_second_text"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintLeft_toLeftOf="@id/iv_avatar"
+            app:layout_constraintRight_toRightOf="@id/iv_avatar"
+            app:layout_constraintTop_toBottomOf="@id/tv_nickname"
+            tools:text="AgoraID: supercalifragilisticexpialidocious" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/iv_chat"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/contact_start_chat"
-        android:layout_marginTop="25dp"/>
+        android:layout_marginTop="25dp"
+        android:src="@drawable/contact_start_chat" />
 
     <TextView
         android:id="@+id/tv_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_small"
-        android:textColor="@color/color_main_text"
         android:layout_marginTop="5dp"
-        android:text="@string/contact_detail_start_chat"/>
-    
+        android:text="@string/contact_detail_start_chat"
+        android:textColor="@color/color_main_text"
+        android:textSize="@dimen/text_size_small" />
+
     <io.agora.chatdemo.general.widget.ArrowItemView
         android:id="@+id/item_block_contact"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginTop="32dp"
-        app:arrowItemShowAvatar="true"
-        app:arrowItemAvatarSrc="@drawable/block"
+        android:foreground="@drawable/ease_ripple_click_gray"
         app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarSrc="@drawable/block"
         app:arrowItemAvatarWidth="32dp"
         app:arrowItemShowArrow="false"
-        app:arrowItemTitle="@string/contact_detail_block_contact"
-        android:foreground="@drawable/ease_ripple_click_gray"/>
+        app:arrowItemShowAvatar="true"
+        app:arrowItemTitle="@string/contact_detail_block_contact" />
 
     <io.agora.chatdemo.general.widget.ArrowItemView
         android:id="@+id/item_delete_block"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        app:arrowItemShowAvatar="true"
-        app:arrowItemAvatarSrc="@drawable/delete"
+        android:foreground="@drawable/ease_ripple_click_gray"
         app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarSrc="@drawable/delete"
         app:arrowItemAvatarWidth="32dp"
         app:arrowItemShowArrow="false"
-        app:arrowItemTitle="@string/contact_detail_delete_contact"
-        android:foreground="@drawable/ease_ripple_click_gray"/>
+        app:arrowItemShowAvatar="true"
+        app:arrowItemTitle="@string/contact_detail_delete_contact" />
 
 </LinearLayout>

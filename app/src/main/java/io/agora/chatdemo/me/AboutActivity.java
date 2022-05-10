@@ -38,8 +38,8 @@ public class AboutActivity extends BaseInitActivity implements EaseTitleBar.OnBa
     @Override
     protected void initData() {
         super.initData();
-        mBinding.itemSdkVersion.setContent("V"+ ChatClient.VERSION);
-        mBinding.itemLibVersion.setContent("V"+ DemoHelper.getInstance().getAppVersionName(this));
+        mBinding.itemSdkVersion.setContent("AgoraChat v" + ChatClient.VERSION);
+        mBinding.itemLibVersion.setContent("AgoraChat v" + DemoHelper.getInstance().getAppVersionName(this));
     }
 
     @Override

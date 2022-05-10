@@ -64,7 +64,7 @@ public class MembersScrollViewHeadView extends HorizontalScrollView {
             }
             View view=LayoutInflater.from(getContext()).inflate(R.layout.layout_contact_avatar_name,container,false);
             container.addView(view);
-            EaseImageView ivAvatar = view.findViewById(R.id.iv_avatar);
+            EaseImageView ivAvatar = view.findViewById(R.id.iv_user_avatar);
             TextView tvName = view.findViewById(R.id.tv_name);
             ImageView ivDelete = view.findViewById(R.id.iv_delete);
             EaseUserUtils.setUserAvatarStyle(ivAvatar);

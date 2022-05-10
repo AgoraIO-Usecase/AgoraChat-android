@@ -14,9 +14,11 @@ import java.util.List;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
+import io.agora.chat.Presence;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
+import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -253,5 +255,12 @@ public class UsersManager {
 			return true;
 		}
 		return false;
+	}
+
+	public void updateUserPresenceView(String username,EasePresenceView presenceView){
+		Presence presence = DemoHelper.getInstance().getPresences().get(username);
+		if(presence!=null && presenceView != null) {
+			presenceView.setPresenceData(getUserInfo(username).getAvatar(),presence);
+		}
 	}
 }

@@ -13,11 +13,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
+import io.agora.chat.Presence;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.DemoHelper;
@@ -32,6 +35,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private String owner;
     private OnSelectListener listener;
     private List<String> memberList;
+    private ConcurrentHashMap<String,Presence> presences;
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
@@ -40,6 +44,11 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
 
     public void setShowInitials(boolean showInitials) {
         this.showInitials = showInitials;
+    }
+
+    public void setPresences(ConcurrentHashMap<String,Presence> presences){
+        this.presences=presences;
+        notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -103,6 +112,8 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         private ConstraintLayout clUser;
         private CheckBox cb_select;
         private TextView label;
+        private View presenceGroup;
+        private EaseImageView ivPresence;
 
         public ContactViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -118,6 +129,8 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             clUser = findViewById(R.id.cl_user);
             cb_select = findViewById(R.id.cb_select);
             label = findViewById(R.id.label);
+            ivPresence = findViewById(R.id.iv_presence);
+            presenceGroup = findViewById(R.id.presence_group);
             EaseUserUtils.setUserAvatarStyle(mAvatar);
         }
 
@@ -195,6 +208,15 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                         }
                     });
                 }
+            }
+
+            if(presences!=null&&!presences.isEmpty()) {
+                presenceGroup.setVisibility(View.VISIBLE);
+                Presence presence = presences.get(username);
+                mSignature.setText(EasePresenceUtil.getPresenceString(mContext,presence));
+                ivPresence.setImageResource(EasePresenceUtil.getPresenceIcon(mContext,presence));
+            }else {
+                presenceGroup.setVisibility(View.GONE);
             }
         }
     }

@@ -110,9 +110,27 @@
         <!-- Group members -->
         <activity android:name=".group.activities.GroupMembersActivity"
             android:screenOrientation="portrait" />
+        <!-- Group notice -->
+        <activity android:name=".group.activities.GroupNoticeActivity"
+            android:screenOrientation="portrait" />
+        <!-- Group files -->
+        <activity android:name=".group.activities.GroupFilesActivity"
+            android:screenOrientation="portrait" />
         <!-- Transfer group owner -->
         <activity android:name=".group.activities.GroupTransferActivity"
             android:screenOrientation="portrait" />
+        <!--General-->
+        <activity android:name=".me.GeneralActivity"
+            android:screenOrientation="portrait"/>
+        <!--Notification-->
+        <activity android:name=".me.NotificationActivity"
+            android:screenOrientation="portrait"/>
+        <!--Privacy-->
+        <activity android:name=".me.PrivacyActivity"
+            android:screenOrientation="portrait"/>
+        <!--Contact Black List-->
+        <activity android:name=".me.ContactBlackListActivity"
+            android:screenOrientation="portrait"/>
         <!--About-->
         <activity android:name=".me.AboutActivity"
             android:screenOrientation="portrait"/>
@@ -123,6 +141,14 @@
         <activity
             android:name=".contact.ContactDetailActivity"
             android:screenOrientation="portrait" />
+        <!-- custom presence -->
+        <activity
+            android:name=".me.CustomPresenceActivity"
+            android:exported="false" />
+        <!-- set presence -->
+        <activity
+            android:name=".me.SetPresenceActivity"
+            android:exported="false" />
         <!-- Thread member list -->
         <activity
             android:name=".chatthread.ChatThreadMembersActivity"

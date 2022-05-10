@@ -6,9 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.List;
+
+import io.agora.chat.Presence;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.EaseTitleBar;
@@ -17,6 +22,7 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.viewmodels.ContactDetailViewModel;
+import io.agora.chatdemo.conversation.viewmodel.PresenceViewModel;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
@@ -35,6 +41,8 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     private ArrowItemView itemDeleteBlock;
     private ContactDetailViewModel viewModel;
     private boolean fromChat;
+    private EaseImageView ivPresence;
+    private PresenceViewModel presenceViewModel;
 
     public static void actionStart(Context context, String username) {
         actionStart(context, username, false);
@@ -67,6 +75,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
         tvNickname = findViewById(R.id.tv_nickname);
         tvId = findViewById(R.id.tv_id);
         ivChat = findViewById(R.id.iv_chat);
+        ivPresence = findViewById(R.id.iv_user_presence);
         TextView tvChat = findViewById(R.id.tv_chat);
         itemBlockContact = findViewById(R.id.item_block_contact);
         itemDeleteBlock = findViewById(R.id.item_delete_block);
@@ -74,6 +83,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
             ivChat.setVisibility(View.GONE);
             tvChat.setVisibility(View.GONE);
         }
+        ivPresence.setVisibility(View.VISIBLE);
         EaseUserUtils.setUserAvatarStyle(ivAvatar);
     }
 
@@ -89,12 +99,22 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
                 finish();
             }
         });
+
+        LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(mContext, event -> {
+            updatePresence();
+        });
+    }
+
+    private void updatePresence() {
+        Presence presence = DemoHelper.getInstance().getPresences().get(username);
+        ivPresence.setImageResource(EasePresenceUtil.getPresenceIcon(mContext,presence));
     }
 
     @Override
     protected void initData() {
         super.initData();
         viewModel = new ViewModelProvider(mContext).get(ContactDetailViewModel.class);
+        presenceViewModel=new ViewModelProvider(mContext).get(PresenceViewModel.class);
         viewModel.blackObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
@@ -122,7 +142,17 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
                 }
             });
         });
+        presenceViewModel.presencesObservable().observe(this,response->{
+            parseResource(response, new OnResourceParseCallback<List<Presence>>() {
+                @Override
+                public void onSuccess(@Nullable List<Presence> data) {
+                    updatePresence();
+                }
+            });
+        });
         viewModel.getUserInfoById(username, true);
+
+        presenceViewModel.subscribePresences(username, 7 * 24 * 60 * 60);
     }
 
     private void sendEvent() {

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import io.agora.ChatRoomChangeListener;
@@ -23,12 +24,14 @@ import io.agora.ContactListener;
 import io.agora.ConversationListener;
 import io.agora.Error;
 import io.agora.MultiDeviceListener;
+import io.agora.PresenceListener;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatThreadEvent;
 import io.agora.chat.Conversation;
 import io.agora.chat.MucSharedFile;
+import io.agora.chat.Presence;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.UserInfo;
 import io.agora.chat.adapter.EMAChatRoomManagerListener;
@@ -69,6 +72,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
     private boolean isPushConfigsWithServer = false;
     private Context appContext;
     protected Handler handler;
+    private ConcurrentHashMap<String,Presence> mPresences=new ConcurrentHashMap<>();
 
     Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
 
@@ -86,6 +90,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
         //Add monitoring of conversation (listening to read receipts)
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
+        //Initialize presence
+        initPresence();
     }
 
     public static GlobalEventsMonitor getInstance() {
@@ -132,6 +138,23 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         } else {
             msgQueue.add(message);
         }
+    }
+
+    private void initPresence() {
+        ChatClient.getInstance().presenceManager().addListener(new PresenceListener() {
+            @Override
+            public void onPresenceUpdated(List<Presence> presences) {
+                for (Presence presence : presences) {
+                    Log.d("TAG", presence.toString());
+                    mPresences.put(presence.getPublisher(),presence);
+                }
+                LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).postValue(mPresences);
+            }
+        });
+    }
+
+    public ConcurrentHashMap<String, Presence> getPresences() {
+        return mPresences;
     }
 
     @Override
@@ -422,6 +445,9 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
             showToast(context.getString(R.string.group_listener_onRequestToJoinAccepted, accepter, groupName));
             EMLog.i(TAG, context.getString(R.string.group_listener_onRequestToJoinAccepted, accepter, groupName));
+
+            EaseEvent groupEvent = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(groupEvent);
         }
 
         @Override

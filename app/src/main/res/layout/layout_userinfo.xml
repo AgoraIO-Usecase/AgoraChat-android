@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_userinfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:layout_height="wrap_content">
+    android:paddingBottom="5dp">
 
     <io.agora.chat.uikit.widget.EaseImageView
-        android:id="@+id/iv_avatar"
+        android:id="@+id/iv_user_avatar"
         android:layout_width="@dimen/avatar_big_size"
         android:layout_height="@dimen/avatar_big_size"
+        android:layout_marginTop="5dp"
         android:scaleType="fitXY"
-        app:ease_shape_type="round"
         android:src="@drawable/ease_default_avatar"
-        android:layout_marginTop="5dp"/>
+        app:ease_shape_type="round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        android:id="@+id/iv_presence"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:ease_shape_type="round"
+        app:layout_constraintBottom_toBottomOf="@id/iv_user_avatar"
+        app:layout_constraintRight_toRightOf="@id/iv_user_avatar"
+        tools:src="@drawable/ease_presence_online" />
 
     <TextView
         android:id="@+id/tv_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_big_20"
-        android:textColor="@color/color_main_text"
         android:layout_marginTop="10dp"
-        tools:text="Maria Troncatti"/>
+        android:textColor="@color/color_main_text"
+        android:textSize="@dimen/text_size_big_20"
+        app:layout_constraintLeft_toLeftOf="@id/iv_user_avatar"
+        app:layout_constraintRight_toRightOf="@id/iv_user_avatar"
+        app:layout_constraintTop_toBottomOf="@id/iv_user_avatar"
+        tools:text="Maria Troncatti" />
 
     <TextView
         android:id="@+id/tv_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_small"
-        android:textColor="@color/color_second_text"
         android:layout_marginTop="5dp"
-        tools:text="AgoraID: supercalifragilisticexpialidocious"/>
-</LinearLayout>
+        android:textColor="@color/color_second_text"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintLeft_toLeftOf="@id/iv_user_avatar"
+        app:layout_constraintRight_toRightOf="@id/iv_user_avatar"
+        app:layout_constraintTop_toBottomOf="@id/tv_nickname"
+        tools:text="AgoraID: supercalifragilisticexpialidocious" />
+</androidx.constraintlayout.widget.ConstraintLayout>

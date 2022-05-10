@@ -24,6 +24,7 @@ import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.CallBack;
 import io.agora.chat.ChatClient;
@@ -35,6 +36,7 @@ import io.agora.chat.ChatThreadManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
+import io.agora.chat.Presence;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.activities.EaseChatThreadActivity;
@@ -98,6 +100,10 @@ public class DemoHelper {
             initEaseUIKit(context);
         }
 
+    }
+
+    public ConcurrentHashMap<String, Presence> getPresences() {
+        return ((GlobalEventsMonitor)EaseUIKit.getInstance().getChatPresenter()).getPresences();
     }
 
     /**
@@ -346,7 +352,12 @@ public class DemoHelper {
         // Set whether read confirmation is required by the recipient
         options.setRequireAck(true);
         // Set whether confirmation of delivery is required by the recipient. Default: false
-        options.setRequireDeliveryAck(false);
+        options.setRequireDeliveryAck(true);
+        // Set whether to delete chat messages when exiting (actively and passively) a group
+        options.setDeleteMessagesAsExitGroup(demoModel.isDeleteMessagesAsExitGroup());
+        // Set whether to automatically accept group invitations
+        options.setAutoAcceptGroupInvitation(demoModel.isAutoAcceptGroupInvitation());
+
 
         /**
          * NOTE:You need to set up your own account to use the three-way push function, see the integration documentation

@@ -189,7 +189,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             mConversationListFragment = new EaseConversationListFragment.Builder()
                                             .setCustomFragment(new ConversationListFragment())
                                             .setConversationChangeListener(new ChatConversationChangeListener())
-                                            .useHeader(true)
+                                            .useHeader(false)
                                             .setUnreadPosition(EaseConversationSetStyle.UnreadDotPosition.RIGHT)
                                             .setUnreadStyle(EaseConversationSetStyle.UnreadStyle.NUM)
                                             .build();

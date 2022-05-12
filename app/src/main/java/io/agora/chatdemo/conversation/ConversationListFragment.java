@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,11 +32,11 @@ import io.agora.chat.uikit.conversation.adapter.EaseConversationListAdapter;
 import io.agora.chat.uikit.conversation.model.EaseConversationInfo;
 import io.agora.chat.uikit.interfaces.OnEaseChatConnectionListener;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.general.widget.EasePresenceView;
-import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.general.models.PresenceData;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -66,15 +67,20 @@ public class ConversationListFragment extends EaseConversationListFragment imple
     private TextView mNetworkDisconnectedTip;
     private List<EaseConversationInfo> mLastData;
     private EaseConversationListAdapter mAdapter;
+    private View titleBarLayout;
 
     @Override
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        titleBar.setRightImageResource(R.drawable.main_add_top);
-        titleBar.setRightLayoutVisibility(View.VISIBLE);
+        titleBarLayout = LayoutInflater.from(mContext).inflate(R.layout.layout_conversation_list_title_bar, null);
+        ViewGroup.LayoutParams titleBarParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.ease_common_title_bar_height));
+        titleBarLayout.setLayoutParams(titleBarParams);
+        llRoot.addView(titleBarLayout, 0);
+        ImageView rightIcon = titleBarLayout.findViewById(R.id.right_image);
+        rightIcon.setImageResource(R.drawable.main_add_top);
         // Set toolbar's icon
-        EaseImageView icon = titleBar.getIcon();
-        titleBar.setIcon(R.drawable.chat_toolbar_icon);
+        EaseImageView icon = titleBarLayout.findViewById(R.id.iv_icon);
+        icon.setImageResource(R.drawable.chat_toolbar_icon);
         icon.setShapeType(0);
         ViewGroup.LayoutParams layoutParams = icon.getLayoutParams();
         layoutParams.height = (int) EaseUtils.dip2px(mContext, 20);
@@ -104,6 +110,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         mNetworkDisconnectedTip = findViewById(R.id.network_disconnected_tip);
         mAdapter = conversationListLayout.getListAdapter();
 
+        presenceView = titleBarLayout.findViewById(R.id.presence_view);
         if(presenceView != null) {
             presenceView.setVisibility(View.VISIBLE);
             presenceView.setPresenceTextViewArrowVisible(true);
@@ -186,9 +193,9 @@ public class ConversationListFragment extends EaseConversationListFragment imple
     @Override
     public void initListener() {
         super.initListener();
-        titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
+        titleBarLayout.findViewById(R.id.right_layout).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRightClick(View view) {
+            public void onClick(View v) {
                 new BottomSheetContainerFragment().show(getChildFragmentManager(), "ContainerFragment");
             }
         });

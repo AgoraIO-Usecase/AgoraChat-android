@@ -44,7 +44,7 @@ public class EasePresenceView extends ConstraintLayout {
         ivPresence = findViewById(R.id.iv_presence);
         tvName = findViewById(R.id.tv_name);
         tvPresence = findViewById(R.id.tv_presence);
-        tvPresence.setOnClickListener(new OnClickListener() {
+        this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {

@@ -36,6 +36,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.chatthread.viewmodel.ChatThreadViewModel;
+import io.agora.chatdemo.me.NotificationActivity;
 import io.agora.util.EMLog;
 
 /**
@@ -273,6 +274,7 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
             @Override
             public void onClick(View v) {
                 pMenu.dismiss();
+                skipToThreadNotification();
             }
         });
 
@@ -300,6 +302,10 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
             }
         });
 
+    }
+
+    private void skipToThreadNotification() {
+        NotificationActivity.actionStart(mContext, DemoConstant.DETAIL_TYPE_THREAD, conversationId);
     }
 
     private void skipToThreadMembers() {

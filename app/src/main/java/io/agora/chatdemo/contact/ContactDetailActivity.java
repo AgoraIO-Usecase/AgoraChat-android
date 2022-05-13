@@ -29,6 +29,9 @@ import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.widget.ArrowItemView;
+import io.agora.chatdemo.me.NotificationActivity;
+
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_CHAT;
 
 public class ContactDetailActivity extends BaseInitActivity implements View.OnClickListener {
     private String username;
@@ -38,6 +41,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     private TextView tvId;
     private EaseImageView ivChat;
     private ArrowItemView itemBlockContact;
+    private ArrowItemView itemNotification;
     private ArrowItemView itemDeleteBlock;
     private ContactDetailViewModel viewModel;
     private boolean fromChat;
@@ -78,6 +82,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
         ivPresence = findViewById(R.id.iv_user_presence);
         TextView tvChat = findViewById(R.id.tv_chat);
         itemBlockContact = findViewById(R.id.item_block_contact);
+        itemNotification = findViewById(R.id.item_notifications);
         itemDeleteBlock = findViewById(R.id.item_delete_block);
         if(fromChat) {
             ivChat.setVisibility(View.GONE);
@@ -92,6 +97,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
         super.initListener();
         ivChat.setOnClickListener(this);
         itemBlockContact.setOnClickListener(this);
+        itemNotification.setOnClickListener(this);
         itemDeleteBlock.setOnClickListener(this);
         toolbarContactDetail.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
             @Override
@@ -177,6 +183,9 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
             case R.id.item_delete_block :
                 showDeleteDialog();
                 break;
+            case R.id.item_notifications:
+                skipToNotificationSetting();
+                break;
         }
     }
 
@@ -212,5 +221,9 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
 
     private void skipToChat() {
         ChatActivity.actionStart(mContext, username, DemoConstant.CHATTYPE_SINGLE);
+    }
+
+    private void skipToNotificationSetting(){
+        NotificationActivity.actionStart(mContext, DETAIL_TYPE_CHAT, username);
     }
 }

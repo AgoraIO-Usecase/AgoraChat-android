@@ -112,5 +112,13 @@ public interface DemoConstant extends EaseConstant {
      int GROUP_ROLE_ADMIN = 2;
      int GROUP_ROLE_MEMBER = 0;
 
+     String DETAIL_TYPE = "detail_type";
+     int DETAIL_TYPE_USER = 0;
+     int DETAIL_TYPE_CHAT = 1;
+     int DETAIL_TYPE_GROUP = 2;
+     int DETAIL_TYPE_THREAD = 3;
+     String DETAIL_ID = "detail_id";
+
+    String SILENT_DURATION = "silent_duration";
 
 }

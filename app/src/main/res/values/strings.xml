@@ -313,14 +313,50 @@
 
     <string name="notification_push_title">Push Notifications</string>
     <string name="notification_setting">Notification Setting</string>
+    <string name="notification_setting_default">Default</string>
     <string name="notification_setting_all_message">All Messages</string>
     <string name="notification_setting_only_metions">Only @Metions</string>
     <string name="notification_setting_nothing">Nothing</string>
     <string name="notification_do_not_disturb">Do Not Disturb</string>
+    <string name="notification_turn_off">Turn Off</string>
+    <string name="notification_turn_on">Turn On</string>
     <string name="notification_show_preview_text">Show Preview Text</string>
     <string name="notification_app_setting_title">In-App Notifications</string>
     <string name="notification_alert_sound">Alert Sound</string>
     <string name="notification_vibrate">Vibrate</string>
+    <string name="notification_mute">Mute</string>
+    <string name="notification_un_mute">Unmute</string>
+    <string name="notification_group">Group Notifications</string>
+    <string name="notification_thread">Thread Notifications</string>
+    <string name="notification_contact">Contact Notifications</string>
+    <string name="notification_mute_group">Mute this Group</string>
+    <string name="notification_mute_thread">Mute this Thread</string>
+    <string name="notification_mute_contact">Mute this Contact</string>
+    <string name="notification_un_mute_group">Unmute this Group?</string>
+    <string name="notification_un_mute_thread">Unmute this Thread?</string>
+    <string name="notification_un_mute_contact">Unmute this Contact?</string>
+    <string name="notification_frequency">Frequency</string>
+    <string name="notification_turn_off_mute">Turn off Do Not Disturb?</string>
+    <string name="notification_mute_until">You have set Do Not Disturb until %1$s</string>
+    <string name="notification_mute_thread_until">You have muted this Thread until %1$s</string>
+    <string name="notification_mute_group_until">You have muted this Group until %1$s</string>
+    <string name="notification_mute_contact_until">You have muted this Contact until %1$s</string>
+    <string name="notification_mute_until_you_turn">Until You turn it Unmute</string>
+    <string name="notification_mute_un_mute">Unmute</string>
+    <string name="notification_mute_turn_off">Turn Off</string>
+    <string name="notification_mute_mute">Mute</string>
+    <string name="notification_mute_turn_on">Turn On</string>
+    <string name="notification_mute_this_group">You have muted this Group</string>
+    <string name="notification_mute_this_thread">You have muted this thread</string>
+    <string name="notification_mute_text">Until %1$s</string>
+
+    <string name="not_disturb_15_min">For 15 Minutes</string>
+    <string name="not_disturb_1_hour">For 1 Hour</string>
+    <string name="not_disturb_8_hours">For 8 Hours</string>
+    <string name="not_disturb_24_hours">For 24 Hours</string>
+    <string name="not_disturb_8_tomorrow">Until 8:00 AM Tomorrow</string>
+    <string name="not_disturb_until_turn">Until I turn it Unmute</string>
+
 
     <string name="privacy_blocked_list">Blocked List</string>
     <string name="contact_move_out_blacklist_success">User removed from blocklist</string>

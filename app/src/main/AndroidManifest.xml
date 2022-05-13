@@ -162,6 +162,9 @@
             android:name=".chatthread.ChatThreadActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <!-- Do not disturb activity -->
+        <activity android:name=".me.DoNotDisturbActivity"
+            android:screenOrientation="portrait"/>
 
     </application>
 

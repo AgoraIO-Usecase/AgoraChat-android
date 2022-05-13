@@ -32,6 +32,9 @@ import io.agora.chatdemo.group.dialog.DisbandGroupDialog;
 import io.agora.chatdemo.general.dialog.EditInfoDialog;
 import io.agora.chatdemo.group.dialog.EditGroupInfoDialog;
 import io.agora.chatdemo.group.viewmodel.GroupDetailViewModel;
+import io.agora.chatdemo.me.NotificationActivity;
+
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_GROUP;
 
 public class GroupDetailActivity extends BaseInitActivity implements View.OnClickListener {
 
@@ -99,6 +102,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             }
         });
         binding.includeInfo.ivChat.setOnClickListener(this);
+        binding.itemGroupNotification.setOnClickListener(this);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -128,6 +132,9 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 break;
             case R.id.iv_chat:
                 ChatActivity.actionStart(mContext, groupId, DemoConstant.CHATTYPE_GROUP);
+                break;
+            case R.id.item_group_notification:
+                skipToNotificationSetting();
                 break;
         }
     }
@@ -318,6 +325,10 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             // Skip to transfer activity
             GroupTransferActivity.actionStart(mContext, groupId, leave);
         }
+    }
+
+    private void skipToNotificationSetting(){
+        NotificationActivity.actionStart(mContext, DETAIL_TYPE_GROUP, groupId);
     }
 
     private void leaveGroup() {

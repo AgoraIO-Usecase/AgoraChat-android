@@ -1,6 +1,7 @@
 package io.agora.chatdemo.me;
 
 import static android.app.Activity.RESULT_OK;
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_USER;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -130,8 +131,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.setting_notifications:
-                intent = new Intent(mContext, NotificationActivity.class);
-                startActivity(intent);
+                NotificationActivity.actionStart(mContext, DETAIL_TYPE_USER, "");
                 break;
             case R.id.setting_privacy:
                 intent = new Intent(mContext, PrivacyActivity.class);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -39,7 +40,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="@string/notification_push_title"
                 android:textColor="@color/ease_gray_normal"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,6 +73,16 @@
                 app:layout_constraintTop_toBottomOf="@id/item_notification_setting" />
 
             <TextView
+                android:id="@+id/not_disturb_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/ease_gray_normal"
+                android:textSize="12sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_notification_do_not_disturb" />
+
+            <TextView
                 android:id="@+id/tv_notification_do_not_disturb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,10 +101,11 @@
                 android:id="@+id/item_switch_show_preview_text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_item_height"
+                android:layout_marginTop="20dp"
                 android:background="@color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_notification_do_not_disturb"
+                app:layout_constraintTop_toBottomOf="@+id/not_disturb_time"
                 app:switchItemShowDivider="false"
                 app:switchItemTitle="@string/notification_show_preview_text"
                 app:switchItemTitleSize="@dimen/text_size_normal" />
@@ -107,7 +119,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="@string/notification_app_setting_title"
                 android:textColor="@color/ease_gray_normal"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_switch_show_preview_text" />
 

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 
 import io.agora.chat.Presence;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUserUtils;
@@ -220,7 +221,7 @@ public class ContactDetailActivity extends BaseInitActivity implements View.OnCl
     }
 
     private void skipToChat() {
-        ChatActivity.actionStart(mContext, username, DemoConstant.CHATTYPE_SINGLE);
+        ChatActivity.actionStart(mContext, username, EaseChatType.SINGLE_CHAT);
     }
 
     private void skipToNotificationSetting(){

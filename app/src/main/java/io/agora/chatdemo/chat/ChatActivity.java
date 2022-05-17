@@ -1,6 +1,5 @@
 package io.agora.chatdemo.chat;
 
-import static io.agora.chat.uikit.constants.EaseConstant.CHATTYPE_SINGLE;
 import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 
 import android.Manifest;
@@ -38,9 +37,9 @@ import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.chat.interfaces.OnPeerTypingListener;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.StatusBarCompat;
-import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
@@ -60,15 +59,15 @@ import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity {
     private String conversationId;
-    private int chatType;
+    private EaseChatType chatType;
     private ChatViewModel viewModel;
     private ActivityChatBinding binding;
     private EaseChatLayout mChatLayout;
 
-    public static void actionStart(Context context, String conversationId, int chatType) {
+    public static void actionStart(Context context, String conversationId, EaseChatType chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
-        intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType);
+        intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType.getChatType());
         context.startActivity(intent);
     }
 
@@ -82,14 +81,14 @@ public class ChatActivity extends BaseInitActivity {
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         conversationId = intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID);
-        chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+        chatType = EaseChatType.from(intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseChatType.SINGLE_CHAT.getChatType()));
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
 
-        if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+        if (chatType == EaseChatType.SINGLE_CHAT) {
             binding.presenceView.setVisibility(View.VISIBLE);
             binding.presenceView.setNameTextViewVisibility(View.VISIBLE);
             binding.presenceView.setPresenceTextViewArrowVisible(false);
@@ -116,7 +115,7 @@ public class ChatActivity extends BaseInitActivity {
                 }
             });
         }
-        if(chatType == EaseConstant.CHATTYPE_GROUP) {
+        if(chatType == EaseChatType.GROUP_CHAT) {
             binding.llTitleRight.setVisibility(View.VISIBLE);
         }else {
             binding.llTitleRight.setVisibility(View.GONE);
@@ -277,7 +276,7 @@ public class ChatActivity extends BaseInitActivity {
                 // Skip to chat settings fragment
                 Bundle bundle = new Bundle();
                 bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
-                bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
+                bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType.getChatType());
                 BottomSheetDialogFragment fragment = new ChatSettingsFragment();
                 fragment.setArguments(bundle);
                 fragment.show(getSupportFragmentManager(), "chat_settings");
@@ -286,9 +285,9 @@ public class ChatActivity extends BaseInitActivity {
         binding.ivIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(chatType == DemoConstant.CHATTYPE_SINGLE) {
+                if(chatType == EaseChatType.SINGLE_CHAT) {
                     ContactDetailActivity.actionStart(mContext, conversationId, true);
-                } else if (chatType == DemoConstant.CHATTYPE_GROUP) {
+                } else if (chatType == EaseChatType.GROUP_CHAT) {
                     GroupDetailActivity.actionStart(mContext, conversationId, true);
                 }
             }
@@ -296,7 +295,7 @@ public class ChatActivity extends BaseInitActivity {
         binding.llTitleRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(chatType == EaseConstant.CHATTYPE_GROUP) {
+                if(chatType == EaseChatType.GROUP_CHAT) {
                     EaseChatThreadListActivity.actionStart(mContext, conversationId);
                 }
             }
@@ -376,7 +375,7 @@ public class ChatActivity extends BaseInitActivity {
         });
         checkUnreadCount();
         setDefaultTitle();
-        if (chatType == CHATTYPE_SINGLE) {
+        if (chatType == EaseChatType.SINGLE_CHAT) {
             getPresenceData();
         }
     }
@@ -406,7 +405,7 @@ public class ChatActivity extends BaseInitActivity {
     }
 
     private void setDefaultTitle() {
-        if(chatType != DemoConstant.CHATTYPE_SINGLE) {
+        if(chatType != EaseChatType.SINGLE_CHAT) {
             boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, binding.title, binding.ivIcon);
             if(!hasProvided) {
                 setGroupInfo();
@@ -419,10 +418,10 @@ public class ChatActivity extends BaseInitActivity {
 
     private void setGroupInfo() {
         String title = "";
-        if(chatType == DemoConstant.CHATTYPE_GROUP) {
+        if(chatType == EaseChatType.GROUP_CHAT) {
             title = GroupHelper.getGroupName(conversationId);
             binding.ivIcon.setImageResource(R.drawable.icon);
-        }else if(chatType == DemoConstant.CHATTYPE_CHATROOM) {
+        }else if(chatType == EaseChatType.CHATROOM) {
             ChatRoom room = ChatClient.getInstance().chatroomManager().getChatRoom(conversationId);
             if(room == null) {
                 viewModel.getChatRoom(conversationId);

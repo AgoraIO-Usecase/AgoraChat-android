@@ -145,7 +145,19 @@ public class ChatActivity extends BaseInitActivity {
                                 return true;
                             }
                             return false;
-                        } else if (itemId == R.id.extend_item_picture || itemId == R.id.extend_item_file || itemId == R.id.extend_item_video) {
+                        } else if (itemId == R.id.extend_item_picture || itemId == R.id.extend_item_file) {
+                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                        , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
+                                return true;
+                            }
+                            return false;
+                        } else if (itemId == R.id.extend_item_video) {
+                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
+                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                        , new String[]{Manifest.permission.CAMERA}, null);
+                                return true;
+                            }
                             if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                                 PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
                                         , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);

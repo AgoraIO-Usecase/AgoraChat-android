@@ -131,23 +131,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     public void initData() {
-        int code = 403;
-        int error_code = 4003;
-        switch (code) {
-            case 403 :
-                EMLog.e("tag", "403");
-                if(error_code == 4004) {
-                    EMLog.e("tag", "error_code");
-                    break;
-                }
-            case 503 :
-                EMLog.e("tag", "503");
-            case 603 :
-                EMLog.e("tag", "603");
-            default:
-                EMLog.e("tag", "default");
-                break;
-        }
         mainViewModel.getMsgConversation();
         mainViewModel.checkUnreadMsg();
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());

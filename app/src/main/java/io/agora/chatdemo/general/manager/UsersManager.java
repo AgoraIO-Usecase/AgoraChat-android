@@ -44,7 +44,7 @@ public class UsersManager {
 	private boolean isPushConfigsWithServer = false;
 
 	public synchronized EaseUser getCurrentUserInfo() {
-		if (currentUser == null) {
+		if (currentUser == null || TextUtils.isEmpty(currentUser.getUsername())) {
 			String username = ChatClient.getInstance().getCurrentUser();
 			currentUser = new EaseUser(username);
 			String nick = getCurrentUserNick();

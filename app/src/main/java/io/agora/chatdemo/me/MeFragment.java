@@ -3,6 +3,7 @@ package io.agora.chatdemo.me;
 import static android.app.Activity.RESULT_OK;
 import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_USER;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -117,6 +118,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         mBinding.layoutUserinfo.ivPresence.setImageResource(EasePresenceUtil.getPresenceIcon(mContext,presence));
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         Intent intent = null;

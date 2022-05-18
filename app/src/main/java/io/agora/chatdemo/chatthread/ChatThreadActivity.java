@@ -12,6 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.List;
+
+import io.agora.MessageListener;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
@@ -20,6 +23,7 @@ import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.chatthread.EaseChatThreadFragment;
+import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.menu.EasePopupWindow;
 import io.agora.chat.uikit.chatthread.EaseChatThreadRole;
 import io.agora.chat.uikit.utils.EaseUtils;
@@ -43,9 +47,10 @@ import io.agora.util.EMLog;
  * The example that how to extends EaseThreadChatActivity, developer can extends {@link EaseChatThreadFragment}
  * and load it to your activity also.
  */
-public class ChatThreadActivity extends EaseChatThreadActivity {
+public class ChatThreadActivity extends EaseChatThreadActivity implements MessageListener {
     private EaseTitleBar titleBar;
     private ChatThreadViewModel viewModel;
+    private boolean isReachLatestThreadMessage;
 
     public static void actionStart(Context context, String conversationId, String parentMsgId) {
         Intent intent = new Intent(context, ChatThreadActivity.class);
@@ -78,7 +83,12 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
         .setOnMessageSendCallBack(new OnMessageSendCallBack() {
             @Override
             public void onSuccess(ChatMessage message) {
-                ToastUtils.showToast(R.string.chat_thread_message_send_success);
+                if(!isReachLatestThreadMessage) {
+                    isReachLatestThreadMessage = message.getBooleanAttribute(EaseConstant.FLAG_REACH_LATEST_THREAD_MESSAGE, false);
+                }
+                if(!isReachLatestThreadMessage) {
+                    ToastUtils.showToast(R.string.chat_thread_message_send_success);
+                }
             }
 
             @Override
@@ -100,6 +110,12 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void initListener() {
+        super.initListener();
+        ChatClient.getInstance().chatManager().addMessageListener(this);
     }
 
     @Override
@@ -317,4 +333,12 @@ public class ChatThreadActivity extends EaseChatThreadActivity {
         ChatThreadEditActivity.actionStart(mContext, conversationId, threadName);
     }
 
+    @Override
+    public void onMessageReceived(List<ChatMessage> messages) {
+        for (ChatMessage message : messages) {
+            if(!isReachLatestThreadMessage && message.conversationId().equals(conversationId)) {
+                ToastUtils.showToast(EaseUtils.getMessageDigest(message, mContext));
+            }
+        }
+    }
 }

@@ -341,4 +341,10 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ChatClient.getInstance().chatManager().removeMessageListener(this);
+    }
 }

@@ -21,9 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
-import io.agora.CallBack;
 import io.agora.chat.ChatClient;
-import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.DemoHelper;
@@ -32,8 +30,6 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.manager.SoftKeyboardChangeHelper;
 import io.agora.chatdemo.main.MainActivity;
-import io.agora.exceptions.ChatException;
-import io.agora.util.EMLog;
 
 public class SignInActivity extends BaseInitActivity {
 
@@ -147,43 +143,7 @@ public class SignInActivity extends BaseInitActivity {
             return;
         }
         btn_login.setEnabled(false);
-        //viewModel.login(agoraID, nickname);
-        ChatClient.getInstance().login(agoraID, nickname, new CallBack() {
-            @Override
-            public void onSuccess() {
-                Intent intent = new Intent(mContext, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void onError(int code, String error) {
-                if(code == 204) {
-                    registToServer(agoraID, nickname);
-                }
-                runOnUiThread(()-> {
-                    btn_login.setEnabled(true);
-                    setErrorHint(error);
-                });
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-        });
-    }
-
-    private void registToServer(String agoraID, String password) {
-        EaseThreadManager.getInstance().runOnIOThread(()-> {
-            try {
-                ChatClient.getInstance().createAccount(agoraID, password);
-                EMLog.e("tag", "create account success");
-            } catch (ChatException e) {
-                setErrorHint(e.getDescription());
-            }
-        });
-
+        viewModel.login(agoraID, nickname);
     }
 
     public void initData() {

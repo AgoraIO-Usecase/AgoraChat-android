@@ -245,6 +245,16 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                         ChatThreadActivity.actionStart(mContext, threadId, messageId);
                         return true;
                     }
+
+                    @Override
+                    public void onTouchItemOutside() {
+
+                    }
+
+                    @Override
+                    public void onViewDragging() {
+
+                    }
                 })
                 .setOnMessageSendCallBack(new OnMessageSendCallBack() {
 

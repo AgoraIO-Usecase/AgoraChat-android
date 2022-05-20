@@ -79,6 +79,13 @@ android {
     buildFeatures{
         viewBinding true
     }
+
+    sourceSets {
+        main {
+            //jniLibs.srcDirs = ['libs']
+            jni.srcDirs = []
+        }
+    }
 }
 
 dependencies {
@@ -116,14 +123,15 @@ dependencies {
     // Agora Chat Uikit
 //    implementation 'io.agora.rtc:chat-uikit:1.0.6'
     implementation 'io.agora.rtc:chat-callkit:1.0.6'
-//    implementation project(path: ':chat-uikit')
 //    implementation project(path: ':chat-callkit')
 //    implementation 'io.agora.rtc:chat-uikit:1.0.1'
     implementation project(path: ':chat-uikit')
 
     implementation("androidx.multidex:multidex:2.0.1")
 //    implementation 'com.github.stipop-development:stipop-android-sdk:0.5.2'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation project(':emoji-sdk')
+    implementation 'com.giphy.sdk:ui:2.1.17'
 }
 
 

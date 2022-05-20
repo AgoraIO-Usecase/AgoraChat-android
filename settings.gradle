@@ -1,8 +1,6 @@
 include ':emoji-sdk'
 include ':app'
-//include ':chat-uikit'
-//project(':chat-uikit').projectDir = new File('../AgoraChat-UIKit-android/chat-uikit')
-//include ':chat-callkit'
-//project(':chat-callkit').projectDir = new File('../AgoraChat-CallKit-android/chat-callkit')
+include ':chat-uikit'
+project(':chat-uikit').projectDir = new File('../AgoraChat-UIKit-android/chat-uikit')
 //include ':hyphenatechatsdk'
 //project(':hyphenatechatsdk').projectDir = new File('../emclient-android/hyphenatechatsdk')

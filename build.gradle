@@ -58,3 +58,8 @@ ext{
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    sdkVersionCode = 23
+    sdkVersionName = "0.5.2"
+}

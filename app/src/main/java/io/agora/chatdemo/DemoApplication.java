@@ -1,8 +1,8 @@
 package io.agora.chatdemo;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.multidex.MultiDexApplication;
@@ -41,15 +41,17 @@ public class DemoApplication extends MultiDexApplication {
     private void initAgoraChatSDK() {
         DemoHelper.getInstance().init(this);
 
-        Stipop.Companion.configure(this, null);
-//        Stipop.Companion.configure(this, (isConfigured) -> {
-//            if (isConfigured) {
-//                //todo
-//            } else {
-//                //todo
-//            }
-//            return null;
-//        });
+//        Stipop.Companion.configure(this, null);
+        Stipop.Companion.configure(this, (isConfigured) -> {
+            if (isConfigured) {
+                //todo
+                Log.e("Stipop","初始化 Stipop 成功");
+            } else {
+                //todo
+                Log.e("Stipop","初始化 Stipop 失败");
+            }
+            return null;
+        });
     }
 
     public static DemoApplication getInstance() {

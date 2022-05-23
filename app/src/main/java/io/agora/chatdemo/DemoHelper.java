@@ -124,6 +124,8 @@ public class DemoHelper {
 //        options.setIMServer("106.75.100.247");
 //        options.setImPort(6717);
         options.setUsingHttpsOnly(true);
+        // Use fpa by default
+        options.setFpaEnable(true);
         // Call UIKit to initialize Agora Chat SDK
         isSDKInit = EaseUIKit.getInstance().init(context, options);
         return isSDKInit();

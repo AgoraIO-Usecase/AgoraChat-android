@@ -40,6 +40,7 @@ import io.agora.chat.Presence;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.activities.EaseChatThreadActivity;
+import io.agora.chat.uikit.activities.EaseChatThreadCreateActivity;
 import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
@@ -51,6 +52,7 @@ import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
+import io.agora.chatdemo.chatthread.ChatThreadCreateActivity;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
@@ -282,6 +284,8 @@ public class DemoHelper {
                     public Class getActivity(String activityName) {
                         if(TextUtils.equals(activityName, EaseChatThreadActivity.class.getSimpleName())) {
                             return ChatThreadActivity.class;
+                        }else if(TextUtils.equals(activityName, EaseChatThreadCreateActivity.class.getSimpleName())) {
+                            return ChatThreadCreateActivity.class;
                         }
                         return null;
                     }

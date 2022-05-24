@@ -165,6 +165,8 @@
         <!-- Do not disturb activity -->
         <activity android:name=".me.DoNotDisturbActivity"
             android:screenOrientation="portrait"/>
+        <!-- create chat thread -->
+        <activity android:name=".chatthread.ChatThreadCreateActivity" />
 
     </application>
 

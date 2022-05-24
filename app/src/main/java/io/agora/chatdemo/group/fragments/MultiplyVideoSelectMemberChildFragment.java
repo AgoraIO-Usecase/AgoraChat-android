@@ -9,8 +9,8 @@ import java.util.Map;
 
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.ContactListAdapter;
-import io.agora.easecallkit.EaseCallKit;
-import io.agora.easecallkit.base.EaseCallType;
+import io.agora.chat.callkit.EaseCallKit;
+import io.agora.chat.callkit.base.EaseCallType;
 
 public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContactsFragment {
 

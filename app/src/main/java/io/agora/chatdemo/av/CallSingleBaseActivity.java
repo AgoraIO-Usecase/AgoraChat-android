@@ -8,10 +8,10 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import io.agora.chat.uikit.utils.StatusBarCompat;
-import io.agora.easecallkit.ui.EaseVideoCallActivity;
+import io.agora.chat.callkit.ui.EaseCallSingleBaseActivity;
 
 
-public class VideoCallActivity extends EaseVideoCallActivity {
+public class CallSingleBaseActivity extends EaseCallSingleBaseActivity {
 
     @Override
     public void initView() {

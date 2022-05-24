@@ -49,8 +49,8 @@ import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.av.DemoCallKitListener;
-import io.agora.chatdemo.av.MultipleVideoActivity;
-import io.agora.chatdemo.av.VideoCallActivity;
+import io.agora.chatdemo.av.CallMultipleBaseActivity;
+import io.agora.chatdemo.av.CallSingleBaseActivity;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
@@ -58,9 +58,9 @@ import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
-import io.agora.easecallkit.EaseCallKit;
-import io.agora.easecallkit.base.EaseCallKitConfig;
-import io.agora.easecallkit.base.EaseCallKitListener;
+import io.agora.chat.callkit.EaseCallKit;
+import io.agora.chat.callkit.base.EaseCallKitConfig;
+import io.agora.chat.callkit.base.EaseCallKitListener;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -322,8 +322,8 @@ public class DemoHelper {
         callKitConfig.setDefaultHeadImage(getUsersManager().getCurrentUserInfo().getAvatar());
         EaseCallKit.getInstance().init(context, callKitConfig);
         // Register the activities which you have registered in manifest
-        EaseCallKit.getInstance().registerVideoCallClass(VideoCallActivity.class);
-        EaseCallKit.getInstance().registerMultipleVideoClass(MultipleVideoActivity.class);
+        EaseCallKit.getInstance().registerVideoCallClass(CallSingleBaseActivity.class);
+        EaseCallKit.getInstance().registerMultipleVideoClass(CallMultipleBaseActivity.class);
         addCallkitListener();
     }
 

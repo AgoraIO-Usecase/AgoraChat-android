@@ -30,14 +30,14 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.cloud.EMHttpClient;
-import io.agora.easecallkit.EaseCallKit;
-import io.agora.easecallkit.base.EaseCallEndReason;
-import io.agora.easecallkit.base.EaseCallKitListener;
-import io.agora.easecallkit.base.EaseCallKitTokenCallback;
-import io.agora.easecallkit.base.EaseCallType;
-import io.agora.easecallkit.base.EaseCallUserInfo;
-import io.agora.easecallkit.base.EaseGetUserAccountCallback;
-import io.agora.easecallkit.base.EaseUserAccount;
+import io.agora.chat.callkit.EaseCallKit;
+import io.agora.chat.callkit.base.EaseCallEndReason;
+import io.agora.chat.callkit.base.EaseCallKitListener;
+import io.agora.chat.callkit.base.EaseCallKitTokenCallback;
+import io.agora.chat.callkit.base.EaseCallType;
+import io.agora.chat.callkit.base.EaseCallUserInfo;
+import io.agora.chat.callkit.base.EaseCallGetUserAccountCallback;
+import io.agora.chat.callkit.base.EaseUserAccount;
 import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
 import kotlin.Unit;
@@ -79,8 +79,8 @@ public class DemoCallKitListener implements EaseCallKitListener {
         bundle.putString("groupId", groupId);
         bundle.putStringArray("existMembers", existMembers);
 
-        Intent intent=new Intent(mContext,CallInviteUsersActivity.class);
-        intent.putExtra("invite_params",bundle);
+        Intent intent = new Intent(mContext, CallInviteUsersActivity.class);
+        intent.putExtra("invite_params", bundle);
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
@@ -90,7 +90,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
         EMLog.d(TAG, "onEndCallWithReason" + (callType != null ? callType.name() : " callType is null ") + " reason:" + reason + " time:" + callTime);
         SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String callString = mContext.getString(R.string.call_duration);
+        String callString = mContext.getString(R.string.ease_call_duration);
         callString += formatter.format(callTime);
         switch (reason) {
             case EaseCallEndReasonHangup://正常挂断
@@ -156,14 +156,14 @@ public class DemoCallKitListener implements EaseCallKitListener {
     }
 
     @Override
-    public void onRemoteUserJoinChannel(String channelName, String userName, int uid, EaseGetUserAccountCallback callback) {
+    public void onRemoteUserJoinChannel(String channelName, String userName, int uid, EaseCallGetUserAccountCallback callback) {
         if (userName == null || userName == "") {
             StringBuilder url = new StringBuilder(uIdUrl)
                     .append("?")
                     .append("channelName=")
-                    .append(channelName);
-//                            .append("&userAccount=")
-//                            .append(userName);
+                    .append(channelName)
+                    .append("&userAccount=")
+                    .append(userName);
             getUserIdByAgoraUid(uid, url.toString(), callback);
         } else {
             //设置用户昵称 头像
@@ -181,38 +181,38 @@ public class DemoCallKitListener implements EaseCallKitListener {
      */
     private void getRtcToken(String tokenUrl, int agoraUid, EaseCallKitTokenCallback callback) {
         executor.asyncResult(new Function1<Pair<Integer, String>, Unit>() {
-                    @Override
-                    public Unit invoke(Pair<Integer, String> response) {
-                        if (response != null) {
-                            try {
-                                int resCode = response.first;
-                                if (resCode == 200) {
-                                    String responseInfo = response.second;
-                                    if (responseInfo != null && responseInfo.length() > 0) {
-                                        try {
-                                            JSONObject object = new JSONObject(responseInfo);
-                                            String token = object.getString("accessToken");
-                                            //设置自己头像昵称
-                                            setEaseCallKitUserInfo(ChatClient.getInstance().getCurrentUser());
-                                            callback.onSetToken(token, agoraUid);
-                                        } catch (Exception e) {
-                                            e.getStackTrace();
-                                        }
-                                    } else {
-                                        callback.onGetTokenError(response.first, response.second);
-                                    }
-                                } else {
-                                    callback.onGetTokenError(response.first, response.second);
+            @Override
+            public Unit invoke(Pair<Integer, String> response) {
+                if (response != null) {
+                    try {
+                        int resCode = response.first;
+                        if (resCode == 200) {
+                            String responseInfo = response.second;
+                            if (responseInfo != null && responseInfo.length() > 0) {
+                                try {
+                                    JSONObject object = new JSONObject(responseInfo);
+                                    String token = object.getString("accessToken");
+                                    //设置自己头像昵称
+                                    setEaseCallKitUserInfo(ChatClient.getInstance().getCurrentUser());
+                                    callback.onSetToken(token, agoraUid);
+                                } catch (Exception e) {
+                                    e.getStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            } else {
+                                callback.onGetTokenError(response.first, response.second);
                             }
                         } else {
-                            callback.onSetToken(null, 0);
+                            callback.onGetTokenError(response.first, response.second);
                         }
-                        return null;
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                })
+                } else {
+                    callback.onSetToken(null, 0);
+                }
+                return null;
+            }
+        })
                 .asyncTask(notifier -> {
                     try {
                         Pair<Integer, String> response = EMHttpClient.getInstance().sendRequestWithToken(tokenUrl, null, EMHttpClient.GET);
@@ -231,7 +231,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
      * @param url
      * @param callback
      */
-    private void getUserIdByAgoraUid(int uId, String url, EaseGetUserAccountCallback callback) {
+    private void getUserIdByAgoraUid(int uId, String url, EaseCallGetUserAccountCallback callback) {
         executor.asyncResult(new Function1<Pair<Integer, String>, Unit>() {
             @Override
             public Unit invoke(Pair<Integer, String> response) {
@@ -253,8 +253,8 @@ public class DemoCallKitListener implements EaseCallKitListener {
                                         if (uid == uId) {
                                             //获取到当前用户的userName 设置头像昵称等信息
                                             setEaseCallKitUserInfo(username);
+                                            userAccounts.add(new EaseUserAccount(uid, username));
                                         }
-                                        userAccounts.add(new EaseUserAccount(uid, username));
                                     }
                                     callback.onUserAccount(userAccounts);
                                 } catch (Exception e) {

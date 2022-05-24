@@ -148,14 +148,14 @@
             android:name=".contact.ContactDetailActivity"
             android:screenOrientation="portrait" /> <!-- video call -->
         <activity
-            android:name=".av.VideoCallActivity"
+            android:name=".av.CallSingleBaseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:label="@string/demo_activity_label_video_call"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".av.MultipleVideoActivity"
+            android:name=".av.CallMultipleBaseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:label="@string/demo_activity_label_multi_call"

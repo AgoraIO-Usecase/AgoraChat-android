@@ -1,8 +1,8 @@
 package io.agora.chatdemo.chat;
 
-import static io.agora.easecallkit.base.EaseCallType.SINGLE_VOICE_CALL;
-import static io.agora.easecallkit.utils.EaseMsgUtils.CALL_COST_TIME;
-import static io.agora.easecallkit.utils.EaseMsgUtils.CALL_INVITE_EXT;
+import static io.agora.chat.callkit.base.EaseCallType.SINGLE_VOICE_CALL;
+import static io.agora.chat.callkit.utils.EaseCallMsgUtils.CALL_COST_TIME;
+import static io.agora.chat.callkit.utils.EaseCallMsgUtils.CALL_INVITE_EXT;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -12,9 +12,9 @@ import org.json.JSONObject;
 
 import io.agora.chat.uikit.widget.chatrow.EaseChatRow;
 import io.agora.chatdemo.R;
-import io.agora.easecallkit.base.EaseCallType;
-import io.agora.easecallkit.utils.EaseCallAction;
-import io.agora.easecallkit.utils.EaseMsgUtils;
+import io.agora.chat.callkit.base.EaseCallType;
+import io.agora.chat.callkit.utils.EaseCallAction;
+import io.agora.chat.callkit.utils.EaseCallMsgUtils;
 import io.agora.exceptions.ChatException;
 
 
@@ -44,56 +44,56 @@ public class ChatRowCall extends EaseChatRow {
 
     @Override
     protected void onSetUpView() {
-        String action = message.getStringAttribute(EaseMsgUtils.CALL_ACTION, "");
-        String callerDevId = message.getStringAttribute(EaseMsgUtils.CALL_DEVICE_ID, "");
-        String fromCallId = message.getStringAttribute(EaseMsgUtils.CLL_ID, "");
+        String action = message.getStringAttribute(EaseCallMsgUtils.CALL_ACTION, "");
+        String callerDevId = message.getStringAttribute(EaseCallMsgUtils.CALL_DEVICE_ID, "");
+        String fromCallId = message.getStringAttribute(EaseCallMsgUtils.CLL_ID, "");
         String fromUser = message.getFrom();
-        String channel = message.getStringAttribute(EaseMsgUtils.CALL_CHANNELNAME, "");
+        String channel = message.getStringAttribute(EaseCallMsgUtils.CALL_CHANNELNAME, "");
         JSONObject ext = null;
         try {
             ext = message.getJSONObjectAttribute(CALL_INVITE_EXT);
         } catch (ChatException exception) {
             exception.printStackTrace();
         }
-        int calltype = message.getIntAttribute(EaseMsgUtils.CALL_TYPE, SINGLE_VOICE_CALL.code);
+        int calltype = message.getIntAttribute(EaseCallMsgUtils.CALL_TYPE, SINGLE_VOICE_CALL.code);
         EaseCallType callkitType = EaseCallType.getfrom(calltype);
         EaseCallAction callAction = EaseCallAction.getfrom(action);
         if (callAction == EaseCallAction.CALL_INVITE) {
             switch (callkitType) {
                 case SINGLE_VOICE_CALL:
-                    title.setText(context.getText(R.string.single_audio_call));
+                    title.setText(context.getText(R.string.ease_call_single_audio_call));
                     ivCall.setImageResource(R.drawable.call_voice_green);
                     break;
                 case CONFERENCE_VOICE_CALL:
-                    title.setText(context.getText(R.string.group_audio_call));
+                    title.setText(context.getText(R.string.ease_call_group_audio_call));
                     ivCall.setImageResource(R.drawable.call_voice_green);
                     break;
                 case SINGLE_VIDEO_CALL:
-                    title.setText(context.getText(R.string.single_video_call));
+                    title.setText(context.getText(R.string.ease_call_single_video_call));
                     ivCall.setImageResource(R.drawable.call_video_green);
                     break;
                 case CONFERENCE_VIDEO_CALL:
-                    title.setText(context.getText(R.string.group_video_call));
+                    title.setText(context.getText(R.string.ease_call_group_video_call));
                     ivCall.setImageResource(R.drawable.call_video_green);
                     break;
             }
-            subtitle.setText(context.getText(R.string.touch_to_join));
+            subtitle.setText(context.getText(R.string.ease_call_touch_to_join));
         }else if(callAction==EaseCallAction.CALL_CANCEL) {
             switch (callkitType) {
                 case SINGLE_VOICE_CALL:
-                    title.setText(context.getText(R.string.audio_call_ended));
+                    title.setText(context.getText(R.string.ease_call_audio_call_ended));
                     ivCall.setImageResource(R.drawable.call_voice_gray);
                     break;
                 case CONFERENCE_VOICE_CALL:
-                    title.setText(context.getText(R.string.audio_call_ended));
+                    title.setText(context.getText(R.string.ease_call_audio_call_ended));
                     ivCall.setImageResource(R.drawable.call_voice_gray);
                     break;
                 case SINGLE_VIDEO_CALL:
-                    title.setText(context.getText(R.string.video_call_ended));
+                    title.setText(context.getText(R.string.ease_call_video_call_ended));
                     ivCall.setImageResource(R.drawable.call_video_gray);
                     break;
                 case CONFERENCE_VIDEO_CALL:
-                    title.setText(context.getText(R.string.video_call_ended));
+                    title.setText(context.getText(R.string.ease_call_video_call_ended));
                     ivCall.setImageResource(R.drawable.call_video_gray);
                     break;
             }

@@ -2,10 +2,10 @@ package io.agora.chatdemo.chat;
 
 import static io.agora.chat.uikit.constants.EaseConstant.CHATTYPE_SINGLE;
 import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
-import static io.agora.easecallkit.base.EaseCallType.CONFERENCE_VIDEO_CALL;
-import static io.agora.easecallkit.base.EaseCallType.CONFERENCE_VOICE_CALL;
-import static io.agora.easecallkit.base.EaseCallType.SINGLE_VIDEO_CALL;
-import static io.agora.easecallkit.base.EaseCallType.SINGLE_VOICE_CALL;
+import static io.agora.chat.callkit.base.EaseCallType.CONFERENCE_VIDEO_CALL;
+import static io.agora.chat.callkit.base.EaseCallType.CONFERENCE_VOICE_CALL;
+import static io.agora.chat.callkit.base.EaseCallType.SINGLE_VIDEO_CALL;
+import static io.agora.chat.callkit.base.EaseCallType.SINGLE_VOICE_CALL;
 
 import android.Manifest;
 import android.content.Context;
@@ -46,7 +46,7 @@ import io.agora.chat.uikit.widget.EasePresenceView;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.av.VideoCallActivity;
+import io.agora.chatdemo.av.CallSingleBaseActivity;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
@@ -61,7 +61,7 @@ import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.group.fragments.MultiplyVideoSelectMemberContainerFragment;
-import io.agora.easecallkit.EaseCallKit;
+import io.agora.chat.callkit.EaseCallKit;
 import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity implements View.OnClickListener {
@@ -414,7 +414,7 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.ll_audio_call:
                 if(chatType==CHATTYPE_SINGLE) {
-                    EaseCallKit.getInstance().startSingleCall(SINGLE_VOICE_CALL,conversationId,null, VideoCallActivity.class);
+                    EaseCallKit.getInstance().startSingleCall(SINGLE_VOICE_CALL,conversationId,null, CallSingleBaseActivity.class);
                 }else{
                     // select members for voice call
                     MultiplyVideoSelectMemberContainerFragment fragment = new MultiplyVideoSelectMemberContainerFragment();
@@ -427,7 +427,7 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
                break;
             case R.id.ll_video_call:
                 if(chatType==CHATTYPE_SINGLE) {
-                    EaseCallKit.getInstance().startSingleCall(SINGLE_VIDEO_CALL,conversationId,null, VideoCallActivity.class);
+                    EaseCallKit.getInstance().startSingleCall(SINGLE_VIDEO_CALL,conversationId,null, CallSingleBaseActivity.class);
 //                    Map<String, Object> params = new HashMap<>();
 //                    params.put("groupId", conversationId);
 //                    EaseCallKit.getInstance().startInviteMultipleCall(CONFERENCE_VIDEO_CALL,new String[]{"xu2", "pu1", "pu2", "xu1","1203","cheng"},params);

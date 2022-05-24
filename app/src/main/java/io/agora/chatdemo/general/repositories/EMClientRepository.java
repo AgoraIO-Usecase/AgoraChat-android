@@ -309,6 +309,7 @@ public class EMClientRepository extends BaseEMRepository{
                             ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
                                 @Override
                                 public void onSuccess() {
+                                    DemoHelper.getInstance().getUsersManager().setCurrentUserAgoraUid(value.getAgoraUid());
                                     success(nickname, callBack);
                                 }
 
@@ -334,10 +335,37 @@ public class EMClientRepository extends BaseEMRepository{
                         callBack.onError(error, getErrorMsg(error, errorMsg));
                     }
                 });
+
             }
         }.asLiveData();
     }
-    
+
+    public LiveData<Resource<Boolean>> loginByPassword(String username, String pwd) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                ChatClient.getInstance().login(username, pwd, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        success(username, callBack);
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, getErrorMsg(code, error));
+                        closeDb();
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+
+            }
+        }.asLiveData();
+    }
+
     private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
         // ** manually load all local groups and conversation
         initLocalDb();
@@ -366,9 +394,11 @@ public class EMClientRepository extends BaseEMRepository{
                     if (responseInfo != null && responseInfo.length() > 0) {
                         JSONObject object = new JSONObject(responseInfo);
                         String token = object.getString("accessToken");
+                        int agoraUid = object.getInt("agoraUid");
                         LoginBean bean = new LoginBean();
                         bean.setAccessToken(token);
                         bean.setUserNickname(nickname);
+                        bean.setAgoraUid(agoraUid);
                         if(callBack != null) {
                             callBack.onSuccess(bean);
                         }

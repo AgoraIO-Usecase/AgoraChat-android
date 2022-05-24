@@ -48,6 +48,9 @@ import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
+import io.agora.chatdemo.av.DemoCallKitListener;
+import io.agora.chatdemo.av.MultipleVideoActivity;
+import io.agora.chatdemo.av.VideoCallActivity;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
@@ -55,6 +58,9 @@ import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.easecallkit.EaseCallKit;
+import io.agora.easecallkit.base.EaseCallKitConfig;
+import io.agora.easecallkit.base.EaseCallKitListener;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -73,15 +79,17 @@ public class DemoHelper {
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
     private UsersManager usersManager;
+    private EaseCallKitListener callKitListener;
+    private Context mContext;
+    private ConcurrentHashMap<String, Presence> mPresences = new ConcurrentHashMap<>();
 
-    private ConcurrentHashMap<String,Presence> mPresences=new ConcurrentHashMap<>();
-
-    private DemoHelper() {}
+    private DemoHelper() {
+    }
 
     public static DemoHelper getInstance() {
-        if(mInstance == null) {
+        if (mInstance == null) {
             synchronized (DemoHelper.class) {
-                if(mInstance == null) {
+                if (mInstance == null) {
                     mInstance = new DemoHelper();
                 }
             }
@@ -90,9 +98,10 @@ public class DemoHelper {
     }
 
     public void init(Context context) {
+        mContext=context;
         demoModel = new DemoModel(context);
         //Initialize Agora Chat SDK
-        if(initSDK(context)) {
+        if (initSDK(context)) {
             // debug mode, you'd better set it to false, if you want release your App officially.
             ChatClient.getInstance().setDebugMode(true);
             // Initialize Push
@@ -101,8 +110,9 @@ public class DemoHelper {
             initEaseUIKit(context);
             //Initialize presence
             initPresence();
+            //Initialize callKit
+            InitCallKit(context);
         }
-
     }
 
     private void initPresence() {
@@ -111,7 +121,7 @@ public class DemoHelper {
             public void onPresenceUpdated(List<Presence> presences) {
                 for (Presence presence : presences) {
                     Log.d("TAG", presence.toString());
-                    mPresences.put(presence.getPublisher(),presence);
+                    mPresences.put(presence.getPublisher(), presence);
                 }
                 LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).postValue(mPresences);
             }
@@ -124,19 +134,25 @@ public class DemoHelper {
 
     /**
      * Initialize Agora Chat SDK
+     *
      * @param context
      * @return
      */
     private boolean initSDK(Context context) {
         // Set Chat Options
         ChatOptions options = initChatOptions(context);
-        if(options == null) {
+        if (options == null) {
             return false;
         }
         // Configure custom rest server and im server
         //options.setRestServer(BuildConfig.APP_SERVER_DOMAIN);
         //options.setIMServer("106.75.100.247");
         //options.setImPort(6717);
+
+//        options.setRestServer("a1-test.easemob.com");
+//        options.setIMServer("52.80.99.104");
+//        options.setImPort(6717);
+
         options.setUsingHttpsOnly(true);
         // Call UIKit to initialize Agora Chat SDK
         isSDKInit = EaseUIKit.getInstance().init(context, options);
@@ -146,6 +162,7 @@ public class DemoHelper {
 
     /**
      * Determine if you have logged in before
+     *
      * @return
      */
     public boolean isLoggedIn() {
@@ -154,6 +171,7 @@ public class DemoHelper {
 
     /**
      * Get ChatClient's entity
+     *
      * @return
      */
     public ChatClient getChatClient() {
@@ -162,6 +180,7 @@ public class DemoHelper {
 
     /**
      * Get the entity of contact manager
+     *
      * @return
      */
     public ContactManager getContactManager() {
@@ -170,6 +189,7 @@ public class DemoHelper {
 
     /**
      * Get the entity of group manager
+     *
      * @return
      */
     public GroupManager getGroupManager() {
@@ -178,6 +198,7 @@ public class DemoHelper {
 
     /**
      * Get the entity of chatroom manager
+     *
      * @return
      */
     public ChatRoomManager getChatroomManager() {
@@ -187,6 +208,7 @@ public class DemoHelper {
 
     /**
      * Get the entity of EMChatManager
+     *
      * @return
      */
     public ChatManager getChatManager() {
@@ -195,6 +217,7 @@ public class DemoHelper {
 
     /**
      * Get the entity of push manager
+     *
      * @return
      */
     public PushManager getPushManager() {
@@ -203,6 +226,7 @@ public class DemoHelper {
 
     /**
      * Initialize UIKit
+     *
      * @param context
      */
     private void initEaseUIKit(Context context) {
@@ -212,12 +236,12 @@ public class DemoHelper {
                 .setSettingsProvider(new EaseSettingsProvider() {
                     @Override
                     public boolean isMsgNotifyAllowed(ChatMessage message) {
-                        if(message == null){
+                        if (message == null) {
                             return demoModel.getSettingMsgNotification();
                         }
-                        if(!demoModel.getSettingMsgNotification()){
+                        if (!demoModel.getSettingMsgNotification()) {
                             return false;
-                        }else{
+                        } else {
                             String chatUsename = null;
                             List<String> notNotifyIds = null;
                             // get user or group id which was blocked to show message notifications
@@ -262,7 +286,7 @@ public class DemoHelper {
                 .setGroupInfoProvider(new EaseGroupInfoProvider() {
                     @Override
                     public EaseGroupInfo getGroupInfo(String groupId, int type) {
-                        if(type == Conversation.ConversationType.GroupChat.ordinal()) {
+                        if (type == Conversation.ConversationType.GroupChat.ordinal()) {
                             EaseGroupInfo info = new EaseGroupInfo();
                             info.setIcon(ContextCompat.getDrawable(context, R.drawable.group_avatar));
                             EaseGroupInfo.AvatarSettings settings = new EaseGroupInfo.AvatarSettings();
@@ -283,26 +307,46 @@ public class DemoHelper {
                 });
     }
 
+    /**
+     * CallKit initialization
+     *
+     * @param context
+     */
+    private void InitCallKit(Context context) {
+        EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
+        //Set the call timeout period
+        callKitConfig.setCallTimeOut(30 * 1000);
+        //Set the AgoraAppId
+        callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
+        callKitConfig.setEnableRTCToken(true);
+        callKitConfig.setDefaultHeadImage(getUsersManager().getCurrentUserInfo().getAvatar());
+        EaseCallKit.getInstance().init(context, callKitConfig);
+        // Register the activities which you have registered in manifest
+        EaseCallKit.getInstance().registerVideoCallClass(VideoCallActivity.class);
+        EaseCallKit.getInstance().registerMultipleVideoClass(MultipleVideoActivity.class);
+        addCallkitListener();
+    }
+
     private Drawable getFileDrawable(String filename) {
-        if(!TextUtils.isEmpty(filename)) {
+        if (!TextUtils.isEmpty(filename)) {
             Drawable drawable = null;
             Context context = DemoApplication.getInstance();
             Resources resources = context.getResources();
-            if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_image_file_suffix))) {
+            if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_image_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
-            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_video_file_suffix))) {
+            } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_video_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
-            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_audio_file_suffix))) {
+            } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_audio_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
-            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_word_file_suffix))) {
+            } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_word_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_doc);
-            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_excel_file_suffix))) {
+            } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_excel_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_exl);
-            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_pdf_file_suffix))) {
+            } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_pdf_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_pdf);
-            }else if(EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_ppt_file_suffix))) {
+            } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_ppt_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_ppt);
-            }else {
+            } else {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_unknown);
             }
             return drawable;
@@ -312,6 +356,7 @@ public class DemoHelper {
 
     /**
      * Unified Profile Picture Configuration
+     *
      * @return
      */
     private EaseAvatarOptions getAvatarOptions() {
@@ -330,16 +375,17 @@ public class DemoHelper {
 
     /**
      * Custom settings
+     *
      * @param context
      * @return
      */
-    private ChatOptions initChatOptions(Context context){
+    private ChatOptions initChatOptions(Context context) {
         Log.d(TAG, "init Agora Chat Options");
 
         ChatOptions options = new ChatOptions();
         boolean hasAppkey = checkAgoraChatAppKey(context);
         // You can set your AppKey by options.setAppKey(appkey)
-        if(!hasAppkey) {
+        if (!hasAppkey) {
             String error = context.getString(R.string.please_check);
             EMLog.e(TAG, error);
             Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -378,9 +424,9 @@ public class DemoHelper {
             e.printStackTrace();
             return false;
         }
-        if(ai != null) {
+        if (ai != null) {
             Bundle metaData = ai.metaData;
-            if(metaData == null){
+            if (metaData == null) {
                 return false;
             }
             // read appkey
@@ -395,7 +441,7 @@ public class DemoHelper {
     }
 
     public void initPush(Context context) {
-        if(EaseUIKit.getInstance().isMainProcess(context)) {
+        if (EaseUIKit.getInstance().isMainProcess(context)) {
             PushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
                 public void onError(PushType pushType, long errorCode) {
@@ -404,8 +450,8 @@ public class DemoHelper {
 
                 @Override
                 public boolean isSupportPush(PushType pushType, PushConfig pushConfig) {
-                    if(pushType == PushType.FCM){
-                        EMLog.d("FCM", "GooglePlayServiceCode:"+ GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
+                    if (pushType == PushType.FCM) {
+                        EMLog.d("FCM", "GooglePlayServiceCode:" + GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
                         return GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
                     }
                     return super.isSupportPush(pushType, pushConfig);
@@ -417,10 +463,8 @@ public class DemoHelper {
     /**
      * logout
      *
-     * @param unbindDeviceToken
-     *            whether you need unbind your device token
-     * @param callback
-     *            callback
+     * @param unbindDeviceToken whether you need unbind your device token
+     * @param callback          callback
      */
     public void logout(boolean unbindDeviceToken, final CallBack callback) {
         Log.d(TAG, "logout: " + unbindDeviceToken);
@@ -459,15 +503,14 @@ public class DemoHelper {
      */
     public void killApp() {
         List<Activity> activities = DemoApplication.getInstance().getLifecycleCallbacks().getActivityList();
-        if(activities != null && !activities.isEmpty()) {
-            for(Activity activity : activities) {
+        if (activities != null && !activities.isEmpty()) {
+            for (Activity activity : activities) {
                 activity.finish();
             }
         }
         Process.killProcess(Process.myPid());
         System.exit(0);
     }
-
 
 
     /**
@@ -480,14 +523,15 @@ public class DemoHelper {
 
     /**
      * Get avatar's options
+     *
      * @return
      */
     public EaseAvatarOptions getEaseAvatarOptions() {
         return EaseUIKit.getInstance().getAvatarOptions();
     }
 
-    public DemoModel getModel(){
-        if(demoModel == null) {
+    public DemoModel getModel() {
+        if (demoModel == null) {
             demoModel = new DemoModel(DemoApplication.getInstance());
         }
         return demoModel;
@@ -495,14 +539,16 @@ public class DemoHelper {
 
     /**
      * get instance of EaseNotifier
+     *
      * @return
      */
-    public EaseNotifier getNotifier(){
+    public EaseNotifier getNotifier() {
         return EaseUIKit.getInstance().getNotifier();
     }
 
     /**
      * Whether to log in automatically
+     *
      * @return
      */
     public boolean getAutoLogin() {
@@ -515,6 +561,7 @@ public class DemoHelper {
 
     /**
      * Insert data into the database
+     *
      * @param object
      */
     public void insert(Object object) {
@@ -523,6 +570,7 @@ public class DemoHelper {
 
     /**
      * Update the data int the database
+     *
      * @param object
      */
     public void update(Object object) {
@@ -541,7 +589,7 @@ public class DemoHelper {
         }
 
         // return a empty non-null object to avoid app crash
-        if(contactList == null){
+        if (contactList == null) {
             return new Hashtable<String, EaseUser>();
         }
         return contactList;
@@ -551,42 +599,43 @@ public class DemoHelper {
      * Update contact list
      */
     public void updateContactList() {
-        if(isLoggedIn()) {
+        if (isLoggedIn()) {
             contactList = demoModel.getContactList();
         }
     }
 
     /**
      * Delete contact
+     *
      * @param username
      * @return
      */
     public synchronized int deleteContact(String username) {
-        if(TextUtils.isEmpty(username)) {
+        if (TextUtils.isEmpty(username)) {
             return 0;
         }
         DemoDbHelper helper = DemoDbHelper.getInstance(DemoApplication.getInstance());
-        if(helper.getUserDao() == null) {
+        if (helper.getUserDao() == null) {
             return 0;
         }
         int num = helper.getUserDao().deleteUser(username);
         ChatClient.getInstance().chatManager().deleteConversation(username, false);
         getModel().deleteUsername(username, false);
-        Log.e(TAG, "delete num = "+num);
+        Log.e(TAG, "delete num = " + num);
         return num;
     }
-
 
 
     public boolean setGroupInfo(Context context, String groupId, TextView tvName, ImageView avatar) {
         return setGroupInfo(context, groupId, R.drawable.group_avatar, tvName, avatar);
     }
+
     public boolean setGroupInfo(Context context, String groupId, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {
         return GroupHelper.setGroupInfo(context, groupId, defaultAvatar, tvName, avatar);
     }
 
-    public  String getAppVersionName(Context context) {
-        String versionName=null;
+    public String getAppVersionName(Context context) {
+        String versionName = null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
@@ -595,6 +644,11 @@ public class DemoHelper {
             Log.e("VersionInfo", "Exception", e);
         }
         return versionName;
+    }
+
+    public void addCallkitListener() {
+        callKitListener = new DemoCallKitListener(mContext,getUsersManager());
+        EaseCallKit.getInstance().setCallKitListener(callKitListener);
     }
 
 }

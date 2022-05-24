@@ -23,7 +23,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     private ContactsListViewModel mViewModel;
     private PresenceViewModel presenceViewModel;
-    private List<EaseUser> mData = new ArrayList<>();
+    protected List<EaseUser> mData = new ArrayList<>();
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -60,7 +60,6 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 public void onLoading(@Nullable List<EaseUser> data) {
                     super.onLoading(data);
                     mData = data;
-                    presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
                 }
 
                 @Override

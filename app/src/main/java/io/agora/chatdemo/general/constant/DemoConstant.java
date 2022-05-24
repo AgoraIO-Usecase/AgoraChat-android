@@ -11,12 +11,12 @@ public interface DemoConstant extends EaseConstant {
     String ACCOUNT_KICKED_BY_CHANGE_PASSWORD = "kicked_by_change_password";
     String ACCOUNT_KICKED_BY_OTHER_DEVICE = "kicked_by_another_device";
 
-    String EXTRA_CONFERENCE_ID = "confId";
-    String EXTRA_CONFERENCE_PASS = "password";
-    String EXTRA_CONFERENCE_INVITER = "inviter";
-    String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
-    String EXTRA_CONFERENCE_GROUP_ID = "group_id";
-    String EXTRA_CONFERENCE_GROUP_EXIST_MEMBERS = "exist_members";
+    String CONFERENCE_ID = "confId";
+    String CONFERENCE_PASS = "password";
+    String CONFERENCE_INVITER = "inviter";
+    String CONFERENCE_IS_CREATOR = "is_creator";
+    String CONFERENCE_GROUP_ID = "groupId";
+    String CONFERENCE_GROUP_EXIST_MEMBERS = "exist_members";
 
     String OP_INVITE = "invite";
     String OP_REQUEST_TOBE_SPEAKER = "request_tobe_speaker";
@@ -30,7 +30,7 @@ public interface DemoConstant extends EaseConstant {
     String EM_NOTIFICATION_TYPE = "em_notification_type";
 
     String MSG_ATTR_CONF_ID = "conferenceId";
-    String MSG_ATTR_CONF_PASS = EXTRA_CONFERENCE_PASS;
+    String MSG_ATTR_CONF_PASS = CONFERENCE_PASS;
     String MSG_ATTR_EXTENSION = "msg_extension";
 
     String NEW_FRIENDS_USERNAME = "item_new_friends";
@@ -89,24 +89,28 @@ public interface DemoConstant extends EaseConstant {
 
     String USER_INFO = "userinfo";
 
-     String GROUP_NAME="group_name";
-     String GROUP_DESC="group_desc";
-     String GROUP_REASON="group_reason";
-     String GROUP_PUBLIC="group_public";
-     String GROUP_ALLOW_INVITE="group_allow_invite";
-     String GROUP_MAX_USERS="group_max_users";
+    String GROUP_NAME = "group_name";
+    String GROUP_DESC = "group_desc";
+    String GROUP_REASON = "group_reason";
+    String GROUP_PUBLIC = "group_public";
+    String GROUP_ALLOW_INVITE = "group_allow_invite";
+    String GROUP_MAX_USERS = "group_max_users";
 
-     String GROUP_MEMBER_USER="group_member_user";
+    String GROUP_MEMBER_USER = "group_member_user";
 
-     String PRESENCES_CHANGED="presences_changed";
-     String PRESENCE_CUSTOM = "PRESENCE_CUSTOM";
-     int PRESENCE_CUSTOM_REQUESTCODE_FORM_SETPRESENCEFRAGAGMENT = 3;
-     int PRESENCE_CUSTOM_REQUESTCODE_FORM_CONVERSATIONFRAGMENT = 4;
-     int PRESENCE_RESULTCODE = 5;
+    String PRESENCES_CHANGED = "presences_changed";
+    String PRESENCE_CUSTOM = "PRESENCE_CUSTOM";
+    int PRESENCE_CUSTOM_REQUESTCODE_FORM_SETPRESENCEFRAGAGMENT = 3;
+    int PRESENCE_CUSTOM_REQUESTCODE_FORM_CONVERSATIONFRAGMENT = 4;
+    int PRESENCE_RESULTCODE = 5;
 
-     int GROUP_ROLE_OWNER = 1;
-     int GROUP_ROLE_ADMIN = 2;
-     int GROUP_ROLE_MEMBER = 0;
+    int GROUP_ROLE_OWNER = 1;
+    int GROUP_ROLE_ADMIN = 2;
+    int GROUP_ROLE_MEMBER = 0;
 
+    int VIEW_TYPE_MESSAGE_CALL_ME = 18;//must larger than 17,the lagest number which defined in uikit#EaseChatType
+    int VIEW_TYPE_MESSAGE_CALL_OTHER = 19;
+
+    String CALL_TYPE = "easeCallType";
 
 }

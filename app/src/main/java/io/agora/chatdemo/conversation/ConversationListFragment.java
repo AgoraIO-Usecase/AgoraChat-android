@@ -107,7 +107,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         presenceView = titleBar.getPresenceView();
         presenceView.setVisibility(View.VISIBLE);
         presenceView.setPresenceTextViewArrowVisiable(true);
-        presenceView.setNameTextViewVisiablity(View.GONE);
+        presenceView.setNameTextViewVisiablity(View.INVISIBLE);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) presenceView.getLayoutParams();
         params.setMargins(UIUtils.dp2px(mContext, 16), 0, 0, 0);
         presenceView.setLayoutParams(params);

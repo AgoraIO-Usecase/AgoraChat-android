@@ -22,6 +22,7 @@ import io.agora.chat.uikit.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
 import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.viewmodels.ContactDetailViewModel;
@@ -112,7 +113,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
             }
         });
 
-        LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(mContext, event -> {
+        LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(((BaseActivity)mContext), event -> {
             updatePresence();
         });
 

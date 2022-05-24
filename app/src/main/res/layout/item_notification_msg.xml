@@ -15,7 +15,7 @@
         app:ease_shape_type="round"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/avatar_1" />
+        tools:src="@drawable/agora_avatar_1" />
 
     <TextView
         android:id="@+id/tv_name"

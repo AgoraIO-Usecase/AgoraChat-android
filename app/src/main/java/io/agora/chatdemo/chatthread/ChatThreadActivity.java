@@ -1,5 +1,6 @@
 package io.agora.chatdemo.chatthread;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
@@ -20,7 +21,10 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.activities.EaseChatThreadActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
+import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
+import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
+import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.chatthread.EaseChatThreadFragment;
 import io.agora.chat.uikit.constants.EaseConstant;
@@ -38,6 +42,7 @@ import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.net.Resource;
+import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.chatthread.viewmodel.ChatThreadViewModel;
 import io.agora.chatdemo.me.NotificationActivity;
@@ -76,6 +81,58 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
             public void onTitleBarFinishInflate(EaseTitleBar titleBar) {
                 ChatThreadActivity.this.titleBar = titleBar;
                 setThreadTitle();
+            }
+        })
+        .setOnChatExtendMenuItemClickListener(new OnChatExtendMenuItemClickListener() {
+            @Override
+            public boolean onChatExtendMenuItemClick(View view, int itemId) {
+                EMLog.e("TAG", "onChatExtendMenuItemClick");
+                if (itemId == io.agora.chat.uikit.R.id.extend_item_take_picture) {
+                    // check if has permissions
+                    if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
+                        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                , new String[]{Manifest.permission.CAMERA}, null);
+                        return true;
+                    }
+                    if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
+                        return true;
+                    }
+                    return false;
+                } else if (itemId == io.agora.chat.uikit.R.id.extend_item_picture || itemId == io.agora.chat.uikit.R.id.extend_item_file) {
+                    if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
+                        return true;
+                    }
+                    return false;
+                } else if (itemId == io.agora.chat.uikit.R.id.extend_item_video) {
+                    if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
+                        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                , new String[]{Manifest.permission.CAMERA}, null);
+                        return true;
+                    }
+                    if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
+                        return true;
+                    }
+                    return false;
+                }
+                return false;
+            }
+        })
+        .setOnChatRecordTouchListener(new OnChatRecordTouchListener() {
+            @Override
+            public boolean onRecordTouch(View v, MotionEvent event) {
+                // Check if has record audio permission
+                if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.RECORD_AUDIO)) {
+                    PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                            , new String[]{Manifest.permission.RECORD_AUDIO}, null);
+                    return true;
+                }
+                return false;
             }
         })
         .setCustomAdapter(new ChatThreadCustomMessageAdapter())

@@ -428,9 +428,6 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
             case R.id.ll_video_call:
                 if(chatType==CHATTYPE_SINGLE) {
                     EaseCallKit.getInstance().startSingleCall(SINGLE_VIDEO_CALL,conversationId,null, CallSingleBaseActivity.class);
-//                    Map<String, Object> params = new HashMap<>();
-//                    params.put("groupId", conversationId);
-//                    EaseCallKit.getInstance().startInviteMultipleCall(CONFERENCE_VIDEO_CALL,new String[]{"xu2", "pu1", "pu2", "xu1","1203","cheng"},params);
                 }else{
                     // select members for video call
                     MultiplyVideoSelectMemberContainerFragment fragment = new MultiplyVideoSelectMemberContainerFragment();

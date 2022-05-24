@@ -22,7 +22,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     private ContactsListViewModel mViewModel;
-    private PresenceViewModel presenceViewModel;
+    protected PresenceViewModel presenceViewModel;
     protected List<EaseUser> mData = new ArrayList<>();
 
     @Override
@@ -34,7 +34,11 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        mViewModel = new ViewModelProvider(this).get(ContactsListViewModel.class);
+        initContactsListViewModel();
+        initPresenceViewModel();
+    }
+
+    protected void initPresenceViewModel() {
         presenceViewModel= new ViewModelProvider(this).get(PresenceViewModel.class);
         presenceViewModel.presencesObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<Presence>>() {
@@ -47,6 +51,10 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 }
             });
         });
+    }
+
+    private void initContactsListViewModel() {
+        mViewModel = new ViewModelProvider(this).get(ContactsListViewModel.class);
         mViewModel.getContactObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override

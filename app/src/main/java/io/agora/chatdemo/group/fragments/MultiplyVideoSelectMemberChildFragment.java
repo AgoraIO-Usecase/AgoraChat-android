@@ -18,14 +18,14 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.ContactListAdapter;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
-import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
+import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContactsFragment {
 
     private EaseCallType callType;
     private String groupId;
     private String[] existMembers;
-    private GroupMemberAuthorityViewModel viewModel;
+    private GroupContactViewModel viewModel;
 
     @Override
     protected void initArgument() {
@@ -41,9 +41,9 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
     @Override
     protected void initViewModel() {
         initPresenceViewModel();
-        viewModel = new ViewModelProvider(mContext).get(GroupMemberAuthorityViewModel.class);
+        viewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
 
-        viewModel.getMemberObservable().observe(getViewLifecycleOwner(), response -> {
+        viewModel.getGroupMember().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> users) {
@@ -70,12 +70,12 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
     protected void initData() {
         mRecyclerView.setAdapter(concatAdapter);
         ((ContactListAdapter) mListAdapter).setCheckModel(true);
-        viewModel.getMembers(groupId);
+        viewModel.getGroupMembers(groupId);
     }
 
     @Override
     public void onRefresh() {
-        viewModel.getMembers(groupId);
+        viewModel.getGroupMembers(groupId);
     }
 
     @Override

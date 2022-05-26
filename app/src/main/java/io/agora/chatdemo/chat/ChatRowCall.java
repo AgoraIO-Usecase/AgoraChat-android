@@ -10,16 +10,20 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import io.agora.chat.uikit.widget.chatrow.EaseChatRow;
-import io.agora.chatdemo.R;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import io.agora.chat.callkit.base.EaseCallType;
 import io.agora.chat.callkit.utils.EaseCallAction;
 import io.agora.chat.callkit.utils.EaseCallMsgUtils;
+import io.agora.chat.uikit.widget.chatrow.EaseChatRow;
+import io.agora.chatdemo.R;
 import io.agora.exceptions.ChatException;
 
 
 public class ChatRowCall extends EaseChatRow {
 
+    private final SimpleDateFormat dateFormat;
     private TextView title;
     private TextView subtitle;
     private ImageView ivCall;
@@ -27,6 +31,7 @@ public class ChatRowCall extends EaseChatRow {
 
     public ChatRowCall(Context context, boolean isSender) {
         super(context, isSender);
+        dateFormat = new SimpleDateFormat("HH:mm MMM dd",java.util.Locale.US);
     }
 
     @Override
@@ -47,6 +52,7 @@ public class ChatRowCall extends EaseChatRow {
         String action = message.getStringAttribute(EaseCallMsgUtils.CALL_ACTION, "");
         String callerDevId = message.getStringAttribute(EaseCallMsgUtils.CALL_DEVICE_ID, "");
         String fromCallId = message.getStringAttribute(EaseCallMsgUtils.CLL_ID, "");
+        long time = message.getLongAttribute(EaseCallMsgUtils.CLL_TIMESTRAMEP, 0);
         String fromUser = message.getFrom();
         String channel = message.getStringAttribute(EaseCallMsgUtils.CALL_CHANNELNAME, "");
         JSONObject ext = null;
@@ -77,7 +83,8 @@ public class ChatRowCall extends EaseChatRow {
                     ivCall.setImageResource(R.drawable.call_video_green);
                     break;
             }
-            subtitle.setText(context.getText(R.string.ease_call_touch_to_join));
+            String str = dateFormat.format(new Date(time));
+            subtitle.setText(str);
         }else if(callAction==EaseCallAction.CALL_CANCEL) {
             switch (callkitType) {
                 case SINGLE_VOICE_CALL:

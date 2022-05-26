@@ -98,7 +98,7 @@
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"/> <!-- Chat -->
+           /> <!-- Chat -->
         <activity
             android:name=".chat.ChatActivity"
             android:screenOrientation="portrait"
@@ -152,14 +152,14 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:label="@string/demo_activity_label_video_call"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".av.CallMultipleBaseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:label="@string/demo_activity_label_multi_call"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
     </application>
 

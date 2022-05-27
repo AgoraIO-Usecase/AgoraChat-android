@@ -21,6 +21,14 @@ import java.util.List;
 import java.util.TimeZone;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.callkit.EaseCallKit;
+import io.agora.chat.callkit.base.EaseCallEndReason;
+import io.agora.chat.callkit.base.EaseCallGetUserAccountCallback;
+import io.agora.chat.callkit.base.EaseCallKitListener;
+import io.agora.chat.callkit.base.EaseCallKitTokenCallback;
+import io.agora.chat.callkit.base.EaseCallType;
+import io.agora.chat.callkit.base.EaseCallUserInfo;
+import io.agora.chat.callkit.base.EaseUserAccount;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.R;
@@ -30,14 +38,6 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.cloud.EMHttpClient;
-import io.agora.chat.callkit.EaseCallKit;
-import io.agora.chat.callkit.base.EaseCallEndReason;
-import io.agora.chat.callkit.base.EaseCallKitListener;
-import io.agora.chat.callkit.base.EaseCallKitTokenCallback;
-import io.agora.chat.callkit.base.EaseCallType;
-import io.agora.chat.callkit.base.EaseCallUserInfo;
-import io.agora.chat.callkit.base.EaseCallGetUserAccountCallback;
-import io.agora.chat.callkit.base.EaseUserAccount;
 import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
 import kotlin.Unit;
@@ -148,6 +148,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
     @Override
     public void onCallError(EaseCallKit.EaseCallError type, int errorCode, String description) {
         EMLog.d(TAG, "onCallError" + type.name() + " description:" + description);
+        ToastUtils.showToast(description);
     }
 
     @Override

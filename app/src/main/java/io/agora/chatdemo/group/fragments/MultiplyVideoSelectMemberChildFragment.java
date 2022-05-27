@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.callkit.EaseCallKit;
@@ -18,6 +20,7 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.ContactListAdapter;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.group.viewmodel.GroupContactViewModel;
 
 public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContactsFragment {
@@ -26,6 +29,7 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
     private String groupId;
     private String[] existMembers;
     private GroupContactViewModel viewModel;
+    private Set<String> finalUsers=new HashSet<>();
 
     @Override
     protected void initArgument() {
@@ -80,9 +84,20 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
 
     @Override
     public boolean onTitlebarRightTextViewClick() {
+        finalUsers.clear();
         List<String> checkedList = ((ContactListAdapter) mListAdapter).getCheckedList();
         if (checkedList == null) {
             checkedList = new ArrayList<>();
+        }
+        for (String user : checkedList) {
+            finalUsers.add(user);
+        }
+        for (String existMember : existMembers) {
+            finalUsers.add(existMember);
+        }
+        if(finalUsers.size()>EaseCallKit.getInstance().getLargestNumInChannel()) {
+            ToastUtils.showToast(getString(R.string.ease_call_max_people_in_channel));
+            return true;
         }
         Map<String, Object> ext = new HashMap<>();
         ext.put("groupId", groupId);

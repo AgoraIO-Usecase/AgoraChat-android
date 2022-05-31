@@ -3,6 +3,7 @@ package io.agora.chatdemo.general.manager;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -260,6 +261,7 @@ public class UsersManager {
 	public void updateUserPresenceView(String username,EasePresenceView presenceView){
 		Presence presence = DemoHelper.getInstance().getPresences().get(username);
 		if(presence!=null && presenceView != null) {
+			presenceView.setVisibility(View.VISIBLE);
 			presenceView.setPresenceData(getUserInfo(username).getAvatar(),presence);
 		}
 	}

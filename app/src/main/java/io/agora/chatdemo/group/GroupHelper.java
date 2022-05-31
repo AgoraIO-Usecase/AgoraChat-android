@@ -181,26 +181,28 @@ public class GroupHelper {
                     name = info.getName();
                 }
                 String iconUrl = info.getIconUrl();
-                if(!TextUtils.isEmpty(iconUrl)) {
-                    try {
-                        int resourceId = Integer.parseInt(iconUrl);
-                        Glide.with(context).load(resourceId).error(defaultAvatar).into(avatar);
-                    } catch (NumberFormatException e) {
-                        Glide.with(context).load(iconUrl).error(defaultAvatar).into(avatar);
+                if(avatar != null) {
+                    if(!TextUtils.isEmpty(iconUrl)) {
+                        try {
+                            int resourceId = Integer.parseInt(iconUrl);
+                            Glide.with(context).load(resourceId).error(defaultAvatar).into(avatar);
+                        } catch (NumberFormatException e) {
+                            Glide.with(context).load(iconUrl).error(defaultAvatar).into(avatar);
+                        }
+                    }else {
+                        Glide.with(context).load(info.getIcon()).error(defaultAvatar).into(avatar);
                     }
-                }else {
-                    Glide.with(context).load(info.getIcon()).error(defaultAvatar).into(avatar);
-                }
-                EaseGroupInfo.AvatarSettings settings = info.getAvatarSettings();
-                if(settings != null && avatar != null && avatar instanceof EaseImageView) {
-                    if(settings.getAvatarShapeType() != 0)
-                        ((EaseImageView)avatar).setShapeType(settings.getAvatarShapeType());
-                    if(settings.getAvatarBorderWidth() != 0)
-                        ((EaseImageView)avatar).setBorderWidth(settings.getAvatarBorderWidth());
-                    if(settings.getAvatarBorderColor() != 0)
-                        ((EaseImageView)avatar).setBorderColor(settings.getAvatarBorderColor());
-                    if(settings.getAvatarRadius() != 0)
-                        ((EaseImageView)avatar).setRadius(settings.getAvatarRadius());
+                    EaseGroupInfo.AvatarSettings settings = info.getAvatarSettings();
+                    if(settings != null && avatar != null && avatar instanceof EaseImageView) {
+                        if(settings.getAvatarShapeType() != 0)
+                            ((EaseImageView)avatar).setShapeType(settings.getAvatarShapeType());
+                        if(settings.getAvatarBorderWidth() != 0)
+                            ((EaseImageView)avatar).setBorderWidth(settings.getAvatarBorderWidth());
+                        if(settings.getAvatarBorderColor() != 0)
+                            ((EaseImageView)avatar).setBorderColor(settings.getAvatarBorderColor());
+                        if(settings.getAvatarRadius() != 0)
+                            ((EaseImageView)avatar).setRadius(settings.getAvatarRadius());
+                    }
                 }
                 if(!TextUtils.isEmpty(info.getName())) {
                     isProvide = true;

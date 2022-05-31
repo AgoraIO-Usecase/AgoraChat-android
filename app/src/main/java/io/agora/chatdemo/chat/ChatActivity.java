@@ -320,6 +320,12 @@ public class ChatActivity extends BaseInitActivity {
                 public void onSuccess(List<Presence> presences) {
                     updatePresence();
                 }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    runOnUiThread(()-> showSingleInfo());
+                }
             });
         });
         LiveDataBus.get().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
@@ -381,7 +387,19 @@ public class ChatActivity extends BaseInitActivity {
     }
 
     private void updatePresence() {
-        DemoHelper.getInstance().getUsersManager().updateUserPresenceView(conversationId, binding.presenceView);
+        Presence presence = DemoHelper.getInstance().getPresences().get(conversationId);
+        if(presence != null) {
+            DemoHelper.getInstance().getUsersManager().updateUserPresenceView(conversationId, binding.presenceView);
+            binding.ivIcon.setVisibility(View.GONE);
+        }else {
+            showSingleInfo();
+        }
+    }
+
+    private void showSingleInfo() {
+        DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, binding.title, binding.ivIcon);
+        binding.title.setVisibility(View.GONE);
+        binding.presenceView.setVisibility(View.VISIBLE);
     }
 
     private void getPresenceData() {

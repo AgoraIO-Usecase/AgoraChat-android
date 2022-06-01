@@ -20,6 +20,7 @@ import io.agora.chat.Group;
 import io.agora.chat.GroupInfo;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.contact.SearchFragment;
@@ -162,7 +163,7 @@ public class PublicGroupFragment extends SearchFragment<GroupInfo> implements On
     public void onItemClick(View view, int position) {
         if(allJoinGroups!=null&&allJoinGroups.contains(lastData.get(position))) {
             GroupInfo item = mListAdapter.getItem(position);
-            ChatActivity.actionStart(mContext, item.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+            ChatActivity.actionStart(mContext, item.getGroupId(), EaseChatType.GROUP_CHAT);
         }else{
             PublicGroupDetailFragment publicGroupDetailFragment = new PublicGroupDetailFragment();
             Bundle bundle=new Bundle();

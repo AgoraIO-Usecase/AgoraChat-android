@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">AgoraChat</string>
 
     <string name="loading">Loading&#8230;</string>
@@ -238,6 +238,8 @@
     <string name="chat_setting_to_top">Sticky on Top</string>
     <string name="chat_settings_clear_history_warning">Are you sure you want to delete all chat history？</string>
 
+    <string name="chat_thread_message_send_success">Send successfully</string>
+
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_confirm">OK</string>
 
@@ -397,5 +399,21 @@
 
     <string name="dialog_change_presence_title">status </string>
     <string name="dialog_clear_presence_title">Clear your Custom Status? </string>
+
     <string name="dialog_clear_presence_content">Clear ”%1$s”, change to %2$s. </string>
+    <string name="thread_menu_members">Thread members</string>
+    <string name="thread_menu_notifications">Thread Notifications</string>
+    <string name="thread_menu_edit">Edit Thread</string>
+    <string name="thread_menu_leave">Leave Thread</string>
+    <string name="thread_menu_disband">Disband Thread</string>
+    <string name="thread_leave_hint_title">Leave this Thread?</string>
+    <string name="thread_disband_hint_title">Disband this Thread?</string>
+    <string name="thread_leave_hint_confirm">Leave</string>
+    <string name="thread_disband_hint_confirm">Disband</string>
+    <string name="thread_edit_title">Edit Thread</string>
+    <string name="thread_edit_title_done">Done</string>
+    <string name="thread_member_title">Thread members</string>
+    <string name="thread_remove_member_hint">Remove From Thread</string>
+    <string name="thread_unsent_message_success">You successfully unsent a message</string>
+
 </resources>

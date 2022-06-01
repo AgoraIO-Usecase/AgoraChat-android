@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatManager;
 import io.agora.chat.ChatRoomManager;
+import io.agora.chat.ChatThreadManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.GroupManager;
 import io.agora.chat.PushManager;
@@ -55,7 +56,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * EMChatManager
+     * ChatManager
      * @return
      */
     public ChatManager getChatManager() {
@@ -63,7 +64,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * EMContactManager
+     * ContactManager
      * @return
      */
     public ContactManager getContactManager() {
@@ -71,7 +72,7 @@ public class BaseEMRepository {
     }
 
     /**
-     * EMGroupManager
+     * GroupManager
      * @return
      */
     public GroupManager getGroupManager() {
@@ -79,7 +80,15 @@ public class BaseEMRepository {
     }
 
     /**
-     * EMChatRoomManager
+     * ThreadManager
+     * @return
+     */
+    public ChatThreadManager getThreadManager() {
+        return ChatClient.getInstance().chatThreadManager();
+    }
+
+    /**
+     * ChatRoomManager
      * @return
      */
     public ChatRoomManager getChatRoomManager() {
@@ -88,7 +97,7 @@ public class BaseEMRepository {
 
 
     /**
-     * EMPushManager
+     * PushManager
      * @return
      */
     public PushManager getPushManager() {

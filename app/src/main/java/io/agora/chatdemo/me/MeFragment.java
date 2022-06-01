@@ -3,6 +3,7 @@ package io.agora.chatdemo.me;
 import static android.app.Activity.RESULT_OK;
 import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_USER;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,7 +25,7 @@ import io.agora.CallBack;
 import io.agora.chat.Presence;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.utils.EasePresenceUtil;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
@@ -117,6 +118,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
         mBinding.layoutUserinfo.ivPresence.setImageResource(EasePresenceUtil.getPresenceIcon(mContext,presence));
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         Intent intent = null;

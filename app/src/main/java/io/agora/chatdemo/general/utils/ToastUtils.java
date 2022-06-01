@@ -296,7 +296,7 @@ public class ToastUtils {
             tvToastContent.setText(message);
         }
 
-        ivToast.setVisibility(View.VISIBLE);
+        ivToast.setVisibility(View.GONE);
         if(type == SUCCESS) {
             //ivToast.setImageResource(R.drawable.em_toast_success);
         }else if(type == FAIL) {

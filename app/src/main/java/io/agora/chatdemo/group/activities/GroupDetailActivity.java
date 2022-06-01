@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -131,7 +132,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 disbandGroup();
                 break;
             case R.id.iv_chat:
-                ChatActivity.actionStart(mContext, groupId, DemoConstant.CHATTYPE_GROUP);
+                ChatActivity.actionStart(mContext, groupId, EaseChatType.GROUP_CHAT);
                 break;
             case R.id.item_group_notification:
                 skipToNotificationSetting();

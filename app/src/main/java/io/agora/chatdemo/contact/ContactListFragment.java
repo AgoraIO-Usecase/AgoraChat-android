@@ -45,7 +45,6 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onSuccess(@Nullable List<Presence> data) {
                     ((ContactListAdapter) mListAdapter).setPresences(DemoHelper.getInstance().getPresences());
-//                    checkSearchContent(etSearch.getText().toString().trim());
                     mListAdapter.setData(mData);
                     checkView(etSearch.getText().toString().trim());
                 }
@@ -67,7 +66,11 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onLoading(@Nullable List<EaseUser> data) {
                     super.onLoading(data);
-                    mData = data;
+                    if(data!=null&&data.size()>0) {
+                        mData = data;
+                        mListAdapter.setData(mData);
+                        checkView(etSearch.getText().toString().trim());
+                    }
                 }
 
                 @Override

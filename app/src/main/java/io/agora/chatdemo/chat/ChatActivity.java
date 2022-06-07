@@ -1,11 +1,12 @@
 package io.agora.chatdemo.chat;
 
-import static io.agora.chat.uikit.constants.EaseConstant.CHATTYPE_SINGLE;
-import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 import static io.agora.chat.callkit.general.EaseCallType.CONFERENCE_VIDEO_CALL;
 import static io.agora.chat.callkit.general.EaseCallType.CONFERENCE_VOICE_CALL;
 import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VIDEO_CALL;
 import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VOICE_CALL;
+import static io.agora.chat.uikit.constants.EaseConstant.CHATTYPE_SINGLE;
+import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
+import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 
 import android.Manifest;
 import android.content.Context;
@@ -21,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -32,26 +34,31 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
 import io.agora.chat.Presence;
+import io.agora.chat.callkit.EaseCallKit;
+import io.agora.chat.uikit.activities.EaseChatThreadListActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.EaseChatLayout;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
+import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.chat.interfaces.OnPeerTypingListener;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.widget.EasePresenceView;
-import io.agora.chat.uikit.widget.EaseTitleBar;
+import io.agora.chat.uikit.utils.StatusBarCompat;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.av.CallSingleBaseActivity;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
+import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.chatdemo.contact.ContactDetailActivity;
 import io.agora.chatdemo.contact.GroupMemberDetailBottomSheetFragment;
+import io.agora.chatdemo.databinding.ActivityChatBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.AlertDialog;
@@ -61,55 +68,71 @@ import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.group.fragments.MultiplyVideoSelectMemberContainerFragment;
-import io.agora.chat.callkit.EaseCallKit;
 import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity implements View.OnClickListener {
     private String conversationId;
-    private int chatType;
-    private EaseTitleBar titleBar;
+    private EaseChatType chatType;
     private ChatViewModel viewModel;
-    private EasePresenceView presenceView;
     private AlertDialog callSelectedDialog;
+    private ActivityChatBinding binding;
+    private EaseChatLayout mChatLayout;
 
-    public static void actionStart(Context context, String conversationId, int chatType) {
+    public static void actionStart(Context context, String conversationId, EaseChatType chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
-        intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType);
+        intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType.getChatType());
         context.startActivity(intent);
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_chat;
+    protected View getContentView() {
+        binding = ActivityChatBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
     }
 
     @Override
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         conversationId = intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID);
-        chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+        chatType = EaseChatType.from(intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, SINGLE_CHAT.getChatType()));
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        titleBar = findViewById(R.id.title_bar);
-        titleBar.setRightImageResource(R.drawable.chat_settings_more);
-        titleBar.getIcon().setVisibility(View.GONE);
-        titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
 
-        presenceView = titleBar.getPresenceView();
-        if (chatType == EaseConstant.CHATTYPE_SINGLE) {
-            presenceView.setVisibility(View.VISIBLE);
-            presenceView.setNameTextViewVisiablity(View.VISIBLE);
-            presenceView.setPresenceTextViewArrowVisiable(false);
-            presenceView.setPresenTextViewColor(ContextCompat.getColor(this, R.color.color_light_gray_999999));
+        if (chatType == SINGLE_CHAT) {
+            binding.presenceView.setVisibility(View.VISIBLE);
+            binding.presenceView.setNameTextViewVisibility(View.VISIBLE);
+            binding.presenceView.setPresenceTextViewArrowVisible(false);
+            binding.presenceView.setPresenceTextViewColor(ContextCompat.getColor(this,R.color.color_light_gray_999999));
         } else {
-            presenceView.setVisibility(View.GONE);
+            binding.presenceView.setVisibility(View.GONE);
         }
-        titleBar.setRightImageResource(R.drawable.demo_img);
 
+        binding.rightImage.setImageResource(R.drawable.chat_settings_more);
+        if(mContext.getSupportActionBar() == null) {
+            setSupportActionBar(binding.toolbar);
+            if(getSupportActionBar() != null) {
+                // Show back icon
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                // Not show title
+                getSupportActionBar().setDisplayShowTitleEnabled(false);
+                StatusBarCompat.setToolbarCustomColor(mContext, R.color.black);
+            }
+            binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
+        if(chatType == EaseChatType.GROUP_CHAT) {
+            binding.llTitleRight.setVisibility(View.VISIBLE);
+        }else {
+            binding.llTitleRight.setVisibility(View.GONE);
+        }
         initChatFragment();
     }
 
@@ -134,7 +157,19 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
                                 return true;
                             }
                             return false;
-                        } else if (itemId == R.id.extend_item_picture || itemId == R.id.extend_item_file || itemId == R.id.extend_item_video) {
+                        } else if (itemId == R.id.extend_item_picture || itemId == R.id.extend_item_file) {
+                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                        , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
+                                return true;
+                            }
+                            return false;
+                        } else if (itemId == R.id.extend_item_video) {
+                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
+                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                                        , new String[]{Manifest.permission.CAMERA}, null);
+                                return true;
+                            }
                             if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                                 PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
                                         , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
@@ -199,6 +234,12 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
                     public void onUserAvatarLongClick(String username) {
 
                     }
+
+                    @Override
+                    public boolean onThreadClick(String messageId, String threadId) {
+                        ChatThreadActivity.actionStart(mContext, threadId, messageId);
+                        return true;
+                    }
                 })
                 .setOnMessageSendCallBack(new OnMessageSendCallBack() {
 
@@ -221,14 +262,21 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
                     @Override
                     public void onPeerTyping(String action) {
                         if (TextUtils.equals(action, EaseChatLayout.ACTION_TYPING_BEGIN)) {
-                            titleBar.setTitle(getString(R.string.alert_during_typing));
+                            binding.title.setText(getString(R.string.alert_during_typing));
                         } else if (TextUtils.equals(action, EaseChatLayout.ACTION_TYPING_END)) {
                             setDefaultTitle();
                         }
                     }
                 })
+                .setOnChatLayoutFinishInflateListener(new OnChatLayoutFinishInflateListener() {
+                    @Override
+                    public void onChatListFinishInflate(EaseChatLayout chatLayout) {
+                        mChatLayout = chatLayout;
+                    }
+                })
                 .hideSenderAvatar(true)
                 .setCustomAdapter(new CustomMessageAdapter())
+                .sendMessageByOriginalImage(true)
                 .build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }
@@ -236,34 +284,41 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
     @Override
     protected void initListener() {
         super.initListener();
-        titleBar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
+        binding.rightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onBackPress(View view) {
-                onBackPressed();
-            }
-        });
-        titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
-            @Override
-            public void onRightClick(View view) {
+            public void onClick(View v) {
                 // Skip to chat settings fragment
-//                Bundle bundle = new Bundle();
-//                bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
-//                bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
-//                BottomSheetDialogFragment fragment = new ChatSettingsFragment();
-//                fragment.setArguments(bundle);
-//                fragment.show(getSupportFragmentManager(), "chat_settings");
 
-                showCallSelectedDialog();
+                Bundle bundle = new Bundle();
+                bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
+                bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType.getChatType());
+                BottomSheetDialogFragment fragment = new ChatSettingsFragment();
+                fragment.setArguments(bundle);
+                fragment.show(getSupportFragmentManager(), "chat_settings");
             }
         });
-        titleBar.setOnIconClickListener(new EaseTitleBar.OnIconClickListener() {
+        binding.ivIcon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onIconClick(View view) {
-                if (chatType == DemoConstant.CHATTYPE_SINGLE) {
+            public void onClick(View v) {
+                if(chatType == SINGLE_CHAT) {
                     ContactDetailActivity.actionStart(mContext, conversationId, true);
-                } else if (chatType == DemoConstant.CHATTYPE_GROUP) {
+                } else if (chatType == EaseChatType.GROUP_CHAT) {
                     GroupDetailActivity.actionStart(mContext, conversationId, true);
                 }
+            }
+        });
+        binding.ivThreadMedium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(chatType == EaseChatType.GROUP_CHAT) {
+                    EaseChatThreadListActivity.actionStart(mContext, conversationId);
+                }
+            }
+        });
+        binding.ivCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCallSelectedDialog();
             }
         });
     }
@@ -346,18 +401,24 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
                 finish();
             }
         });
+        LiveDataBus.get().with(DemoConstant.THREAD_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            mChatLayout.getChatMessageListLayout().refreshMessages();
+        });
         LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(this, event -> {
             updatePresence();
         });
         checkUnreadCount();
         setDefaultTitle();
-        if (chatType == CHATTYPE_SINGLE) {
+        if (chatType == SINGLE_CHAT) {
             getPresenceData();
         }
     }
 
     private void updatePresence() {
-        DemoHelper.getInstance().getUsersManager().updateUserPresenceView(conversationId, presenceView);
+        DemoHelper.getInstance().getUsersManager().updateUserPresenceView(conversationId, binding.presenceView);
     }
 
     private void getPresenceData() {
@@ -377,43 +438,43 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
     }
 
     private void showSnackBar(String event) {
-        Snackbar.make(titleBar, event, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.clTitle, event, Snackbar.LENGTH_SHORT).show();
     }
 
     private void setDefaultTitle() {
-        if (chatType != DemoConstant.CHATTYPE_SINGLE) {
-            boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
-            if (!hasProvided) {
+        if(chatType != SINGLE_CHAT) {
+            boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, binding.title, binding.ivIcon);
+            if(!hasProvided) {
                 setGroupInfo();
             }
         } else {
-            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
-            titleBar.getTitle().setVisibility(View.GONE);
+            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, binding.title, binding.ivIcon);
+            binding.title.setVisibility(View.GONE);
         }
     }
 
     private void setGroupInfo() {
         String title = "";
-        if (chatType == DemoConstant.CHATTYPE_GROUP) {
+        if(chatType == EaseChatType.GROUP_CHAT) {
             title = GroupHelper.getGroupName(conversationId);
-            titleBar.setIcon(R.drawable.icon);
-        } else if (chatType == DemoConstant.CHATTYPE_CHATROOM) {
+            binding.ivIcon.setImageResource(R.drawable.icon);
+        }else if(chatType == EaseChatType.CHATROOM) {
             ChatRoom room = ChatClient.getInstance().chatroomManager().getChatRoom(conversationId);
-            if (room == null) {
+            if(room == null) {
                 viewModel.getChatRoom(conversationId);
                 return;
             }
-            title = TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
-            titleBar.setIcon(R.drawable.icon);
+            title =  TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
+            binding.ivIcon.setImageResource(R.drawable.icon);
         }
-        titleBar.setTitle(title);
+        binding.title.setText(title);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_audio_call:
-                if(chatType==CHATTYPE_SINGLE) {
+                if(chatType==SINGLE_CHAT) {
                     EaseCallKit.getInstance().startSingleCall(SINGLE_VOICE_CALL,conversationId,null, CallSingleBaseActivity.class);
                 }else{
                     // select members for voice call
@@ -426,7 +487,7 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
                 }
                break;
             case R.id.ll_video_call:
-                if(chatType==CHATTYPE_SINGLE) {
+                if(chatType==SINGLE_CHAT) {
                     EaseCallKit.getInstance().startSingleCall(SINGLE_VIDEO_CALL,conversationId,null, CallSingleBaseActivity.class);
                 }else{
                     // select members for video call

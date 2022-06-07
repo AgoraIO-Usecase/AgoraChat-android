@@ -1,5 +1,6 @@
 package io.agora.chatdemo.general.dialog;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -19,6 +20,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -252,12 +254,12 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
     }
 
     public static class Builder {
-        public BaseActivity context;
+        public AppCompatActivity context;
         private OnConfirmClickListener listener;
         private onCancelClickListener cancelClickListener;
         protected Bundle bundle;
 
-        public Builder(BaseActivity context) {
+        public Builder(AppCompatActivity context) {
             this.context = context;
             this.bundle = new Bundle();
         }

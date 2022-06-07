@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">AgoraChat</string>
 
     <string name="loading">Loading&#8230;</string>
@@ -238,6 +238,8 @@
     <string name="chat_setting_to_top">Sticky on Top</string>
     <string name="chat_settings_clear_history_warning">Are you sure you want to delete all chat history？</string>
 
+    <string name="chat_thread_message_send_success">Send successfully</string>
+
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_confirm">OK</string>
 
@@ -311,14 +313,50 @@
 
     <string name="notification_push_title">Push Notifications</string>
     <string name="notification_setting">Notification Setting</string>
+    <string name="notification_setting_default">Default</string>
     <string name="notification_setting_all_message">All Messages</string>
     <string name="notification_setting_only_metions">Only @Metions</string>
     <string name="notification_setting_nothing">Nothing</string>
     <string name="notification_do_not_disturb">Do Not Disturb</string>
+    <string name="notification_turn_off">Turn Off</string>
+    <string name="notification_turn_on">Turn On</string>
     <string name="notification_show_preview_text">Show Preview Text</string>
     <string name="notification_app_setting_title">In-App Notifications</string>
     <string name="notification_alert_sound">Alert Sound</string>
     <string name="notification_vibrate">Vibrate</string>
+    <string name="notification_mute">Mute</string>
+    <string name="notification_un_mute">Unmute</string>
+    <string name="notification_group">Group Notifications</string>
+    <string name="notification_thread">Thread Notifications</string>
+    <string name="notification_contact">Contact Notifications</string>
+    <string name="notification_mute_group">Mute this Group</string>
+    <string name="notification_mute_thread">Mute this Thread</string>
+    <string name="notification_mute_contact">Mute this Contact</string>
+    <string name="notification_un_mute_group">Unmute this Group?</string>
+    <string name="notification_un_mute_thread">Unmute this Thread?</string>
+    <string name="notification_un_mute_contact">Unmute this Contact?</string>
+    <string name="notification_frequency">Frequency</string>
+    <string name="notification_turn_off_mute">Turn off Do Not Disturb?</string>
+    <string name="notification_mute_until">You have set Do Not Disturb until %1$s</string>
+    <string name="notification_mute_thread_until">You have muted this Thread until %1$s</string>
+    <string name="notification_mute_group_until">You have muted this Group until %1$s</string>
+    <string name="notification_mute_contact_until">You have muted this Contact until %1$s</string>
+    <string name="notification_mute_until_you_turn">Until You turn it Unmute</string>
+    <string name="notification_mute_un_mute">Unmute</string>
+    <string name="notification_mute_turn_off">Turn Off</string>
+    <string name="notification_mute_mute">Mute</string>
+    <string name="notification_mute_turn_on">Turn On</string>
+    <string name="notification_mute_this_group">You have muted this Group</string>
+    <string name="notification_mute_this_thread">You have muted this thread</string>
+    <string name="notification_mute_text">Until %1$s</string>
+
+    <string name="not_disturb_15_min">For 15 Minutes</string>
+    <string name="not_disturb_1_hour">For 1 Hour</string>
+    <string name="not_disturb_8_hours">For 8 Hours</string>
+    <string name="not_disturb_24_hours">For 24 Hours</string>
+    <string name="not_disturb_8_tomorrow">Until 8:00 AM Tomorrow</string>
+    <string name="not_disturb_until_turn">Until I turn it Unmute</string>
+
 
     <string name="privacy_blocked_list">Blocked List</string>
     <string name="contact_move_out_blacklist_success">User removed from blocklist</string>
@@ -361,6 +399,7 @@
 
     <string name="dialog_change_presence_title">status </string>
     <string name="dialog_clear_presence_title">Clear your Custom Status? </string>
+
     <string name="dialog_clear_presence_content">Clear ”%1$s”, change to %2$s. </string>
 
     <string name="dialog_video_call">Video Call</string>
@@ -376,5 +415,21 @@
     <string name="demo_call_end_reason_busy_remote_no_response">No response from the other party</string>
     <string name="demo_call_end_reason_other_device_refused">Handle On Othe rDevice Refused</string>
     <string name="demo_call_end_reason_other_device_agreed">Handle On Othe rDevice Agreed</string>
+
+    <string name="thread_menu_members">Thread members</string>
+    <string name="thread_menu_notifications">Thread Notifications</string>
+    <string name="thread_menu_edit">Edit Thread</string>
+    <string name="thread_menu_leave">Leave Thread</string>
+    <string name="thread_menu_disband">Disband Thread</string>
+    <string name="thread_leave_hint_title">Leave this Thread?</string>
+    <string name="thread_disband_hint_title">Disband this Thread?</string>
+    <string name="thread_leave_hint_confirm">Leave</string>
+    <string name="thread_disband_hint_confirm">Disband</string>
+    <string name="thread_edit_title">Edit Thread</string>
+    <string name="thread_edit_title_done">Done</string>
+    <string name="thread_member_title">Thread members</string>
+    <string name="thread_remove_member_hint">Remove From Thread</string>
+    <string name="thread_unsent_message_success">You successfully unsent a message</string>
+
 
 </resources>

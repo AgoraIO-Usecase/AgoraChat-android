@@ -12,19 +12,20 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chatdemo.chat.adapter.SearchMessageAdapter;
 import io.agora.chatdemo.general.constant.DemoConstant;
 
 public class SearchMessageActivity extends SearchActivity {
 
     private String mConversationId;
-    private int mChatType;
+    private EaseChatType mChatType;
     private Conversation mConversation;
 
-    public static void actionStart(Context context, String conversationId, int chatType) {
+    public static void actionStart(Context context, String conversationId, EaseChatType chatType) {
         Intent intent = new Intent(context, SearchMessageActivity.class);
         intent.putExtra(DemoConstant.EXTRA_CONVERSATION_ID, conversationId);
-        intent.putExtra(DemoConstant.EXTRA_CHAT_TYPE, chatType);
+        intent.putExtra(DemoConstant.EXTRA_CHAT_TYPE, chatType.getChatType());
         context.startActivity(intent);
     }
 
@@ -32,7 +33,7 @@ public class SearchMessageActivity extends SearchActivity {
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         mConversationId = getIntent().getStringExtra(DemoConstant.EXTRA_CONVERSATION_ID);
-        mChatType = getIntent().getIntExtra(DemoConstant.EXTRA_CHAT_TYPE, DemoConstant.CHATTYPE_SINGLE);
+        mChatType = EaseChatType.from(getIntent().getIntExtra(DemoConstant.EXTRA_CHAT_TYPE, EaseChatType.SINGLE_CHAT.getChatType()));
     }
 
     @Override
@@ -63,13 +64,13 @@ public class SearchMessageActivity extends SearchActivity {
         ChatMessage item = ((SearchMessageAdapter) mAdapter).getItem(position);
 
         ChatMessage.ChatType messageChatType = item.getChatType();
-        int chatType = EaseConstant.CHATTYPE_SINGLE;
+        EaseChatType chatType = EaseChatType.SINGLE_CHAT;
         if (ChatMessage.ChatType.Chat == messageChatType) {
-            chatType = EaseConstant.CHATTYPE_SINGLE;
+            chatType = EaseChatType.SINGLE_CHAT;
         } else if (ChatMessage.ChatType.GroupChat == messageChatType) {
-            chatType = EaseConstant.CHATTYPE_GROUP;
+            chatType = EaseChatType.GROUP_CHAT;
         } else if (ChatMessage.ChatType.ChatRoom == messageChatType) {
-            chatType = EaseConstant.CHATTYPE_CHATROOM;
+            chatType = EaseChatType.CHATROOM;
         }
         ChatHistoryActivity.actionStart(this.getApplicationContext(), item.conversationId(), chatType);
 

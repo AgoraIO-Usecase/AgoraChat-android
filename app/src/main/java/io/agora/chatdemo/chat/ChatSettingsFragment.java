@@ -15,6 +15,7 @@ import java.util.List;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
@@ -32,7 +33,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     private FragmentChatSettingsBinding binding;
     private String conversationId;
     private ChatSettingsViewModel viewModel;
-    private int chatType;
+    private EaseChatType chatType;
 
     @Nullable
     @Override
@@ -47,7 +48,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         Bundle bundle = getArguments();
         if(bundle != null) {
             conversationId = bundle.getString(DemoConstant.EXTRA_CONVERSATION_ID);
-            chatType = bundle.getInt(DemoConstant.EXTRA_CHAT_TYPE);
+            chatType = EaseChatType.from(bundle.getInt(DemoConstant.EXTRA_CHAT_TYPE));
         }
     }
 
@@ -57,7 +58,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
         String extField = conversation.getExtField();
         binding.itemToTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseUtils.isTimestamp(extField));
-        if (chatType == DemoConstant.CHATTYPE_SINGLE) {
+        if (chatType == EaseChatType.SINGLE_CHAT) {
             binding.itemMuteNotification.setVisibility(View.GONE);
         }
     }
@@ -144,7 +145,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
             });
         });
 
-        if(chatType == DemoConstant.CHATTYPE_SINGLE) {
+        if(chatType == EaseChatType.SINGLE_CHAT) {
             viewModel.getNoPushUsers();
         }else {
             viewModel.getNoPushGroups();
@@ -156,7 +157,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_mute_notification:
-                if(chatType == DemoConstant.CHATTYPE_SINGLE) {
+                if(chatType == EaseChatType.SINGLE_CHAT) {
                     viewModel.setUserNotDisturb(conversationId, isChecked);
                 }else {
                     viewModel.setGroupNotDisturb(conversationId, isChecked);

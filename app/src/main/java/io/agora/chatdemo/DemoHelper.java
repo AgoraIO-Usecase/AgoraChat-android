@@ -33,6 +33,7 @@ import io.agora.chat.ChatManager;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatOptions;
 import io.agora.chat.ChatRoomManager;
+import io.agora.chat.ChatThreadManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
@@ -42,10 +43,14 @@ import io.agora.chat.callkit.EaseCallKit;
 import io.agora.chat.callkit.general.EaseCallKitConfig;
 import io.agora.chat.callkit.listener.EaseCallKitListener;
 import io.agora.chat.uikit.EaseUIKit;
+import io.agora.chat.uikit.activities.EaseChatThreadActivity;
+import io.agora.chat.uikit.activities.EaseChatThreadCreateActivity;
 import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.options.EaseAvatarOptions;
+import io.agora.chat.uikit.options.EaseReactionOptions;
+import io.agora.chat.uikit.provider.EaseActivityProvider;
 import io.agora.chat.uikit.provider.EaseFileIconProvider;
 import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
@@ -54,6 +59,8 @@ import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.av.CallMultipleBaseActivity;
 import io.agora.chatdemo.av.CallSingleBaseActivity;
 import io.agora.chatdemo.av.DemoCallKitListener;
+import io.agora.chatdemo.chatthread.ChatThreadActivity;
+import io.agora.chatdemo.chatthread.ChatThreadCreateActivity;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
@@ -83,8 +90,8 @@ public class DemoHelper {
     private Context mContext;
     private ConcurrentHashMap<String, Presence> mPresences = new ConcurrentHashMap<>();
 
-    private DemoHelper() {
-    }
+
+    private DemoHelper() {}
 
     public static DemoHelper getInstance() {
         if (mInstance == null) {
@@ -129,7 +136,7 @@ public class DemoHelper {
     }
 
     public ConcurrentHashMap<String, Presence> getPresences() {
-        return mPresences;
+        return ((GlobalEventsMonitor)EaseUIKit.getInstance().getChatPresenter()).getPresences();
     }
 
     /**
@@ -145,15 +152,14 @@ public class DemoHelper {
             return false;
         }
         // Configure custom rest server and im server
-        //options.setRestServer(BuildConfig.APP_SERVER_DOMAIN);
-        //options.setIMServer("106.75.100.247");
-        //options.setImPort(6717);
 
-//        options.setRestServer("a1-test.easemob.com");
-//        options.setIMServer("52.80.99.104");
+//        options.setRestServer("a1-hsb.easemob.com");
+//        options.setAppKey("easemob-demo#chatdemoui");
+//        options.setIMServer("106.75.100.247");
 //        options.setImPort(6717);
-
         options.setUsingHttpsOnly(true);
+        // Use fpa by default
+        options.setFpaEnable(true);
         // Call UIKit to initialize Agora Chat SDK
         isSDKInit = EaseUIKit.getInstance().init(context, options);
         return isSDKInit();
@@ -222,6 +228,14 @@ public class DemoHelper {
      */
     public PushManager getPushManager() {
         return getChatClient().pushManager();
+    }
+
+    /**
+     * Get the entity of ThreadManager
+     * @return
+     */
+    public ChatThreadManager getThreadManager() {
+        return getChatClient().chatThreadManager();
     }
 
     /**
@@ -304,7 +318,19 @@ public class DemoHelper {
                     public Drawable getFileIcon(String filename) {
                         return getFileDrawable(filename);
                     }
-                });
+                })
+                .setActivityProvider(new EaseActivityProvider() {
+                    @Override
+                    public Class getActivity(String activityName) {
+                        if(TextUtils.equals(activityName, EaseChatThreadActivity.class.getSimpleName())) {
+                            return ChatThreadActivity.class;
+                        }else if(TextUtils.equals(activityName, EaseChatThreadCreateActivity.class.getSimpleName())) {
+                            return ChatThreadCreateActivity.class;
+                        }
+                        return null;
+                    }
+                })
+               .setReactionOptions(getReactionOptions());
     }
 
     /**
@@ -366,6 +392,16 @@ public class DemoHelper {
         EaseAvatarOptions avatarOptions = new EaseAvatarOptions();
         avatarOptions.setAvatarShape(1);
         return avatarOptions;
+    }
+
+    /**
+     * Reaction Configuration
+     * @return EaseReactionOptions
+     */
+    private EaseReactionOptions getReactionOptions() {
+        EaseReactionOptions reactionOptions = new EaseReactionOptions();
+        reactionOptions.setOpen(true);
+        return reactionOptions;
     }
 
     public UsersManager getUsersManager() {

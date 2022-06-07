@@ -7,8 +7,12 @@
 
     <io.agora.chat.uikit.widget.EaseTitleBar
         android:id="@+id/title_bar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/ease_common_title_bar_height"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scroll_view"
         android:background="@color/white"
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarLeftImage="@drawable/ease_titlebar_back"

@@ -20,7 +20,7 @@ import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
-import io.agora.chat.uikit.utils.EasePresenceUtil;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.DemoHelper;

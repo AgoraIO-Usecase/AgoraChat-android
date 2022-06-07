@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- IM SDK required end -->
 
     <application
         android:name=".DemoApplication"
@@ -27,26 +28,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HyphenateDemoAndroid"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".av.CallInviteUsersActivity"
-            android:exported="false" />
-        <activity
-            android:name=".me.CustomPresenceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".me.SetPresenceActivity"
-            android:exported="false" /> <!-- IM SDK required start -->
+        <!-- IM SDK required start -->
         <!-- Set your agora chat AppKey -->
-        <meta-data
-            android:name="EASEMOB_APPKEY"
-            android:value="${AGORA_CHAT_APPKEY}" /> <!-- SDK service -->
+        <meta-data android:name="EASEMOB_APPKEY"  android:value="${AGORA_CHAT_APPKEY}" />
+        <!-- SDK service -->
         <service
             android:name="io.agora.chat.ChatService"
             android:exported="true" />
         <service
             android:name="io.agora.chat.ChatJobService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- SDK receiver -->
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!-- SDK receiver -->
         <receiver android:name="io.agora.chat.MonitorReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
@@ -58,8 +51,9 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
-        </receiver> <!-- IM SDK required end -->
-        <!-- Add FileProvider -->
+        </receiver>
+        <!-- IM SDK required end -->
+        <!--Add FileProvider-->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
@@ -68,19 +62,24 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider> <!-- FCM required start -->
+        </provider>
+
+        <!-- FCM required start -->
         <service android:name=".fcm.FCMMSGService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service> <!-- Cancels automatic initialization -->
+        </service>
+        <!-- Cancels automatic initialization -->
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />
         <meta-data
             android:name="firebase_analytics_collection_enabled"
-            android:value="false" /> <!-- FCM required end -->
-        <!-- Splash -->
+            android:value="false" />
+        <!-- FCM required end -->
+
+        <!--Splash-->
         <activity
             android:name=".sign.SplashActivity"
             android:screenOrientation="portrait">
@@ -89,61 +88,55 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Sign in -->
+        </activity>
+        <!-- Sign in -->
         <activity
             android:name=".sign.SignInActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- Main -->
-        <activity
-            android:name=".main.MainActivity"
-            android:screenOrientation="portrait"
-           /> <!-- Chat -->
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <!--Main-->
+        <activity android:name=".main.MainActivity"
+            android:screenOrientation="portrait" />
+        <!--Chat-->
         <activity
             android:name=".chat.ChatActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- Search message -->
-        <activity
-            android:name=".chat.SearchMessageActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- Chat history -->
-        <activity
-            android:name=".chat.ChatHistoryActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" /> <!-- Group detail -->
-        <activity
-            android:name=".group.activities.GroupDetailActivity"
-            android:screenOrientation="portrait" /> <!-- Group members -->
-        <activity
-            android:name=".group.activities.GroupMembersActivity"
-            android:screenOrientation="portrait" /> <!-- Group notice -->
-        <activity
-            android:name=".group.activities.GroupNoticeActivity"
-            android:screenOrientation="portrait" /> <!-- Group files -->
-        <activity
-            android:name=".group.activities.GroupFilesActivity"
-            android:screenOrientation="portrait" /> <!-- Transfer group owner -->
-        <activity
-            android:name=".group.activities.GroupTransferActivity"
-            android:screenOrientation="portrait" /> <!-- General -->
-        <activity
-            android:name=".me.GeneralActivity"
-            android:screenOrientation="portrait" /> <!-- Notification -->
-        <activity
-            android:name=".me.NotificationActivity"
-            android:screenOrientation="portrait" /> <!-- Privacy -->
-        <activity
-            android:name=".me.PrivacyActivity"
-            android:screenOrientation="portrait" /> <!-- Contact Black List -->
-        <activity
-            android:name=".me.ContactBlackListActivity"
-            android:screenOrientation="portrait" /> <!-- About -->
-        <activity
-            android:name=".me.AboutActivity"
-            android:screenOrientation="portrait" /> <!-- Replace avatar -->
-        <activity
-            android:name=".me.UserAvatarSelectActivity"
-            android:screenOrientation="portrait" /> <!-- Contact detail -->
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <!-- Group detail -->
+        <activity android:name=".group.activities.GroupDetailActivity"
+            android:screenOrientation="portrait" />
+        <!-- Group members -->
+        <activity android:name=".group.activities.GroupMembersActivity"
+            android:screenOrientation="portrait" />
+        <!-- Group notice -->
+        <activity android:name=".group.activities.GroupNoticeActivity"
+            android:screenOrientation="portrait" />
+        <!-- Group files -->
+        <activity android:name=".group.activities.GroupFilesActivity"
+            android:screenOrientation="portrait" />
+        <!-- Transfer group owner -->
+        <activity android:name=".group.activities.GroupTransferActivity"
+            android:screenOrientation="portrait" />
+        <!--General-->
+        <activity android:name=".me.GeneralActivity"
+            android:screenOrientation="portrait"/>
+        <!--Notification-->
+        <activity android:name=".me.NotificationActivity"
+            android:screenOrientation="portrait"/>
+        <!--Privacy-->
+        <activity android:name=".me.PrivacyActivity"
+            android:screenOrientation="portrait"/>
+        <!--Contact Black List-->
+        <activity android:name=".me.ContactBlackListActivity"
+            android:screenOrientation="portrait"/>
+        <!--About-->
+        <activity android:name=".me.AboutActivity"
+            android:screenOrientation="portrait"/>
+        <!--Replace avatar-->
+        <activity android:name=".me.UserAvatarSelectActivity"
+            android:screenOrientation="portrait" />
+        <!-- Contact detail -->
         <activity
             android:name=".contact.ContactDetailActivity"
             android:screenOrientation="portrait" /> <!-- video call -->
@@ -161,6 +154,37 @@
             android:label="@string/demo_activity_label_multi_call"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
+        <!-- custom presence -->
+        <activity
+            android:name=".me.CustomPresenceActivity"
+            android:exported="false" />
+        <!-- set presence -->
+        <activity
+            android:name=".me.SetPresenceActivity"
+            android:exported="false" />
+        <!-- Thread member list -->
+        <activity
+            android:name=".chatthread.ChatThreadMembersActivity"
+            android:screenOrientation="portrait"/>
+        <!-- Thread edit -->
+        <activity
+            android:name=".chatthread.ChatThreadEditActivity"
+            android:screenOrientation="portrait"/>
+        <!-- Thread chat -->
+        <activity
+            android:name=".chatthread.ChatThreadActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <!-- Do not disturb activity -->
+        <activity android:name=".me.DoNotDisturbActivity"
+            android:screenOrientation="portrait"/>
+        <!-- create chat thread -->
+        <activity android:name=".chatthread.ChatThreadCreateActivity" />
+
+        <activity
+            android:name=".av.CallInviteUsersActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

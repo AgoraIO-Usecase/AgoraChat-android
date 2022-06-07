@@ -18,7 +18,7 @@ import io.agora.chat.Presence;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
-import io.agora.chat.uikit.widget.EasePresenceView;
+import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -45,7 +45,7 @@ public class UsersManager {
 	private int currentUserAgoraUid;
 
 	public synchronized EaseUser getCurrentUserInfo() {
-		if (currentUser == null) {
+		if (currentUser == null || TextUtils.isEmpty(currentUser.getUsername())) {
 			String username = ChatClient.getInstance().getCurrentUser();
 			currentUser = new EaseUser(username);
 			String nick = getCurrentUserNick();
@@ -264,7 +264,7 @@ public class UsersManager {
 
 	public void updateUserPresenceView(String username,EasePresenceView presenceView){
 		Presence presence = DemoHelper.getInstance().getPresences().get(username);
-		if(presence!=null) {
+		if(presence!=null && presenceView != null) {
 			presenceView.setPresenceData(getUserInfo(username).getAvatar(),presence);
 		}
 	}

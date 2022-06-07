@@ -72,6 +72,6 @@ public class EaseEvent implements Serializable {
     }
 
     public enum TYPE {
-        GROUP, GROUP_LEAVE, CONTACT, MESSAGE, NOTIFY, CHAT_ROOM, CHAT_ROOM_LEAVE, ACCOUNT
+        GROUP, GROUP_LEAVE, CONTACT, MESSAGE, NOTIFY, CHAT_ROOM, CHAT_ROOM_LEAVE, ACCOUNT, THREAD
     }
 }

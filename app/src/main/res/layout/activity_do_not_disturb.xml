@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".me.DoNotDisturbActivity">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        android:background="@color/white"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back"
+        app:titleBarTitle="@string/notification_do_not_disturb"
+        app:titleBarTitlePosition="left"
+        app:titleBarTitleTextColor="@color/color_main_text"
+        app:titleBarRightTitle="@string/group_done_title"
+        app:titleBarRightVisible="true"
+        app:titleBarRightTextColor="@color/ease_btn_blue_normal"
+        />
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        />
+
+</LinearLayout>

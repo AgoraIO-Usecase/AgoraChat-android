@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.agora.chat.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        app:titleBarTitle="@string/thread_member_title"/>
+
+    <io.agora.chatdemo.general.widget.EaseSearchEditText
+        android:id="@+id/et_search"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:focusableInTouchMode="true"
+        android:layout_marginTop="6dp"
+        android:visibility="gone"
+        android:singleLine="true"
+        android:layout_marginStart="@dimen/margin_view_distance_border"
+        android:layout_marginEnd="@dimen/margin_view_distance_border"
+        app:search_edit_drawable_left_width="20dp"
+        app:search_edit_drawable_left_height="20dp"/>
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/srl_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

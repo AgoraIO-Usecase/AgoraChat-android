@@ -387,12 +387,14 @@ public class ChatActivity extends BaseInitActivity {
     }
 
     private void updatePresence() {
-        Presence presence = DemoHelper.getInstance().getPresences().get(conversationId);
-        if(presence != null) {
-            DemoHelper.getInstance().getUsersManager().updateUserPresenceView(conversationId, binding.presenceView);
-            binding.ivIcon.setVisibility(View.GONE);
-        }else {
-            showSingleInfo();
+        if(chatType == EaseChatType.SINGLE_CHAT) {
+            Presence presence = DemoHelper.getInstance().getPresences().get(conversationId);
+            if(presence != null) {
+                DemoHelper.getInstance().getUsersManager().updateUserPresenceView(conversationId, binding.presenceView);
+                binding.ivIcon.setVisibility(View.GONE);
+            }else {
+                showSingleInfo();
+            }
         }
     }
 

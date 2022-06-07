@@ -17,6 +17,7 @@ import java.util.List;
 import io.agora.chat.Group;
 import io.agora.chat.GroupManager;
 import io.agora.chat.GroupOptions;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.ChatActivity;
@@ -79,7 +80,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
                     showToast(R.string.group_new_success);
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                     // Skip to chat activity
-                    ChatActivity.actionStart(mContext, data.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+                    ChatActivity.actionStart(mContext, data.getGroupId(), EaseChatType.GROUP_CHAT);
                     hide();
                 }
 

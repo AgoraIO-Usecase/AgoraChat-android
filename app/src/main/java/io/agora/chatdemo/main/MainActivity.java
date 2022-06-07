@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -103,7 +104,8 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     private void refreshConversation() {
-        if(mConversationListFragment != null && mConversationListFragment instanceof EaseConversationListFragment) {
+        if(mConversationListFragment != null && mConversationListFragment instanceof EaseConversationListFragment
+                && mConversationListFragment.isAdded()) {
             ((EaseConversationListFragment) mConversationListFragment).refreshList();
         }
     }
@@ -129,7 +131,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     public void initData() {
-
         mainViewModel.getMsgConversation();
         mainViewModel.checkUnreadMsg();
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
@@ -171,7 +172,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             mConversationListFragment = new EaseConversationListFragment.Builder()
                                             .setCustomFragment(new ConversationListFragment())
                                             .setConversationChangeListener(new ChatConversationChangeListener())
-                                            .useHeader(true)
+                                            .useHeader(false)
                                             .setUnreadPosition(EaseConversationSetStyle.UnreadDotPosition.RIGHT)
                                             .setUnreadStyle(EaseConversationSetStyle.UnreadStyle.NUM)
                                             .build();

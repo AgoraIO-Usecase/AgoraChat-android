@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="10dp">
+
+    <FrameLayout
+        android:id="@+id/expand_icon"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="visible">
+
+        <View
+            android:layout_width="35dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ease_bg_expand_icon_popupwindow" />
+
+    </FrameLayout>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_thread_members"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemAvatarSrc="@drawable/main_tab_friends_selector"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarWidth="28dp"
+        app:arrowItemAvatarHeight="28dp"
+        app:arrowItemTitle="@string/thread_menu_members"
+        app:arrowItemTitleSize="18sp"
+        app:arrowItemTitleColor="@color/black"
+        app:arrowItemShowDivider="false"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_thread_notifications"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemAvatarSrc="@drawable/notifications"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarWidth="28dp"
+        app:arrowItemAvatarHeight="28dp"
+        app:arrowItemTitle="@string/thread_menu_notifications"
+        app:arrowItemTitleSize="18sp"
+        app:arrowItemTitleColor="@color/black"
+        app:arrowItemShowDivider="false"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_thread_edit"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemAvatarSrc="@drawable/edit_black"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarWidth="28dp"
+        app:arrowItemAvatarHeight="28dp"
+        app:arrowItemTitle="@string/thread_menu_edit"
+        app:arrowItemTitleSize="18sp"
+        app:arrowItemTitleColor="@color/black"
+        app:arrowItemShowDivider="false"
+        android:visibility="gone"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_thread_leave"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemAvatarSrc="@drawable/leave"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarWidth="28dp"
+        app:arrowItemAvatarHeight="28dp"
+        app:arrowItemTitle="@string/thread_menu_leave"
+        app:arrowItemTitleSize="18sp"
+        app:arrowItemTitleColor="@color/black"
+        app:arrowItemShowDivider="false"
+        app:arrowItemShowArrow="false"/>
+
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        android:id="@+id/item_thread_disband"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:arrowItemAvatarSrc="@drawable/disband"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemAvatarWidth="28dp"
+        app:arrowItemAvatarHeight="28dp"
+        app:arrowItemTitle="@string/thread_menu_disband"
+        app:arrowItemTitleSize="18sp"
+        app:arrowItemTitleColor="@color/color_alert"
+        app:arrowItemShowDivider="false"
+        app:arrowItemShowArrow="false"
+        android:visibility="gone"/>
+
+</LinearLayout>

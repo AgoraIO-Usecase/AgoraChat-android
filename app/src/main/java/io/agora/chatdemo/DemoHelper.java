@@ -27,34 +27,38 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.agora.CallBack;
-import io.agora.PresenceListener;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatManager;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatOptions;
 import io.agora.chat.ChatRoomManager;
+import io.agora.chat.ChatThreadManager;
 import io.agora.chat.ContactManager;
 import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.Presence;
 import io.agora.chat.PushManager;
 import io.agora.chat.uikit.EaseUIKit;
+import io.agora.chat.uikit.activities.EaseChatThreadActivity;
+import io.agora.chat.uikit.activities.EaseChatThreadCreateActivity;
 import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.options.EaseAvatarOptions;
+import io.agora.chat.uikit.provider.EaseActivityProvider;
+import io.agora.chat.uikit.options.EaseReactionOptions;
 import io.agora.chat.uikit.provider.EaseFileIconProvider;
 import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
-import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.chatthread.ChatThreadCreateActivity;
 import io.agora.chatdemo.general.db.DemoDbHelper;
-import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -73,8 +77,6 @@ public class DemoHelper {
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
     private UsersManager usersManager;
-
-    private ConcurrentHashMap<String,Presence> mPresences=new ConcurrentHashMap<>();
 
     private DemoHelper() {}
 
@@ -99,27 +101,12 @@ public class DemoHelper {
             initPush(context);
             // Initialize UIKit
             initEaseUIKit(context);
-            //Initialize presence
-            initPresence();
         }
 
     }
 
-    private void initPresence() {
-        ChatClient.getInstance().presenceManager().addListener(new PresenceListener() {
-            @Override
-            public void onPresenceUpdated(List<Presence> presences) {
-                for (Presence presence : presences) {
-                    Log.d("TAG", presence.toString());
-                    mPresences.put(presence.getPublisher(),presence);
-                }
-                LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).postValue(mPresences);
-            }
-        });
-    }
-
     public ConcurrentHashMap<String, Presence> getPresences() {
-        return mPresences;
+        return ((GlobalEventsMonitor)EaseUIKit.getInstance().getChatPresenter()).getPresences();
     }
 
     /**
@@ -134,10 +121,13 @@ public class DemoHelper {
             return false;
         }
         // Configure custom rest server and im server
-        //options.setRestServer(BuildConfig.APP_SERVER_DOMAIN);
-        //options.setIMServer("106.75.100.247");
-        //options.setImPort(6717);
+//        options.setRestServer("a1-hsb.easemob.com");
+//        options.setAppKey("easemob-demo#chatdemoui");
+//        options.setIMServer("106.75.100.247");
+//        options.setImPort(6717);
         options.setUsingHttpsOnly(true);
+        // Use fpa by default
+        options.setFpaEnable(true);
         // Call UIKit to initialize Agora Chat SDK
         isSDKInit = EaseUIKit.getInstance().init(context, options);
         return isSDKInit();
@@ -199,6 +189,14 @@ public class DemoHelper {
      */
     public PushManager getPushManager() {
         return getChatClient().pushManager();
+    }
+
+    /**
+     * Get the entity of ThreadManager
+     * @return
+     */
+    public ChatThreadManager getThreadManager() {
+        return getChatClient().chatThreadManager();
     }
 
     /**
@@ -280,7 +278,19 @@ public class DemoHelper {
                     public Drawable getFileIcon(String filename) {
                         return getFileDrawable(filename);
                     }
-                });
+                })
+                .setActivityProvider(new EaseActivityProvider() {
+                    @Override
+                    public Class getActivity(String activityName) {
+                        if(TextUtils.equals(activityName, EaseChatThreadActivity.class.getSimpleName())) {
+                            return ChatThreadActivity.class;
+                        }else if(TextUtils.equals(activityName, EaseChatThreadCreateActivity.class.getSimpleName())) {
+                            return ChatThreadCreateActivity.class;
+                        }
+                        return null;
+                    }
+                })
+               .setReactionOptions(getReactionOptions());
     }
 
     private Drawable getFileDrawable(String filename) {
@@ -318,6 +328,16 @@ public class DemoHelper {
         EaseAvatarOptions avatarOptions = new EaseAvatarOptions();
         avatarOptions.setAvatarShape(1);
         return avatarOptions;
+    }
+
+    /**
+     * Reaction Configuration
+     * @return EaseReactionOptions
+     */
+    private EaseReactionOptions getReactionOptions() {
+        EaseReactionOptions reactionOptions = new EaseReactionOptions();
+        reactionOptions.setOpen(true);
+        return reactionOptions;
     }
 
     public UsersManager getUsersManager() {

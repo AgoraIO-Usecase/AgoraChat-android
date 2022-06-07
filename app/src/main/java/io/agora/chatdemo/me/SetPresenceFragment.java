@@ -13,9 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import io.agora.chat.Presence;
-import io.agora.chat.uikit.utils.EasePresenceUtil;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.widget.EaseTitleBar;
-import io.agora.chat.uikit.widget.PresenceData;
+import io.agora.chatdemo.general.models.PresenceData;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;

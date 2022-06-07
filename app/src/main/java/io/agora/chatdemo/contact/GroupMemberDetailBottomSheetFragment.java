@@ -17,8 +17,9 @@ import java.util.List;
 
 import io.agora.chat.Presence;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.utils.EasePresenceUtil;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -103,7 +104,7 @@ public class GroupMemberDetailBottomSheetFragment extends BaseBottomSheetFragmen
             public void onClick(View v) {
                 if(user!=null) {
                     if (user.getContact()==0) {
-                        ChatActivity.actionStart(getContext(), user.getUsername(), EaseConstant.CHATTYPE_SINGLE);
+                        ChatActivity.actionStart(getContext(), user.getUsername(), EaseChatType.SINGLE_CHAT);
                         hide();
                     } else if (user.getContact()==3) {
                         mViewModel.addContact(user.getUsername(), getResources().getString(R.string.add_contact_add_a_friend));

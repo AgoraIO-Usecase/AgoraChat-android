@@ -67,6 +67,10 @@ public interface DemoConstant extends EaseConstant {
     String CHAT_ROOM_CHANGE = "chat_room_change";
     String CHAT_ROOM_DESTROY = "chat_room_destroy";
 
+    String THREAD_CHANGE = "thread_change";
+    String THREAD_LEAVE = "thread_leave";
+    String THREAD_DESTROY = "thread_destroy";
+
     String REFRESH_NICKNAME = "refresh_nickname";
 
     String CONVERSATION_DELETE = "conversation_delete";
@@ -108,5 +112,13 @@ public interface DemoConstant extends EaseConstant {
      int GROUP_ROLE_ADMIN = 2;
      int GROUP_ROLE_MEMBER = 0;
 
+     String DETAIL_TYPE = "detail_type";
+     int DETAIL_TYPE_USER = 0;
+     int DETAIL_TYPE_CHAT = 1;
+     int DETAIL_TYPE_GROUP = 2;
+     int DETAIL_TYPE_THREAD = 3;
+     String DETAIL_ID = "detail_id";
+
+    String SILENT_DURATION = "silent_duration";
 
 }

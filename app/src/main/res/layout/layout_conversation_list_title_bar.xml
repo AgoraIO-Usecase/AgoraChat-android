@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/ease_common_title_bar_height"
+    android:gravity="center_vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:popupTheme="@style/Toolbar.PopupTheme" />
+
+    <RelativeLayout
+        android:id="@+id/left_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/ease_common_tab_bg"
+        android:minWidth="50dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/left_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            tools:src="@drawable/ease_mm_title_back" />
+
+    </RelativeLayout>
+
+    <io.agora.chatdemo.general.widget.EasePresenceView
+        android:id="@+id/presence_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/left_layout"
+        android:visibility="gone" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <io.agora.chat.uikit.widget.EaseImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:visibility="visible"
+            android:src="@drawable/chat_toolbar_icon"
+            app:ease_shape_type="none"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/title"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/ease_toolbar_color_title"
+            android:textSize="@dimen/ease_toolbar_title_size"
+            android:visibility="gone"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginStart="0dp"
+            tools:text="Title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/right_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:foreground="@drawable/ease_ripple_click_gray"
+        android:minWidth="50dp">
+
+        <ImageView
+            android:id="@+id/right_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/right_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/ease_toolbar_color_title_right"
+            android:textSize="@dimen/ease_toolbar_title_right_size"
+            tools:text="cancel" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

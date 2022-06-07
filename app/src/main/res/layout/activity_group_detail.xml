@@ -41,6 +41,18 @@
                 app:arrowItemTitle="@string/group_detail_members" />
 
             <io.agora.chatdemo.general.widget.ArrowItemView
+                android:id="@+id/item_group_notification"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:foreground="@drawable/ease_ripple_click_gray"
+                app:arrowItemAvatarHeight="32dp"
+                app:arrowItemAvatarSrc="@drawable/notifications"
+                app:arrowItemAvatarWidth="32dp"
+                app:arrowItemShowArrow="true"
+                app:arrowItemShowAvatar="true"
+                app:arrowItemTitle="@string/me_setting_notifications" />
+
+            <io.agora.chatdemo.general.widget.ArrowItemView
                 android:id="@+id/item_group_notice"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"

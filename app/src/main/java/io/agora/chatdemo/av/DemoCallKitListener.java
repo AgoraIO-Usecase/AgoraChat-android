@@ -15,20 +15,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.TimeZone;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.callkit.EaseCallKit;
-import io.agora.chat.callkit.base.EaseCallEndReason;
-import io.agora.chat.callkit.base.EaseCallGetUserAccountCallback;
-import io.agora.chat.callkit.base.EaseCallKitListener;
-import io.agora.chat.callkit.base.EaseCallKitTokenCallback;
-import io.agora.chat.callkit.base.EaseCallType;
-import io.agora.chat.callkit.base.EaseCallUserInfo;
-import io.agora.chat.callkit.base.EaseUserAccount;
+import io.agora.chat.callkit.bean.EaseCallUserInfo;
+import io.agora.chat.callkit.bean.EaseUserAccount;
+import io.agora.chat.callkit.general.EaseCallEndReason;
+import io.agora.chat.callkit.general.EaseCallError;
+import io.agora.chat.callkit.general.EaseCallType;
+import io.agora.chat.callkit.listener.EaseCallGetUserAccountCallback;
+import io.agora.chat.callkit.listener.EaseCallKitListener;
+import io.agora.chat.callkit.listener.EaseCallKitTokenCallback;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.R;
@@ -123,7 +122,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
     }
 
     @Override
-    public void onGenerateToken(String userAccount, String channelName, EaseCallKitTokenCallback callback) {
+    public void onGenerateRTCToken(String userAccount, String channelName, EaseCallKitTokenCallback callback) {
         EMLog.d(TAG, "onGenerateToken userId:" + userAccount + " channelName:" + channelName);
         int agoraUid = mUsersManager.getCurrentUserAgoraUid();
         StringBuilder url = new StringBuilder(tokenUrl)
@@ -146,9 +145,11 @@ public class DemoCallKitListener implements EaseCallKitListener {
     }
 
     @Override
-    public void onCallError(EaseCallKit.EaseCallError type, int errorCode, String description) {
+    public void onCallError(EaseCallError type, int errorCode, String description) {
         EMLog.d(TAG, "onCallError" + type.name() + " description:" + description);
-        ToastUtils.showToast(description);
+        if(type== EaseCallError.PROCESS_ERROR) {
+            ToastUtils.showToast(description);
+        }
     }
 
     @Override
@@ -158,24 +159,14 @@ public class DemoCallKitListener implements EaseCallKitListener {
 
     @Override
     public void onRemoteUserJoinChannel(String channelName, String userName, int uid, EaseCallGetUserAccountCallback callback) {
-        if (userName == null || userName == "") {
-            StringBuilder url = new StringBuilder(uIdUrl)
-                    .append("?")
-                    .append("channelName=")
-                    .append(channelName)
-                    .append("&userAccount=")
-                    .append(userName);
-            getUserIdByAgoraUid(uid, url.toString(), callback);
-        } else {
-            //设置用户昵称 头像
-            setEaseCallKitUserInfo(userName);
-            EaseUserAccount account = new EaseUserAccount(uid, userName);
-            List<EaseUserAccount> accounts = new ArrayList<>();
-            accounts.add(account);
-            callback.onUserAccount(accounts);
-        }
+        StringBuilder url = new StringBuilder(uIdUrl)
+                .append("?")
+                .append("channelName=")
+                .append(channelName)
+                .append("&userAccount=")
+                .append(userName);
+        getUserIdByAgoraUid(uid, url.toString(), callback);
     }
-
 
     /**
      * 获取声网Token
@@ -241,7 +232,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
                         int resCode = response.first;
                         if (resCode == 200) {
                             String responseInfo = response.second;
-                            List<EaseUserAccount> userAccounts = new ArrayList<>();
+                           EaseUserAccount userAccount =null;
                             if (responseInfo != null && responseInfo.length() > 0) {
                                 try {
                                     JSONObject object = new JSONObject(responseInfo);
@@ -253,11 +244,10 @@ public class DemoCallKitListener implements EaseCallKitListener {
                                         String username = resToken.optString(uIdStr);
                                         if (uid == uId) {
                                             //获取到当前用户的userName 设置头像昵称等信息
-                                            setEaseCallKitUserInfo(username);
-                                            userAccounts.add(new EaseUserAccount(uid, username));
+                                            userAccount=new EaseUserAccount(uid, username);
                                         }
                                     }
-                                    callback.onUserAccount(userAccounts);
+                                    callback.onUserAccount(userAccount);
                                 } catch (Exception e) {
                                     e.getStackTrace();
                                 }
@@ -294,5 +284,11 @@ public class DemoCallKitListener implements EaseCallKitListener {
             userInfo.setHeadImage(user.getAvatar());
         }
         EaseCallKit.getInstance().getCallKitConfig().setUserInfo(userName, userInfo);
+    }
+
+    @Override
+    public void onUserInfoUpdate(String userName) {
+        //设置用户昵称 头像
+        setEaseCallKitUserInfo(userName);
     }
 }

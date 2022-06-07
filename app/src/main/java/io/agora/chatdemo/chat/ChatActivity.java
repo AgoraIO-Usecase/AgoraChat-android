@@ -2,10 +2,10 @@ package io.agora.chatdemo.chat;
 
 import static io.agora.chat.uikit.constants.EaseConstant.CHATTYPE_SINGLE;
 import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
-import static io.agora.chat.callkit.base.EaseCallType.CONFERENCE_VIDEO_CALL;
-import static io.agora.chat.callkit.base.EaseCallType.CONFERENCE_VOICE_CALL;
-import static io.agora.chat.callkit.base.EaseCallType.SINGLE_VIDEO_CALL;
-import static io.agora.chat.callkit.base.EaseCallType.SINGLE_VOICE_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.CONFERENCE_VIDEO_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.CONFERENCE_VOICE_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VIDEO_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VOICE_CALL;
 
 import android.Manifest;
 import android.content.Context;

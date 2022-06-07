@@ -15,7 +15,7 @@ import java.util.Set;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.callkit.EaseCallKit;
-import io.agora.chat.callkit.base.EaseCallType;
+import io.agora.chat.callkit.general.EaseCallType;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.ContactListAdapter;
@@ -92,10 +92,12 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
         for (String user : checkedList) {
             finalUsers.add(user);
         }
-        for (String existMember : existMembers) {
-            finalUsers.add(existMember);
+        if(existMembers!=null) {
+            for (String existMember : existMembers) {
+                finalUsers.add(existMember);
+            }
         }
-        if(finalUsers.size()>EaseCallKit.getInstance().getLargestNumInChannel()) {
+        if(finalUsers.size()>EaseCallKit.getInstance().getLargestNumInChannel()-1) {
             ToastUtils.showToast(getString(R.string.ease_call_max_people_in_channel));
             return true;
         }

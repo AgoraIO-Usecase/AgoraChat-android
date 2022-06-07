@@ -1,6 +1,6 @@
 package io.agora.chatdemo.chat;
 
-import static io.agora.chat.callkit.base.EaseCallType.SINGLE_VOICE_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VOICE_CALL;
 import static io.agora.chat.callkit.utils.EaseCallMsgUtils.CALL_COST_TIME;
 import static io.agora.chat.callkit.utils.EaseCallMsgUtils.CALL_INVITE_EXT;
 
@@ -13,8 +13,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import io.agora.chat.callkit.base.EaseCallType;
-import io.agora.chat.callkit.utils.EaseCallAction;
+import io.agora.chat.callkit.general.EaseCallType;
+import io.agora.chat.callkit.general.EaseCallAction;
 import io.agora.chat.callkit.utils.EaseCallMsgUtils;
 import io.agora.chat.uikit.widget.chatrow.EaseChatRow;
 import io.agora.chatdemo.R;

@@ -3,8 +3,8 @@ package io.agora.chatdemo.chat.adapter;
 
 import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CALL_ME;
 import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CALL_OTHER;
-import static io.agora.chat.callkit.base.EaseCallType.SINGLE_VIDEO_CALL;
-import static io.agora.chat.callkit.base.EaseCallType.SINGLE_VOICE_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VIDEO_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VOICE_CALL;
 
 import android.text.TextUtils;
 import android.view.ViewGroup;
@@ -13,8 +13,8 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
 import io.agora.chatdemo.chat.CallViewHolder;
 import io.agora.chatdemo.chat.ChatRowCall;
-import io.agora.chat.callkit.base.EaseCallType;
-import io.agora.chat.callkit.utils.EaseCallAction;
+import io.agora.chat.callkit.general.EaseCallType;
+import io.agora.chat.callkit.general.EaseCallAction;
 import io.agora.chat.callkit.utils.EaseCallMsgUtils;
 
 public class CustomMessageAdapter extends EaseMessageAdapter {

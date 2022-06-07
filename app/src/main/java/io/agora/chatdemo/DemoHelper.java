@@ -38,6 +38,9 @@ import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.Presence;
 import io.agora.chat.PushManager;
+import io.agora.chat.callkit.EaseCallKit;
+import io.agora.chat.callkit.general.EaseCallKitConfig;
+import io.agora.chat.callkit.listener.EaseCallKitListener;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.manager.EaseNotifier;
 import io.agora.chat.uikit.models.EaseGroupInfo;
@@ -48,9 +51,9 @@ import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
-import io.agora.chatdemo.av.DemoCallKitListener;
 import io.agora.chatdemo.av.CallMultipleBaseActivity;
 import io.agora.chatdemo.av.CallSingleBaseActivity;
+import io.agora.chatdemo.av.DemoCallKitListener;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
@@ -58,9 +61,6 @@ import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
-import io.agora.chat.callkit.EaseCallKit;
-import io.agora.chat.callkit.base.EaseCallKitConfig;
-import io.agora.chat.callkit.base.EaseCallKitListener;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -309,16 +309,19 @@ public class DemoHelper {
 
     /**
      * CallKit initialization
-     *
      * @param context
      */
     private void InitCallKit(Context context) {
         EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
-        //Set the call timeout period
         callKitConfig.setCallTimeOut(30 * 1000);
-        //Set the AgoraAppId
         callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
         callKitConfig.setEnableRTCToken(true);
+//        String ringFile = EaseFileUtils.getModelFilePath(context,"huahai.mp3");
+//        callKitConfig.setRingFile(ringFile);
+//        Map<String, EaseCallUserInfo> userInfoMap = new HashMap<>();
+//        userInfoMap.put("***",new EaseCallUserInfo("****",null));
+//        userInfoMap.put("***",new EaseCallUserInfo("****",null));
+//        callKitConfig.setUserInfoMap(userInfoMap);
         callKitConfig.setDefaultHeadImage(getUsersManager().getCurrentUserInfo().getAvatar());
         EaseCallKit.getInstance().init(context, callKitConfig);
         // Register the activities which you have registered in manifest

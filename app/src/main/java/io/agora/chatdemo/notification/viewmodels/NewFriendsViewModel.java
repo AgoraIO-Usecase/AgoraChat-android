@@ -1,7 +1,7 @@
 package io.agora.chatdemo.notification.viewmodels;
 
 import android.app.Application;
-import android.text.TextUtils;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -14,16 +14,16 @@ import java.util.List;
 import java.util.UUID;
 
 import io.agora.CallBack;
-import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
-import io.agora.chat.Group;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.manager.EaseNotificationMsgManager;
 import io.agora.chat.uikit.manager.EaseThreadManager;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
@@ -111,7 +111,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                         @Override
                         public void onSuccess() {
                             try {
-                                saveNotificationMessage(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM),DemoConstant.SYSTEM_MESSAGE_FROM,getApplication().getString(R.string.contact_agreed_request));
+                                saveNotificationMessage(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM),DemoConstant.SYSTEM_ADD_CONTACT,getApplication().getString(R.string.contact_agreed_request));
                             } catch (ChatException e) {
                                 e.printStackTrace();
                             }
@@ -191,17 +191,21 @@ public class NewFriendsViewModel extends AndroidViewModel {
     }
 
     public void saveNotificationMessage(String to,String constant,String content){
-            ChatMessage msg = ChatMessage.createSendMessage(ChatMessage.Type.TXT);
-            msg.setChatType(ChatMessage.ChatType.Chat);
-            msg.setTo(to);
-            msg.setMsgId(UUID.randomUUID().toString());
-            msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
-            msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, constant);
-            msg.addBody(new TextMessageBody(content));
-            msg.setStatus(ChatMessage.Status.SUCCESS);
-            // save invitation as messages
-            ChatClient.getInstance().chatManager().saveMessage(msg);
-            EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
-            LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+        ChatMessage msg = ChatMessage.createSendMessage(ChatMessage.Type.TXT);
+        msg.setChatType(ChatMessage.ChatType.Chat);
+        msg.setTo(to);
+        msg.setMsgId(UUID.randomUUID().toString());
+        msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
+        msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, constant);
+        msg.addBody(new TextMessageBody(content));
+        msg.setStatus(ChatMessage.Status.SUCCESS);
+        // save invitation as messages
+        ChatClient.getInstance().chatManager().saveMessage(msg);
+        EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
+        Intent intent = new Intent(getApplication(), ChatActivity.class);
+        intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, to);
+        intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseChatType.SINGLE_CHAT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplication().startActivity(intent);
     }
 }

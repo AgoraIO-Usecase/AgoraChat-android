@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -344,7 +345,7 @@ public class EMClientRepository extends BaseEMRepository{
         // get current user
         DemoHelper.getInstance().getUsersManager().reload();
         DemoHelper.getInstance().getUsersManager().initUserInfo();
-        new EMContactManagerRepository().updateCurrentUserNickname(nickname, null);
+//        new EMContactManagerRepository().updateCurrentUserNickname(nickname, null);
         callBack.onSuccess(createLiveData(true));
     }
 
@@ -356,7 +357,7 @@ public class EMClientRepository extends BaseEMRepository{
 
                 JSONObject request = new JSONObject();
                 request.putOpt("userAccount", username);
-                request.putOpt("userNickname", nickname);
+                request.putOpt("userPassword", nickname);
 
                 String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_URL;
                 HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
@@ -381,6 +382,53 @@ public class EMClientRepository extends BaseEMRepository{
             } catch (Exception e) {
                 //e.printStackTrace();
                 callBack.onError(Error.NETWORK_ERROR, e.getMessage());
+            }
+        });
+    }
+
+    public LiveData<Resource<Boolean>> registerByAppServer(String username, String pwd) {
+        return new NetworkOnlyResource<Boolean>(){
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                registerToAppServer(username, pwd, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, getErrorMsg(code, error));
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public void registerToAppServer(String username, String pwd, CallBack callBack){
+        runOnIOThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    JSONObject request = new JSONObject();
+                    request.putOpt("userAccount", username);
+                    request.putOpt("userPassword", pwd);
+
+                    String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_REGISTER;
+                    HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
+                    int code = response.code;
+                    String responseInfo = response.content;
+                    if (code == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        callBack.onError(code, responseInfo);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

@@ -121,4 +121,15 @@ public interface DemoConstant extends EaseConstant {
 
     String SILENT_DURATION = "silent_duration";
 
+    String EASE_SYSTEM_NOTIFICATION_TYPE = "em_system_notification_type";
+
+    String SYSTEM_NOTIFICATION_TYPE = "system_notification_type";
+    String SYSTEM_CREATE_GROUP = "system_createdGroup";
+    String SYSTEM_JOINED_GROUP = "system_joinedGroup";
+
+    String SYSTEM_ADD_CONTACT = "system_add_contact";
+    String SYSTEM_INVITATION_CONTACT = "system_invitation_contact";
+
+    String SYSTEM_NOTIFICATION_NICKNAME = "system_notification_nickname";
+
 }

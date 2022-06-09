@@ -43,6 +43,7 @@ import io.agora.chat.uikit.utils.StatusBarCompat;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
+import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.contact.ContactDetailActivity;
 import io.agora.chatdemo.contact.GroupMemberDetailBottomSheetFragment;
@@ -126,6 +127,7 @@ public class ChatActivity extends BaseInitActivity {
     private void initChatFragment() {
         EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType)
                 .useHeader(false)
+                .setCustomAdapter(new CustomMessageAdapter())
                 .setEmptyLayout(R.layout.ease_layout_no_data_show_nothing)
                 .setOnChatExtendMenuItemClickListener(new OnChatExtendMenuItemClickListener() {
                     @Override

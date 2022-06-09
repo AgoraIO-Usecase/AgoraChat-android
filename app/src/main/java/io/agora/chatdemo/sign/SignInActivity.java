@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -36,9 +37,12 @@ public class SignInActivity extends BaseInitActivity {
     private TextView tv_hint;
     private EditText et_agora_id;
     private EditText et_nickname;
+    private EditText et_confirm_pwd;
     private Button btn_login;
+    private Button btn_register;
     private SignViewModel viewModel;
     private LinearLayout llRoot;
+    private boolean isLoginModule = true;  //true Login / false register
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, SignInActivity.class);
@@ -64,6 +68,8 @@ public class SignInActivity extends BaseInitActivity {
         et_nickname = findViewById(R.id.et_nickname);
         btn_login = findViewById(R.id.btn_login);
         llRoot = findViewById(R.id.ll_root);
+        et_confirm_pwd = findViewById(R.id.et_confirm_pwd);
+        btn_register = findViewById(R.id.btn_register);
     }
 
     public void initListener() {
@@ -104,13 +110,16 @@ public class SignInActivity extends BaseInitActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginToAgoraChat();
+                if (isLoginModule){
+                    loginToAgoraChat();
+                }
+                ChangeUI(true);
             }
         });
         et_nickname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEND) {
+                if(actionId == EditorInfo.IME_ACTION_SEND && isLoginModule) {
                     loginToAgoraChat();
                     return true;
                 }
@@ -126,6 +135,17 @@ public class SignInActivity extends BaseInitActivity {
             @Override
             public void keyboardHide(int height) {
                 llRoot.scrollBy(0, -(int) EaseUtils.dip2px(mContext, 120));
+            }
+        });
+
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isLoginModule){
+                    registerToAgoraChat();
+                }
+                ChangeUI(false);
+
             }
         });
     }
@@ -185,6 +205,24 @@ public class SignInActivity extends BaseInitActivity {
                 }
             });
         });
+        viewModel.getRegisterObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(@Nullable Boolean data) {
+                    Log.e("getRegisterObservable","onSuccess");
+                    ChangeUI(true);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    runOnUiThread(()-> {
+                        ChangeUI(true);
+                        setErrorHint(message);
+                    });
+                }
+            });
+        });
     }
 
     private void setErrorHint(String error) {
@@ -201,5 +239,38 @@ public class SignInActivity extends BaseInitActivity {
     public void showLeftDrawable(TextView editText, Drawable left) {
         String content = editText.getText().toString().trim();
         editText.setCompoundDrawablesWithIntrinsicBounds(TextUtils.isEmpty(content) ? null : left, null, null, null);
+    }
+
+    public void ChangeUI(Boolean module){
+        // true Login / false register
+        if (module){
+            isLoginModule = true;
+            et_confirm_pwd.setVisibility(View.GONE);
+            btn_login.setVisibility(View.VISIBLE);
+        }else {
+            isLoginModule = false;
+            et_confirm_pwd.setVisibility(View.VISIBLE);
+            btn_login.setVisibility(View.GONE);
+        }
+    }
+
+    public void registerToAgoraChat(){
+        setErrorHint("");
+        String agoraID = et_agora_id.getText().toString().trim();
+        if(TextUtils.isEmpty(agoraID)) {
+            setErrorHint(getString(R.string.sign_error_not_id));
+            return;
+        }
+        String pwd = et_nickname.getText().toString().trim();
+        if(TextUtils.isEmpty(pwd)) {
+            setErrorHint(getString(R.string.sign_error_not_nickname));
+            return;
+        }
+        String confirm_pwd = et_confirm_pwd.getText().toString().trim();
+        if (!TextUtils.equals(pwd,confirm_pwd)){
+            setErrorHint(getString(R.string.sign_check_pwd));
+            return;
+        }
+        viewModel.register(agoraID, pwd);
     }
 }

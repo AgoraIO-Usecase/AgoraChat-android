@@ -17,11 +17,34 @@
         android:layout_height="wrap_content"
         android:src="@drawable/icon"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
+    <RelativeLayout
         android:layout_marginTop="20dp"
-        android:src="@drawable/text_agorachat"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/text_agorachat"/>
+
+        <ImageView
+            android:id="@+id/sub_title"
+            android:layout_toRightOf="@id/logo"
+            android:layout_width="91dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/sign_subtitle"
+            android:scaleType="fitCenter"
+            android:textSize="24sp"
+            android:layout_marginLeft="4dp"
+            android:visibility="gone"
+            android:textColor="@color/color_second_text"
+            />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_hint"
@@ -53,10 +76,10 @@
             android:id="@+id/clear_agora_id"
             android:layout_alignEnd="@id/et_agora_id"
             android:layout_centerVertical="true"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginRight="24dp"
-            android:src="@drawable/sign_clear"
+            android:src="@drawable/sign_clear_icon"
             android:visibility="gone"/>
 
     </RelativeLayout>
@@ -80,8 +103,8 @@
             android:id="@+id/see_pwd"
             android:layout_alignEnd="@id/et_nickname"
             android:layout_centerVertical="true"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginRight="24dp"
             android:state_selected="false"
             android:src="@drawable/sign_eye_selector"/>
@@ -110,8 +133,8 @@
             android:id="@+id/see_confirm_pwd"
             android:layout_alignEnd="@id/et_confirm_pwd"
             android:layout_centerVertical="true"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginRight="24dp"
             android:state_selected="false"
             android:src="@drawable/sign_eye_selector"/>

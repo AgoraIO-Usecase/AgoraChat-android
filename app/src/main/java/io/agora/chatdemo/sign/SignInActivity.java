@@ -56,6 +56,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
     private ImageView img_clear;
     private ImageView img_see_pwd;
     private ImageView img_confirm_pwd;
+    private ImageView img_subtitle;
     private RelativeLayout confirm_layout;
 
     public static void actionStart(Context context) {
@@ -89,6 +90,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
         img_confirm_pwd = findViewById(R.id.see_confirm_pwd);
         btn_back_login = findViewById(R.id.btn_back_login);
         confirm_layout = findViewById(R.id.confirm_pwd_layout);
+        img_subtitle = findViewById(R.id.sub_title);
 
         String register_content = btn_register.getText().toString();
         SpannableStringBuilder builder = new SpannableStringBuilder(register_content);
@@ -266,12 +268,14 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             btn_back_login.setVisibility(View.GONE);
             btn_login.setText(getString(R.string.sign_login));
             btn_register.setVisibility(View.VISIBLE);
+            img_subtitle.setVisibility(View.GONE);
         }else {
             isLoginModule = false;
             confirm_layout.setVisibility(View.VISIBLE);
             btn_back_login.setVisibility(View.VISIBLE);
             btn_login.setText(getString(R.string.sign_up));
             btn_register.setVisibility(View.GONE);
+            img_subtitle.setVisibility(View.VISIBLE);
         }
     }
 

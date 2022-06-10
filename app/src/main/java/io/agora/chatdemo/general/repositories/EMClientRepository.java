@@ -2,6 +2,8 @@ package io.agora.chatdemo.general.repositories;
 
 import static io.agora.cloud.HttpClientManager.Method_POST;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -10,11 +12,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Cipher;
 import io.agora.CallBack;
 import io.agora.Error;
 import io.agora.chat.ChatClient;
@@ -23,6 +25,7 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
+import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.DemoCallBack;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -279,7 +282,7 @@ public class EMClientRepository extends BaseEMRepository{
         return new NetworkOnlyResource<String>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
-                loginToAppServer(ChatClient.getInstance().getCurrentUser(), "nickname", new ResultCallBack<LoginBean>() {
+                loginToAppServer(ChatClient.getInstance().getCurrentUser(), decryptData(), new ResultCallBack<LoginBean>() {
                     @Override
                     public void onSuccess(LoginBean value) {
                         if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
@@ -340,13 +343,33 @@ public class EMClientRepository extends BaseEMRepository{
     }
     
     private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        encryptData(nickname);
         // ** manually load all local groups and conversation
         initLocalDb();
         // get current user
         DemoHelper.getInstance().getUsersManager().reload();
         DemoHelper.getInstance().getUsersManager().initUserInfo();
-//        new EMContactManagerRepository().updateCurrentUserNickname(nickname, null);
+        new EMContactManagerRepository().updateCurrentUserNickname(getCurrentUser(), null);
         callBack.onSuccess(createLiveData(true));
+    }
+
+    private void encryptData(String data){
+        DemoHelper.getInstance().getEncryptUtils().initAESgcm(getContext().getString(R.string.sign_aes).getBytes());
+        SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = setting.edit();
+        try {
+            String encryptedData = DemoHelper.getInstance().getEncryptUtils().aesGcmEncrypt(data,1);
+            editor.putString(getContext().getString(R.string.sign_gcm_key), encryptedData);
+            editor.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String decryptData(){
+        SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String encryptedData = setting.getString(getContext().getString(R.string.sign_gcm_key), "");
+        return DemoHelper.getInstance().getEncryptUtils().aesGcmDecrypt(encryptedData,getContext().getString(R.string.sign_aes).getBytes(),1);
     }
 
     private void loginToAppServer(String username, String nickname, ResultCallBack<LoginBean> callBack) {

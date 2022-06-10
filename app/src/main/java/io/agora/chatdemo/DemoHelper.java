@@ -38,6 +38,7 @@ import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.Presence;
 import io.agora.chat.PushManager;
+import io.agora.chat.adapter.EMAREncryptUtils;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.activities.EaseChatThreadActivity;
 import io.agora.chat.uikit.activities.EaseChatThreadCreateActivity;
@@ -77,6 +78,7 @@ public class DemoHelper {
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
     private UsersManager usersManager;
+    private EMAREncryptUtils encryptUtils;
 
     private DemoHelper() {}
 
@@ -102,11 +104,21 @@ public class DemoHelper {
             // Initialize UIKit
             initEaseUIKit(context);
         }
-
     }
 
     public ConcurrentHashMap<String, Presence> getPresences() {
         return ((GlobalEventsMonitor)EaseUIKit.getInstance().getChatPresenter()).getPresences();
+    }
+
+    public EMAREncryptUtils getEncryptUtils(){
+        if(encryptUtils == null) {
+            synchronized (DemoHelper.class) {
+                if(encryptUtils == null) {
+                    encryptUtils = new EMAREncryptUtils();
+                }
+            }
+        }
+        return encryptUtils;
     }
 
     /**

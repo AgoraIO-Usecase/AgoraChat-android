@@ -34,37 +34,89 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"/>
 
-    <EditText
-        android:id="@+id/et_agora_id"
-        android:hint="@string/sign_agora_id"
-        android:layout_marginTop="12dp"
-        style="@style/sign_edit_style"
-        android:paddingStart="20dp"
-        android:inputType="text"
-        android:imeOptions="actionNone"
-        android:paddingEnd="20dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
 
-    <EditText
-        android:id="@+id/et_nickname"
-        android:layout_marginTop="18dp"
-        android:hint="@string/sign_password"
-        style="@style/sign_edit_style"
-        android:imeOptions="actionSend"
-        android:inputType="text"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"/>
+        <EditText
+            android:id="@+id/et_agora_id"
+            android:hint="@string/sign_agora_id"
+            style="@style/sign_edit_style"
+            android:paddingStart="20dp"
+            android:inputType="text"
+            android:imeOptions="actionNone"
+            android:paddingEnd="20dp" />
 
-    <EditText
-        android:id="@+id/et_confirm_pwd"
+
+        <ImageView
+            android:id="@+id/clear_agora_id"
+            android:layout_alignEnd="@id/et_agora_id"
+            android:layout_centerVertical="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="24dp"
+            android:src="@drawable/sign_clear"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_marginTop="18dp"
-        android:hint="@string/sign_confirm_pwd"
-        style="@style/sign_edit_style"
-        android:imeOptions="actionSend"
-        android:inputType="text"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_nickname"
+            android:hint="@string/sign_password"
+            style="@style/sign_edit_style"
+            android:imeOptions="actionSend"
+            android:inputType="textPassword"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"/>
+
+        <ImageView
+            android:id="@+id/see_pwd"
+            android:layout_alignEnd="@id/et_nickname"
+            android:layout_centerVertical="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="24dp"
+            android:state_selected="false"
+            android:src="@drawable/sign_eye_selector"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/confirm_pwd_layout"
+        android:layout_marginTop="18dp"
         android:visibility="gone"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_confirm_pwd"
+            android:hint="@string/sign_confirm_pwd"
+            style="@style/sign_edit_style"
+            android:imeOptions="actionSend"
+            android:inputType="textPassword"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            />
+
+        <ImageView
+            android:id="@+id/see_confirm_pwd"
+            android:layout_alignEnd="@id/et_confirm_pwd"
+            android:layout_centerVertical="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="24dp"
+            android:state_selected="false"
+            android:src="@drawable/sign_eye_selector"/>
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_login"
@@ -78,17 +130,28 @@
         android:textSize="@dimen/text_size_big"
         android:background="@drawable/sign_button_bg_selector"/>
 
-    <Button
+    <TextView
         android:id="@+id/btn_register"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="18dp"
-        android:text="@string/Sign_register"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_big"
-        android:background="@drawable/sign_button_bg_selector"/>
+        android:layout_marginTop="31dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/color_light_gray_999999"
+        android:text="No account? Register"
+        />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/btn_back_login"
+        android:layout_marginTop="31dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/sign_btn_bg"
+        android:text="Back to login"
+        />
+
 
     <View
         android:layout_width="wrap_content"

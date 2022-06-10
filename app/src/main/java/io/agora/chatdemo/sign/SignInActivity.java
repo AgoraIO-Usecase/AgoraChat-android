@@ -1,19 +1,28 @@
 package io.agora.chatdemo.sign;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -32,17 +41,22 @@ import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.manager.SoftKeyboardChangeHelper;
 import io.agora.chatdemo.main.MainActivity;
 
-public class SignInActivity extends BaseInitActivity {
+public class SignInActivity extends BaseInitActivity implements View.OnClickListener{
 
     private TextView tv_hint;
     private EditText et_agora_id;
     private EditText et_nickname;
     private EditText et_confirm_pwd;
     private Button btn_login;
-    private Button btn_register;
+    private TextView btn_register;
+    private TextView btn_back_login;
     private SignViewModel viewModel;
     private LinearLayout llRoot;
     private boolean isLoginModule = true;  //true Login / false register
+    private ImageView img_clear;
+    private ImageView img_see_pwd;
+    private ImageView img_confirm_pwd;
+    private RelativeLayout confirm_layout;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, SignInActivity.class);
@@ -70,9 +84,29 @@ public class SignInActivity extends BaseInitActivity {
         llRoot = findViewById(R.id.ll_root);
         et_confirm_pwd = findViewById(R.id.et_confirm_pwd);
         btn_register = findViewById(R.id.btn_register);
+        img_clear = findViewById(R.id.clear_agora_id);
+        img_see_pwd = findViewById(R.id.see_pwd);
+        img_confirm_pwd = findViewById(R.id.see_confirm_pwd);
+        btn_back_login = findViewById(R.id.btn_back_login);
+        confirm_layout = findViewById(R.id.confirm_pwd_layout);
+
+        String register_content = btn_register.getText().toString();
+        SpannableStringBuilder builder = new SpannableStringBuilder(register_content);
+        ForegroundColorSpan graySpan = new ForegroundColorSpan(getResources().getColor(R.color.sign_btn_bg));
+        StyleSpan styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+        builder.setSpan(styleSpan,register_content.length()-8,register_content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(graySpan,register_content.length()-8,register_content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        btn_register.setText(builder);
     }
 
     public void initListener() {
+        img_clear.setOnClickListener(this);
+        img_see_pwd.setOnClickListener(this);
+        img_confirm_pwd.setOnClickListener(this);
+        btn_register.setOnClickListener(this);
+        btn_back_login.setOnClickListener(this);
+        btn_login.setOnClickListener(this);
+
         et_agora_id.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -90,8 +124,10 @@ public class SignInActivity extends BaseInitActivity {
                 if(TextUtils.isEmpty(content)) {
                     setErrorHint("");
                     btn_login.setEnabled(true);
+                    img_clear.setVisibility(View.GONE);
                     return;
                 }
+                img_clear.setVisibility(View.VISIBLE);
                 if(!patternID(content)) {
                     setErrorHint(getString(R.string.sign_error_illegal_character));
                     btn_login.setEnabled(false);
@@ -105,15 +141,6 @@ public class SignInActivity extends BaseInitActivity {
                     setErrorHint(getString(R.string.username_too_long));
                     btn_login.setEnabled(false);
                 }
-            }
-        });
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isLoginModule){
-                    loginToAgoraChat();
-                }
-                ChangeUI(true);
             }
         });
         et_nickname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -138,16 +165,6 @@ public class SignInActivity extends BaseInitActivity {
             }
         });
 
-        btn_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isLoginModule){
-                    registerToAgoraChat();
-                }
-                ChangeUI(false);
-
-            }
-        });
     }
 
     private void loginToAgoraChat() {
@@ -210,14 +227,14 @@ public class SignInActivity extends BaseInitActivity {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
                     Log.e("getRegisterObservable","onSuccess");
-                    ChangeUI(true);
+                    changeUI(true);
                 }
 
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
                     runOnUiThread(()-> {
-                        ChangeUI(true);
+                        changeUI(true);
                         setErrorHint(message);
                     });
                 }
@@ -241,16 +258,20 @@ public class SignInActivity extends BaseInitActivity {
         editText.setCompoundDrawablesWithIntrinsicBounds(TextUtils.isEmpty(content) ? null : left, null, null, null);
     }
 
-    public void ChangeUI(Boolean module){
+    public void changeUI(Boolean module){
         // true Login / false register
         if (module){
             isLoginModule = true;
-            et_confirm_pwd.setVisibility(View.GONE);
-            btn_login.setVisibility(View.VISIBLE);
+            confirm_layout.setVisibility(View.GONE);
+            btn_back_login.setVisibility(View.GONE);
+            btn_login.setText(getString(R.string.sign_login));
+            btn_register.setVisibility(View.VISIBLE);
         }else {
             isLoginModule = false;
-            et_confirm_pwd.setVisibility(View.VISIBLE);
-            btn_login.setVisibility(View.GONE);
+            confirm_layout.setVisibility(View.VISIBLE);
+            btn_back_login.setVisibility(View.VISIBLE);
+            btn_login.setText(getString(R.string.sign_up));
+            btn_register.setVisibility(View.GONE);
         }
     }
 
@@ -272,5 +293,45 @@ public class SignInActivity extends BaseInitActivity {
             return;
         }
         viewModel.register(agoraID, pwd);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.clear_agora_id:
+                et_agora_id.setText("");
+                break;
+            case R.id.see_pwd:
+                img_see_pwd.setSelected(!img_see_pwd.isSelected());
+                if (img_see_pwd.isSelected()){
+                    et_nickname.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }else {
+                    et_nickname.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                break;
+            case R.id.see_confirm_pwd:
+                img_confirm_pwd.setSelected(!img_confirm_pwd.isSelected());
+                if (img_confirm_pwd.isSelected()){
+                    et_confirm_pwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }else {
+                    et_confirm_pwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                break;
+            case R.id.btn_register:
+                changeUI(false);
+                break;
+            case R.id.btn_back_login:
+                changeUI(true);
+                break;
+            case R.id.btn_login:
+                if (isLoginModule){
+                    loginToAgoraChat();
+                }else {
+                    registerToAgoraChat();
+                }
+                break;
+
+        }
     }
 }

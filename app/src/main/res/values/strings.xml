@@ -15,6 +15,7 @@
     <string name="sign_password">Password</string>
     <string name="sign_confirm_pwd">Confirm Password</string>
     <string name="sign_login">Log In</string>
+    <string name="sign_up">Sign Up</string>
     <string name="Sign_register">Register</string>
     <string name="sign_error_illegal_character">Latin letters and numbers only.</string>
     <string name="sign_error_not_id">Please enter an AgoraID.</string>
@@ -270,8 +271,8 @@
 
     <string name="group_members_tab_title_all">All</string>
     <string name="group_members_tab_title_admin">Admin</string>
-    <string name="group_members_tab_title_mute">Mute</string>
-    <string name="group_members_tab_title_block">Block</string>
+    <string name="group_members_tab_title_mute">Muted</string>
+    <string name="group_members_tab_title_block">Blocked</string>
     <string name="group_members_tab_title_white">White</string>
     <string name="group_members_title">Members</string>
     <string name="group_members_dialog_menu_make_admin">Make Admin</string>

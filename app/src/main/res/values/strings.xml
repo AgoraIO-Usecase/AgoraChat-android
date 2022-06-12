@@ -71,6 +71,7 @@
     <string name="group_add_contacts">Add Contacts</string>
     <string name="group_add_members">Add Members</string>
     <string name="group_contacts">Contacts</string>
+    <string name="group_chat_members">Group Chat Members</string>
     <string name="group_name">Group Name</string>
     <string name="group_description">GROUP DESCRIPTION, NOT REQUIRED</string>
     <string name="group_maximum_member">MAXIMUM MEMBER</string>

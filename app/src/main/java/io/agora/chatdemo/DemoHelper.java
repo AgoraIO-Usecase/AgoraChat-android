@@ -339,7 +339,7 @@ public class DemoHelper {
      */
     private void InitCallKit(Context context) {
         EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
-        callKitConfig.setCallTimeOut(30 * 1000);
+        callKitConfig.setCallTimeOut(30);
         callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
         callKitConfig.setEnableRTCToken(true);
 //        String ringFile = EaseFileUtils.getModelFilePath(context,"huahai.mp3");

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +28,7 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
 
     private EaseCallType callType;
     private String groupId;
-    private String[] existMembers;
+    private List<String> existMembers=new ArrayList<>();
     private GroupContactViewModel viewModel;
     private Set<String> finalUsers=new HashSet<>();
 
@@ -38,7 +39,11 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
         if (bundle != null) {
             callType = (EaseCallType) bundle.getSerializable("easeCallType");
             groupId = bundle.getString("groupId");
-            existMembers = bundle.getStringArray("existMembers");
+            String[] existMembersArray = bundle.getStringArray("existMembers");
+            existMembers.clear();
+            if(existMembersArray!=null&&existMembersArray.length>0) {
+                existMembers.addAll(Arrays.asList(existMembersArray));
+            }
         }
     }
 
@@ -54,7 +59,8 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
                     finishRefresh();
                     mData.clear();
                     for (EaseUser user : users) {
-                        if(!TextUtils.equals(user.getUsername(),ChatClient.getInstance().getCurrentUser())) {
+                        if(!TextUtils.equals(user.getUsername(),ChatClient.getInstance().getCurrentUser())
+                        &&!existMembers.contains(user.getUsername())) {
                             mData.add(user);
                         }
                     }
@@ -68,6 +74,10 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
                 }
             });
         });
+    }
+
+    protected String getHeadName(){
+        return getString(R.string.group_chat_members);
     }
 
     @Override

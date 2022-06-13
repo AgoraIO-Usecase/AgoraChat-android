@@ -342,12 +342,6 @@ public class DemoHelper {
         callKitConfig.setCallTimeOut(30);
         callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
         callKitConfig.setEnableRTCToken(true);
-//        String ringFile = EaseFileUtils.getModelFilePath(context,"huahai.mp3");
-//        callKitConfig.setRingFile(ringFile);
-//        Map<String, EaseCallUserInfo> userInfoMap = new HashMap<>();
-//        userInfoMap.put("***",new EaseCallUserInfo("****",null));
-//        userInfoMap.put("***",new EaseCallUserInfo("****",null));
-//        callKitConfig.setUserInfoMap(userInfoMap);
         callKitConfig.setDefaultHeadImage(getUsersManager().getCurrentUserInfo().getAvatar());
         EaseCallKit.getInstance().init(context, callKitConfig);
         // Register the activities which you have registered in manifest

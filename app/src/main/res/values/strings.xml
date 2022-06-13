@@ -414,8 +414,8 @@
     <string name="demo_call_end_reason_refuse">The other party refuses to answer the call</string>
     <string name="demo_call_end_reason_busy">The line is busy</string>
     <string name="demo_call_end_reason_busy_remote_no_response">No response from the other party</string>
-    <string name="demo_call_end_reason_other_device_refused">Handle On Othe rDevice Refused</string>
-    <string name="demo_call_end_reason_other_device_agreed">Handle On Othe rDevice Agreed</string>
+    <string name="demo_call_end_reason_other_device_refused">Handle On Other Device Refused</string>
+    <string name="demo_call_end_reason_other_device_agreed">Handle On Other Device Agreed</string>
 
     <string name="thread_menu_members">Thread members</string>
     <string name="thread_menu_notifications">Thread Notifications</string>

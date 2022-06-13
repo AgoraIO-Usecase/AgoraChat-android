@@ -5,8 +5,6 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Pair;
 
 import com.haoge.easyandroid.easy.EasyExecutor;
@@ -50,13 +48,11 @@ public class DemoCallKitListener implements EaseCallKitListener {
     private String uIdUrl = "http://" + BuildConfig.APP_SERVER_DOMAIN + "/agora/channel/mapper";
     private UsersManager mUsersManager;
     private Context mContext;
-    private Handler handler;
     private final EasyExecutor executor;
 
     public DemoCallKitListener(Context context, UsersManager usersManager) {
         this.mContext = context;
         this.mUsersManager = usersManager;
-        handler = new Handler(Looper.getMainLooper());
         executor = EasyExecutor.newBuilder(0)
                 .build();
     }
@@ -134,13 +130,12 @@ public class DemoCallKitListener implements EaseCallKitListener {
                 .append("userAccount=")
                 .append(userAccount);
 
-        //获取声网Token
+        //get agora RTC token (获取声网RTC token)
         getRtcToken(url.toString(), agoraUid, callback);
     }
 
     @Override
     public void onReceivedCall(EaseCallType callType, String fromUserId, JSONObject ext) {
-        //收到接听电话
         EMLog.d(TAG, "onRecivedCall" + callType.name() + " fromUserId:" + fromUserId);
     }
 
@@ -168,9 +163,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
         getUserIdByAgoraUid(uid, url.toString(), callback);
     }
 
-    /**
-     * 获取声网Token
-     */
+
     private void getRtcToken(String tokenUrl, int agoraUid, EaseCallKitTokenCallback callback) {
         executor.asyncResult(new Function1<Pair<Integer, String>, Unit>() {
             @Override
@@ -184,7 +177,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
                                 try {
                                     JSONObject object = new JSONObject(responseInfo);
                                     String token = object.getString("accessToken");
-                                    //设置自己头像昵称
+                                    //Set your avatar nickname(设置自己头像昵称)
                                     setEaseCallKitUserInfo(ChatClient.getInstance().getCurrentUser());
                                     callback.onSetToken(token, agoraUid);
                                 } catch (Exception e) {
@@ -217,6 +210,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
     }
 
     /**
+     * Get the userIDS of all people in the channel based on channelName and agora uId
      * 根据channelName和声网uId获取频道内所有人的UserId
      *
      * @param uId
@@ -243,7 +237,8 @@ public class DemoCallKitListener implements EaseCallKitListener {
                                         int uid = Integer.valueOf(uIdStr).intValue();
                                         String username = resToken.optString(uIdStr);
                                         if (uid == uId) {
-                                            //获取到当前用户的userName 设置头像昵称等信息
+                                            //Obtain information such as userName, profile picture, and nickname of the current user
+                                            // 获取到当前用户的userName 设置头像昵称等信息
                                             userAccount=new EaseUserAccount(uid, username);
                                         }
                                     }
@@ -288,7 +283,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
 
     @Override
     public void onUserInfoUpdate(String userName) {
-        //设置用户昵称 头像
+        //set user's nickname and avater (设置用户昵称 头像)
         setEaseCallKitUserInfo(userName);
     }
 }

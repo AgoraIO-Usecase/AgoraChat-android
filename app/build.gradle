@@ -37,6 +37,8 @@ android {
 //        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a1-vip6.easemob.com\"")
         buildConfigField ("String", "APP_SERVER_URL", "\"/app/chat/user/login\"")
 
+        buildConfigField ("String", "Agora_AppId", properties.getProperty("AGORA_APPID", "******"))
+
         manifestPlaceholders = [AGORA_CHAT_APPKEY: properties.getProperty("AGORA_CHAT_APPKEY", "******")]
     }
 

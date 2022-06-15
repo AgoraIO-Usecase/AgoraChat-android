@@ -340,7 +340,7 @@ public class DemoHelper {
     private void InitCallKit(Context context) {
         EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
         callKitConfig.setCallTimeOut(30);
-        callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
+        callKitConfig.setAgoraAppId(BuildConfig.Agora_AppId);
         callKitConfig.setEnableRTCToken(true);
         callKitConfig.setDefaultHeadImage(getUsersManager().getCurrentUserInfo().getAvatar());
         EaseCallKit.getInstance().init(context, callKitConfig);

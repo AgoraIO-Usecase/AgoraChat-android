@@ -44,8 +44,10 @@ import kotlin.jvm.functions.Function1;
 public class DemoCallKitListener implements EaseCallKitListener {
 
     private final String TAG = getClass().getSimpleName();
+    //The URL here is for the demo example, and the actual project users should obtain it from their App Server（此处url为demo示例所用，实际项目用用户应该从自己的App Server去获取）
     private String tokenUrl = "http://" + BuildConfig.APP_SERVER_DOMAIN + "/token/rtc";
     private String uIdUrl = "http://" + BuildConfig.APP_SERVER_DOMAIN + "/agora/channel/mapper";
+
     private UsersManager mUsersManager;
     private Context mContext;
     private final EasyExecutor executor;

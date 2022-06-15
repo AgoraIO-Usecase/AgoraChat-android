@@ -15,7 +15,7 @@ public class TestAvatarRepository {
     static {
         Context context = DemoApplication.getInstance().getApplicationContext();
         for(int i = 1; i <= SIZE; i++){
-            String name = "avatar_"+i;
+            String name = "agora_avatar_"+i;
             int resId = context.getResources().getIdentifier(name,"drawable",context.getPackageName());
             avatarlist.add(resId);
         }

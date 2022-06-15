@@ -110,13 +110,17 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
     private void addContactHeadView() {
         AbsListView.LayoutParams contactsParams = new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         TextView contacts = new TextView(mContext);
-        contacts.setText(R.string.group_contacts);
+        contacts.setText(getHeadName());
         contacts.setLayoutParams(contactsParams);
         contacts.setGravity(Gravity.LEFT);
         contacts.setTextSize(UIUtils.getSpDimen(mContext, R.dimen.text_size_small));
         contacts.setPadding((int) UIUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_2), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_2));
         contacts.setTextColor(ContextCompat.getColor(mContext, R.color.color_light_gray_999999));
         ((EaseRecyclerView) mRecyclerView).addHeaderView(contacts);
+    }
+
+    protected String getHeadName(){
+        return getString(R.string.group_contacts);
     }
 
     @Override

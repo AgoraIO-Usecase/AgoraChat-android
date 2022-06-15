@@ -1,5 +1,10 @@
 package io.agora.chatdemo.chat;
 
+import static io.agora.chat.callkit.general.EaseCallType.CONFERENCE_VIDEO_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.CONFERENCE_VOICE_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VIDEO_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VOICE_CALL;
+import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
 import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 
 import android.Manifest;
@@ -7,8 +12,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -25,15 +32,16 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
-import io.agora.chat.uikit.activities.EaseChatThreadListActivity;
 import io.agora.chat.Presence;
+import io.agora.chat.callkit.EaseCallKit;
+import io.agora.chat.uikit.activities.EaseChatThreadListActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.EaseChatLayout;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
-import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
+import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.chat.interfaces.OnPeerTypingListener;
 import io.agora.chat.uikit.constants.EaseConstant;
@@ -42,25 +50,30 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.StatusBarCompat;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.av.CallSingleBaseActivity;
 import io.agora.chatdemo.base.BaseInitActivity;
+import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
+import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.chatdemo.contact.ContactDetailActivity;
 import io.agora.chatdemo.contact.GroupMemberDetailBottomSheetFragment;
 import io.agora.chatdemo.databinding.ActivityChatBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
-import io.agora.chatdemo.chatthread.ChatThreadActivity;
+import io.agora.chatdemo.group.fragments.MultiplyVideoSelectMemberContainerFragment;
 import io.agora.util.EMLog;
 
-public class ChatActivity extends BaseInitActivity {
+public class ChatActivity extends BaseInitActivity implements View.OnClickListener {
     private String conversationId;
     private EaseChatType chatType;
     private ChatViewModel viewModel;
+    private AlertDialog callSelectedDialog;
     private ActivityChatBinding binding;
     private EaseChatLayout mChatLayout;
 
@@ -81,14 +94,14 @@ public class ChatActivity extends BaseInitActivity {
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         conversationId = intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID);
-        chatType = EaseChatType.from(intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseChatType.SINGLE_CHAT.getChatType()));
+        chatType = EaseChatType.from(intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, SINGLE_CHAT.getChatType()));
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
 
-        if (chatType == EaseChatType.SINGLE_CHAT) {
+        if (chatType == SINGLE_CHAT) {
             binding.presenceView.setVisibility(View.VISIBLE);
             binding.presenceView.setNameTextViewVisibility(View.VISIBLE);
             binding.presenceView.setPresenceTextViewArrowVisible(false);
@@ -96,7 +109,6 @@ public class ChatActivity extends BaseInitActivity {
         } else {
             binding.presenceView.setVisibility(View.GONE);
         }
-
 
         binding.rightImage.setImageResource(R.drawable.chat_settings_more);
         if(mContext.getSupportActionBar() == null) {
@@ -262,6 +274,7 @@ public class ChatActivity extends BaseInitActivity {
                     }
                 })
                 .hideSenderAvatar(true)
+                .setCustomAdapter(new CustomMessageAdapter())
                 .sendMessageByOriginalImage(true)
                 .build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
@@ -274,6 +287,7 @@ public class ChatActivity extends BaseInitActivity {
             @Override
             public void onClick(View v) {
                 // Skip to chat settings fragment
+
                 Bundle bundle = new Bundle();
                 bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
                 bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType.getChatType());
@@ -285,14 +299,14 @@ public class ChatActivity extends BaseInitActivity {
         binding.ivIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(chatType == EaseChatType.SINGLE_CHAT) {
+                if(chatType == SINGLE_CHAT) {
                     ContactDetailActivity.actionStart(mContext, conversationId, true);
                 } else if (chatType == EaseChatType.GROUP_CHAT) {
                     GroupDetailActivity.actionStart(mContext, conversationId, true);
                 }
             }
         });
-        binding.llTitleRight.setOnClickListener(new View.OnClickListener() {
+        binding.ivThreadMedium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(chatType == EaseChatType.GROUP_CHAT) {
@@ -300,6 +314,28 @@ public class ChatActivity extends BaseInitActivity {
                 }
             }
         });
+        binding.ivCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCallSelectedDialog();
+            }
+        });
+    }
+
+    private void showCallSelectedDialog() {
+        if (callSelectedDialog == null) {
+            callSelectedDialog = new AlertDialog.Builder(mContext)
+                    .setContentView(R.layout.dialog_call_selected)
+                    .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    .setGravity(Gravity.BOTTOM)
+                    .setCancelable(true)
+                    .setOnClickListener(R.id.btn_cancel, this)
+                    .setOnClickListener(R.id.ll_audio_call, this)
+                    .setOnClickListener(R.id.ll_video_call, this)
+                    .show();
+        } else {
+            callSelectedDialog.show();
+        }
     }
 
     @Override
@@ -381,7 +417,7 @@ public class ChatActivity extends BaseInitActivity {
         });
         checkUnreadCount();
         setDefaultTitle();
-        if (chatType == EaseChatType.SINGLE_CHAT) {
+        if (chatType == SINGLE_CHAT) {
             getPresenceData();
         }
     }
@@ -425,7 +461,7 @@ public class ChatActivity extends BaseInitActivity {
     }
 
     private void setDefaultTitle() {
-        if(chatType != EaseChatType.SINGLE_CHAT) {
+        if(chatType != SINGLE_CHAT) {
             boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, binding.title, binding.ivIcon);
             if(!hasProvided) {
                 setGroupInfo();
@@ -451,5 +487,38 @@ public class ChatActivity extends BaseInitActivity {
             binding.ivIcon.setImageResource(R.drawable.icon);
         }
         binding.title.setText(title);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_audio_call:
+                if(chatType==SINGLE_CHAT) {
+                    EaseCallKit.getInstance().startSingleCall(SINGLE_VOICE_CALL,conversationId,null, CallSingleBaseActivity.class);
+                }else{
+                    // select members for voice call
+                    MultiplyVideoSelectMemberContainerFragment fragment = new MultiplyVideoSelectMemberContainerFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("easeCallType",CONFERENCE_VOICE_CALL);
+                    bundle.putString("groupId",conversationId);
+                    fragment.setArguments(bundle);
+                    fragment .show(getSupportFragmentManager(),"MultiplyVideoSelectMemberContainerFragment");
+                }
+               break;
+            case R.id.ll_video_call:
+                if(chatType==SINGLE_CHAT) {
+                    EaseCallKit.getInstance().startSingleCall(SINGLE_VIDEO_CALL,conversationId,null, CallSingleBaseActivity.class);
+                }else{
+                    // select members for video call
+                    MultiplyVideoSelectMemberContainerFragment fragment = new MultiplyVideoSelectMemberContainerFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("easeCallType",CONFERENCE_VIDEO_CALL);
+                    bundle.putString("groupId",conversationId);
+                    fragment.setArguments(bundle);
+                    fragment .show(getSupportFragmentManager(),"MultiplyVideoSelectMemberContainerFragment");
+                }
+                break;
+        }
+        callSelectedDialog.dismiss();
     }
 }

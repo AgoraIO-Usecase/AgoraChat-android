@@ -43,6 +43,7 @@ public class UsersManager {
 	private boolean isContactsSyncedWithServer = false;
 	private boolean isBlackListSyncedWithServer = false;
 	private boolean isPushConfigsWithServer = false;
+	private int currentUserAgoraUid;
 
 	public synchronized EaseUser getCurrentUserInfo() {
 		if (currentUser == null || TextUtils.isEmpty(currentUser.getUsername())) {
@@ -51,6 +52,7 @@ public class UsersManager {
 			String nick = getCurrentUserNick();
 			currentUser.setNickname((nick != null) ? nick : username);
 			currentUser.setAvatar(getCurrentUserAvatar());
+			currentUserAgoraUid=getCurrentUserAgoraUid();
 		}
 		return currentUser;
 	}
@@ -64,7 +66,7 @@ public class UsersManager {
 		String nick = getCurrentUserNick();
 		currentUser.setNickname((nick != null) ? nick : username);
 		currentUser.setAvatar(getCurrentUserAvatar());
-
+		currentUserAgoraUid=getCurrentUserAgoraUid();
 		isGroupsSyncedWithServer=false;
 		isContactsSyncedWithServer=false;
 		isBlackListSyncedWithServer=false;
@@ -87,6 +89,13 @@ public class UsersManager {
 			setCurrentUserNick(nickname);
 		}
 		return nickname;
+	}
+
+	public void setCurrentUserAgoraUid(int agoraUid){
+		PreferenceManager.getInstance().setCurrentUserAgoraUid(agoraUid);
+	}
+	public int getCurrentUserAgoraUid(){
+		return PreferenceManager.getInstance().getCurrentUserAgoraUid();
 	}
 
 	private void setCurrentUserNick(String nickname) {
@@ -188,11 +197,7 @@ public class UsersManager {
 		if(avatar != null) {
 			try {
 				int resourceId = Integer.parseInt(userAvatar);
-				Glide.with(context)
-						.load(resourceId)
-						.placeholder(defaultAvatar)
-						.error(defaultAvatar)
-						.into(avatar);
+				avatar.setImageResource(resourceId);
 			} catch (NumberFormatException e) {
 				Glide.with(context)
 						.load(userAvatar)

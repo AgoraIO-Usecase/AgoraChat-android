@@ -760,9 +760,14 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
     private void addDefaultAvatar(EaseUser item,List<String> localUsers){
         if(localUsers==null) {
-            localUsers=getUserDao().loadAllUsers();
+            EmUserDao userDao = getUserDao();
+            if(userDao!=null) {
+                localUsers=userDao.loadAllUsers();
+            }else{
+                localUsers=Collections.emptyList();
+            }
         }
-        if(TextUtils.isEmpty(item.getAvatar())) {
+        if(item!=null&&TextUtils.isEmpty(item.getAvatar())) {
             if(localUsers.contains(item.getUsername())) {
                 String avatar = getUserDao().loadUserByUserId(item.getUsername()).get(0).getAvatar();
                 if(!TextUtils.isEmpty(avatar)) {

@@ -29,7 +29,7 @@ public class AvatarSelectAdapter extends EaseBaseRecyclerViewAdapter<Integer> {
             super( binding.getRoot());
             this.mBinding=binding;
             RoundedCorners roundedCorners = new RoundedCorners(UIUtils.dp2px(mContext, 5));
-            requestOptions = new RequestOptions().transform(new FitCenter(), roundedCorners).placeholder(R.drawable.avatar_1);
+            requestOptions = new RequestOptions().transform(new FitCenter(), roundedCorners).placeholder(R.drawable.agora_avatar_1);
         }
 
         @Override
@@ -37,7 +37,7 @@ public class AvatarSelectAdapter extends EaseBaseRecyclerViewAdapter<Integer> {
            Glide.with(mContext)
                     .load(item)
                     .apply(requestOptions)
-                    .error(R.drawable.avatar_1)
+                    .error(R.drawable.agora_avatar_1)
                     .into(mBinding.ivUserAvatar);
         }
     }

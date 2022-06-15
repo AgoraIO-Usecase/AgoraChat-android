@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="13dp">
+
+    <TextView
+        android:id="@+id/timestamp"
+        style="@style/chat_text_date_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ease_margin_chat_activity">
+
+        <io.agora.chat.uikit.widget.EaseImageView
+            android:id="@+id/iv_userhead"
+            style="@style/ease_row_sent_iv_userhead_style"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bubble"
+            android:layout_width="230dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/ease_margin_chat_activity"
+            android:background="@drawable/ease_chat_bubble_send_file_bg"
+            android:minWidth="30dp"
+            android:paddingStart="12dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_userhead"
+            app:layout_goneMarginEnd="@dimen/ease_chat_avatar_margin">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toRightOf="@id/iv_call"
+                app:layout_constraintTop_toTopOf="@id/iv_call"
+                tools:text="Title" />
+
+            <ImageView
+                android:id="@+id/iv_call"
+                android:layout_width="42dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/call_video_green" />
+
+            <TextView
+                android:id="@+id/tv_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/color_light_gray_666666"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_call"
+                app:layout_constraintLeft_toRightOf="@id/iv_call"
+                tools:text="subtitle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/msg_status"
+            style="@style/ease_row_sent_iv_fail_style"
+            app:layout_constraintBottom_toBottomOf="@id/bubble"
+            app:layout_constraintEnd_toStartOf="@id/bubble" />
+
+        <TextView
+            android:id="@+id/tv_ack"
+            style="@style/chat_text_send_status_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ease_msg_status_read"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bubble" />
+
+        <TextView
+            android:id="@+id/tv_delivered"
+            style="@style/chat_text_send_status_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ease_msg_status_received"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bubble" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="@dimen/ease_msg_status_icon_margin_bubble"
+            android:indeterminateDrawable="@drawable/ease_chat_loading_progress_bar"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bubble" />
+
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/ease_chat_nick_margin_left"
+            android:layout_marginBottom="2dp"
+            android:textColor="@color/ease_msg_name_color"
+            android:textSize="@dimen/ease_chat_nick_text_size"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/bubble"
+            app:layout_constraintRight_toRightOf="@id/bubble" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

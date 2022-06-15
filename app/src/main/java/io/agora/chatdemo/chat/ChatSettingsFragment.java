@@ -18,6 +18,7 @@ import io.agora.chat.Conversation;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
 import io.agora.chatdemo.chat.viewmodel.ChatSettingsViewModel;
 import io.agora.chatdemo.databinding.FragmentChatSettingsBinding;
@@ -82,7 +83,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     }
 
     private void showDialog() {
-        new SimpleDialog.Builder(mContext)
+        new SimpleDialog.Builder(((BaseActivity)mContext))
                 .setTitle(R.string.chat_settings_clear_history_warning)
                 .setOnConfirmClickListener(new SimpleDialog.OnConfirmClickListener() {
                     @Override
@@ -97,7 +98,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     @Override
     protected void initData() {
         super.initData();
-        viewModel = new ViewModelProvider(mContext).get(ChatSettingsViewModel.class);
+        viewModel = new ViewModelProvider(((BaseActivity)mContext)).get(ChatSettingsViewModel.class);
         viewModel.getSetNoPushUsersObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override

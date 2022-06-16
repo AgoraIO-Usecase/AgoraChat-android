@@ -128,7 +128,7 @@ public class EMThreadManagerRepository extends BaseEMRepository {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getThreadManager().changeChatThreadName(threadId, newThreadName, new CallBack() {
+                getThreadManager().updateChatThreadName(threadId, newThreadName, new CallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));

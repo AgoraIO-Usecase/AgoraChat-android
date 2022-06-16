@@ -42,7 +42,7 @@ class NotificationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
         @Override
         public void setData(ChatMessage msg, int position) {
             itemBinding.ivMsgDelete.setImageResource(R.drawable.contacts_notification_delete);
-            itemBinding.ivFrom.setImageResource(R.drawable.avatar_3);
+            itemBinding.ivFrom.setImageResource(R.drawable.agora_avatar_3);
 
             try {
                 String groupName=null;

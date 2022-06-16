@@ -78,6 +78,7 @@
     <string name="group_add_members">Add Members</string>
     <string name="group_invitation_members_notification">Invitation has been sent</string>
     <string name="group_contacts">Contacts</string>
+    <string name="group_chat_members">Group Chat Members</string>
     <string name="group_name">Group Name</string>
     <string name="group_description">GROUP DESCRIPTION, NOT REQUIRED</string>
     <string name="group_maximum_member">MAXIMUM MEMBER</string>
@@ -412,6 +413,21 @@
     <string name="dialog_clear_presence_title">Clear your Custom Status? </string>
 
     <string name="dialog_clear_presence_content">Clear ”%1$s”, change to %2$s. </string>
+
+    <string name="dialog_video_call">Video Call</string>
+    <string name="dialog_audio_call">Audio Call</string>
+
+    <string name="demo_activity_label_video_call">video_call</string>
+    <string name="demo_activity_label_multi_call">multi_call</string>
+
+    <string name="demo_multiply_video_select_members">Select Members</string>
+
+    <string name="demo_call_end_reason_refuse">Request declined</string>
+    <string name="demo_call_end_reason_busy">The line is busy</string>
+    <string name="demo_call_end_reason_busy_remote_no_response">No response</string>
+    <string name="demo_call_end_reason_other_device_refused">Other devices declined</string>
+    <string name="demo_call_end_reason_other_device_agreed">Other devices connected</string>
+
     <string name="thread_menu_members">Thread members</string>
     <string name="thread_menu_notifications">Thread Notifications</string>
     <string name="thread_menu_edit">Edit Thread</string>
@@ -426,5 +442,6 @@
     <string name="thread_member_title">Thread members</string>
     <string name="thread_remove_member_hint">Remove From Thread</string>
     <string name="thread_unsent_message_success">You successfully unsent a message</string>
+
 
 </resources>

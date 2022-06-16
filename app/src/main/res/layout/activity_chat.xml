@@ -14,7 +14,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ease_common_title_bar_height"
-            app:popupTheme="@style/Toolbar.PopupTheme"/>
+            app:popupTheme="@style/Toolbar.PopupTheme" />
 
         <io.agora.chatdemo.general.widget.EasePresenceView
             android:id="@+id/presence_view"
@@ -88,13 +88,14 @@
             android:id="@+id/ll_title_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_toLeftOf="@id/iv_call"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="5dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/iv_thread_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ease_thread_icon_medium"/>
@@ -108,6 +109,15 @@
                 tools:text="2"/>
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="50dp"
+            android:src="@drawable/demo_img"/>
 
         <RelativeLayout
             android:id="@+id/right_layout"

@@ -1,6 +1,7 @@
 package io.agora.chatdemo.conversation.viewmodel;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.agora.chat.ChatClient;
 import io.agora.chat.Presence;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
@@ -45,6 +47,10 @@ public class PresenceViewModel extends AndroidViewModel {
         List<String> ids = new ArrayList<>();
         if (users != null && !users.isEmpty()) {
             for (EaseUser user : users) {
+                //不能订阅自己，否则会error
+                if(TextUtils.equals(user.getUsername(), ChatClient.getInstance().getCurrentUser())) {
+                    continue;
+                }
                 ids.add(user.getUsername());
             }
             presencesObservable.setSource(presenceManagerRepository.subscribePresences(ids, expiry));

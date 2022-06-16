@@ -32,12 +32,8 @@ import io.agora.chat.uikit.conversation.adapter.EaseConversationListAdapter;
 import io.agora.chat.uikit.conversation.model.EaseConversationInfo;
 import io.agora.chat.uikit.interfaces.OnEaseChatConnectionListener;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.widget.EaseTitleBar;
-import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
-import io.agora.chatdemo.general.widget.EasePresenceView;
-import io.agora.chatdemo.general.models.PresenceData;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
@@ -49,7 +45,10 @@ import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.general.models.PresenceData;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chatdemo.general.utils.UIUtils;
+import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.general.widget.EaseSearchEditText;
 import io.agora.chatdemo.global.BottomSheetContainerFragment;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
@@ -207,6 +206,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
             }
             if (event.isContactChange()) {
                 refreshList();
+                updatePresence();
             }
         });
 

@@ -175,7 +175,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                 return;
             }
             // Not notify if message is chat thread message
-            if(message.isThread()) {
+            if(message.isChatThreadMessage()) {
                 return;
             }
             // in background, do not refresh UI, notify it in notification bar
@@ -244,7 +244,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             msgNotification.setChatType(msg.getChatType());
             msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALL, true);
             msgNotification.setStatus(ChatMessage.Status.SUCCESS);
-            msgNotification.setIsThread(msg.isThread());
+            msgNotification.setIsChatThreadMessage(msg.isChatThreadMessage());
             ChatClient.getInstance().chatManager().saveMessage(msgNotification);
         }
     }
@@ -1035,8 +1035,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
     }
 
     @Override
-    public void onThreadEvent(int event, String target, List<String> usernames) {
-        super.onThreadEvent(event, target, usernames);
+    public void onChatThreadEvent(int event, String target, List<String> usernames) {
+        super.onChatThreadEvent(event, target, usernames);
         EMLog.i(TAG, "onThreadEvent event: "+event);
     }
 

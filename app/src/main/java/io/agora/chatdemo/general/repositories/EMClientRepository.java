@@ -303,11 +303,11 @@ public class EMClientRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
-    public LiveData<Resource<Boolean>> loginByAppServer(String username, String nickname) {
+    public LiveData<Resource<Boolean>> loginByAppServer(String username, String pwd) {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                loginToAppServer(username, nickname, new ResultCallBack<LoginBean>() {
+                loginToAppServer(username, pwd, new ResultCallBack<LoginBean>() {
                     @Override
                     public void onSuccess(LoginBean value) {
                         if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
@@ -315,7 +315,7 @@ public class EMClientRepository extends BaseEMRepository{
                                 @Override
                                 public void onSuccess() {
                                     DemoHelper.getInstance().getUsersManager().setCurrentUserAgoraUid(value.getAgoraUid());
-                                    success(nickname, callBack);
+                                    success(pwd, callBack);
                                 }
 
                                 @Override
@@ -371,8 +371,8 @@ public class EMClientRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
-    private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-        encryptData(nickname);
+    private void success(String pwd, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        encryptData(pwd);
         // ** manually load all local groups and conversation
         initLocalDb();
         // get current user

@@ -230,6 +230,19 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
                 public void onSuccess(@Nullable Boolean data) {
                     Log.e("getRegisterObservable","onSuccess");
                     changeUI(true);
+                    showToast(R.string.sign_register_suc);
+                }
+
+                @Override
+                public void onLoading(@Nullable Boolean data) {
+                    super.onLoading(data);
+                    showLoading();
+                }
+
+                @Override
+                public void onHideLoading() {
+                    super.onHideLoading();
+                    dismissLoading();
                 }
 
                 @Override

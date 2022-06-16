@@ -58,13 +58,8 @@ public class GroupAddMembersFragment extends NewGroupSelectContactsFragment{
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getActivity(), getString(R.string.group_invitation_members_notification), Toast.LENGTH_SHORT).show();
-                            hide();
-                        }
-                    });
+                    showToast(R.string.group_invitation_members_notification);
+                    hide();
                 }
             });
         });

@@ -83,7 +83,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
                 public void onSuccess(Group data) {
                     showToast(R.string.group_new_success);
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
-                    sendMessage(data.getGroupId());
+                    saveMessage(data.getGroupId());
                     // Skip to chat activity
                     ChatActivity.actionStart(mContext, data.getGroupId(), EaseChatType.GROUP_CHAT);
                     hide();
@@ -184,7 +184,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
         ((ContactListAdapter) mListAdapter).setSelectedMembers(selectedMembers);
     }
 
-    private void sendMessage(String groupId){
+    private void saveMessage(String groupId){
         ChatMessage msg = ChatMessage.createSendMessage(ChatMessage.Type.TXT);
         msg.setChatType(ChatMessage.ChatType.GroupChat);
         msg.setTo(groupId);

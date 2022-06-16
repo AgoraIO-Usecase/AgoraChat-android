@@ -35,6 +35,7 @@ import io.agora.chat.MucSharedFile;
 import io.agora.chat.Presence;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.UserInfo;
+import io.agora.chat.UserInfoManager;
 import io.agora.chat.adapter.EMAChatRoomManagerListener;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.interfaces.EaseGroupListener;
@@ -43,6 +44,7 @@ import io.agora.chat.uikit.manager.EaseAtMessageHelper;
 import io.agora.chat.uikit.manager.EaseChatPresenter;
 import io.agora.chat.uikit.manager.EaseNotificationMsgManager;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -730,55 +732,27 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                     }
                 }
             }
+
+            String[] userId = new String[1];
+            userId[0] = username;
+            DemoHelper.getInstance().getUsersManager().getUserInfo(username);
+
+            ChatMessage msg = ChatMessage.createSendMessage(ChatMessage.Type.TXT);
+            msg.setChatType(ChatMessage.ChatType.Chat);
+            msg.setTo(username);
+            msg.setMsgId(UUID.randomUUID().toString());
+            msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
+            msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_INVITATION_CONTACT);
+
+            msg.addBody(new TextMessageBody(context.getString(R.string.contact_approved)));
+            msg.setStatus(ChatMessage.Status.SUCCESS);
+            // save invitation as messages
+            ChatClient.getInstance().chatManager().saveMessage(msg);
+
             Map<String, Object> ext = EaseNotificationMsgManager.getInstance().createMsgExt();
             ext.put(DemoConstant.SYSTEM_MESSAGE_FROM, username);
             ext.put(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.BEAGREED.name());
             ChatMessage message = EaseNotificationMsgManager.getInstance().createMessage(PushAndMessageHelper.getSystemMessage(ext), ext);
-
-            String[] userId = new String[1];
-            userId[0] = username;
-            ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(userId, new ValueCallBack<Map<String, UserInfo>>() {
-                @Override
-                public void onSuccess(Map<String, UserInfo> value) {
-                    UserInfo userInfo = value.get(username);
-                    EmUserEntity entity = new EmUserEntity();
-                    entity.setUsername(username);
-                    if(userInfo != null){
-                        entity.setNickname(userInfo.getNickName());
-                        entity.setEmail(userInfo.getEmail());
-                        entity.setAvatar(userInfo.getAvatarUrl());
-                        entity.setBirth(userInfo.getBirth());
-                        entity.setGender(userInfo.getGender());
-                        entity.setExt(userInfo.getExt());
-                        entity.setContact(0);
-                        entity.setSign(userInfo.getSignature());
-                    }
-                    DemoHelper.getInstance().getModel().insert(entity);
-                    DemoHelper.getInstance().updateContactList();
-
-                    ChatMessage msg = ChatMessage.createSendMessage(ChatMessage.Type.TXT);
-                    msg.setChatType(ChatMessage.ChatType.Chat);
-                    msg.setTo(username);
-                    msg.setMsgId(UUID.randomUUID().toString());
-                    msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
-                    msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_INVITATION_CONTACT);
-
-                    if (null != userInfo && TextUtils.isEmpty(userInfo.getNickname())){
-                        msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_NICKNAME,userInfo.getNickname());
-                    }
-
-                    msg.addBody(new TextMessageBody(context.getString(R.string.contact_approved)));
-                    msg.setStatus(ChatMessage.Status.SUCCESS);
-                    // save invitation as messages
-                    ChatClient.getInstance().chatManager().saveMessage(msg);
-                }
-
-                @Override
-                public void onError(int error, String errorMsg) {
-                    EMLog.e(TAG, context.getString(R.string.contact_get_userInfo_failed) +  username + "error:" + error + " errorMsg:" +errorMsg);
-                }
-            });
-
             notifyNewInviteMessage(message);
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);

@@ -175,6 +175,12 @@
             android:name=".chatthread.ChatThreadActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".chat.SearchMessageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".chat.SearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!-- Do not disturb activity -->
         <activity android:name=".me.DoNotDisturbActivity"
             android:screenOrientation="portrait"/>

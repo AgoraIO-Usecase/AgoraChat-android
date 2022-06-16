@@ -64,12 +64,14 @@ import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
+import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.group.fragments.MultiplyVideoSelectMemberContainerFragment;
 import io.agora.util.EMLog;
 
-public class ChatActivity extends BaseInitActivity implements View.OnClickListener {
+public class ChatActivity extends BaseInitActivity implements EasePresenceView.OnPresenceClickListener, View.OnClickListener{
+
     private String conversationId;
     private EaseChatType chatType;
     private ChatViewModel viewModel;
@@ -111,15 +113,16 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
         }
 
         binding.rightImage.setImageResource(R.drawable.chat_settings_more);
+        binding.toolbar.setNavigationIcon(R.drawable.ease_titlebar_back);
         if(mContext.getSupportActionBar() == null) {
-            setSupportActionBar(binding.toolbar);
-            if(getSupportActionBar() != null) {
+//            setSupportActionBar(binding.toolbar);
+//            if(getSupportActionBar() != null) {
                 // Show back icon
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 // Not show title
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
-                StatusBarCompat.setToolbarCustomColor(mContext, R.color.black);
-            }
+//                getSupportActionBar().setDisplayShowTitleEnabled(false);
+//                StatusBarCompat.setToolbarCustomColor(mContext, R.color.black);
+//            }
             binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -138,6 +141,7 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
     private void initChatFragment() {
         EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType)
                 .useHeader(false)
+                .setCustomAdapter(new CustomMessageAdapter())
                 .setEmptyLayout(R.layout.ease_layout_no_data_show_nothing)
                 .setOnChatExtendMenuItemClickListener(new OnChatExtendMenuItemClickListener() {
                     @Override
@@ -274,7 +278,6 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
                     }
                 })
                 .hideSenderAvatar(true)
-                .setCustomAdapter(new CustomMessageAdapter())
                 .sendMessageByOriginalImage(true)
                 .build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
@@ -283,6 +286,7 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
     @Override
     protected void initListener() {
         super.initListener();
+        binding.presenceView.setOnPresenceClickListener(this);
         binding.rightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -490,6 +494,10 @@ public class ChatActivity extends BaseInitActivity implements View.OnClickListen
     }
 
     @Override
+    public void onPresenceClick(View v) {
+        ContactDetailActivity.actionStart(mContext, conversationId, true);
+    }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_audio_call:

@@ -13,18 +13,28 @@ import io.agora.chatdemo.general.repositories.EMClientRepository;
 public class SignViewModel extends AndroidViewModel {
     private EMClientRepository repository;
     private SingleSourceLiveData<Resource<Boolean>> loginObservable;
+    private SingleSourceLiveData<Resource<Boolean>> registerObservable;
 
     public SignViewModel(@NonNull Application application) {
         super(application);
         repository = new EMClientRepository();
         loginObservable = new SingleSourceLiveData<>();
+        registerObservable = new SingleSourceLiveData<>();
     }
 
     public LiveData<Resource<Boolean>> getLoginObservable() {
         return loginObservable;
     }
+
+    public LiveData<Resource<Boolean>> getRegisterObservable() {
+        return registerObservable;
+    }
     
     public void login(String username, String nickname) {
         loginObservable.setSource(repository.loginByAppServer(username, nickname));
+    }
+
+    public void register(String username, String pwd){
+        registerObservable.setSource(repository.registerByAppServer(username, pwd));
     }
 }

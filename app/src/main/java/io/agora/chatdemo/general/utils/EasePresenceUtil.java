@@ -3,12 +3,14 @@ package io.agora.chatdemo.general.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.DrawableRes;
 
 import java.util.Map;
 
 import io.agora.chat.Presence;
+import io.agora.chat.uikit.utils.EaseDateUtils;
 import io.agora.chatdemo.general.models.PresenceData;
 
 public class EasePresenceUtil {
@@ -27,7 +29,7 @@ public class EasePresenceUtil {
             if (isOnline) {
                 String ext = presence.getExt();
                 if (TextUtils.isEmpty(ext)||TextUtils.equals(ext, context.getString(PresenceData.ONLINE.getPresence()))) {
-                    return context.getString(PresenceData.ONLINE.getPresence());
+                    return context.getString(PresenceData.ONLINE.getPresence()) +"  "+ EaseDateUtils.getPresenceTimestampString(presence.getLatestTime());
                 } else if (TextUtils.equals(ext, context.getString(PresenceData.BUSY.getPresence()))) {
                     return context.getString(PresenceData.BUSY.getPresence());
                 } else if (TextUtils.equals(ext, context.getString(PresenceData.DO_NOT_DISTURB.getPresence()))) {

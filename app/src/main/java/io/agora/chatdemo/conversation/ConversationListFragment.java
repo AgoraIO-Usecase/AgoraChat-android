@@ -51,7 +51,9 @@ import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.general.widget.EaseSearchEditText;
 import io.agora.chatdemo.global.BottomSheetContainerFragment;
+import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.me.CustomPresenceActivity;
+import io.agora.util.EMLog;
 
 public class ConversationListFragment extends EaseConversationListFragment implements EasePresenceView.OnPresenceClickListener, View.OnClickListener {
 
@@ -113,7 +115,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         if(presenceView != null) {
             presenceView.setVisibility(View.VISIBLE);
             presenceView.setPresenceTextViewArrowVisible(true);
-            presenceView.setNameTextViewVisibility(View.GONE);
+            presenceView.setNameTextViewVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) presenceView.getLayoutParams();
             params.setMargins(UIUtils.dp2px(mContext, 16), 0, 0, 0);
             presenceView.setLayoutParams(params);

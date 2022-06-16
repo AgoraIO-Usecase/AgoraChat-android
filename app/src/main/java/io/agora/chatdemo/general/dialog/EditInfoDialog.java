@@ -1,13 +1,18 @@
 package io.agora.chatdemo.general.dialog;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,6 +21,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -26,13 +32,15 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.base.BaseDialogFragment;
 
-public class EditInfoDialog extends BaseDialogFragment implements View.OnClickListener {
+public class EditInfoDialog extends BaseDialogFragment implements View.OnClickListener, TextWatcher {
     public TextView mTvDialogTitle;
     public TextView mBtnDialogCancel;
     public TextView mBtnDialogConfirm;
     public EditText mEtDialogContent;
     public EditInfoDialog.OnConfirmClickListener mOnConfirmClickListener;
     public EditInfoDialog.onCancelClickListener mOnCancelClickListener;
+//    public onTextChangeListener onTextChangeListener;
+    public int confirmColor = -1;
 
     public String title;
     public String content;
@@ -53,6 +61,9 @@ public class EditInfoDialog extends BaseDialogFragment implements View.OnClickLi
             lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             lp.gravity = Gravity.BOTTOM;
             dialogWindow.setAttributes(lp);
+
+            dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+                    |WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,7 +127,7 @@ public class EditInfoDialog extends BaseDialogFragment implements View.OnClickLi
                 mEtDialogContent.setText(content);
                 mEtDialogContent.setSelection(mEtDialogContent.getText().length(), mEtDialogContent.getText().length());
             }
-            int confirmColor = bundle.getInt("confirm_color", -1);
+            confirmColor = bundle.getInt("confirm_color", -1);
             if (confirmColor != -1) {
                 mBtnDialogConfirm.setTextColor(confirmColor);
             }
@@ -147,6 +158,7 @@ public class EditInfoDialog extends BaseDialogFragment implements View.OnClickLi
     public void initListener() {
         mBtnDialogCancel.setOnClickListener(this);
         mBtnDialogConfirm.setOnClickListener(this);
+        mEtDialogContent.addTextChangedListener(this);
     }
 
     public void initData() {
@@ -183,6 +195,33 @@ public class EditInfoDialog extends BaseDialogFragment implements View.OnClickLi
         dismiss();
         if (mOnConfirmClickListener != null) {
             mOnConfirmClickListener.onConfirmClick(v, mEtDialogContent.getText().toString());
+        }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s.length() > 0 ){
+            if (confirmColor == -1){
+                mBtnDialogConfirm.setTextColor(getContext().getResources().getColor(R.color.dialog_color_normal));
+            }else {
+                mBtnDialogConfirm.setTextColor(confirmColor);
+            }
+        }else {
+            if (confirmColor == -1){
+                mBtnDialogConfirm.setTextColor(getContext().getResources().getColor(R.color.dialog_color_btn_bg_select));
+            }else {
+                mBtnDialogConfirm.setTextColor(confirmColor);
+            }
         }
     }
 

@@ -39,6 +39,7 @@ import io.agora.chat.Conversation;
 import io.agora.chat.GroupManager;
 import io.agora.chat.Presence;
 import io.agora.chat.PushManager;
+import io.agora.chat.adapter.EMAREncryptUtils;
 import io.agora.chat.callkit.EaseCallKit;
 import io.agora.chat.callkit.general.EaseCallKitConfig;
 import io.agora.chat.callkit.listener.EaseCallKitListener;
@@ -86,10 +87,10 @@ public class DemoHelper {
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
     private UsersManager usersManager;
+    private EMAREncryptUtils encryptUtils;
     private EaseCallKitListener callKitListener;
     private Context mContext;
     private ConcurrentHashMap<String, Presence> mPresences = new ConcurrentHashMap<>();
-
 
     private DemoHelper() {}
 
@@ -137,6 +138,17 @@ public class DemoHelper {
 
     public ConcurrentHashMap<String, Presence> getPresences() {
         return ((GlobalEventsMonitor)EaseUIKit.getInstance().getChatPresenter()).getPresences();
+    }
+
+    public EMAREncryptUtils getEncryptUtils(){
+        if(encryptUtils == null) {
+            synchronized (DemoHelper.class) {
+                if(encryptUtils == null) {
+                    encryptUtils = new EMAREncryptUtils();
+                }
+            }
+        }
+        return encryptUtils;
     }
 
     /**
@@ -356,9 +368,9 @@ public class DemoHelper {
             Context context = DemoApplication.getInstance();
             Resources resources = context.getResources();
             if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_image_file_suffix))) {
-                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_img);
             } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_video_file_suffix))) {
-                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_video);
             } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_audio_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
             } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_word_file_suffix))) {

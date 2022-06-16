@@ -31,14 +31,10 @@ android {
         // See:
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
         buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a41.easemob.com\"")
-        //ebs
-//        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a1.easemob.com\"")
-        //vip6
-//        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a1-vip6.easemob.com\"")
         buildConfigField ("String", "APP_SERVER_URL", "\"/app/chat/user/login\"")
+        buildConfigField ("String", "APP_SERVER_REGISTER", "\"/app/chat/user/register\"")
 
         buildConfigField ("String", "Agora_AppId", properties.getProperty("AGORA_APPID", "******"))
-
         manifestPlaceholders = [AGORA_CHAT_APPKEY: properties.getProperty("AGORA_CHAT_APPKEY", "******")]
     }
 
@@ -124,4 +120,19 @@ dependencies {
 //    implementation project(path: ':chat-callkit')
 
 }
+
+//afterEvaluate {
+//    File file = new File('outputs')
+//    delete(file)
+//    getTasks().findByName("assembleDebug").finalizedBy(copyApp)
+//}
+//
+//task copyApp(type: Copy) {
+//    FileTree tree = fileTree('build/outputs/apk') {
+//        include '**/*.apk'
+//    }
+//    from tree
+//    File file = new File('outputs')
+//    into file
+//}
 

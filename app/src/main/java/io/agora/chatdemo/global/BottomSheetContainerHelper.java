@@ -8,4 +8,5 @@ public interface BottomSheetContainerHelper {
     void startFragment(@NonNull Fragment fragment, @Nullable String tag);
     void hide();
     void back();
+    void changeNextColor(boolean isChange);
 }

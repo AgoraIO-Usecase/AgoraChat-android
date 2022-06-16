@@ -54,7 +54,8 @@ public class AboutActivity extends BaseInitActivity implements EaseTitleBar.OnBa
                 startToWeb("https://www.agora.io/cn/v2?utm_source=baidu&utm_medium=cpc&utm_campaign=brand");
                 break;
             case  R.id.item_more:
-                startToWeb("https://www.agora.io/cn/v2?utm_source=baidu&utm_medium=cpc&utm_campaign=brand");
+//                startToWeb("https://www.agora.io/cn/v2?utm_source=baidu&utm_medium=cpc&utm_campaign=brand");
+                startToWeb("https://www.agora.io/en/");
                 break;
         }
     }

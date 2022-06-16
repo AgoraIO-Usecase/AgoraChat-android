@@ -8,6 +8,8 @@
 
     <RelativeLayout
         android:id="@+id/image_layout"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
         android:layout_width="55dp"
         android:layout_height="55dp">
 
@@ -26,7 +28,7 @@
         android:layout_height="wrap_content"
         android:gravity="start"
         android:textColor="#000000"
-        android:textSize="15sp"
+        android:textSize="18sp"
         tools:text="photo" />
 
 </LinearLayout>

@@ -21,6 +21,7 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.databinding.ItemNotificationMsgBinding;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
+import io.agora.chatdemo.group.GroupHelper;
 
 class NotificationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
 
@@ -46,7 +47,7 @@ class NotificationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
             try {
                 String groupName=null;
                 try {
-                    groupName = msg.getStringAttribute(SYSTEM_MESSAGE_FROM);
+                    groupName = GroupHelper.getGroupName(msg.getStringAttribute(SYSTEM_MESSAGE_FROM));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

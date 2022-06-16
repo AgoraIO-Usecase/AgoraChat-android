@@ -296,6 +296,7 @@ public class EMClientRepository extends BaseEMRepository{
                     @Override
                     public void onError(int error, String errorMsg) {
                         callBack.onError(error, getErrorMsg(error, errorMsg));
+                        EMLog.e("renewAgoraChatToken error : ", error + " " +errorMsg);
                     }
                 });
             }
@@ -387,6 +388,7 @@ public class EMClientRepository extends BaseEMRepository{
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {
+                    EMLog.e("loginToAppServer success : ", responseInfo);
                     if (responseInfo != null && responseInfo.length() > 0) {
                         JSONObject object = new JSONObject(responseInfo);
                         String token = object.getString("accessToken");
@@ -400,7 +402,12 @@ public class EMClientRepository extends BaseEMRepository{
                         callBack.onError(code, responseInfo);
                     }
                 } else {
-                    callBack.onError(code, responseInfo);
+                    if (responseInfo != null && responseInfo.length() > 0) {
+                        JSONObject object = new JSONObject(responseInfo);
+                        callBack.onError(code, object.getString("errorInfo"));
+                    }else {
+                        callBack.onError(code, responseInfo);
+                    }
                 }
             } catch (Exception e) {
                 //e.printStackTrace();
@@ -447,7 +454,12 @@ public class EMClientRepository extends BaseEMRepository{
                     if (code == 200) {
                         callBack.onSuccess();
                     } else {
-                        callBack.onError(code, responseInfo);
+                        if (responseInfo != null && responseInfo.length() > 0) {
+                            JSONObject object = new JSONObject(responseInfo);
+                            callBack.onError(code, object.getString("errorInfo"));
+                        }else {
+                            callBack.onError(code, responseInfo);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

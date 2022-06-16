@@ -76,6 +76,7 @@
     <string name="group_applied">Applied</string>
     <string name="group_add_contacts">Add Contacts</string>
     <string name="group_add_members">Add Members</string>
+    <string name="group_invitation_members_notification">Invitation has been sent</string>
     <string name="group_contacts">Contacts</string>
     <string name="group_name">Group Name</string>
     <string name="group_description">GROUP DESCRIPTION, NOT REQUIRED</string>
@@ -407,7 +408,7 @@
     <string name="alert_during_typing">Entering &#8230;</string>
     <string name="network_disconnected">Network Disconnected</string>
 
-    <string name="dialog_change_presence_title">status </string>
+    <string name="dialog_change_presence_title">Status</string>
     <string name="dialog_clear_presence_title">Clear your Custom Status? </string>
 
     <string name="dialog_clear_presence_content">Clear ”%1$s”, change to %2$s. </string>

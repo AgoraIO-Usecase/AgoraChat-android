@@ -109,6 +109,12 @@ public abstract class BaseContainChildBottomSheetFragment extends BaseBottomShee
         }
     }
 
+    public void changeNextColor(boolean change){
+        baseBinding.titlebar.getRightText().setTextColor(ContextCompat.getColor(requireContext(), change ? R.color.group_blue_154dfe : R.color.color_light_gray_999999));
+        baseBinding.titlebar.getRightText().setEnabled(change);
+        baseBinding.titlebar.getRightText().setClickable(change);
+    }
+
     /**
      * Provider child fragment, should not be null.
      * @return

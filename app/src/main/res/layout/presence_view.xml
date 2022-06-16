@@ -19,6 +19,8 @@
         android:id="@+id/iv_presence"
         android:layout_width="15dp"
         android:layout_height="15dp"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_user_avatar"
         app:layout_constraintRight_toRightOf="@id/iv_user_avatar"
         tools:src="@drawable/ease_presence_online"

@@ -30,8 +30,9 @@ android {
         // If you use your own Agora Chat appkey, you should deploy your own App Server.
         // See:
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
-        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a41.easemob.com\"")
+        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a1-test.easemob.com\"")
         buildConfigField ("String", "APP_SERVER_URL", "\"/app/chat/user/login\"")
+        buildConfigField ("String", "APP_SERVER_REGISTER", "\"/app/chat/user/register\"")
 
         manifestPlaceholders = [AGORA_CHAT_APPKEY: properties.getProperty("AGORA_CHAT_APPKEY", "******")]
     }
@@ -110,8 +111,8 @@ dependencies {
     implementation  'com.scwang.smart:refresh-header-classics:2.0.3'
 
     // Agora Chat Uikit
-    implementation 'io.agora.rtc:chat-uikit:1.0.5'
-    //implementation project(path: ':chat-uikit')
+//    implementation 'io.agora.rtc:chat-uikit:1.0.5'
+    implementation project(path: ':chat-uikit')
 }
 
 task copyApp(type: Copy) {

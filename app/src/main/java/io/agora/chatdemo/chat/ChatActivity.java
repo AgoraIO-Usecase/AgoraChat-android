@@ -53,12 +53,13 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
+import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.util.EMLog;
 
-public class ChatActivity extends BaseInitActivity {
+public class ChatActivity extends BaseInitActivity implements EasePresenceView.OnPresenceClickListener{
     private String conversationId;
     private EaseChatType chatType;
     private ChatViewModel viewModel;
@@ -100,15 +101,16 @@ public class ChatActivity extends BaseInitActivity {
 
 
         binding.rightImage.setImageResource(R.drawable.chat_settings_more);
+        binding.toolbar.setNavigationIcon(R.drawable.ease_titlebar_back);
         if(mContext.getSupportActionBar() == null) {
-            setSupportActionBar(binding.toolbar);
-            if(getSupportActionBar() != null) {
+//            setSupportActionBar(binding.toolbar);
+//            if(getSupportActionBar() != null) {
                 // Show back icon
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 // Not show title
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
-                StatusBarCompat.setToolbarCustomColor(mContext, R.color.black);
-            }
+//                getSupportActionBar().setDisplayShowTitleEnabled(false);
+//                StatusBarCompat.setToolbarCustomColor(mContext, R.color.black);
+//            }
             binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -272,6 +274,7 @@ public class ChatActivity extends BaseInitActivity {
     @Override
     protected void initListener() {
         super.initListener();
+        binding.presenceView.setOnPresenceClickListener(this);
         binding.rightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -453,5 +456,10 @@ public class ChatActivity extends BaseInitActivity {
             binding.ivIcon.setImageResource(R.drawable.icon);
         }
         binding.title.setText(title);
+    }
+
+    @Override
+    public void onPresenceClick(View v) {
+        ContactDetailActivity.actionStart(mContext,conversationId,true);
     }
 }

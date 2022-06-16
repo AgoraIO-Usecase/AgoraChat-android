@@ -171,7 +171,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
 
     private void loginToAgoraChat() {
         setErrorHint("");
-        String agoraID = et_agora_id.getText().toString().trim();
+        String agoraID = et_agora_id.getText().toString().trim().toLowerCase();
         if(TextUtils.isEmpty(agoraID)) {
             setErrorHint(getString(R.string.sign_error_not_id));
             return;

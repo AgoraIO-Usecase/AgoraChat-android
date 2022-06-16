@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import io.agora.ChatRoomChangeListener;
 import io.agora.ChatThreadChangeListener;
+import io.agora.ConnectionListener;
 import io.agora.ContactListener;
 import io.agora.ConversationListener;
 import io.agora.Error;
@@ -81,7 +82,10 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         initHandler(appContext.getMainLooper());
         messageChangeLiveData = LiveDataBus.get();
         //Add network connection status monitoring
-        EaseUIKit.getInstance().setOnEaseChatConnectionListener(new ChatConnectionListener());
+//        EaseUIKit.getInstance().setOnEaseChatConnectionListener(new ChatConnectionListener());
+
+        ChatClient.getInstance().addConnectionListener(connectionListener);
+
         //Add group change listener
         DemoHelper.getInstance().getGroupManager().addGroupChangeListener(new ChatGroupListener());
         //Add contact listener
@@ -259,8 +263,40 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         }
     }
 
-    private class ChatConnectionListener implements OnEaseChatConnectionListener {
+//    private class ChatConnectionListener implements OnEaseChatConnectionListener {
+//
+//        @Override
+//        public void onConnected() {
+//            EMLog.i(TAG, "onConnected");
+//            DemoHelper.getInstance().getUsersManager().initUserInfo();
+//        }
+//
+//        @Override
+//        public void onDisconnect(int error) {
+//            EMLog.i(TAG, "onDisconnected ="+error);
+//        }
+//
+//        @Override
+//        public void onAccountLogout(int error) {
+//            EMLog.i(TAG, "onAccountLogout ="+error);
+//            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(error), EaseEvent.TYPE.ACCOUNT));
+//        }
+//
+//        @Override
+//        public void onTokenExpired() {
+//            EMLog.i(TAG, "onTokenExpired");
+//            int tokenExpired = Error.TOKEN_EXPIRED;
+//            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(tokenExpired), EaseEvent.TYPE.ACCOUNT));
+//        }
+//
+//        @Override
+//        public void onTokenWillExpire() {
+//            EMLog.e("onTokenWillExpire", "GlobalEvent");
+//            new EMClientRepository().renewAgoraChatToken();
+//        }
+//    }
 
+    private ConnectionListener connectionListener = new ConnectionListener() {
         @Override
         public void onConnected() {
             EMLog.i(TAG, "onConnected");
@@ -268,29 +304,30 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         }
 
         @Override
-        public void onDisconnect(int error) {
+        public void onDisconnected(int error) {
             EMLog.i(TAG, "onDisconnected ="+error);
-        }
+            if (error == Error.USER_REMOVED
+                    || error == Error.USER_LOGIN_ANOTHER_DEVICE
+                    || error == Error.SERVER_SERVICE_RESTRICTED
+                    || error == Error.USER_KICKED_BY_CHANGE_PASSWORD
+                    || error == Error.USER_KICKED_BY_OTHER_DEVICE) {
 
-        @Override
-        public void onAccountLogout(int error) {
-            EMLog.i(TAG, "onAccountLogout ="+error);
-            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(error), EaseEvent.TYPE.ACCOUNT));
+                LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(error), EaseEvent.TYPE.ACCOUNT));
+            }
         }
 
         @Override
         public void onTokenExpired() {
-            EMLog.i(TAG, "onTokenExpired");
             int tokenExpired = Error.TOKEN_EXPIRED;
             LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(tokenExpired), EaseEvent.TYPE.ACCOUNT));
         }
 
         @Override
         public void onTokenWillExpire() {
-            EMLog.i(TAG, "onTokenExpired");
             new EMClientRepository().renewAgoraChatToken();
         }
-    }
+    };
+
 
     private class ChatGroupListener extends EaseGroupListener {
 
@@ -903,6 +940,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                 }
                 msg.setTo(groupId);
                 msg.setMsgId(UUID.randomUUID().toString());
+//                msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
+//                msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_GROUP_INVITE_ACCEPT);
                 msg.setAttribute(DemoConstant.EM_NOTIFICATION_TYPE, true);
                 msg.addBody(new TextMessageBody(msg.getFrom() + " " +st3));
                 msg.setStatus(ChatMessage.Status.SUCCESS);

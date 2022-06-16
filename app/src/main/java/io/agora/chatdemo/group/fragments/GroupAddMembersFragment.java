@@ -1,6 +1,7 @@
 package io.agora.chatdemo.group.fragments;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -57,7 +58,13 @@ public class GroupAddMembersFragment extends NewGroupSelectContactsFragment{
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
-
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(), getString(R.string.group_invitation_members_notification), Toast.LENGTH_SHORT).show();
+                            hide();
+                        }
+                    });
                 }
             });
         });
@@ -76,6 +83,6 @@ public class GroupAddMembersFragment extends NewGroupSelectContactsFragment{
         }
         viewModel.addGroupMembers(GroupHelper.isOwner(group), groupId, checkedList);
         LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
-        return false;
+        return true;
     }
 }

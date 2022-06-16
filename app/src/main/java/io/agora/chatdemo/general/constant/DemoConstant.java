@@ -129,6 +129,7 @@ public interface DemoConstant extends EaseConstant {
 
     String SYSTEM_ADD_CONTACT = "system_add_contact";
     String SYSTEM_INVITATION_CONTACT = "system_invitation_contact";
+    String SYSTEM_GROUP_INVITE_ACCEPT = "system_group_invite_accept";
 
     String SYSTEM_NOTIFICATION_NICKNAME = "system_notification_nickname";
 

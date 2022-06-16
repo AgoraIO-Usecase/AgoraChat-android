@@ -52,6 +52,8 @@ public class ChatRowSystemNotification extends EaseChatRowText {
             tv_chatcontent.setText(getStrAfter(0,3));
         }else if (TextUtils.equals(message.getStringAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE,""),DemoConstant.SYSTEM_JOINED_GROUP)){
             tv_chatcontent.setText(getStrAfter(0,3));
+        }else if (TextUtils.equals(message.getStringAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE,""),DemoConstant.SYSTEM_JOINED_GROUP)){
+            tv_chatcontent.setText(getStrAfter(0,message.getFrom().length()));
         }
     }
 

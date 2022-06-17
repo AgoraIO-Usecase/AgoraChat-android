@@ -368,9 +368,9 @@ public class DemoHelper {
             Context context = DemoApplication.getInstance();
             Resources resources = context.getResources();
             if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_image_file_suffix))) {
-                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_img);
             } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_video_file_suffix))) {
-                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
+                drawable = ContextCompat.getDrawable(context, R.drawable.file_type_video);
             } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_audio_file_suffix))) {
                 drawable = ContextCompat.getDrawable(context, R.drawable.file_type_voice);
             } else if (EaseCompat.checkSuffix(filename, resources.getStringArray(io.agora.chat.uikit.R.array.ease_word_file_suffix))) {

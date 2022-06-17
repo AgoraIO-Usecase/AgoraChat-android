@@ -17,9 +17,10 @@
     <string name="sign_login">Log In</string>
     <string name="sign_up">Sign Up</string>
     <string name="Sign_register">Register</string>
+    <string name="sign_register_suc">Register Successful</string>
     <string name="sign_error_illegal_character">Latin letters and numbers only.</string>
     <string name="sign_error_not_id">Please enter an AgoraID.</string>
-    <string name="sign_error_not_nickname">Please enter a nickname.</string>
+    <string name="sign_error_not_nickname">Please enter a Password.</string>
     <string name="sign_check_pwd">The two passwords are inconsistent</string>
     <string name="sign_aes">0000000110000000</string>
     <string name="sign_gcm_key">server_key_gcm</string>

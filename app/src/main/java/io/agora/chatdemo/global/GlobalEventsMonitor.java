@@ -265,39 +265,6 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         }
     }
 
-//    private class ChatConnectionListener implements OnEaseChatConnectionListener {
-//
-//        @Override
-//        public void onConnected() {
-//            EMLog.i(TAG, "onConnected");
-//            DemoHelper.getInstance().getUsersManager().initUserInfo();
-//        }
-//
-//        @Override
-//        public void onDisconnect(int error) {
-//            EMLog.i(TAG, "onDisconnected ="+error);
-//        }
-//
-//        @Override
-//        public void onAccountLogout(int error) {
-//            EMLog.i(TAG, "onAccountLogout ="+error);
-//            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(error), EaseEvent.TYPE.ACCOUNT));
-//        }
-//
-//        @Override
-//        public void onTokenExpired() {
-//            EMLog.i(TAG, "onTokenExpired");
-//            int tokenExpired = Error.TOKEN_EXPIRED;
-//            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(tokenExpired), EaseEvent.TYPE.ACCOUNT));
-//        }
-//
-//        @Override
-//        public void onTokenWillExpire() {
-//            EMLog.e("onTokenWillExpire", "GlobalEvent");
-//            new EMClientRepository().renewAgoraChatToken();
-//        }
-//    }
-
     private ConnectionListener connectionListener = new ConnectionListener() {
         @Override
         public void onConnected() {
@@ -893,13 +860,13 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             case GROUP_APPLY_DECLINE:
                 removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
                 // TODO: person, reason from ext
-                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE);
+//                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE);
 
 //                showToast("GROUP_APPLY_DECLINE");
                 break;
             case GROUP_INVITE:
                 // TODO: person, reason from ext
-                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE);
+//                saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE);
 
 //                showToast("GROUP_INVITE");
                 break;

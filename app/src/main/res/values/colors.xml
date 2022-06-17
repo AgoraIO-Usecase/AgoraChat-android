@@ -65,4 +65,8 @@
 
     <color name="layout_empty_content">#979797</color>
     <color name="list_delete_bg">#FF14CC</color>
+    <color name="report_dialog_item_bg">#CCFFFFFF</color>
+    <color name="report_line">#E6E6E6</color>
+    <color name="report_content">#979797</color>
+    <color name="report_username">#999999</color>
 </resources>

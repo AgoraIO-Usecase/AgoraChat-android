@@ -12,11 +12,18 @@
 
     <string name="please_check">Key verification error! Please check key settings in the AndroidManifest.xml file.</string>
     <string name="sign_agora_id">AgoraID</string>
-    <string name="sign_nickname">Nickname</string>
+    <string name="sign_password">Password</string>
+    <string name="sign_confirm_pwd">Confirm Password</string>
     <string name="sign_login">Log In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="Sign_register">Register</string>
+    <string name="sign_register_suc">Register Successful</string>
     <string name="sign_error_illegal_character">Latin letters and numbers only.</string>
     <string name="sign_error_not_id">Please enter an AgoraID.</string>
-    <string name="sign_error_not_nickname">Please enter a nickname.</string>
+    <string name="sign_error_not_nickname">Please enter a Password.</string>
+    <string name="sign_check_pwd">The two passwords are inconsistent</string>
+    <string name="sign_aes">0000000110000000</string>
+    <string name="sign_gcm_key">server_key_gcm</string>
 
     <string name="error_network_error">Network unavailable</string>
     <string name="error_not_login">You haven\'t logged in</string>
@@ -70,13 +77,16 @@
     <string name="group_applied">Applied</string>
     <string name="group_add_contacts">Add Contacts</string>
     <string name="group_add_members">Add Members</string>
+    <string name="group_invitation_members_notification">Invitation has been sent</string>
     <string name="group_contacts">Contacts</string>
+    <string name="group_chat_members">Group Chat Members</string>
     <string name="group_name">Group Name</string>
     <string name="group_description">GROUP DESCRIPTION, NOT REQUIRED</string>
     <string name="group_maximum_member">MAXIMUM MEMBER</string>
     <string name="group_set_to_a_public_group">Set to a Public Group</string>
     <string name="group_no_more_than">No More Than 3000</string>
     <string name="group_allow_members_to_invite">Allow Members to Invite</string>
+    <string name="group_joined">You joined the group</string>
 
     <string name="public_group_information">Public group info</string>
     <string name="group_owner">Group owner</string>
@@ -163,6 +173,7 @@
     <string name="group_listener_onUserRemoved">The group administrator removed you from &quot;%1$s&quot;</string>
     <string name="group_listener_onGroupDestroyed">The group &quot;%1$s&quot; has been disbanded</string>
     <string name="group_listener_onAutoAcceptInvitationFromGroup">You\'ve joined &quot;%1$s&quot;</string>
+    <string name="group_listener_onGroupCreate">You have created a group</string>
     <string name="group_listener_onMuteListAdded">%1$s has been muted by the group owner</string>
     <string name="group_listener_onMuteListRemoved">%1$s has been unmuted by the group owner</string>
     <string name="group_listener_onWhiteListAdded">%1$s has been added to the allowlist by the group owner</string>
@@ -265,8 +276,8 @@
 
     <string name="group_members_tab_title_all">All</string>
     <string name="group_members_tab_title_admin">Admin</string>
-    <string name="group_members_tab_title_mute">Mute</string>
-    <string name="group_members_tab_title_block">Block</string>
+    <string name="group_members_tab_title_mute">Muted</string>
+    <string name="group_members_tab_title_block">Blocked</string>
     <string name="group_members_tab_title_white">White</string>
     <string name="group_members_title">Members</string>
     <string name="group_members_dialog_menu_make_admin">Make Admin</string>
@@ -362,6 +373,8 @@
     <string name="contact_move_out_blacklist_success">User removed from blocklist</string>
     <string name="contact_unblock">Unblock</string>
     <string name="contact_unblock_tip">Remove this user from blocklist?</string>
+    <string name="contact_agreed_request">You agreed the friend request</string>
+    <string name="contact_approved">You friend request has been approved</string>
 
     <string name="about_title">About</string>
     <string name="about_sdk_version">SDK Version</string>
@@ -397,10 +410,25 @@
     <string name="alert_during_typing">Entering &#8230;</string>
     <string name="network_disconnected">Network Disconnected</string>
 
-    <string name="dialog_change_presence_title">status </string>
+    <string name="dialog_change_presence_title">Status</string>
     <string name="dialog_clear_presence_title">Clear your Custom Status? </string>
 
     <string name="dialog_clear_presence_content">Clear ”%1$s”, change to %2$s. </string>
+
+    <string name="dialog_video_call">Video Call</string>
+    <string name="dialog_audio_call">Audio Call</string>
+
+    <string name="demo_activity_label_video_call">video_call</string>
+    <string name="demo_activity_label_multi_call">multi_call</string>
+
+    <string name="demo_multiply_video_select_members">Select Members</string>
+
+    <string name="demo_call_end_reason_refuse">Request declined</string>
+    <string name="demo_call_end_reason_busy">The line is busy</string>
+    <string name="demo_call_end_reason_busy_remote_no_response">No response</string>
+    <string name="demo_call_end_reason_other_device_refused">Other devices declined</string>
+    <string name="demo_call_end_reason_other_device_agreed">Other devices connected</string>
+
     <string name="thread_menu_members">Thread members</string>
     <string name="thread_menu_notifications">Thread Notifications</string>
     <string name="thread_menu_edit">Edit Thread</string>
@@ -415,5 +443,6 @@
     <string name="thread_member_title">Thread members</string>
     <string name="thread_remove_member_hint">Remove From Thread</string>
     <string name="thread_unsent_message_success">You successfully unsent a message</string>
+
 
 </resources>

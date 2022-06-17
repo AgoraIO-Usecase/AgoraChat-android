@@ -2,6 +2,7 @@ package io.agora.chatdemo.group.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import io.agora.Error;
 import io.agora.chat.Group;
 import io.agora.chat.GroupInfo;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
+import io.agora.chatdemo.chat.ChatActivity;
 import io.agora.chatdemo.databinding.FragmentPublicGroupDetailBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -73,6 +77,13 @@ public class PublicGroupDetailFragment extends BaseInitFragment implements Botto
                 public void onHideLoading() {
                     super.onHideLoading();
                     dismissLoading();
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    if (code == Error.GROUP_ALREADY_JOINED)
+                    ChatActivity.actionStart(mContext, groupId, EaseChatType.GROUP_CHAT);
                 }
             });
         });

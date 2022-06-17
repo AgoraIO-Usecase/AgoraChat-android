@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/margin_15"
+    android:paddingRight="@dimen/margin_15"
+    android:paddingBottom="33dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_white_corner_14"
+        android:divider="@drawable/shape_divider_gray"
+        android:dividerPadding="1dp"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+
+        <LinearLayout
+            android:id="@+id/ll_audio_call"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/shape_white_corner_14"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                android:drawableLeft="@drawable/img_1"
+                android:drawablePadding="@dimen/presence_drawable_padding"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dialog_drawable_padding"
+                android:text="@string/dialog_audio_call"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big_18" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_video_call"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/shape_white_corner_14"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                android:drawableLeft="@drawable/img_2"
+                android:drawablePadding="@dimen/presence_drawable_padding"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dialog_drawable_padding"
+                android:text="@string/dialog_video_call"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big_18" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/shape_white_corner_14"
+        android:gravity="center"
+        android:text="@string/ease_cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/group_blue_154dfe"
+        android:textSize="@dimen/text_size_big_18" />
+
+
+</LinearLayout>

@@ -2,6 +2,8 @@ package io.agora.chatdemo.general.repositories;
 
 import static io.agora.cloud.HttpClientManager.Method_POST;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Cipher;
 import io.agora.CallBack;
 import io.agora.Error;
 import io.agora.chat.ChatClient;
@@ -22,6 +25,7 @@ import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
+import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.DemoCallBack;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -278,7 +282,7 @@ public class EMClientRepository extends BaseEMRepository{
         return new NetworkOnlyResource<String>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
-                loginToAppServer(ChatClient.getInstance().getCurrentUser(), "nickname", new ResultCallBack<LoginBean>() {
+                loginToAppServer(ChatClient.getInstance().getCurrentUser(), decryptData(), new ResultCallBack<LoginBean>() {
                     @Override
                     public void onSuccess(LoginBean value) {
                         if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
@@ -292,24 +296,26 @@ public class EMClientRepository extends BaseEMRepository{
                     @Override
                     public void onError(int error, String errorMsg) {
                         callBack.onError(error, getErrorMsg(error, errorMsg));
+                        EMLog.e("renewAgoraChatToken error : ", error + " " +errorMsg);
                     }
                 });
             }
         }.asLiveData();
     }
 
-    public LiveData<Resource<Boolean>> loginByAppServer(String username, String nickname) {
+    public LiveData<Resource<Boolean>> loginByAppServer(String username, String pwd) {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                loginToAppServer(username, nickname, new ResultCallBack<LoginBean>() {
+                loginToAppServer(username, pwd, new ResultCallBack<LoginBean>() {
                     @Override
                     public void onSuccess(LoginBean value) {
                         if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
                             ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
                                 @Override
                                 public void onSuccess() {
-                                    success(nickname, callBack);
+                                    DemoHelper.getInstance().getUsersManager().setCurrentUserAgoraUid(value.getAgoraUid());
+                                    success(pwd, callBack);
                                 }
 
                                 @Override
@@ -334,18 +340,65 @@ public class EMClientRepository extends BaseEMRepository{
                         callBack.onError(error, getErrorMsg(error, errorMsg));
                     }
                 });
+
             }
         }.asLiveData();
     }
-    
-    private void success(String nickname, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+
+    public LiveData<Resource<Boolean>> loginByPassword(String username, String pwd) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                ChatClient.getInstance().login(username, pwd, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        success(username, callBack);
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, getErrorMsg(code, error));
+                        closeDb();
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+
+            }
+        }.asLiveData();
+    }
+
+    private void success(String pwd, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        encryptData(pwd);
         // ** manually load all local groups and conversation
         initLocalDb();
         // get current user
         DemoHelper.getInstance().getUsersManager().reload();
         DemoHelper.getInstance().getUsersManager().initUserInfo();
-        new EMContactManagerRepository().updateCurrentUserNickname(nickname, null);
+        new EMContactManagerRepository().updateCurrentUserNickname(getCurrentUser(), null);
         callBack.onSuccess(createLiveData(true));
+    }
+
+    private void encryptData(String data){
+        DemoHelper.getInstance().getEncryptUtils().initAESgcm(getContext().getString(R.string.sign_aes).getBytes());
+        SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = setting.edit();
+        try {
+            String encryptedData = DemoHelper.getInstance().getEncryptUtils().aesGcmEncrypt(data,1);
+            editor.putString(getContext().getString(R.string.sign_gcm_key), encryptedData);
+            editor.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String decryptData(){
+        SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String encryptedData = setting.getString(getContext().getString(R.string.sign_gcm_key), "");
+        return DemoHelper.getInstance().getEncryptUtils().aesGcmDecrypt(encryptedData,getContext().getString(R.string.sign_aes).getBytes(),1);
     }
 
     private void loginToAppServer(String username, String nickname, ResultCallBack<LoginBean> callBack) {
@@ -356,19 +409,22 @@ public class EMClientRepository extends BaseEMRepository{
 
                 JSONObject request = new JSONObject();
                 request.putOpt("userAccount", username);
-                request.putOpt("userNickname", nickname);
+                request.putOpt("userPassword", nickname);
 
                 String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_URL;
                 HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {
+                    EMLog.e("loginToAppServer success : ", responseInfo);
                     if (responseInfo != null && responseInfo.length() > 0) {
                         JSONObject object = new JSONObject(responseInfo);
                         String token = object.getString("accessToken");
+                        int agoraUid = object.getInt("agoraUid");
                         LoginBean bean = new LoginBean();
                         bean.setAccessToken(token);
                         bean.setUserNickname(nickname);
+                        bean.setAgoraUid(agoraUid);
                         if(callBack != null) {
                             callBack.onSuccess(bean);
                         }
@@ -376,11 +432,68 @@ public class EMClientRepository extends BaseEMRepository{
                         callBack.onError(code, responseInfo);
                     }
                 } else {
-                    callBack.onError(code, responseInfo);
+                    if (responseInfo != null && responseInfo.length() > 0) {
+                        JSONObject object = new JSONObject(responseInfo);
+                        callBack.onError(code, object.getString("errorInfo"));
+                    }else {
+                        callBack.onError(code, responseInfo);
+                    }
                 }
             } catch (Exception e) {
                 //e.printStackTrace();
                 callBack.onError(Error.NETWORK_ERROR, e.getMessage());
+            }
+        });
+    }
+
+    public LiveData<Resource<Boolean>> registerByAppServer(String username, String pwd) {
+        return new NetworkOnlyResource<Boolean>(){
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                registerToAppServer(username, pwd, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, getErrorMsg(code, error));
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public void registerToAppServer(String username, String pwd, CallBack callBack){
+        runOnIOThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    JSONObject request = new JSONObject();
+                    request.putOpt("userAccount", username);
+                    request.putOpt("userPassword", pwd);
+
+                    String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_REGISTER;
+                    HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
+                    int code = response.code;
+                    String responseInfo = response.content;
+                    if (code == 200) {
+                        callBack.onSuccess();
+                    } else {
+                        if (responseInfo != null && responseInfo.length() > 0) {
+                            JSONObject object = new JSONObject(responseInfo);
+                            callBack.onError(code, object.getString("errorInfo"));
+                        }else {
+                            callBack.onError(code, responseInfo);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

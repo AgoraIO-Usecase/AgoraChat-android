@@ -143,14 +143,12 @@
         <activity
             android:name=".av.CallSingleBaseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
             android:label="@string/demo_activity_label_video_call"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".av.CallMultipleBaseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
             android:label="@string/demo_activity_label_multi_call"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />

@@ -187,7 +187,8 @@
 
         <activity
             android:name=".av.CallInviteUsersActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance"/>
 
     </application>
 

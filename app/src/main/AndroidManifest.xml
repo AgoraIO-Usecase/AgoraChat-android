@@ -18,6 +18,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- 申请闹钟定时权限 -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <!-- IM SDK required end -->
 
     <application
@@ -41,7 +43,8 @@
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <!-- SDK receiver -->
-        <receiver android:name="io.agora.chat.MonitorReceiver">
+        <receiver android:name="io.agora.chat.MonitorReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
@@ -68,7 +71,8 @@
         </provider>
 
         <!-- FCM required start -->
-        <service android:name=".fcm.FCMMSGService">
+        <service android:name=".fcm.FCMMSGService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -85,7 +89,8 @@
         <!--Splash-->
         <activity
             android:name=".sign.SplashActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

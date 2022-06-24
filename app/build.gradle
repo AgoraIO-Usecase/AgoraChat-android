@@ -10,13 +10,13 @@ android {
     InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream() ;
     properties.load( inputStream )
 
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "io.agora.chatdemo"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -35,7 +35,8 @@ android {
         buildConfigField ("String", "APP_SERVER_URL", "\"/app/chat/user/login\"")
         buildConfigField ("String", "APP_SERVER_REGISTER", "\"/app/chat/user/register\"")
 
-        buildConfigField ("String", "Agora_AppId", properties.getProperty("AGORA_APPID", "******"))
+        buildConfigField("String", "Agora_AppId", "\"${properties.getProperty("AGORA_APPID", "******")}\"")
+        buildConfigField("String", "Giphy_ApIkey", "\"${properties.getProperty("GIPHY_APIKEY", "******")}\"")
         manifestPlaceholders = [AGORA_CHAT_APPKEY: properties.getProperty("AGORA_CHAT_APPKEY", "******")]
     }
 

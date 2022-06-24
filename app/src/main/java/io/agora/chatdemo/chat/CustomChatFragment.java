@@ -40,6 +40,7 @@ import io.agora.chat.ImageMessageBody;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.widget.EaseChatInputMenu;
 import io.agora.chat.uikit.utils.EaseFileUtils;
+import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.R;
 import io.agora.util.EMLog;
 import io.stipop.Stipop;
@@ -60,7 +61,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
 
         inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        Giphy.INSTANCE.configure(getActivity(),"vEQuLHcYSYZHNyEa4BF1Ja7EKwR4qW5e",true);
+        Giphy.INSTANCE.configure(getActivity(), BuildConfig.Giphy_ApIkey,true);
 
 
     }
@@ -118,9 +119,12 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
             if (null != spSticker.getStickerImgLocalFilePath()){
                 Uri uri = getUriForFile(getActivity(),new File(spSticker.getStickerImgLocalFilePath()));
                 if (EaseFileUtils.isFileExistByUri(getActivity(), uri)){
+                    EMLog.e("onStickerSelected","sendImageMessage");
                     chatLayout.sendImageMessage(uri);
                 }
+                EMLog.e("onStickerSelected","isFileExistByUri false");
             }else {
+                EMLog.e("onStickerSelected","sendEmojiMessage");
                 sendEmojiMessage(spSticker.getStickerImg());
             }
         }

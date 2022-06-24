@@ -21,6 +21,7 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.databinding.ItemNotificationMsgBinding;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
+import io.agora.chatdemo.group.GroupHelper;
 
 class NotificationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
 
@@ -41,12 +42,12 @@ class NotificationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
         @Override
         public void setData(ChatMessage msg, int position) {
             itemBinding.ivMsgDelete.setImageResource(R.drawable.contacts_notification_delete);
-            itemBinding.ivFrom.setImageResource(R.drawable.avatar_3);
+            itemBinding.ivFrom.setImageResource(R.drawable.agora_avatar_3);
 
             try {
                 String groupName=null;
                 try {
-                    groupName = msg.getStringAttribute(SYSTEM_MESSAGE_FROM);
+                    groupName = GroupHelper.getGroupName(msg.getStringAttribute(SYSTEM_MESSAGE_FROM));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -75,7 +75,7 @@ public class SearchContactFragment extends SearchFragment<String> implements Add
     @Override
     public void onItemClick(View view, int position) {
         String username = (String) mListAdapter.getItem(position);
-        ContactDetailActivity.actionStart(mContext, username);
+//        ContactDetailActivity.actionStart(mContext, username);
     }
 
     @Override

@@ -77,6 +77,4 @@ public class ContactsListViewModel extends AndroidViewModel {
     public void addUserToBlackList(String username, boolean both) {
         blackResultObservable.setSource(mRepository.addUserToBlackList(username, both));
     }
-
-
 }

@@ -91,6 +91,7 @@ public class GroupFilesActivity extends BaseInitActivity implements EaseTitleBar
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         binding.titleBar.setTitle(getString(R.string.group_detail_files));
+        binding.titleBar.setLeftImageResource(R.drawable.ease_titlebar_back);
         group = ChatClient.getInstance().groupManager().getGroup(groupId);
 
         binding.rvList.setLayoutManager(new LinearLayoutManager(mContext));

@@ -38,7 +38,7 @@
         android:layout_marginBottom="20dp"
         android:layout_alignParentRight="true"
         android:layout_below="@id/et_search"
-        app:ease_side_bar_text_size="14sp"
+        app:ease_side_bar_text_size="10sp"
         app:ease_side_bar_focus_bg_color="@color/color_main_blue"/>
 
     <TextView

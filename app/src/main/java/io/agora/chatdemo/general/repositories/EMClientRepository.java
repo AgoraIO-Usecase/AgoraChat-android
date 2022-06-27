@@ -377,8 +377,10 @@ public class EMClientRepository extends BaseEMRepository{
             initLocalDb();
             //Pull the joined group from the server to prevent only the id from entering the conversation page
             DemoHelper.getInstance().getUsersManager().initUserInfo();
-            // get current user
-            DemoHelper.getInstance().getUsersManager().reload();
+
+            EaseUser user =  DemoHelper.getInstance().getUsersManager().getUserInfo(getCurrentUser());
+            if (!TextUtils.isEmpty(user.getNickname()))
+            new EMContactManagerRepository().updateCurrentUserNickname(user.getNickname(), null);
         }
         callBack.onSuccess(createLiveData(true));
     }

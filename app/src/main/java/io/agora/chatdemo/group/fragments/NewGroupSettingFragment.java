@@ -1,9 +1,11 @@
 package io.agora.chatdemo.group.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -37,6 +39,11 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
         tvCount=findViewById(R.id.tv_count);
         swToPublic=findViewById(R.id.swi_to_public);
         swInvite=findViewById(R.id.swi_allow_invite);
+
+        edtGroupName.requestFocus();
+        edtGroupName.setFocusableInTouchMode(true);
+        InputMethodManager inputManager = (InputMethodManager)edtGroupName.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(edtGroupName, 0);
     }
 
     @Override

@@ -298,6 +298,9 @@
     <string name="group_members_action_transfer_and_leave_title">Transfer Ownership to %1$s and Leave this Group?</string>
     <string name="group_members_action_transfer_and_leave_confirm">Yes</string>
 
+    <string name="group_change_owner">%1$s becomes the new Group Owner</string>
+    <string name="group_change_name">You named Group %1$s</string>
+
     <string name="group_edit_notice_dialog_title">Edit Notice</string>
 
     <string name="group_transfer_title">Transfer Ownership</string>

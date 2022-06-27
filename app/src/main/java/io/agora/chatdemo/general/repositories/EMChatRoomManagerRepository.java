@@ -22,6 +22,7 @@ import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.exceptions.ChatException;
+import io.agora.util.EMLog;
 
 public class EMChatRoomManagerRepository extends BaseEMRepository{
 
@@ -34,7 +35,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(PageResult<ChatRoom> value) {
                         if(value != null && value.getData() != null) {
-                            Log.e("TAG", "chatRooms = "+value.getData().toString());
+                            EMLog.i("TAG", "chatRooms = "+value.getData().toString());
                             callBack.onSuccess(createLiveData(value.getData()));
                         }else {
                             callBack.onError(ErrorCode.ERR_UNKNOWN);

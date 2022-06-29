@@ -103,7 +103,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
 
     @Override
     public boolean onStickerSelected(@NotNull SPSticker spSticker) {
-        Log.e("ChatActivity",
+        EMLog.e("onStickerSelected",
                   "\n  packageId: " + spSticker.getPackageId() +
                         "\n  stickerId: " + spSticker.getStickerId() +
                         "\n  stickerImg: " + spSticker.getStickerImg() +
@@ -112,7 +112,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
                         "\n  keyword: " + spSticker.getKeyword());
         hideBottom();
         if (isEmojiAsGif(spSticker.getStickerImg())){
-            sendEmojiMessage(spSticker.getStickerImg());
+            sendEmojiMessage(spSticker.getStickerImg(),getEmojiType(spSticker.getStickerImg()));
         }else {
             //判断本地文件是否存在
             //stickerImgLocalFilePath: /data/user/0/io.agora.chatdemo/files/stipop/550/1537519590937_carrot_07.png
@@ -125,7 +125,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
                 EMLog.e("onStickerSelected","isFileExistByUri false");
             }else {
                 EMLog.e("onStickerSelected","sendEmojiMessage");
-                sendEmojiMessage(spSticker.getStickerImg());
+                sendEmojiMessage(spSticker.getStickerImg(),getEmojiType(spSticker.getStickerImg()));
             }
         }
         return true;
@@ -195,7 +195,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
                 show(false, new GiphyDialogFragment.GifSelectionListener() {
                     @Override
                     public void onGifSelected(@NotNull Media media, @org.jetbrains.annotations.Nullable String s, @NotNull GPHContentType gphContentType) {
-                        Log.e("ChatActivity", gphContentType.toString()+
+                        EMLog.e("onGifSelected", gphContentType.toString()+
                                         "\n  getBitlyGifUrl: " + media.getBitlyGifUrl() +
                                         "\n  getBitlyUrl: " + media.getBitlyUrl() +
                                         "\n  getContentUrl: " + media.getContentUrl() +
@@ -204,13 +204,15 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
                                         "\n  getUrl: " + media.getUrl() +
                                         "\n  getTitle: " + media.getTitle());
                         contentType = gphContentType;
+                        EMLog.e("emoji",contentType.getMediaType().toString());
                         GPHCore.INSTANCE.gifById(media.getId(), new Function2<MediaResponse, Throwable, Unit>() {
                             @Override
                             public Unit invoke(MediaResponse mediaResponse, Throwable throwable) {
                                 if (contentType.getMediaType() == MediaType.video){
-                                    EMLog.e("emoji","MediaType video is not supported ");
+                                    EMLog.e("onGifSelected","MediaType video is not supported ");
                                 }else {
-                                    sendEmojiMessage(mediaResponse.getData().getImages().getOriginal().getGifUrl());
+                                    sendEmojiMessage(mediaResponse.getData().getImages().getOriginal().getGifUrl(),"gif");
+                                    EMLog.e("onGifSelected","invoke ：" + mediaResponse.getData().getImages().getOriginal().getGifUrl());
                                 }
                                 chatLayout.getChatInputMenu().hideExtendContainer();
                                 return null;
@@ -271,20 +273,19 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
      * 发送贴纸消息
      * @param url
      */
-    public void sendEmojiMessage(String url){
-        String type = getEmojiType(url);
-        Log.e("sendEmojiMessage",type);
+    public void sendEmojiMessage(String url,String type){
+        EMLog.e("sendEmojiMessage",type);
         ChatMessage message = ChatMessage.createSendMessage(ChatMessage.Type.IMAGE);
         message.setTo(conversationId);
         message.setAttribute("emoji_url",url);
         message.setAttribute("emoji_type",type);
-        ImageMessageBody body = new ImageMessageBody(new File("empty_address"));
+        ImageMessageBody body = new ImageMessageBody(new File(""));
         //注意发送 资源链接消息 remoteUrl 不能为空字符串 setLocalUrl 设置为空字符串
         body.setRemoteUrl(url);
         body.setLocalUrl("");
         body.setFileName(getFileName(url));
         message.addBody(body);
-        chatLayout.sendEmojiMessage(message);
+        chatLayout.sendMessage(message);
     }
 
 

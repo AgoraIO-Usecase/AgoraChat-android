@@ -48,6 +48,10 @@ allprojects {
                     // 指定统一版本
                     details.useVersion "1.1.0"
                 }
+                if (details.requested.group == 'com.google.android.material'){
+                    // 指定统一版本
+                    details.useVersion "1.4.0"
+                }
                 // ...可继续指定其它依赖版本
                 // if(...){...}
             }

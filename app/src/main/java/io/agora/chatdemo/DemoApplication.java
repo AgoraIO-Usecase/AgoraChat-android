@@ -22,6 +22,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import io.agora.chatdemo.general.manager.UserActivityLifecycleCallbacks;
+import io.agora.util.EMLog;
 import io.stipop.Stipop;
 
 public class DemoApplication extends MultiDexApplication {
@@ -45,10 +46,10 @@ public class DemoApplication extends MultiDexApplication {
         Stipop.Companion.configure(this, (isConfigured) -> {
             if (isConfigured) {
                 //todo
-                Log.e("Stipop","初始化 Stipop 成功");
+                EMLog.d("Stipop","初始化 Stipop 成功");
             } else {
                 //todo
-                Log.e("Stipop","初始化 Stipop 失败");
+                EMLog.e("Stipop","初始化 Stipop 失败");
             }
             return null;
         });

@@ -20,10 +20,11 @@
             android:textSize="@dimen/ease_toolbar_title_size"
             android:maxLines="1"
             android:ellipsize="end"
+            android:maxLength="6"
             android:gravity="center"
             android:layout_centerHorizontal="true"
             app:layout_constrainedWidth="true"
-            tools:text="罚款决定路"/>
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub_title"

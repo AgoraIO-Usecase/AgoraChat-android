@@ -115,9 +115,10 @@
         <io.agora.chat.uikit.widget.EaseImageView
             android:id="@+id/iv_presence"
             android:layout_width="12dp"
-            android:layout_height="10dp"
+            android:layout_height="12dp"
             android:visibility="gone"
             app:ease_shape_type="round"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="@id/avatar"
             app:layout_constraintRight_toRightOf="@id/avatar"
             tools:src="@drawable/ease_presence_online" />

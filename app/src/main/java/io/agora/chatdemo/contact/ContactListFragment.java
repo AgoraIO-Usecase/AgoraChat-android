@@ -22,8 +22,8 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     private ContactsListViewModel mViewModel;
-    private PresenceViewModel presenceViewModel;
-    private List<EaseUser> mData = new ArrayList<>();
+    protected PresenceViewModel presenceViewModel;
+    protected List<EaseUser> mData = new ArrayList<>();
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -34,19 +34,26 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        mViewModel = new ViewModelProvider(this).get(ContactsListViewModel.class);
+        initContactsListViewModel();
+        initPresenceViewModel();
+    }
+
+    protected void initPresenceViewModel() {
         presenceViewModel= new ViewModelProvider(this).get(PresenceViewModel.class);
         presenceViewModel.presencesObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<Presence>>() {
                 @Override
                 public void onSuccess(@Nullable List<Presence> data) {
                     ((ContactListAdapter) mListAdapter).setPresences(DemoHelper.getInstance().getPresences());
-//                    checkSearchContent(etSearch.getText().toString().trim());
                     mListAdapter.setData(mData);
                     checkView(etSearch.getText().toString().trim());
                 }
             });
         });
+    }
+
+    private void initContactsListViewModel() {
+        mViewModel = new ViewModelProvider(this).get(ContactsListViewModel.class);
         mViewModel.getContactObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
@@ -59,8 +66,11 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onLoading(@Nullable List<EaseUser> data) {
                     super.onLoading(data);
-                    mData = data;
-                    presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
+                    if(data!=null&&data.size()>0) {
+                        mData = data;
+                        mListAdapter.setData(mData);
+                        checkView(etSearch.getText().toString().trim());
+                    }
                 }
 
                 @Override

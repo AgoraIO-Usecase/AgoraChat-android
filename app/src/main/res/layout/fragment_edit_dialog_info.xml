@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/dialog_layout"
     android:background="@drawable/bg_edit_dialog_info">
 
     <TextView
@@ -43,7 +44,7 @@
         android:layout_marginTop="@dimen/dialog_title_margin_top"
         android:layout_marginEnd="@dimen/margin_15"
         android:text="@string/group_done_title"
-        android:textColor="@color/dialog_btn_text_color_selector"
+        android:textColor="@color/dialog_color_btn_bg_select"
         android:textSize="18sp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

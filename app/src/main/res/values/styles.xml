@@ -21,7 +21,7 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="Dialog.Light" parent="Theme.AppCompat.Light.Dialog">
+    <style name="Dialog.Light" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorAccent">@color/color_main_blue</item>
     </style>
 

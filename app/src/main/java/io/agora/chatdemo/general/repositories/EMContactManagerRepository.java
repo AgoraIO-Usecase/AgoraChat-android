@@ -656,32 +656,32 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             }
                         }
                         DemoHelper.getInstance().getUsersManager().updateUserAvatar(user.getAvatar());
-                        if(!TextUtils.isEmpty(nickname) && !TextUtils.equals(user.getNickname(), nickname)) {
-                            ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nickname, new ValueCallBack<String>() {
-                                @Override
-                                public void onSuccess(String value) {
-                                    EMLog.d(TAG, "update nickname success");
-                                    DemoHelper.getInstance().getUsersManager().updateUserNickname(nickname);
-                                    EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
-                                    LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE).postValue(event);
-                                    EMLog.e(TAG, "send CURRENT_USER_INFO_CHANGE");
-                                    if(callBack != null) {
-                                        callBack.onSuccess(DemoHelper.getInstance().getUsersManager().getCurrentUserInfo());
-                                    }
-                                }
-
-                                @Override
-                                public void onError(int error, String errorMsg) {
-                                    if(callBack != null) {
-                                        callBack.onError(error, errorMsg);
-                                    }
-                                }
-                            });
-                        }else {
-                            if(callBack != null) {
-                                callBack.onSuccess(DemoHelper.getInstance().getUsersManager().getCurrentUserInfo());
-                            }
-                        }
+//                        if(!TextUtils.isEmpty(nickname) && !TextUtils.equals(user.getNickname(), nickname)) {
+//                            ChatClient.getInstance().userInfoManager().updateOwnInfoByAttribute(UserInfo.UserInfoType.NICKNAME, nickname, new ValueCallBack<String>() {
+//                                @Override
+//                                public void onSuccess(String value) {
+//                                    EMLog.d(TAG, "update nickname success");
+//                                    DemoHelper.getInstance().getUsersManager().updateUserNickname(nickname);
+//                                    EaseEvent event = EaseEvent.create(DemoConstant.CURRENT_USER_INFO_CHANGE, EaseEvent.TYPE.CONTACT);
+//                                    LiveDataBus.get().with(DemoConstant.CURRENT_USER_INFO_CHANGE).postValue(event);
+//                                    EMLog.e(TAG, "send CURRENT_USER_INFO_CHANGE");
+//                                    if(callBack != null) {
+//                                        callBack.onSuccess(DemoHelper.getInstance().getUsersManager().getCurrentUserInfo());
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onError(int error, String errorMsg) {
+//                                    if(callBack != null) {
+//                                        callBack.onError(error, errorMsg);
+//                                    }
+//                                }
+//                            });
+//                        }else {
+//                            if(callBack != null) {
+//                                callBack.onSuccess(DemoHelper.getInstance().getUsersManager().getCurrentUserInfo());
+//                            }
+//                        }
                     }
                 }
 
@@ -760,9 +760,14 @@ public class EMContactManagerRepository extends BaseEMRepository{
     }
     private void addDefaultAvatar(EaseUser item,List<String> localUsers){
         if(localUsers==null) {
-            localUsers=getUserDao().loadAllUsers();
+            EmUserDao userDao = getUserDao();
+            if(userDao!=null) {
+                localUsers=userDao.loadAllUsers();
+            }else{
+                localUsers=Collections.emptyList();
+            }
         }
-        if(TextUtils.isEmpty(item.getAvatar())) {
+        if(item!=null&&TextUtils.isEmpty(item.getAvatar())) {
             if(localUsers.contains(item.getUsername())) {
                 String avatar = getUserDao().loadUserByUserId(item.getUsername()).get(0).getAvatar();
                 if(!TextUtils.isEmpty(avatar)) {

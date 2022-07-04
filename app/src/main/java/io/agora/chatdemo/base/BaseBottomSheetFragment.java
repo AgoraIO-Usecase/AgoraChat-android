@@ -108,33 +108,27 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
 
-    /**
-     * Parse Resource<T>
-     * @param response
-     * @param callback
-     * @param <T>
-     */
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
-        if(mContext != null) {
-            mContext.parseResource(response, callback);
+        if(mContext != null&&mContext instanceof BaseActivity) {
+            ((BaseActivity)mContext).parseResource(response, callback);
         }
     }
 
     public void showLoading() {
-        if(mContext != null) {
-            mContext.showLoading();
+        if(mContext != null&&mContext instanceof BaseActivity) {
+            ((BaseActivity)mContext).showLoading();
         }
     }
 
     public void showLoading(String message) {
-        if(mContext != null) {
-            mContext.showLoading(message);
+        if(mContext != null&&mContext instanceof BaseActivity) {
+            ((BaseActivity)mContext).showLoading(message);
         }
     }
 
     public void dismissLoading() {
         if(mContext != null) {
-            mContext.dismissLoading();
+            ((BaseActivity)mContext).dismissLoading();
         }
     }
 

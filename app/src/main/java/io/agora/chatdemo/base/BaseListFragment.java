@@ -16,7 +16,7 @@ import io.agora.chat.uikit.interfaces.OnItemClickListener;
 public abstract class BaseListFragment<T> extends BaseInitFragment implements OnItemClickListener {
     public RecyclerView mRecyclerView;
     public EaseBaseRecyclerViewAdapter<T> mListAdapter;
-    private ConcatAdapter concatAdapter;
+    protected ConcatAdapter concatAdapter;
 
     @Override
     protected void initView(Bundle savedInstanceState) {

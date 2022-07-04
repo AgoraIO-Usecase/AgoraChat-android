@@ -53,4 +53,11 @@ public interface BottomSheetChildHelper {
         }
     }
 
+    default void isChangeColor(boolean isChange){
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment != null && parentFragment instanceof BottomSheetContainerHelper) {
+            ((BottomSheetContainerHelper) parentFragment).changeNextColor(isChange);
+        }
+    }
+
 }

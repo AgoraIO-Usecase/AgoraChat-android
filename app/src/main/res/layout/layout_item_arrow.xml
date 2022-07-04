@@ -7,9 +7,9 @@
 
     <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/avatar"
-        android:layout_width="wrap_content"
+        android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginStart="@dimen/margin_16"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -28,15 +28,15 @@
         app:layout_constraintLeft_toRightOf="@id/avatar"
         app:layout_constraintRight_toLeftOf="@id/tv_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginStart="@dimen/margin_20"
+        app:layout_goneMarginStart="@dimen/margin_16"
         tools:text="群文件" />
 
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_20"
-        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginLeft="@dimen/margin_16"
         android:layout_marginRight="@dimen/margin_10"
         android:ellipsize="end"
         android:gravity="end"
@@ -65,8 +65,8 @@
         android:id="@+id/view_divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="@dimen/margin_15"
-        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginLeft="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_15"
         android:layout_marginEnd="@dimen/margin_15"
         android:layout_marginRight="@dimen/margin_15"

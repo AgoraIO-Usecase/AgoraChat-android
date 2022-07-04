@@ -44,6 +44,7 @@ public class PreferenceManager {
 	private static String SHARED_KEY_CURRENTUSER_USERNAME = "SHARED_KEY_CURRENTUSER_USERNAME";
 	private static String SHARED_KEY_CURRENTUSER_USER_PASSWORD = "SHARED_KEY_CURRENTUSER_USER_PASSWORD";
 	private static String SHARED_KEY_CURRENTUSER_NICK = "SHARED_KEY_CURRENTUSER_NICK";
+	private static String SHARED_KEY_CURRENTUSER_AGORAUID = "SHARED_KEY_CURRENTUSER_AGORAUID";
 	private static String SHARED_KEY_CURRENTUSER_AVATAR = "SHARED_KEY_CURRENTUSER_AVATAR";
 
 	private static String SHARED_KEY_MSG_ROAMING = "SHARED_KEY_MSG_ROAMING";
@@ -203,10 +204,18 @@ public class PreferenceManager {
 		editor.putString(SHARED_KEY_CURRENTUSER_NICK, nick);
 		editor.apply();
 	}
+	public void setCurrentUserAgoraUid(int agoraUid) {
+		editor.putInt(SHARED_KEY_CURRENTUSER_AGORAUID, agoraUid);
+		editor.commit();
+	}
 
 	public void setCurrentUserAvatar(String avatar) {
 		editor.putString(SHARED_KEY_CURRENTUSER_AVATAR, avatar);
 		editor.apply();
+	}
+
+	public int getCurrentUserAgoraUid() {
+		return  mSharedPreferences.getInt(SHARED_KEY_CURRENTUSER_AGORAUID, 0);
 	}
 
 	public String getCurrentUserNick() {

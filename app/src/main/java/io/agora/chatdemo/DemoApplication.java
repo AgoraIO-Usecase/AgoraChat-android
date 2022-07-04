@@ -1,11 +1,13 @@
 package io.agora.chatdemo;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.multidex.MultiDexApplication;
 
+import com.haoge.easyandroid.EasyAndroid;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -20,8 +22,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import io.agora.chatdemo.general.manager.UserActivityLifecycleCallbacks;
+import io.agora.util.EMLog;
+import io.stipop.Stipop;
 
-public class DemoApplication extends Application {
+public class DemoApplication extends MultiDexApplication {
     private static DemoApplication instance;
     private UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
 
@@ -31,12 +35,24 @@ public class DemoApplication extends Application {
         instance = this;
         registerActivityLifecycleCallbacks();
         initAgoraChatSDK();
-
+        EasyAndroid.init(this);
         closeAndroidPDialog();
     }
 
     private void initAgoraChatSDK() {
         DemoHelper.getInstance().init(this);
+
+//        Stipop.Companion.configure(this, null);
+        Stipop.Companion.configure(this, (isConfigured) -> {
+            if (isConfigured) {
+                //todo
+                EMLog.d("Stipop","初始化 Stipop 成功");
+            } else {
+                //todo
+                EMLog.e("Stipop","初始化 Stipop 失败");
+            }
+            return null;
+        });
     }
 
     public static DemoApplication getInstance() {

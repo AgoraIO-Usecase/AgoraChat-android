@@ -1,0 +1,90 @@
+{
+	"api_key": "22db8d626c4cfd14b424c618131767f1",
+	"Theme": {
+	  "useLightMode" : true,
+	  "backgroundColor" : {
+		"light" : "#FFFFFF",
+		"dark" : "#171B1C"
+	  },
+	  "groupedContentBackgroundColor" : {
+		"light" : "#F7F8F9",
+		"dark" : "#2E363A"
+	  },
+	  "mainColor" : {
+		"light" : "#FF5D1E",
+		"dark" : "#FF855B"
+	  },
+	  "iconColor" : {
+		"normalColor": {
+		  "light": "#414141",
+		  "dark": "#646F7C"
+		},
+		"tintColor": {
+		  "light": "#FF5D1E",
+		  "dark": "#FF855B"
+		}
+	  },
+	  "font" : {
+		"family": "system",
+		"weight": 400,
+		"character": 0
+	  }
+	},
+	"StickerIcon": "ic_sticker_border_3",
+	"Search": {
+	  "searchbarIcon": "icon_search",
+	  "searchbarDeleteIcon": "ic_erase_border_3",
+	  "searchbarRadius": 10,
+	  "searchTags": {
+		"hidden": false
+	  },
+	  "numOfColumns": 3
+	},
+	"LiteStore": {
+	  "trending" : {
+		"useBackgroundColor" : true,
+		"backgroundColor" : "#eeeeee",
+		"opacity": 0.7
+	  },
+	  "listType": "singular",
+	  "downloadIcon": "ic_download_border_3",
+	  "completeIcon": "ic_downloaded_border_3",
+	  "bottomOfSearch": "popularStickers"
+	},
+	"MySticker": {
+	  "orderIcon": "ic_move_border_3",
+	  "hideIcon": "ic_hide_border_3"
+	},
+	"Keyboard": {
+	  "liteStoreIcon": "ic_em_store",
+	  "numOfColumns": 4
+	},
+	"StorePolicy" : {
+	  "allowPremium" : "N",
+	  "price" : {
+		"png" : 0.99,
+		"gif" : 1.99
+	  }
+	},
+	"Sticker": {
+	  "backIcon": "ic_back_border_3",
+	  "closeIcon": "ic_close_border_3",
+	  "numOfColumns": 3
+	},
+	"Send": {
+	  "preview": false,
+	  "previewPadding": 150,
+	  "favoritesOnIcon": {
+		"light" : "ic_favorites_on",
+		"dark" : "ic_favorites_on"
+	  },
+	  "favoritesOffIcon": {
+		"light" : "ic_favorites_off",
+		"dark" : "ic_favorites_off"
+	  },
+	  "closeIcon": {
+		"light" : "ic_cancel",
+		"dark" : "ic_cancel"
+	  }
+	}
+  }

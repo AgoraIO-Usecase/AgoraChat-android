@@ -13,10 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import io.agora.chat.ChatClient;
+import io.agora.chat.ChatMessage;
 import io.agora.chat.Group;
 import io.agora.chat.GroupManager;
 import io.agora.chat.GroupOptions;
+import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
@@ -79,6 +83,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
                 public void onSuccess(Group data) {
                     showToast(R.string.group_new_success);
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                    saveMessage(data.getGroupId());
                     // Skip to chat activity
                     ChatActivity.actionStart(mContext, data.getGroupId(), EaseChatType.GROUP_CHAT);
                     hide();
@@ -110,13 +115,17 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
     private void addContactHeadView() {
         AbsListView.LayoutParams contactsParams = new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         TextView contacts = new TextView(mContext);
-        contacts.setText(R.string.group_contacts);
+        contacts.setText(getHeadName());
         contacts.setLayoutParams(contactsParams);
         contacts.setGravity(Gravity.LEFT);
         contacts.setTextSize(UIUtils.getSpDimen(mContext, R.dimen.text_size_small));
         contacts.setPadding((int) UIUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_2), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_15), (int) UIUtils.getAbsDimen(mContext, R.dimen.margin_2));
         contacts.setTextColor(ContextCompat.getColor(mContext, R.color.color_light_gray_999999));
         ((EaseRecyclerView) mRecyclerView).addHeaderView(contacts);
+    }
+
+    protected String getHeadName(){
+        return getString(R.string.group_contacts);
     }
 
     @Override
@@ -173,5 +182,18 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
     @Override
     public void onMembersChange(List<String> selectedMembers) {
         ((ContactListAdapter) mListAdapter).setSelectedMembers(selectedMembers);
+    }
+
+    private void saveMessage(String groupId){
+        ChatMessage msg = ChatMessage.createSendMessage(ChatMessage.Type.TXT);
+        msg.setChatType(ChatMessage.ChatType.GroupChat);
+        msg.setTo(groupId);
+        msg.setMsgId(UUID.randomUUID().toString());
+        msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
+        msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_CREATE_GROUP);
+        msg.addBody(new TextMessageBody(getActivity().getString(R.string.group_listener_onGroupCreate)));
+        msg.setStatus(ChatMessage.Status.SUCCESS);
+        // save invitation as messages
+        ChatClient.getInstance().chatManager().saveMessage(msg);
     }
 }

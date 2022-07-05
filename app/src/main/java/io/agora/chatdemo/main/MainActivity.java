@@ -137,12 +137,12 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         checkNeedPermission();
 
         if(GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
-            // 启用 FCM 自动初始化
+            // set enable FCM automatic initialization
             if(!FirebaseMessaging.getInstance().isAutoInitEnabled()){
                 FirebaseMessaging.getInstance().setAutoInitEnabled(true);
                 FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
             }
-            // 获取FCM 推送 token 并上传
+            // get FCM token upload
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                 @Override
                 public void onComplete(@NonNull Task<String> task) {

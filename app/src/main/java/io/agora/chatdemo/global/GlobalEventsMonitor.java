@@ -129,7 +129,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
     }
 
     void showToast(final String message) {
-        Log.d(TAG, "receive invitation to join the group：" + message);
+        EMLog.d(TAG, "receive invitation to join the group：" + message);
         if (handler != null) {
             Message msg = Message.obtain(handler, HANDLER_SHOW_TOAST, message);
             handler.sendMessage(msg);

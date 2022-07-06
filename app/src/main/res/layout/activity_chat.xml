@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             app:layout_goneMarginStart="0dp"
@@ -20,7 +20,7 @@
             android:textSize="@dimen/ease_toolbar_title_size"
             android:maxLines="1"
             android:ellipsize="end"
-            android:maxLength="6"
+            android:maxEms="5"
             android:gravity="center"
             android:layout_centerHorizontal="true"
             app:layout_constrainedWidth="true"

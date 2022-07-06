@@ -69,7 +69,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
     @Override
     public void initView() {
         super.initView();
-        //添加扩展表情
+        //Add extended emoji
         chatLayout.getChatInputMenu().getEmojiconMenu().addTabItem(R.drawable.em_sticker_selector);
         chatLayout.getChatInputMenu().getEmojiconMenu().addTabItem(R.drawable.em_gif_selsctor);
 
@@ -97,7 +97,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
 
     @Override
     public boolean onStickerPackRequested(@NotNull SPPackage spPackage) {
-        // return true 允许下载贴纸
+        // return true Allow download of stickers
         return true;
     }
 
@@ -114,17 +114,17 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
         if (isEmojiAsGif(spSticker.getStickerImg())){
             sendEmojiMessage(spSticker.getStickerImg(),getEmojiType(spSticker.getStickerImg()));
         }else {
-            //判断本地文件是否存在
+            //Check if a local file exists
             //stickerImgLocalFilePath: /data/user/0/io.agora.chatdemo/files/stipop/550/1537519590937_carrot_07.png
             if (null != spSticker.getStickerImgLocalFilePath()){
                 Uri uri = getUriForFile(getActivity(),new File(spSticker.getStickerImgLocalFilePath()));
                 if (EaseFileUtils.isFileExistByUri(getActivity(), uri)){
-                    EMLog.e("onStickerSelected","sendImageMessage");
+                    EMLog.i("onStickerSelected","sendImageMessage");
                     chatLayout.sendImageMessage(uri);
                 }
-                EMLog.e("onStickerSelected","isFileExistByUri false");
+                EMLog.i("onStickerSelected","isFileExistByUri false");
             }else {
-                EMLog.e("onStickerSelected","sendEmojiMessage");
+                EMLog.i("onStickerSelected","sendEmojiMessage");
                 sendEmojiMessage(spSticker.getStickerImg(),getEmojiType(spSticker.getStickerImg()));
             }
         }
@@ -139,7 +139,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
         }
     }
 
-    //判断是否是gif类型
+    //Determine whether it is a gif type
     //https://img.stipop.io/1537519590917_carrot_02.png
     public boolean isEmojiAsGif(String url){
         String[] strs = url.split("[.]");
@@ -150,16 +150,12 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
     }
 
     public String getFileName(String url){
-        //先获取最后一个  / 所在的位置
         int index = url.lastIndexOf("/");
-        //然后获取从最后一个\所在索引+1开始 至 字符串末尾的字符
         return url.substring(index+1);
     }
 
     public String getEmojiType(String url){
-        //先获取最后一个  / 所在的位置
         int index = url.lastIndexOf(".");
-        //然后获取从最后一个\所在索引+1开始 至 字符串末尾的字符
         return url.substring(index+1);
     }
 
@@ -204,15 +200,15 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
                                         "\n  getUrl: " + media.getUrl() +
                                         "\n  getTitle: " + media.getTitle());
                         contentType = gphContentType;
-                        EMLog.e("emoji",contentType.getMediaType().toString());
+                        EMLog.i("emoji",contentType.getMediaType().toString());
                         GPHCore.INSTANCE.gifById(media.getId(), new Function2<MediaResponse, Throwable, Unit>() {
                             @Override
                             public Unit invoke(MediaResponse mediaResponse, Throwable throwable) {
                                 if (contentType.getMediaType() == MediaType.video){
-                                    EMLog.e("onGifSelected","MediaType video is not supported ");
+                                    EMLog.i("onGifSelected","MediaType video is not supported ");
                                 }else {
                                     sendEmojiMessage(mediaResponse.getData().getImages().getOriginal().getGifUrl(),"gif");
-                                    EMLog.e("onGifSelected","invoke ：" + mediaResponse.getData().getImages().getOriginal().getGifUrl());
+                                    EMLog.i("onGifSelected","invoke ：" + mediaResponse.getData().getImages().getOriginal().getGifUrl());
                                 }
                                 chatLayout.getChatInputMenu().hideExtendContainer();
                                 return null;
@@ -270,7 +266,7 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
     }
 
     /**
-     * 发送贴纸消息
+     * Send emoji messages
      * @param url
      */
     public void sendEmojiMessage(String url,String type){
@@ -280,8 +276,9 @@ public class CustomChatFragment extends EaseChatFragment implements StipopDelega
         message.setAttribute("emoji_url",url);
         message.setAttribute("emoji_type",type);
         ImageMessageBody body = new ImageMessageBody(new File(""));
-        //注意发送 资源链接消息 remoteUrl 不能为空字符串 setLocalUrl 设置为空字符串
+        //sendMessage remoteUrl cannot be an empty string.
         body.setRemoteUrl(url);
+        //set local path to empty string
         body.setLocalUrl("");
         body.setFileName(getFileName(url));
         message.addBody(body);

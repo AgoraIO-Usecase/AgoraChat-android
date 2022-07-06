@@ -22,15 +22,16 @@ public class CallMultipleBaseActivity extends EaseCallMultipleBaseActivity {
     }
 
     /**
-     * 修改状态栏文字颜色
-     * @param isLight 是否是浅色字体
+     *
+     * Modify status bar text color
+     * @param isLight Whether it is a light font
      */
     public void setStatusBarTextColor(boolean isLight) {
         StatusBarCompat.setLightStatusBar(this, !isLight);
     }
 
     /**
-     * 设置是否是沉浸式
+     * Whether the setting is immersive
      * @param fitSystemForTheme
      */
     public void setFitSystem(boolean fitSystemForTheme) {

@@ -419,7 +419,7 @@ public class EMClientRepository extends BaseEMRepository{
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {
-                    EMLog.e("loginToAppServer success : ", responseInfo);
+                    EMLog.d("loginToAppServer success : ", responseInfo);
                     if (responseInfo != null && responseInfo.length() > 0) {
                         JSONObject object = new JSONObject(responseInfo);
                         String token = object.getString("accessToken");

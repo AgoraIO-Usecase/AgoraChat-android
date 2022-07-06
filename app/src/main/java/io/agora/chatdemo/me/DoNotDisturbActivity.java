@@ -52,7 +52,7 @@ public class DoNotDisturbActivity extends BaseInitActivity implements EaseTitleB
 
         switch (detailType){
             case DETAIL_TYPE_USER:
-                mBinding.titleBar.setTitle(this.getResources().getString(R.string.notification_frequency));
+                mBinding.titleBar.setTitle(this.getResources().getString(R.string.notification_do_not_disturb));
                 break;
             case DETAIL_TYPE_THREAD:
                 mBinding.titleBar.setTitle(this.getResources().getString(R.string.notification_mute_thread));

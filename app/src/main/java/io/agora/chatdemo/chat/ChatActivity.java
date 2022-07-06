@@ -1,6 +1,10 @@
 package io.agora.chatdemo.chat;
 
-import static io.agora.chat.uikit.constants.EaseConstant.CHATTYPE_SINGLE;
+import static io.agora.chat.callkit.general.EaseCallType.CONFERENCE_VIDEO_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.CONFERENCE_VOICE_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VIDEO_CALL;
+import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VOICE_CALL;
+import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
 import static io.agora.chatdemo.general.constant.DemoConstant.GROUP_MEMBER_USER;
 
 import android.Manifest;

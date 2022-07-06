@@ -128,6 +128,4 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
         return R.string.demo_multiply_video_select_members;
     }
 
-
-
 }

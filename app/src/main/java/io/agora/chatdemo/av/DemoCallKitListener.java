@@ -106,29 +106,29 @@ public class DemoCallKitListener implements EaseCallKitListener {
         callString += formatter.format(callTime);
         Message message = handler.obtainMessage();
         switch (reason) {
-            case EaseCallEndReasonHangup://正常挂断
+            case EaseCallEndReasonHangup://Hang up normally
                 message.obj=callString;
                 break;
-            case EaseCallEndReasonCancel://自己取消通话
+            case EaseCallEndReasonCancel://cancel the call yourself
                 break;
-            case EaseCallEndReasonRemoteCancel: //对方取消通话
+            case EaseCallEndReasonRemoteCancel: //The other party cancels the call
                 message.obj=callString;
                 break;
-            case EaseCallEndReasonRefuse://拒绝接听
+            case EaseCallEndReasonRefuse://request declined
                 message.obj=mContext.getString(R.string.demo_call_end_reason_refuse);
                 break;
-            case EaseCallEndReasonBusy: //忙线中
+            case EaseCallEndReasonBusy: //busy
                 message.obj=mContext.getString(R.string.demo_call_end_reason_busy);
                 break;
-            case EaseCallEndReasonNoResponse://自己无响应
+            case EaseCallEndReasonNoResponse://not responding
                 break;
-            case EaseCallEndReasonRemoteNoResponse://对端无响应
+            case EaseCallEndReasonRemoteNoResponse://No response from peer
                 message.obj=mContext.getString(R.string.demo_call_end_reason_busy_remote_no_response);
                 break;
-            case EaseCallEndReasonHandleOnOtherDeviceAgreed://在其他设备同意
+            case EaseCallEndReasonHandleOnOtherDeviceAgreed://other devices connected
                 message.obj=mContext.getString(R.string.demo_call_end_reason_other_device_agreed);
                 break;
-            case EaseCallEndReasonHandleOnOtherDeviceRefused://在其他设备拒绝
+            case EaseCallEndReasonHandleOnOtherDeviceRefused://other devices declined
                 message.obj=mContext.getString(R.string.demo_call_end_reason_other_device_refused);
                 break;
         }
@@ -149,7 +149,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
                 .append("userAccount=")
                 .append(userAccount);
 
-        //get agora RTC token (获取声网RTC token)
+        //get agora RTC token (get Agora RTC token)
         getRtcToken(url.toString(), agoraUid, callback);
     }
 
@@ -196,7 +196,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
                                 try {
                                     JSONObject object = new JSONObject(responseInfo);
                                     String token = object.getString("accessToken");
-                                    //Set your avatar nickname(设置自己头像昵称)
+                                    //Set your avatar nickname
                                     setEaseCallKitUserInfo(ChatClient.getInstance().getCurrentUser());
                                     callback.onSetToken(token, agoraUid);
                                 } catch (Exception e) {
@@ -257,7 +257,6 @@ public class DemoCallKitListener implements EaseCallKitListener {
                                         String username = resToken.optString(uIdStr);
                                         if (uid == uId) {
                                             //Obtain information such as userName, profile picture, and nickname of the current user
-                                            // 获取到当前用户的userName 设置头像昵称等信息
                                             userAccount=new EaseUserAccount(uid, username);
                                         }
                                     }
@@ -302,7 +301,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
 
     @Override
     public void onUserInfoUpdate(String userName) {
-        //set user's nickname and avater (设置用户昵称 头像)
+        //set user's nickname and avater
         setEaseCallKitUserInfo(userName);
     }
 }

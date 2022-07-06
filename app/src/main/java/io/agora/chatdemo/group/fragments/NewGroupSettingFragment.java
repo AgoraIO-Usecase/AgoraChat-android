@@ -1,9 +1,12 @@
 package io.agora.chatdemo.group.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.general.widget.SwitchItemView;
+import io.agora.util.EMLog;
 
 public class NewGroupSettingFragment extends BaseInitFragment implements BottomSheetChildHelper, SwitchItemView.OnCheckedChangeListener {
     private static final int DEFAULT_GROUP_MAX_MEMBERS = 200;
@@ -37,6 +41,11 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
         tvCount=findViewById(R.id.tv_count);
         swToPublic=findViewById(R.id.swi_to_public);
         swInvite=findViewById(R.id.swi_allow_invite);
+
+        edtGroupName.requestFocus();
+        edtGroupName.setFocusableInTouchMode(true);
+        InputMethodManager inputManager = (InputMethodManager)edtGroupName.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(edtGroupName, 0);
     }
 
     @Override
@@ -81,6 +90,39 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
         });
         swToPublic.setOnCheckedChangeListener(this);
 
+        edtGroupNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (start >= 0) {
+                    try {
+                        int num = Integer.parseInt(s.toString());
+                        if (num > MAX_GROUP_USERS) {
+                            s = String.valueOf(MAX_GROUP_USERS);
+                            edtGroupNumber.setText(s);
+                            edtGroupNumber.setSelection(s.length());
+                            showToast(R.string.group_new_member_limit);
+                        } else if (num < MIN_GROUP_USERS) {
+                            s = String.valueOf(MIN_GROUP_USERS);
+                            edtGroupNumber.setText(s);
+                            edtGroupNumber.setSelection(s.length());
+                            showToast(R.string.group_new_member_limit);
+                        }
+                    } catch (NumberFormatException e) {
+                        EMLog.e("onTextChanged", "==" + e.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -119,10 +161,6 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
                 maxUsers = Integer.parseInt(memberNumber);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-            }
-            if(maxUsers < MIN_GROUP_USERS || maxUsers > MAX_GROUP_USERS) {
-                showToast(R.string.group_new_member_limit);
-                return true;
             }
         }
         String desc = edtDesc.getText().toString();

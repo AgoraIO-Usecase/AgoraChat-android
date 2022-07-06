@@ -12,8 +12,12 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.UUID;
+
 import io.agora.chat.ChatClient;
+import io.agora.chat.ChatMessage;
 import io.agora.chat.Group;
+import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
@@ -171,6 +175,25 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 @Override
                 public void onSuccess(@Nullable String data) {
                     loadGroup();
+                }
+            });
+        });
+        viewModel.getSetGroupNameObservable().observe(this,response ->{
+            parseResource(response,new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(@Nullable String data) {
+                    loadGroup();
+                    ChatMessage msg = ChatMessage.createSendMessage(ChatMessage.Type.TXT);
+                    msg.setChatType(ChatMessage.ChatType.Chat);
+                    msg.setTo(groupId);
+                    msg.setMsgId(UUID.randomUUID().toString());
+                    msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
+                    msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_CHANGE_GROUP_NAME);
+                    msg.setAttribute(DemoConstant.SYSTEM_CHANGE_GROUP_NAME,data);
+                    msg.addBody(new TextMessageBody( getString(R.string.group_change_name,data)));
+                    msg.setStatus(ChatMessage.Status.SUCCESS);
+                    // save invitation as messages
+                    ChatClient.getInstance().chatManager().saveMessage(msg);
                 }
             });
         });

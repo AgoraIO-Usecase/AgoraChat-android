@@ -102,6 +102,8 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
             parseResource(result, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
+                    srlContactRefresh.setRefreshing(false);
+                    mData = data;
                     presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
                 }
             });
@@ -189,7 +191,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
 
     protected void checkSearchContent(String content) {
         if (TextUtils.isEmpty(content)) {
-            mListAdapter.setData(mData);
+            mViewModel.loadContactList(false);
         } else {
             mViewModel.searchContact(content);
         }

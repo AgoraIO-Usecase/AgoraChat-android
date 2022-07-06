@@ -221,7 +221,7 @@ public class PermissionsManager {
   @RequiresApi(api = Build.VERSION_CODES.M)
   void requestCanDrawOverlays(@Nullable Activity activity){
     if (!Settings.canDrawOverlays(activity)) {
-      //若未授权则请求权限
+      //Request permission if not authorized
       Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
       intent.setData(Uri.parse("package:" + activity.getPackageName()));
       activity.startActivityForResult(intent, 0);

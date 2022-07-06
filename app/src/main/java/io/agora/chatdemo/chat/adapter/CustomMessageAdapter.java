@@ -37,8 +37,8 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         ChatMessage message = getData().get(position);
         String messageType = message.getStringAttribute(EaseCallMsgUtils.CALL_MSG_TYPE, "");
         String action = message.getStringAttribute(EaseCallMsgUtils.CALL_ACTION, "");
-        int calltype = message.getIntAttribute(EaseCallMsgUtils.CALL_TYPE, SINGLE_VOICE_CALL.code);
-        EaseCallType callkitType = EaseCallType.getfrom(calltype);
+        int callType = message.getIntAttribute(EaseCallMsgUtils.CALL_TYPE, SINGLE_VOICE_CALL.code);
+        EaseCallType callKitType = EaseCallType.getfrom(callType);
         EaseCallAction callAction = EaseCallAction.getfrom(action);
 
         boolean isSystemNotification = message.getBooleanAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, false);
@@ -48,7 +48,7 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
 
         if (TextUtils.equals(messageType, EaseCallMsgUtils.CALL_MSG_INFO)) {
             if(callAction == EaseCallAction.CALL_INVITE
-                    &&(callkitType==SINGLE_VOICE_CALL||callkitType==SINGLE_VIDEO_CALL)) {
+                    &&(callKitType == SINGLE_VOICE_CALL || callKitType == SINGLE_VIDEO_CALL)) {
                 return super.getItemNotEmptyViewType(position);
             }
             if(message.direct()==ChatMessage.Direct.SEND) {

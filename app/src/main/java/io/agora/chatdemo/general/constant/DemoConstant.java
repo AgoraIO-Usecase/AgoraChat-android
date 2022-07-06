@@ -90,6 +90,7 @@ public interface DemoConstant extends EaseConstant {
     String USER_CARD_ID = "uid";
     String USER_CARD_NICK = "nickname";
     String USER_CARD_AVATAR = "avatar";
+    String ID_OR_NICKNAME = "idOrNickname";
 
     String USER_INFO = "userinfo";
 
@@ -136,5 +137,7 @@ public interface DemoConstant extends EaseConstant {
     String SYSTEM_INVITATION_CONTACT = "system_invitation_contact";
     String SYSTEM_GROUP_INVITE_ACCEPT = "system_group_invite_accept";
     String SYSTEM_NOTIFICATION_NICKNAME = "system_notification_nickname";
+    String SYSTEM_CHANGE_OWNER = "system_change_owner";
+    String SYSTEM_CHANGE_GROUP_NAME = "system_change_group_name";
 
 }

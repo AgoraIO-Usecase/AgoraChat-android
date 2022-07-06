@@ -1,6 +1,7 @@
 package io.agora.chatdemo.notification;
 
 import static io.agora.chatdemo.general.constant.DemoConstant.SYSTEM_MESSAGE_FROM;
+import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.AGREED;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAGREED;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEAPPLYED;
 import static io.agora.chatdemo.general.db.entity.InviteMessageStatus.BEINVITEED;
@@ -77,6 +78,10 @@ class NotificationMsgAdapter extends EaseBaseRecyclerViewAdapter<ChatMessage> {
                         itemBinding.tvStatus.setVisibility(View.VISIBLE);
                         itemBinding.group.setVisibility(View.GONE);
                     }else if(status == BEAGREED) {
+                        itemBinding.tvStatus.setText(R.string.system_msg_accepted);
+                        itemBinding.tvStatus.setVisibility(View.VISIBLE);
+                        itemBinding.group.setVisibility(View.GONE);
+                    }else if(status == AGREED) {
                         itemBinding.tvStatus.setText(R.string.system_msg_accepted);
                         itemBinding.tvStatus.setVisibility(View.VISIBLE);
                         itemBinding.group.setVisibility(View.GONE);

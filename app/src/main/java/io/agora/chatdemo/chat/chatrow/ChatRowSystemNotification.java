@@ -13,6 +13,7 @@ import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.widget.chatrow.EaseChatRowText;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.exceptions.ChatException;
 
 public class ChatRowSystemNotification extends EaseChatRowText {
 
@@ -52,8 +53,24 @@ public class ChatRowSystemNotification extends EaseChatRowText {
             tv_chatcontent.setText(getStrAfter(0,3));
         }else if (TextUtils.equals(message.getStringAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE,""),DemoConstant.SYSTEM_JOINED_GROUP)){
             tv_chatcontent.setText(getStrAfter(0,3));
-        }else if (TextUtils.equals(message.getStringAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE,""),DemoConstant.SYSTEM_JOINED_GROUP)){
+        }else if (TextUtils.equals(message.getStringAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE,""),DemoConstant.SYSTEM_GROUP_INVITE_ACCEPT)){
             tv_chatcontent.setText(getStrAfter(0,message.getFrom().length()));
+        }else if (TextUtils.equals(message.getStringAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE,""),DemoConstant.SYSTEM_CHANGE_OWNER)){
+            if (message.ext().containsKey(DemoConstant.ID_OR_NICKNAME)){
+                try {
+                    tv_chatcontent.setText(getStrAfter(0,message.getStringAttribute(DemoConstant.ID_OR_NICKNAME).length()));
+                } catch (ChatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else if (TextUtils.equals(message.getStringAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE,""),DemoConstant.SYSTEM_CHANGE_GROUP_NAME)){
+            if (message.ext().containsKey(DemoConstant.SYSTEM_CHANGE_GROUP_NAME)){
+                try {
+                    tv_chatcontent.setText(getStrAfter(tv_chatcontent.getText().length()-message.getStringAttribute(DemoConstant.SYSTEM_CHANGE_GROUP_NAME).length(),tv_chatcontent.getText().length()));
+                } catch (ChatException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

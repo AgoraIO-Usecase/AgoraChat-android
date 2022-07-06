@@ -95,7 +95,9 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!--Main-->
-        <activity android:name=".main.MainActivity"
+        <activity
+            android:exported="true"
+            android:name=".main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>

@@ -93,11 +93,17 @@
         <activity
             android:name=".sign.SignInActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!--Main-->
-        <activity android:name=".main.MainActivity"
-            android:screenOrientation="portrait" />
+        <activity
+            android:exported="true"
+            android:name=".main.MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
         <!--Chat-->
         <activity
             android:name=".chat.ChatActivity"
@@ -143,14 +149,12 @@
         <activity
             android:name=".av.CallSingleBaseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
             android:label="@string/demo_activity_label_video_call"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".av.CallMultipleBaseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
             android:label="@string/demo_activity_label_multi_call"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
@@ -189,7 +193,8 @@
 
         <activity
             android:name=".av.CallInviteUsersActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance"/>
 
     </application>
 

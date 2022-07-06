@@ -5,7 +5,12 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import com.haoge.easyandroid.easy.EasyExecutor;
 
@@ -51,6 +56,16 @@ public class DemoCallKitListener implements EaseCallKitListener {
     private UsersManager mUsersManager;
     private Context mContext;
     private final EasyExecutor executor;
+    private Handler handler=new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Object obj = msg.obj;
+            if( obj instanceof  String) {
+                ToastUtils.showToast((String) obj);
+            }
+        }
+    };
 
     public DemoCallKitListener(Context context, UsersManager usersManager) {
         this.mContext = context;
@@ -89,33 +104,35 @@ public class DemoCallKitListener implements EaseCallKitListener {
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         String callString = mContext.getString(R.string.ease_call_duration);
         callString += formatter.format(callTime);
+        Message message = handler.obtainMessage();
         switch (reason) {
             case EaseCallEndReasonHangup://Hang up normally
-                ToastUtils.showToast(callString);
+                message.obj=callString;
                 break;
             case EaseCallEndReasonCancel://cancel the call yourself
                 break;
             case EaseCallEndReasonRemoteCancel: //The other party cancels the call
-                ToastUtils.showToast(callString);
+                message.obj=callString;
                 break;
             case EaseCallEndReasonRefuse://request declined
-                ToastUtils.showToast(mContext.getString(R.string.demo_call_end_reason_refuse));
+                message.obj=mContext.getString(R.string.demo_call_end_reason_refuse);
                 break;
             case EaseCallEndReasonBusy: //busy
-                ToastUtils.showToast(mContext.getString(R.string.demo_call_end_reason_busy));
+                message.obj=mContext.getString(R.string.demo_call_end_reason_busy);
                 break;
             case EaseCallEndReasonNoResponse://not responding
                 break;
             case EaseCallEndReasonRemoteNoResponse://No response from peer
-                ToastUtils.showToast(mContext.getString(R.string.demo_call_end_reason_busy_remote_no_response));
+                message.obj=mContext.getString(R.string.demo_call_end_reason_busy_remote_no_response);
                 break;
             case EaseCallEndReasonHandleOnOtherDeviceAgreed://other devices connected
-                ToastUtils.showToast(mContext.getString(R.string.demo_call_end_reason_other_device_agreed));
+                message.obj=mContext.getString(R.string.demo_call_end_reason_other_device_agreed);
                 break;
             case EaseCallEndReasonHandleOnOtherDeviceRefused://other devices declined
-                ToastUtils.showToast(mContext.getString(R.string.demo_call_end_reason_other_device_refused));
+                message.obj=mContext.getString(R.string.demo_call_end_reason_other_device_refused);
                 break;
         }
+        handler.sendMessage(message);
 
     }
 

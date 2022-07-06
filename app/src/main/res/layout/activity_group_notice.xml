@@ -13,6 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarRightTitle="@string/title_bar_edit"
+        app:titleBarRightTextColor="@color/color_main_blue"
         app:titleBarRightVisible="true"
         app:titleBarTitlePosition="left" />
 

@@ -64,6 +64,17 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // should be in launcher activity, but all app use this can avoid the problem
+        if(!isTaskRoot()){
+            Intent intent = getIntent();
+            String action = intent.getAction();
+            if(intent.hasCategory(Intent.CATEGORY_LAUNCHER) && action.equals(Intent.ACTION_MAIN)){
+                finish();
+                return;
+            }
+        }
+
         mContext = this;
         clearFragmentsBeforeCreate();
         registerAccountObservable();

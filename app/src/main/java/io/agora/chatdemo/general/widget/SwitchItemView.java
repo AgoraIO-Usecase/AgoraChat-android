@@ -2,6 +2,7 @@ package io.agora.chatdemo.general.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -79,6 +80,9 @@ public class SwitchItemView extends ConstraintLayout {
         }
         tvTitle.getPaint().setTextSize(titleSize);
 
+        int titleStyle = a.getInteger(R.styleable.SwitchItemView_switchItemTitleStyle,  -1);
+        setTvStyle(titleStyle);
+
         boolean showDivider = a.getBoolean(R.styleable.SwitchItemView_switchItemShowDivider, true);
         viewDivider.setVisibility(showDivider ? VISIBLE : GONE);
 
@@ -135,6 +139,20 @@ public class SwitchItemView extends ConstraintLayout {
                 }
             }
         });
+    }
+
+    private void setTvStyle(int titleStyle){
+        switch (titleStyle){
+            case 0:
+                tvTitle.setTypeface(null, Typeface.NORMAL);
+                break;
+            case 1:
+                tvTitle.setTypeface(null, Typeface.BOLD);
+                break;
+            case 2:
+                tvTitle.setTypeface(null, Typeface.ITALIC);
+                break;
+        }
     }
     
     public EaseImageView getAvatar() {

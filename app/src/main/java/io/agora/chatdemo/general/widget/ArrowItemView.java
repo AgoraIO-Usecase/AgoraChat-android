@@ -2,6 +2,7 @@ package io.agora.chatdemo.general.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -68,6 +69,9 @@ public class ArrowItemView extends ConstraintLayout {
             titleColor = ContextCompat.getColor(getContext(), titleColorId);
         }
         tvTitle.setTextColor(titleColor);
+
+        int titleStyle = a.getInteger(R.styleable.ArrowItemView_arrowItemTitleStyle,  -1);
+        setTvStyle(titleStyle);
 
         int titleSizeId = a.getResourceId(R.styleable.ArrowItemView_arrowItemTitleSize, -1);
         titleSize = a.getDimension(R.styleable.ArrowItemView_arrowItemTitleSize, sp2px(getContext(), 14));
@@ -194,6 +198,20 @@ public class ArrowItemView extends ConstraintLayout {
         ViewGroup.LayoutParams params = avatar.getLayoutParams();
         params.width = width;
         avatar.setLayoutParams(params);
+    }
+
+    private void setTvStyle(int titleStyle){
+        switch (titleStyle){
+            case 0:
+                tvTitle.setTypeface(null, Typeface.NORMAL);
+                break;
+            case 1:
+                tvTitle.setTypeface(null, Typeface.BOLD);
+                break;
+            case 2:
+                tvTitle.setTypeface(null, Typeface.ITALIC);
+                break;
+        }
     }
 
     public void setTitleColor(int titleColor) {

@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference;
 class DialogViewHelper {
     private final Context mContext;
     private final View mContentView;
-    private SparseArray<WeakReference<View>> views = new SparseArray<>();//使用若引用，防止内存泄露
+    private SparseArray<WeakReference<View>> views = new SparseArray<>();//Use WeakReference to prevent memory leaks
 
 
     public DialogViewHelper(Context mContext, View contentView) {

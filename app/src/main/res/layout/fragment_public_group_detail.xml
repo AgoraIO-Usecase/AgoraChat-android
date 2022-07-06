@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginTop="32dp"
+        app:arrowItemTitleStyle="bold"
         android:foreground="@drawable/ease_ripple_click_gray"
         app:arrowItemAvatarHeight="32dp"
         app:arrowItemAvatarSrc="@drawable/public_group_join"

@@ -7,11 +7,11 @@ import android.content.Context;
 public class CommonUtils {
 
     public static void copyContentToClipboard(Context context,String content ) {
-        //获取剪贴板管理器：
+        // Get a clipboard manager：
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        // 创建普通字符型ClipData
+        // create ClipData
         ClipData mClipData = ClipData.newPlainText("Label", content);
-        // 将ClipData内容放到系统剪贴板里。
+        // Put the ClipData contents into the system clipboard.
         cm.setPrimaryClip(mClipData);
     }
 }

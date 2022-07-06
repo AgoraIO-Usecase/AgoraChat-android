@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="54dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/select_content"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="54dp"
         android:layout_marginStart="20dp"
         android:gravity="center_vertical"
         android:textColor="@color/black"
-        tools:text="环信" />
+        android:textStyle="bold"
+        android:textSize="16sp"
+        tools:text="easemob" />
 
 
     <RadioButton

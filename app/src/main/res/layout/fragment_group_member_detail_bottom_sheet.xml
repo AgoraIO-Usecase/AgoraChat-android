@@ -61,6 +61,7 @@
         app:arrowItemAvatarHeight="32dp"
         app:arrowItemAvatarSrc="@drawable/group_member_chat"
         app:arrowItemAvatarWidth="32dp"
+        app:arrowItemTitleStyle="bold"
         app:arrowItemShowArrow="true"
         app:arrowItemShowAvatar="true"
         app:arrowItemTitle="@string/contact_detail_start_chat"

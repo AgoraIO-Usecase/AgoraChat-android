@@ -107,7 +107,6 @@ public class ChatReportActivity extends BaseActivity implements
                 public void run() {
                     int pos =  mediaPlayer.getCurrentPosition();
                     final int dur  =  mediaPlayer.getDuration();
-                    Log.d("mUpdateCounters","pos: "+pos + " dur: "+ dur);
                     report_SeekBar.setProgress(pos);
                     report_SeekBar.setMax(dur);
                     mDuration.setText(getDurationString(pos,false));
@@ -134,6 +133,7 @@ public class ChatReportActivity extends BaseActivity implements
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
             reportMsgId = bundle.getString(EaseConstant.REPORT_MESSAGE_ID);
+            message = ChatClient.getInstance().chatManager().getMessage(reportMsgId);
         }
         initData();
     }
@@ -174,19 +174,12 @@ public class ChatReportActivity extends BaseActivity implements
         labels.add(getString(R.string.report_label_adult));
         labels.add(getString(R.string.report_label_racy));
         labels.add(getString(R.string.report_label_other));
-        message = ChatClient.getInstance().chatManager().getMessage(reportMsgId);
         if (null != message){
             mTime.setText(EaseDateUtils.getTimestampString(this, new Date(message.getMsgTime())));
             userName.setText(EaseUserUtils.getUserInfo(message.getFrom()).getNickname());
             EaseUserUtils.setUserAvatar(this,message.getFrom(),easeImageView);
             if (message.getBody() instanceof TextMessageBody){
                 mTextContent.setVisibility(View.VISIBLE);
-                Log.e("initData"," from " + message.getFrom()
-                    + " getBody " + message.getBody().toString()
-                    + " getMsgTime " + message.getMsgTime()
-                    + " getNickname " + EaseUserUtils.getUserInfo(message.getFrom()).getNickname()
-                    + " getAvatar " +    EaseUserUtils.getUserInfo(message.getFrom()).getAvatar()
-                );
                 Spannable span = EaseSmileUtils.getSmiledText(ChatReportActivity.this,((TextMessageBody)message.getBody()).getMessage());
                 mTextContent.setText(span, TextView.BufferType.SPANNABLE);
             }else if (message.getBody() instanceof ImageMessageBody){
@@ -195,10 +188,8 @@ public class ChatReportActivity extends BaseActivity implements
             }else if (message.getBody() instanceof VoiceMessageBody){
                 report_voice_layout.setVisibility(View.VISIBLE);
                 mFileDuration = ((VoiceMessageBody) message.getBody()).getLength();
-
                 mDuration.setText(getTimer(mFileDuration));
                 report_SeekBar.setProgress(0);
-
             }else if (message.getBody() instanceof VideoMessageBody){
                 report_video_layout.setVisibility(View.VISIBLE);
                 if(EaseFileUtils.isFileExistByUri(this, ((VideoMessageBody) message.getBody()).getLocalUri())) {

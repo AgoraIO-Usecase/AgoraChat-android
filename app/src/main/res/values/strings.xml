@@ -453,4 +453,6 @@
     <string name="report_label_racy">Racy</string>
     <string name="report_label_other">Other</string>
 
+    <string name="ease_action_report">Report</string>
+
 </resources>

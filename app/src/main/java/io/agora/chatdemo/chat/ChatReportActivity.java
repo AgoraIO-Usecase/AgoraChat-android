@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import io.agora.CallBack;
@@ -92,7 +91,6 @@ public class ChatReportActivity extends BaseActivity implements
     private SeekBar report_SeekBar;
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
-    private Timer timer;
     private EasyVideoPlayer videoPlayer;
     private ArrayList<String> labels = new ArrayList<>();
     private ChatMessage message;
@@ -109,7 +107,9 @@ public class ChatReportActivity extends BaseActivity implements
                     final int dur  =  mediaPlayer.getDuration();
                     report_SeekBar.setProgress(pos);
                     report_SeekBar.setMax(dur);
-                    mDuration.setText(getDurationString(pos,false));
+                    if (pos != 0){
+                        mDuration.setText(getDurationString(pos,false));
+                    }
                     if (mHandler != null) mHandler.postDelayed(this, UPDATE_INTERVAL);
                 }
             };
@@ -164,7 +164,6 @@ public class ChatReportActivity extends BaseActivity implements
 
 
         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-        timer = new Timer();
 
         setTint(report_SeekBar, Color.WHITE);
 
@@ -190,6 +189,7 @@ public class ChatReportActivity extends BaseActivity implements
                 mFileDuration = ((VoiceMessageBody) message.getBody()).getLength();
                 mDuration.setText(getTimer(mFileDuration));
                 report_SeekBar.setProgress(0);
+                report_SeekBar.setSecondaryProgress(0);
             }else if (message.getBody() instanceof VideoMessageBody){
                 report_video_layout.setVisibility(View.VISIBLE);
                 if(EaseFileUtils.isFileExistByUri(this, ((VideoMessageBody) message.getBody()).getLocalUri())) {
@@ -346,7 +346,6 @@ public class ChatReportActivity extends BaseActivity implements
             public void onPrepared(MediaPlayer mp) {
                 mp.start();
                 mp.seekTo(0);
-                Log.d("mediaPlayer-",mediaPlayer.getDuration()+"");
             }
         });
 
@@ -409,10 +408,15 @@ public class ChatReportActivity extends BaseActivity implements
         if ((msg.getBody() instanceof VoiceMessageBody)){
             VoiceMessageBody voiceBody = (VoiceMessageBody) msg.getBody();
             try {
-                mediaPlayer.setDataSource(this, voiceBody.getLocalUri());
-                mediaPlayer.prepare();
-                report_SeekBar.setMax(mediaPlayer.getDuration());
-                mediaPlayer.start();
+                if (mediaPlayer.isPlaying()){
+                    mediaPlayer.stop();
+                }else {
+                    mediaPlayer.reset();
+                    mediaPlayer.setDataSource(this, voiceBody.getLocalUri());
+                    mediaPlayer.prepare();
+                    report_SeekBar.setMax(mediaPlayer.getDuration());
+                    mediaPlayer.start();
+                }
 
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
@@ -422,6 +426,7 @@ public class ChatReportActivity extends BaseActivity implements
                         mediaPlayer.seekTo(0);
                         report_SeekBar.setProgress(0);
                         mDuration.setText(getTimer(mFileDuration));
+                        if (mHandler != null) mHandler.removeCallbacks(mUpdateCounters);
                     }
                 });
 
@@ -437,8 +442,6 @@ public class ChatReportActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
-        timer.cancel();
-        timer = null;
         super.onDestroy();
         if(mediaPlayer.isPlaying()) {
             mediaPlayer.stop();

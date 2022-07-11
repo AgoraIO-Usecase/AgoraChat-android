@@ -84,7 +84,6 @@
                         android:textSize="14sp"
                         android:visibility="gone"
                         android:maxEms="100"
-                        android:singleLine="true"
                         android:ellipsize="end"
                         android:maxLines="6"
                         android:textColor="@color/report_content"

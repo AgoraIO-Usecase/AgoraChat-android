@@ -205,7 +205,6 @@ public class ChatReportActivity extends BaseActivity implements
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
-                    dismissLoading();
                     ChatReportCompleteActivity.actionStart(ChatReportActivity.this);
                     finish();
                 }
@@ -215,6 +214,18 @@ public class ChatReportActivity extends BaseActivity implements
                     super.onError(code, message);
                     dismissLoading();
                     showToast(message);
+                }
+
+                @Override
+                public void onLoading(@Nullable Boolean data) {
+                    super.onLoading(data);
+                    showLoading("Loading...");
+                }
+
+                @Override
+                public void onHideLoading() {
+                    super.onHideLoading();
+                    dismissLoading();
                 }
             });
         });
@@ -263,7 +274,6 @@ public class ChatReportActivity extends BaseActivity implements
                         .setOnConfirmClickListener(R.string.dialog_btn_to_confirm,new SimpleDialog.OnConfirmClickListener() {
                             @Override
                             public void onConfirmClick(View view) {
-                                showLoading("Loading...");
                                 viewModel.reportMessage(reportMsgId, report_type.getText().toString(), easeInputEditText.getText().toString());
                             }
                         }).show();

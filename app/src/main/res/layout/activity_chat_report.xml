@@ -92,15 +92,14 @@
 
                     <io.agora.chat.uikit.widget.EaseImageView
                         android:id="@+id/img_content"
-                        android:layout_below="@id/user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/user_name"
                         android:scaleType="fitCenter"
+                        android:visibility="gone"
                         app:ease_radius="@dimen/ease_chat_image_corner_radius"
                         app:ease_shape_type="rectangle"
-                        tools:src="@drawable/ease_default_avatar"
-                        android:visibility="gone"
-                        />
+                        tools:src="@drawable/ease_default_avatar" />
 
                     <LinearLayout
                         android:id="@+id/voice_content_layout"
@@ -276,7 +275,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:maxLength="500"
+                    android:maxLength="150"
                     android:paddingTop="8dp"
                     android:hint="Input"
                     android:gravity="left|top"
@@ -302,7 +301,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:text="/500"
+                        android:text="/150"
                         android:textColor="@color/report_line"
                         />
 

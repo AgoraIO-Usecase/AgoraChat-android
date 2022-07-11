@@ -16,7 +16,6 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
@@ -29,8 +28,9 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.DrawableCompat;
-
+import androidx.lifecycle.ViewModelProvider;
 
 
 import java.io.File;
@@ -41,7 +41,6 @@ import java.util.Formatter;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import io.agora.CallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.FileMessageBody;
@@ -64,8 +63,9 @@ import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
+import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
+import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
-import io.agora.chatdemo.general.widget.EaseProgressDialog;
 import io.agora.exceptions.ChatException;
 
 public class ChatReportActivity extends BaseActivity implements
@@ -87,7 +87,6 @@ public class ChatReportActivity extends BaseActivity implements
     private EditText easeInputEditText;
     private ImageView mImgContent;
     private ImageView mPlay;
-    private EaseProgressDialog progressDialog;
     private SeekBar report_SeekBar;
     private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
@@ -98,6 +97,7 @@ public class ChatReportActivity extends BaseActivity implements
     private ScrollView scrollView;
     private Handler mHandler;
     private static final int UPDATE_INTERVAL = 100;
+    private ChatViewModel viewModel;
 
     private final Runnable mUpdateCounters =
             new Runnable() {
@@ -200,14 +200,31 @@ public class ChatReportActivity extends BaseActivity implements
                 mFileName.setText(((FileMessageBody) message.getBody()).getFileName());
             }
         }
+        viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        viewModel.getChatManagerObservable().observe(this,response->{
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(@Nullable Boolean data) {
+                    dismissLoading();
+                    ChatReportCompleteActivity.actionStart(ChatReportActivity.this);
+                    finish();
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    dismissLoading();
+                    showToast(message);
+                }
+            });
+        });
     }
 
     public void initListener(){
         report_type_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2022/6/1 show Choose type
-                new ReportDialogFragment.Builder((BaseActivity) mContext)
+                new ReportDialogFragment.Builder(mContext)
                         .setData(labels)
                         .setCancelColorRes(R.color.black)
                         .setWindowAnimations(R.style.dialog_from_bottom_anim)
@@ -246,39 +263,8 @@ public class ChatReportActivity extends BaseActivity implements
                         .setOnConfirmClickListener(R.string.dialog_btn_to_confirm,new SimpleDialog.OnConfirmClickListener() {
                             @Override
                             public void onConfirmClick(View view) {
-                                progressDialog = new EaseProgressDialog.Builder(ChatReportActivity.this)
-                                        .setLoadingMessage("Loading...")
-                                        .show();
-
-                                ChatClient.getInstance().chatManager().asyncReportMessage(reportMsgId, report_type.getText().toString(), easeInputEditText.getText().toString(), new CallBack() {
-                                    @Override
-                                    public void onSuccess() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (!isFinishing() && !isDestroyed()) {
-                                                    if (progressDialog != null) {
-                                                        progressDialog.dismiss();
-                                                    }
-                                                    ChatReportCompleteActivity.actionStart(ChatReportActivity.this);
-                                                    finish();
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onError(int code, String error) {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (progressDialog != null) {
-                                                    progressDialog.dismiss();
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
+                                showLoading("Loading...");
+                                viewModel.reportMessage(reportMsgId, report_type.getText().toString(), easeInputEditText.getText().toString());
                             }
                         }).show();
             }

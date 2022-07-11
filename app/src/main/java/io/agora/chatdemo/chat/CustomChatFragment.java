@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
+import io.agora.chat.CustomMessageBody;
 import io.agora.chat.LocationMessageBody;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.menu.EasePopupWindowHelper;
@@ -40,7 +41,7 @@ public class CustomChatFragment extends EaseChatFragment {
     public void onPreMenu(EasePopupWindowHelper helper, ChatMessage message) {
         super.onPreMenu(helper, message);
         if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser()) ||
-                message.getBody() instanceof LocationMessageBody){
+                message.getBody() instanceof LocationMessageBody || message.getBody() instanceof CustomMessageBody){
             chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_report,false);
         }else {
             chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_report,true);

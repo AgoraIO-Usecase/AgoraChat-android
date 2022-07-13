@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import io.agora.CallBack;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
@@ -164,6 +165,28 @@ public class EMChatManagerRepository extends BaseEMRepository{
                 });
 
             }
+        }.asLiveData();
+    }
+
+
+    public LiveData<Resource<Boolean>> reportMessage(String reportMsgId,String reportType,String reportReason){
+        return new NetworkOnlyResource<Boolean>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                ChatClient.getInstance().chatManager().asyncReportMessage(reportMsgId, reportType, reportReason, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+
         }.asLiveData();
     }
 

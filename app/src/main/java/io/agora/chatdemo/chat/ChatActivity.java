@@ -131,9 +131,11 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
     }
 
     private void initChatFragment() {
+        CustomChatFragment customChatFragment = new CustomChatFragment();
         EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType)
                 .useHeader(false)
                 .setCustomAdapter(new CustomMessageAdapter())
+                .setCustomFragment(customChatFragment)
                 .setEmptyLayout(R.layout.ease_layout_no_data_show_nothing)
                 .setOnChatExtendMenuItemClickListener(new OnChatExtendMenuItemClickListener() {
                     @Override

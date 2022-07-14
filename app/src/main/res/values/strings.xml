@@ -447,5 +447,12 @@
     <string name="thread_remove_member_hint">Remove From Thread</string>
     <string name="thread_unsent_message_success">You successfully unsent a message</string>
 
+    <string name="check_report_type">The Type of Report is Required</string>
+    <string name="is_confirm_report">Confirm to Report?</string>
+    <string name="report_label_adult">Adult</string>
+    <string name="report_label_racy">Racy</string>
+    <string name="report_label_other">Other</string>
+
+    <string name="ease_action_report">Report</string>
 
 </resources>

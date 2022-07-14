@@ -27,6 +27,7 @@ public class ChatViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Boolean>> makeConversationReadObservable;
     private SingleSourceLiveData<Resource< List<String>>> getNoPushUsersObservable;
     private SingleSourceLiveData<Resource<Boolean>> setNoPushUsersObservable;
+    private SingleSourceLiveData<Resource<Boolean>> chatManagerObservable;
 
     public ChatViewModel(@NonNull Application application) {
         super(application);
@@ -38,6 +39,7 @@ public class ChatViewModel extends AndroidViewModel {
         getNoPushUsersObservable = new SingleSourceLiveData<>();
         setNoPushUsersObservable = new SingleSourceLiveData<>();
         presenceObservable = new SingleSourceLiveData<>();
+        chatManagerObservable = new SingleSourceLiveData<>();
     }
     public LiveData<Resource<List<Presence>>> getPresenceObservable(){
         return presenceObservable;
@@ -47,6 +49,9 @@ public class ChatViewModel extends AndroidViewModel {
     }
     public LiveData<Resource<ChatRoom>> getChatRoomObservable() {
         return chatRoomObservable;
+    }
+    public LiveData<Resource<Boolean>> getChatManagerObservable(){
+        return chatManagerObservable;
     }
     public LiveData<Resource<List<String>>> getNoPushUsersObservable() {
         return getNoPushUsersObservable;
@@ -88,4 +93,7 @@ public class ChatViewModel extends AndroidViewModel {
         return makeConversationReadObservable;
     }
 
+    public void reportMessage(String reportMsgId, String reportType, String reportReason ){
+        chatManagerObservable.setSource(chatManagerRepository.reportMessage(reportMsgId,reportType,reportReason));
+    }
 }

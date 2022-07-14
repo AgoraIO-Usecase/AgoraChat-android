@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/check_img"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/check"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="168dp"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/check_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp"
+        android:text="Your Report"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:layout_below="@id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="has been submitted"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        />
+
+
+    <TextView
+        android:id="@+id/complete_done"
+        android:layout_width="132dp"
+        android:layout_height="36dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="154dp"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"
+        android:text="Done"
+        android:background="@drawable/sign_button_bg"
+        />
+
+</RelativeLayout>

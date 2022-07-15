@@ -102,92 +102,48 @@
                         tools:src="@drawable/ease_default_avatar" />
 
                     <LinearLayout
-                        android:id="@+id/voice_content_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="38dp"
-                        android:gravity="center_vertical"
-                        android:layout_below="@id/user_name"
-                        android:background="@color/color_search_bg"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        >
-
-                        <ImageView
-                            android:id="@+id/report_player"
-                            android:layout_marginLeft="11dp"
-                            android:layout_marginRight="11dp"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignParentLeft="true"
-                            android:src="@drawable/chat_report_play_icon"/>
-
-                        <SeekBar
-                            android:id="@+id/report_progress"
-                            android:layout_weight="1"
-                            android:layout_height="2dp"
-                            android:layout_width="0dp"
-                            android:thumb="@null"
-                            />
-
-                        <TextView
-                            android:id="@+id/report_duration"
-                            android:layout_width="62dp"
-                            android:layout_height="22dp"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"
-                            android:layout_alignParentRight="true"
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/report_file_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="38dp"
+                        android:layout_height="70dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
                         android:gravity="center_vertical"
                         android:layout_below="@id/user_name"
                         android:background="@color/color_search_bg"
                         android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:padding="10dp"
+                        android:visibility="visible">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/chat_report_document"
-                            android:layout_marginLeft="11dp"
-                            android:layout_marginRight="11dp"
-                            />
+                        <RelativeLayout
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:gravity="center"
+                            android:background="@drawable/report_item_icon_bg">
+
+                            <ImageView
+                                android:id="@+id/file_icon"
+                                android:layout_width="44dp"
+                                android:layout_height="44dp"
+                                />
+
+                        </RelativeLayout>
+
 
                         <TextView
                             android:id="@+id/report_file_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="12dp"
                             android:textColor="@color/black"
-                            android:maxLines="1"
+                            android:maxLines="2"
                             android:maxEms="14"
-                            android:singleLine="true"
                             android:ellipsize="end"
                             />
 
                     </LinearLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/report_video_layout"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp">
-
-                        <io.agora.chat.uikit.player.EasyVideoPlayer
-                            android:id="@+id/evp_player"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    </RelativeLayout>
-
-
                 </RelativeLayout>
-
 
             </LinearLayout>
 

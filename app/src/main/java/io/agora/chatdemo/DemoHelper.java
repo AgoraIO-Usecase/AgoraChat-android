@@ -362,7 +362,7 @@ public class DemoHelper {
         addCallkitListener();
     }
 
-    private Drawable getFileDrawable(String filename) {
+    public static Drawable getFileDrawable(String filename) {
         if (!TextUtils.isEmpty(filename)) {
             Drawable drawable = null;
             Context context = DemoApplication.getInstance();

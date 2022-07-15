@@ -140,4 +140,6 @@ public interface DemoConstant extends EaseConstant {
     String SYSTEM_CHANGE_OWNER = "system_change_owner";
     String SYSTEM_CHANGE_GROUP_NAME = "system_change_group_name";
 
+    String REPORT_MESSAGE_ID = "report_message_id";
+
 }

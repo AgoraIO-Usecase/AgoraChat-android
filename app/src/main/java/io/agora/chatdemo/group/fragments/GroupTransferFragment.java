@@ -6,6 +6,11 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.util.UUID;
+
+import io.agora.chat.ChatClient;
+import io.agora.chat.ChatMessage;
+import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoHelper;
@@ -19,6 +24,8 @@ import io.agora.chatdemo.group.GroupHelper;
 
 public class GroupTransferFragment extends GroupAllMembersFragment {
     private boolean isLeaveAfterTransfer;
+    private String newOwner;
+    private String newOwner_nickname;
 
     @Override
     protected void initArgument() {
@@ -36,6 +43,17 @@ public class GroupTransferFragment extends GroupAllMembersFragment {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
+                    ChatMessage msg = ChatMessage.createSendMessage(ChatMessage.Type.TXT);
+                    msg.setChatType(ChatMessage.ChatType.Chat);
+                    msg.setTo(groupId);
+                    msg.setMsgId(UUID.randomUUID().toString());
+                    msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
+                    msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_CHANGE_OWNER);
+                    msg.setAttribute(DemoConstant.ID_OR_NICKNAME,TextUtils.isEmpty(newOwner_nickname)? newOwner : newOwner_nickname);
+                    msg.addBody(new TextMessageBody( getString(R.string.group_change_owner,TextUtils.isEmpty(newOwner_nickname)? newOwner : newOwner_nickname)));
+                    msg.setStatus(ChatMessage.Status.SUCCESS);
+                    // save invitation as messages
+                    ChatClient.getInstance().chatManager().saveMessage(msg);
                     mContext.finish();
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_OWNER_TRANSFER, EaseEvent.TYPE.GROUP));
                 }
@@ -82,6 +100,8 @@ public class GroupTransferFragment extends GroupAllMembersFragment {
                         , new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
+                        newOwner = item.getUsername();
+                        newOwner_nickname = item.getNickname();
                         viewModel.changeOwner(groupId, item.getUsername());
                     }
                 })

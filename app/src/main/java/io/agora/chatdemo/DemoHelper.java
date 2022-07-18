@@ -128,7 +128,7 @@ public class DemoHelper {
             @Override
             public void onPresenceUpdated(List<Presence> presences) {
                 for (Presence presence : presences) {
-                    Log.d("TAG", presence.toString());
+                    EMLog.d("TAG", presence.toString());
                     mPresences.put(presence.getPublisher(), presence);
                 }
                 LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).postValue(mPresences);
@@ -425,7 +425,7 @@ public class DemoHelper {
      * @return
      */
     private ChatOptions initChatOptions(Context context) {
-        Log.d(TAG, "init Agora Chat Options");
+        EMLog.d(TAG, "init Agora Chat Options");
 
         ChatOptions options = new ChatOptions();
         boolean hasAppkey = checkAgoraChatAppKey(context);
@@ -512,7 +512,7 @@ public class DemoHelper {
      * @param callback          callback
      */
     public void logout(boolean unbindDeviceToken, final CallBack callback) {
-        Log.d(TAG, "logout: " + unbindDeviceToken);
+        EMLog.d(TAG, "logout: " + unbindDeviceToken);
         ChatClient.getInstance().logout(unbindDeviceToken, new CallBack() {
 
             @Override
@@ -534,7 +534,7 @@ public class DemoHelper {
 
             @Override
             public void onError(int code, String error) {
-                Log.d(TAG, "logout: onSuccess");
+                EMLog.e(TAG, "logout: onSuccess");
                 //reset();
                 if (callback != null) {
                     callback.onError(code, error);
@@ -562,7 +562,7 @@ public class DemoHelper {
      * Set custom logic that needs to be processed after logout
      */
     public void logoutSuccess() {
-        Log.d(TAG, "logout: onSuccess");
+        EMLog.d(TAG, "logout: onSuccess");
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
     }
 
@@ -666,7 +666,7 @@ public class DemoHelper {
         int num = helper.getUserDao().deleteUser(username);
         ChatClient.getInstance().chatManager().deleteConversation(username, false);
         getModel().deleteUsername(username, false);
-        Log.e(TAG, "delete num = " + num);
+        EMLog.e(TAG, "delete num = " + num);
         return num;
     }
 

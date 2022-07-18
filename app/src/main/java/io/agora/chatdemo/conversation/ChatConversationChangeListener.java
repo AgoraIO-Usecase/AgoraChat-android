@@ -5,11 +5,6 @@ import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 
-/**
- * Created by 许成谱 on 2022/1/20 15:21.
- * qq:1550540124
- * 热爱生活每一天！
- */
 public class ChatConversationChangeListener implements OnConversationChangeListener {
     @Override
     public void notifyItemChange(int position) {

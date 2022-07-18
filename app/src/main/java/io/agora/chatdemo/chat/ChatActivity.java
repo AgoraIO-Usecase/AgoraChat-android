@@ -116,14 +116,6 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         binding.rightImage.setImageResource(R.drawable.chat_settings_more);
         binding.toolbar.setNavigationIcon(R.drawable.ease_titlebar_back);
         if(mContext.getSupportActionBar() == null) {
-//            setSupportActionBar(binding.toolbar);
-//            if(getSupportActionBar() != null) {
-                // Show back icon
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                // Not show title
-//                getSupportActionBar().setDisplayShowTitleEnabled(false);
-//                StatusBarCompat.setToolbarCustomColor(mContext, R.color.black);
-//            }
             binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -134,7 +126,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         if(chatType == EaseChatType.GROUP_CHAT) {
             binding.llTitleRight.setVisibility(View.VISIBLE);
         }else {
-            binding.llTitleRight.setVisibility(View.GONE);
+            binding.llTitleRight.setVisibility(View.INVISIBLE);
         }
         initChatFragment();
     }
@@ -278,7 +270,8 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                     @Override
                     public void onPeerTyping(String action) {
                         if (TextUtils.equals(action, EaseChatLayout.ACTION_TYPING_BEGIN)) {
-                            binding.title.setText(getString(R.string.alert_during_typing));
+                            binding.subTitle.setText(getString(R.string.alert_during_typing));
+                            binding.subTitle.setVisibility(View.VISIBLE);
                         } else if (TextUtils.equals(action, EaseChatLayout.ACTION_TYPING_END)) {
                             setDefaultTitle();
                         }
@@ -444,7 +437,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             Presence presence = DemoHelper.getInstance().getPresences().get(conversationId);
             if(presence != null) {
                 DemoHelper.getInstance().getUsersManager().updateUserPresenceView(conversationId, binding.presenceView);
-                binding.ivIcon.setVisibility(View.GONE);
+                binding.ivIcon.setVisibility(View.INVISIBLE);
             }else {
                 showSingleInfo();
             }
@@ -453,7 +446,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
 
     private void showSingleInfo() {
         DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, binding.title, binding.ivIcon);
-        binding.title.setVisibility(View.GONE);
+        binding.title.setVisibility(View.INVISIBLE);
         binding.presenceView.setVisibility(View.VISIBLE);
     }
 
@@ -485,7 +478,8 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         } else {
             DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, binding.title, binding.ivIcon);
-            binding.title.setVisibility(View.GONE);
+            binding.title.setVisibility(View.INVISIBLE);
+            binding.subTitle.setVisibility(View.INVISIBLE);
         }
     }
 

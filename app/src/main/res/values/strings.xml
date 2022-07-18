@@ -82,7 +82,7 @@
     <string name="group_chat_members">Group Chat Members</string>
     <string name="group_name">Group Name</string>
     <string name="group_description">GROUP DESCRIPTION, NOT REQUIRED</string>
-    <string name="group_maximum_member">MAXIMUM MEMBER</string>
+    <string name="group_maximum_member">Maximum Member</string>
     <string name="group_set_to_a_public_group">Set to a Public Group</string>
     <string name="group_no_more_than">No More Than 3000</string>
     <string name="group_allow_members_to_invite">Allow Members to Invite</string>
@@ -297,6 +297,9 @@
     <string name="group_members_action_transfer_confirm">Transfer</string>
     <string name="group_members_action_transfer_and_leave_title">Transfer Ownership to %1$s and Leave this Group?</string>
     <string name="group_members_action_transfer_and_leave_confirm">Yes</string>
+
+    <string name="group_change_owner">%1$s becomes the new Group Owner</string>
+    <string name="group_change_name">You named Group %1$s</string>
 
     <string name="group_edit_notice_dialog_title">Edit Notice</string>
 

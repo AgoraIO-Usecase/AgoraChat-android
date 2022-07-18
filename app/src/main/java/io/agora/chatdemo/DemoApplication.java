@@ -46,10 +46,10 @@ public class DemoApplication extends MultiDexApplication {
         Stipop.Companion.configure(this, (isConfigured) -> {
             if (isConfigured) {
                 //todo
-                EMLog.d("Stipop","初始化 Stipop 成功");
+                EMLog.d("Stipop","init Stipop successful");
             } else {
                 //todo
-                EMLog.e("Stipop","初始化 Stipop 失败");
+                EMLog.e("Stipop","init Stipop failed");
             }
             return null;
         });

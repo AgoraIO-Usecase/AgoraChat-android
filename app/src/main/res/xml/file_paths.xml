@@ -2,4 +2,6 @@
 <paths>
     <external-path path="Android/data/io/agora/chatdemo/" name="files_root" />
     <external-path path="." name="external_storage_root" />
+    <files-path    path="." name="files"/>
+    <cache-path    path="." name="cached_files"  />
 </paths>

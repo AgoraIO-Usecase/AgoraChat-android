@@ -32,7 +32,7 @@ public class CustomChatFragment extends EaseChatFragment {
     @Override
     public void initView() {
         super.initView();
-        MenuItemBean menuItemBean = new MenuItemBean(0, R.id.action_chat_report,99, getResources().getString(io.agora.chat.uikit.R.string.ease_action_report));
+        MenuItemBean menuItemBean = new MenuItemBean(0, R.id.action_chat_report,99, getResources().getString(R.string.ease_action_report));
         menuItemBean.setResourceId(R.drawable.chat_item_menu_report);
         chatLayout.getMenuHelper().addItemMenu(menuItemBean);
     }

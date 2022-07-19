@@ -154,7 +154,7 @@ public class GroupHelper {
 
     /**
      * Whether joined group
-     * @param allJoinGroups 所有加入的群组
+     * @param allJoinGroups All joined groups
      * @param groupId
      * @return
      */

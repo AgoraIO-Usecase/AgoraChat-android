@@ -1,6 +1,7 @@
 package io.agora.chatdemo.me;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,6 +23,7 @@ public class PrivacyActivity extends BaseInitActivity implements EaseTitleBar.On
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        mBinding.titleBar.getTitle().setTypeface(null, Typeface.BOLD);
     }
 
     @Override

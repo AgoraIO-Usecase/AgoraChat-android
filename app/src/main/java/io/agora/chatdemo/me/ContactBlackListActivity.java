@@ -1,5 +1,6 @@
 package io.agora.chatdemo.me;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -59,7 +60,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-
+        mBinding.titleBar.getTitle().setTypeface(null, Typeface.BOLD);
         mBinding.rvList.setLayoutManager(new LinearLayoutManager(mContext));
         mContactListAdapter = new ContactListAdapter();
         mContactListAdapter.hideEmptyView(true);

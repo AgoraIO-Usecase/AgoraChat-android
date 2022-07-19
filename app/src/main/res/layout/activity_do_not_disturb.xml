@@ -18,7 +18,6 @@
         app:titleBarTitleTextColor="@color/color_main_text"
         app:titleBarRightTitle="@string/group_done_title"
         app:titleBarRightVisible="true"
-        app:titleBarTitleTextStyle="bold"
         app:titleBarRightTextColor="@color/ease_chat_thread_region_msg_count_color"
         />
 

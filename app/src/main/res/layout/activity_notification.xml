@@ -15,7 +15,9 @@
         app:titleBarLeftImage="@drawable/ease_titlebar_back"
         app:titleBarTitle="@string/me_setting_notifications"
         app:titleBarTitlePosition="left"
-        app:titleBarTitleTextColor="@color/color_main_text" />
+        app:titleBarTitleTextStyle="bold"
+        app:titleBarTitleTextColor="@color/color_main_text"
+        tools:ignore="MissingConstraints" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
@@ -54,6 +56,7 @@
                 app:arrowItemAvatarWidth="@dimen/about_me_avatar_size"
                 app:arrowItemTitle="@string/notification_setting"
                 app:arrowItemTitleSize="@dimen/text_size_normal"
+                app:arrowItemTitleStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/push_title" />
@@ -63,6 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_item_height"
                 android:background="@color/white"
+                app:arrowItemTitleStyle="bold"
                 android:foreground="@drawable/ease_ripple_click_gray"
                 app:arrowItemAvatarHeight="@dimen/about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/about_me_avatar_size"
@@ -103,6 +107,7 @@
                 android:layout_height="@dimen/common_item_height"
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
+                app:switchItemTitleStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/not_disturb_time"
@@ -129,6 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_item_height"
                 android:background="@color/white"
+                app:switchItemTitleStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/app_setting_title"
@@ -141,6 +147,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_item_height"
                 android:background="@color/white"
+                app:switchItemTitleStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_switch_alert_sound"

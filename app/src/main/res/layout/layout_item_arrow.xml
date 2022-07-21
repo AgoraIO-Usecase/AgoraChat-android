@@ -9,7 +9,7 @@
         android:id="@+id/avatar"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginStart="@dimen/margin_12"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -29,7 +29,7 @@
         app:layout_constraintRight_toLeftOf="@id/tv_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginStart="@dimen/margin_16"
-        tools:text="群文件" />
+        tools:text="group file" />
 
     <TextView
         android:id="@+id/tv_content"
@@ -48,7 +48,7 @@
         app:layout_constraintRight_toLeftOf="@id/iv_arrow"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginRight="@dimen/margin_20"
-        tools:text="群文件" />
+        tools:text="content" />
 
     <ImageView
         android:id="@+id/iv_arrow"

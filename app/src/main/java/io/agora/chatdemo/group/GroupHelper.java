@@ -47,7 +47,7 @@ public class GroupHelper {
     }
 
     /**
-     * 是否是聊天室创建者
+     * Whether is chatRoom owner
      * @return
      */
     public static boolean isOwner(ChatRoom room) {
@@ -59,7 +59,7 @@ public class GroupHelper {
     }
 
     /**
-     * 是否是管理员
+     * Whether is chatRoom owner
      * @return
      */
     public synchronized static boolean isAdmin(Group group) {
@@ -74,7 +74,7 @@ public class GroupHelper {
     }
 
     /**
-     * 是否是管理员
+     * Whether is admin
      * @return
      */
     public synchronized static boolean isAdmin(ChatRoom group) {
@@ -86,7 +86,7 @@ public class GroupHelper {
     }
 
     /**
-     * 是否有邀请权限
+     * Whether have invitation permission
      * @return
      */
     public static boolean isCanInvite(Group group) {
@@ -94,7 +94,7 @@ public class GroupHelper {
     }
 
     /**
-     * 在黑名单中
+     * in blacklist
      * @param username
      * @return
      */
@@ -103,7 +103,7 @@ public class GroupHelper {
     }
 
     /**
-     * 在黑名单中
+     * Whether in blacklist
      * @param username
      * @return
      */
@@ -112,7 +112,7 @@ public class GroupHelper {
     }
 
     /**
-     * 在禁言名单中
+     * Whether in muteList
      * @param username
      * @return
      */
@@ -121,7 +121,7 @@ public class GroupHelper {
     }
 
     /**
-     * 是否在列表中
+     * Whether in muteList
      * @param name
      * @return
      */
@@ -140,7 +140,7 @@ public class GroupHelper {
     }
 
     /**
-     * 获取群名称
+     * get GroupName
      * @param groupId
      * @return
      */
@@ -153,7 +153,7 @@ public class GroupHelper {
     }
 
     /**
-     * 判断是否加入了群组
+     * Whether joined group
      * @param allJoinGroups 所有加入的群组
      * @param groupId
      * @return

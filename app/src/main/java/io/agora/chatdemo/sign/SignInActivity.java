@@ -40,6 +40,7 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.manager.SoftKeyboardChangeHelper;
 import io.agora.chatdemo.main.MainActivity;
+import io.agora.util.EMLog;
 
 public class SignInActivity extends BaseInitActivity implements View.OnClickListener{
 
@@ -228,7 +229,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
-                    Log.e("getRegisterObservable","onSuccess");
+                    EMLog.i("getRegisterObservable","onSuccess");
                     changeUI(true);
                     showToast(R.string.sign_register_suc);
                 }
@@ -294,7 +295,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
 
     public void registerToAgoraChat(){
         setErrorHint("");
-        String agoraID = et_agora_id.getText().toString().trim();
+        String agoraID = et_agora_id.getText().toString().trim().toLowerCase();
         if(TextUtils.isEmpty(agoraID)) {
             setErrorHint(getString(R.string.sign_error_not_id));
             return;

@@ -14,12 +14,12 @@
         android:background="@color/white"
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarLeftImage="@drawable/ease_titlebar_back"
-        app:titleBarTitle="@string/notification_do_not_disturb"
         app:titleBarTitlePosition="left"
         app:titleBarTitleTextColor="@color/color_main_text"
         app:titleBarRightTitle="@string/group_done_title"
         app:titleBarRightVisible="true"
-        app:titleBarRightTextColor="@color/ease_btn_blue_normal"
+        app:titleBarTitleTextStyle="bold"
+        app:titleBarRightTextColor="@color/ease_chat_thread_region_msg_count_color"
         />
 
     <ListView

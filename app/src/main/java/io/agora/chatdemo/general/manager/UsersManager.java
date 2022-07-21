@@ -244,7 +244,7 @@ public class UsersManager {
 
 			@Override
 			public void onError(int error, String errorMsg) {
-				Log.e(TAG,UIUtils.getString(R.string.fetch_userinfo_fail));
+				EMLog.e(TAG,UIUtils.getString(R.string.fetch_userinfo_fail));
 			}
 		});
 	}

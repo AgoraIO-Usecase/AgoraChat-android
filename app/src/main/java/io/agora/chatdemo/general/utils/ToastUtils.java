@@ -22,7 +22,7 @@ import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.R;
 
 /**
- * Toast工具类，统一Toast样式，处理重复显示的问题，处理7.1.x版本crash的问题
+ * Toast tool class, unify the Toast style, deal with the problem of repeated display, and deal with the problem of version 7.1.x crash
  */
 public class ToastUtils {
     private static final int DEFAULT = 0;
@@ -32,7 +32,7 @@ public class ToastUtils {
     private static Toast toast;
 
     /**
-     * 弹出成功的toast
+     * Pop up a successful toast
      * @param message
      */
     public static void showSuccessToast(String message) {
@@ -40,7 +40,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出成功的toast
+     * Pop up a successful toast
      * @param message
      */
     public static void showSuccessToast(@StringRes int message) {
@@ -48,7 +48,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出失败的toast
+     * Failed toast pops up
      * @param message
      */
     public static void showFailToast(String message) {
@@ -56,7 +56,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出失败的toast
+     * Failed toast pops up
      * @param message
      */
     public static void showFailToast(@StringRes int message) {
@@ -64,7 +64,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出默认的toast
+     * Pop up the default toast
      * @param message
      */
     public static void showToast(String message) {
@@ -75,7 +75,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出默认的toast
+     * Pop up the default toast
      * @param message
      */
     public static void showToast(@StringRes int message) {
@@ -83,7 +83,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出成功的toast，有标题
+     * Pop up a successful toast with a title
      * @param title
      * @param message
      */
@@ -95,7 +95,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出成功的toast，有标题
+     * Pop up a successful toast with a title
      * @param title
      * @param message
      */
@@ -104,7 +104,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出失败的toast，有标题
+     * A failed toast pops up with a title
      * @param title
      * @param message
      */
@@ -116,7 +116,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出失败的toast，有标题
+     * A failed toast pops up with a title
      * @param title
      * @param message
      */
@@ -125,7 +125,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出成功的toast，有标题，可以设置显示时长
+     * A successful toast pops up, with a title, and the display duration can be set
      * @param title
      * @param message
      * @param duration
@@ -138,7 +138,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出成功的toast，有标题，可以设置显示时长
+     * A successful toast pops up, with a title, and the display duration can be set
      * @param title
      * @param message
      * @param duration
@@ -148,7 +148,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出失败的toast，有标题，可以设置显示时长
+     * The failed toast pops up, with a title, and the display duration can be set
      * @param title
      * @param message
      * @param duration
@@ -161,7 +161,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出失败的toast，有标题，可以设置显示时长
+     * The failed toast pops up, with a title, and the display duration can be set
      * @param title
      * @param message
      * @param duration
@@ -171,7 +171,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出toast，无图标，无标题，可以设置显示时长
+     * Pop up toast, no icon, no title, you can set the display time
      * @param message
      * @param duration
      */
@@ -183,7 +183,7 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出toast，无图标，无标题，可以设置显示时长
+     * Pop up toast, no icon, no title, you can set the display time
      * @param message
      * @param duration
      */
@@ -192,7 +192,7 @@ public class ToastUtils {
     }
 
     /**
-     * 在屏幕中部显示，在此处传入application
+     * Display in the middle of the screen
      * @param title
      * @param message
      * @param type
@@ -206,7 +206,7 @@ public class ToastUtils {
     }
 
     /**
-     * 在屏幕中部显示，在此处传入application
+     * Display in the middle of the screen
      * @param title
      * @param message
      * @param type
@@ -217,7 +217,7 @@ public class ToastUtils {
     }
 
     /**
-     * 在屏幕底部显示，在此处传入application
+     * Show at the bottom of the screen
      * @param title
      * @param message
      * @param type
@@ -231,7 +231,7 @@ public class ToastUtils {
     }
 
     /**
-     * 在屏幕底部显示，在此处传入application
+     * Show at the bottom of the screen
      * @param title
      * @param message
      * @param type
@@ -242,7 +242,7 @@ public class ToastUtils {
     }
 
     /**
-     * 此处判断toast不为空，选择cancel，是因为toast因为类型不同（是否显示图片）或者是否有标题，会导致不同的toast展示
+     * Judging that the toast is not empty, choose cancel, because the toast is different in type (whether to display a picture) or whether it has a title, which will lead to different toast displays
      * @param context
      * @param title
      * @param message
@@ -255,7 +255,7 @@ public class ToastUtils {
     }
 
     /**
-     * 此处判断toast不为空，选择cancel，是因为toast因为类型不同（是否显示图片）或者是否有标题，会导致不同的toast展示
+     * Judging that the toast is not empty, choose cancel, because the toast is different in type (whether to display a picture) or whether it has a title, which will lead to different toast displays
      * @param context
      * @param title
      * @param message
@@ -315,23 +315,23 @@ public class ToastUtils {
     }
 
     /**
-     * 为了解决7.1.x版本toast可以导致crash的问题
+     * fix 7.1.x version toast crash
      * @param toast
      */
     private static void hookToast(Toast toast) {
         Class<Toast> cToast = Toast.class;
         try {
-            //TN是private的
+            //private TN
             Field fTn = cToast.getDeclaredField("mTN");
             fTn.setAccessible(true);
 
-            //获取tn对象
+            //get TN
             Object oTn = fTn.get(toast);
-            //获取TN的class，也可以直接通过Field.getType()获取。
+            //get TN class or Field.getType()
             Class<?> cTn = oTn.getClass();
             Field fHandle = cTn.getDeclaredField("mHandler");
 
-            //重新set->mHandler
+            //reset->mHandler
             fHandle.setAccessible(true);
             fHandle.set(oTn, new HandlerProxy((Handler) fHandle.get(oTn)));
         } catch (NoSuchFieldException e) {

@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarRightImage="@drawable/main_add_top"
+        app:titleBarLeftImage="@drawable/ease_titlebar_back"
         app:titleBarRightVisible="true"
         app:titleBarTitlePosition="left" />
 

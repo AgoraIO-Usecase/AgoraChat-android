@@ -59,7 +59,7 @@ public class EMClientRepository extends BaseEMRepository{
                 if(isAutoLogin()) {
                     runOnIOThread(() -> {
                         if(isLoggedIn()) {
-                            success(null, callBack);
+                            success("", callBack);
                         }else {
                             callBack.onError(ErrorCode.NOT_LOGIN);
                         }
@@ -371,13 +371,16 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     private void success(String pwd, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-        encryptData(pwd);
-        // ** manually load all local groups and conversation
-        initLocalDb();
-        // get current user
-        DemoHelper.getInstance().getUsersManager().reload();
-        DemoHelper.getInstance().getUsersManager().initUserInfo();
-        new EMContactManagerRepository().updateCurrentUserNickname(getCurrentUser(), null);
+        if (!TextUtils.isEmpty(pwd)){
+            encryptData(pwd);
+            // ** manually load all local groups and conversation
+            initLocalDb();
+            // get current user
+            DemoHelper.getInstance().getUsersManager().reload();
+            //Pull the joined group from the server to prevent only the id from entering the conversation page
+            DemoHelper.getInstance().getUsersManager().initUserInfo();
+            new EMContactManagerRepository().updateCurrentUserNickname(getCurrentUser(), null);
+        }
         callBack.onSuccess(createLiveData(true));
     }
 
@@ -391,6 +394,7 @@ public class EMClientRepository extends BaseEMRepository{
             editor.commit();
         } catch (Exception e) {
             e.printStackTrace();
+            EMLog.e("EMClientRepository : ",e.getMessage());
         }
     }
 

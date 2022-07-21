@@ -142,6 +142,9 @@ public class PushAndMessageHelper {
                 break;
             case REFUSED:
             case MULTI_DEVICE_GROUP_APPLY:
+            case MULTI_DEVICE_GROUP_DESTROY:
+            case MULTI_DEVICE_GROUP_CREATE:
+            case MULTI_DEVICE_GROUP_JOIN:
                 messge = builder.toString();
                 break;
             default:

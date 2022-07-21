@@ -10,6 +10,8 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import io.agora.util.EMLog;
+
 public abstract class BaseInitFragment extends BaseFragment {
 
     @Nullable
@@ -69,7 +71,7 @@ public abstract class BaseInitFragment extends BaseFragment {
      * @param savedInstanceState
      */
     protected void initView(Bundle savedInstanceState) {
-        Log.e("TAG", "fragment = "+this.getClass().getSimpleName());
+        EMLog.d("TAG", "fragment = "+this.getClass().getSimpleName());
     }
 
 

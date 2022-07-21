@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.crypto.Cipher;
 import io.agora.CallBack;
 import io.agora.Error;
 import io.agora.chat.ChatClient;
@@ -401,7 +400,7 @@ public class EMClientRepository extends BaseEMRepository{
         return DemoHelper.getInstance().getEncryptUtils().aesGcmDecrypt(encryptedData,getContext().getString(R.string.sign_aes).getBytes(),1);
     }
 
-    private void loginToAppServer(String username, String nickname, ResultCallBack<LoginBean> callBack) {
+    private void loginToAppServer(String username, String password, ResultCallBack<LoginBean> callBack) {
         runOnIOThread(() -> {
             try {
                 Map<String, String> headers = new HashMap<>();
@@ -409,7 +408,7 @@ public class EMClientRepository extends BaseEMRepository{
 
                 JSONObject request = new JSONObject();
                 request.putOpt("userAccount", username);
-                request.putOpt("userPassword", nickname);
+                request.putOpt("userPassword", password);
 
                 String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_URL;
                 HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
@@ -423,7 +422,7 @@ public class EMClientRepository extends BaseEMRepository{
                         int agoraUid = object.getInt("agoraUid");
                         LoginBean bean = new LoginBean();
                         bean.setAccessToken(token);
-                        bean.setUserNickname(nickname);
+                        bean.setPassword(password);
                         bean.setAgoraUid(agoraUid);
                         if(callBack != null) {
                             callBack.onSuccess(bean);

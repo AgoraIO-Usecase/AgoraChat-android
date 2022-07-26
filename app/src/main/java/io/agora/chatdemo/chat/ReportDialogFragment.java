@@ -40,7 +40,7 @@ public class ReportDialogFragment extends BaseDialogFragment {
     private OnDialogItemClickListener itemClickListener;
     private List<String> data;
     private OnDialogCancelClickListener cancelClickListener;
-    private int animations;//进出动画
+    private int animations;
 
 
     @Override
@@ -139,7 +139,7 @@ public class ReportDialogFragment extends BaseDialogFragment {
         private int cancelColor;
         private OnDialogCancelClickListener cancelClickListener;
         private Bundle bundle;
-        private int animations;//进出动画
+        private int animations;
 
         public Builder(BaseActivity context){
             this.context = context;

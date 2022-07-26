@@ -15,7 +15,6 @@
         app:titleBarLeftImage="@drawable/ease_titlebar_back"
         app:titleBarTitle="@string/me_setting_notifications"
         app:titleBarTitlePosition="left"
-        app:titleBarTitleTextStyle="bold"
         app:titleBarTitleTextColor="@color/color_main_text"
         tools:ignore="MissingConstraints" />
 

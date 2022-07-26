@@ -75,4 +75,9 @@
         <item name="colorControlActivated">@color/ease_chat_thread_region_msg_count_color</item>
     </style>
 
+    <style name="editText_Underline">
+        <item name="colorControlNormal">@color/thread_edit_line_color</item>
+        <item name="colorControlActivated">@color/thread_edit_line_color</item>
+    </style>
+
 </resources>

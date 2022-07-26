@@ -93,7 +93,7 @@ public class NotificationActivity extends BaseInitActivity implements EaseTitleB
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        mBinding.titleBar.getTitle().setTypeface(null, Typeface.BOLD);
+        setTitleTextStyle(mBinding.titleBar.getTitle(),Typeface.BOLD);
         mutePromptTitle = this.getResources().getString(R.string.notification_turn_off_mute);
         mutePromptContent = this.getResources().getString(R.string.notification_mute_until);
         mBinding.itemNotificationSetting.setContent(this.getResources().getString(R.string.notification_setting_all_message));

@@ -2,7 +2,7 @@ package io.agora.chatdemo.general.models;
 
 public class LoginBean {
     private String accessToken;
-    private String userNickname;
+    private String password;
     private int agoraUid;
 
     public int getAgoraUid() {
@@ -21,11 +21,11 @@ public class LoginBean {
         this.accessToken = accessToken;
     }
 
-    public String getUserNickname() {
-        return userNickname;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserNickname(String userNickname) {
-        this.userNickname = userNickname;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

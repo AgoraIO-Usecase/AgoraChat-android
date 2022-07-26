@@ -91,7 +91,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/et_nickname"
+            android:id="@+id/et_password"
             android:hint="@string/sign_password"
             style="@style/sign_edit_style"
             android:imeOptions="actionSend"
@@ -101,7 +101,7 @@
 
         <ImageView
             android:id="@+id/see_pwd"
-            android:layout_alignEnd="@id/et_nickname"
+            android:layout_alignEnd="@id/et_password"
             android:layout_centerVertical="true"
             android:layout_width="28dp"
             android:layout_height="28dp"

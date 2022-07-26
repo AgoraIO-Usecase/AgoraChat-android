@@ -23,7 +23,7 @@ public class PrivacyActivity extends BaseInitActivity implements EaseTitleBar.On
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        setTitleTextStyle(mBinding.titleBar.getTitle(),Typeface.BOLD);
+        setTextStyle(mBinding.titleBar.getTitle(),Typeface.BOLD);
     }
 
     @Override

@@ -488,7 +488,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param view textView
      * @param type Typeface {NORMAL, BOLD, ITALIC, BOLD_ITALIC}
      */
-    public void setTitleTextStyle(TextView view, int type){
+    public void setTextStyle(TextView view, int type){
         if (null != view && type >= 0 && type<= 3)
             view.setTypeface(null,type);
     }

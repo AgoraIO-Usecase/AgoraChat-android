@@ -59,6 +59,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
                     srlContactRefresh.setRefreshing(false);
+                    mListAdapter.setData(data);
                     mData = data;
                     presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
                 }

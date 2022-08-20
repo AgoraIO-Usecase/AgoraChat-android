@@ -24,6 +24,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     private ContactsListViewModel mViewModel;
     protected PresenceViewModel presenceViewModel;
     protected List<EaseUser> mData = new ArrayList<>();
+    private String searchKey;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -45,7 +46,6 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onSuccess(@Nullable List<Presence> data) {
                     ((ContactListAdapter) mListAdapter).setPresences(DemoHelper.getInstance().getPresences());
-                    mListAdapter.setData(mData);
                     checkView(etSearch.getText().toString().trim());
                 }
             });
@@ -59,6 +59,11 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
                     srlContactRefresh.setRefreshing(false);
+                    if(!TextUtils.isEmpty(searchKey)) {
+                        searchText(searchKey);
+                        return;
+                    }
+                    mListAdapter.setData(data);
                     mData = data;
                     presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
                 }
@@ -102,6 +107,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
             parseResource(result, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
+                    mListAdapter.setData(data);
                     presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
                 }
             });
@@ -183,6 +189,7 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
 
     @Override
     protected void searchText(String content) {
+        searchKey = content;
         checkSearchContent(content);
         checkView(content);
     }

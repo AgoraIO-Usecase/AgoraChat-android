@@ -115,6 +115,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     try {
                         List<String> usernames = getContactManager().getAllContactsFromServer();
 //                        List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
+                        List<String> blackListFromServer = getContactManager().getBlackListFromServer();
                         List<String> ids = new ArrayList<>();
                         if(usernames == null) {
                             usernames = new ArrayList<>();
@@ -122,7 +123,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         if(ids != null && !ids.isEmpty()) {
                             usernames.addAll(ids);
                         }
-                        callBack.onSuccess(createLiveData(updateData(usernames)));
+                        callBack.onSuccess(createLiveData(updateData(usernames, blackListFromServer)));
                     } catch (ChatException e) {
                         e.printStackTrace();
                         callBack.onError(e.getErrorCode(), e.getDescription());
@@ -226,6 +227,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 if(usernames != null && !usernames.isEmpty()) {
                     List<String> blackListFromServer = getContactManager().getBlackListFromServer();
                     for (EaseUser user : easeUsers) {
+                        user.setContact(0);
                         if(blackListFromServer != null && !blackListFromServer.isEmpty()) {
                             if(blackListFromServer.contains(user.getUsername())) {
                                 user.setContact(1);
@@ -725,7 +727,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
         return null;
     }
 
-    private List<EaseUser> updateData(List<String> data) {
+    private List<EaseUser> updateData(List<String> data, List<String> blackList) {
         if(data == null || data.isEmpty() ) {
             return new ArrayList<>();
         }
@@ -737,11 +739,17 @@ public class EMContactManagerRepository extends BaseEMRepository{
         for(int i = 0; i < data.size(); i++) {
             String username = data.get(i);
             List<EaseUser> easeUsers = userDao.loadUserByUserId(username);
+            EaseUser user;
             if(easeUsers != null && !easeUsers.isEmpty()) {
-                users.add(easeUsers.get(0));
+                user = easeUsers.get(0);
             }else {
-                users.add(new EaseUser(username));
+                user = new EaseUser(username);
             }
+            user.setContact(0);
+            if(blackList.contains(username)) {
+                user.setContact(1);
+            }
+            users.add(user);
         }
         return users;
     }

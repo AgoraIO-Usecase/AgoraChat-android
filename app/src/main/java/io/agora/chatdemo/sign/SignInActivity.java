@@ -46,7 +46,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
 
     private TextView tv_hint;
     private EditText et_agora_id;
-    private EditText et_nickname;
+    private EditText et_password;
     private EditText et_confirm_pwd;
     private Button btn_login;
     private TextView btn_register;
@@ -81,7 +81,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
         super.initView(savedInstanceState);
         tv_hint = findViewById(R.id.tv_hint);
         et_agora_id = findViewById(R.id.et_agora_id);
-        et_nickname = findViewById(R.id.et_nickname);
+        et_password = findViewById(R.id.et_password);
         btn_login = findViewById(R.id.btn_login);
         llRoot = findViewById(R.id.ll_root);
         et_confirm_pwd = findViewById(R.id.et_confirm_pwd);
@@ -146,7 +146,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
                 }
             }
         });
-        et_nickname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        et_password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEND && isLoginModule) {
@@ -177,13 +177,13 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             setErrorHint(getString(R.string.sign_error_not_id));
             return;
         }
-        String nickname = et_nickname.getText().toString().trim();
-        if(TextUtils.isEmpty(nickname)) {
+        String password = et_password.getText().toString().trim();
+        if(TextUtils.isEmpty(password)) {
             setErrorHint(getString(R.string.sign_error_not_nickname));
             return;
         }
         btn_login.setEnabled(false);
-        viewModel.login(agoraID, nickname);
+        viewModel.login(agoraID, password);
     }
 
     public void initData() {
@@ -300,7 +300,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             setErrorHint(getString(R.string.sign_error_not_id));
             return;
         }
-        String pwd = et_nickname.getText().toString().trim();
+        String pwd = et_password.getText().toString().trim();
         if(TextUtils.isEmpty(pwd)) {
             setErrorHint(getString(R.string.sign_error_not_nickname));
             return;
@@ -323,9 +323,9 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             case R.id.see_pwd:
                 img_see_pwd.setSelected(!img_see_pwd.isSelected());
                 if (img_see_pwd.isSelected()){
-                    et_nickname.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    et_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }else {
-                    et_nickname.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    et_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
                 break;
             case R.id.see_confirm_pwd:

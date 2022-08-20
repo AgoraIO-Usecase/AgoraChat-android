@@ -30,8 +30,8 @@ public class SignViewModel extends AndroidViewModel {
         return registerObservable;
     }
     
-    public void login(String username, String nickname) {
-        loginObservable.setSource(repository.loginByAppServer(username, nickname));
+    public void login(String username, String password) {
+        loginObservable.setSource(repository.loginByAppServer(username, password));
     }
 
     public void register(String username, String pwd){

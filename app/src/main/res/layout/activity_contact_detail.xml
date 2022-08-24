@@ -100,6 +100,7 @@
         app:arrowItemAvatarWidth="32dp"
         app:arrowItemShowArrow="false"
         app:arrowItemShowAvatar="true"
+        app:arrowItemTitleSize="@dimen/text_size_big"
         app:arrowItemTitle="@string/contact_detail_block_contact" />
 
     <io.agora.chatdemo.general.widget.ArrowItemView
@@ -127,6 +128,7 @@
         app:arrowItemAvatarWidth="32dp"
         app:arrowItemShowArrow="false"
         app:arrowItemShowAvatar="true"
+        app:arrowItemTitleSize="@dimen/text_size_big"
         app:arrowItemTitle="@string/contact_detail_delete_contact" />
 
 </LinearLayout>

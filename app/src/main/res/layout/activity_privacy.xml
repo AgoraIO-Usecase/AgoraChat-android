@@ -14,6 +14,7 @@
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarLeftImage="@drawable/ease_titlebar_back"
         app:titleBarTitle="@string/me_setting_privacy"
+        app:titleBarTitleTextSize="@dimen/text_size_big_18"
         app:titleBarTitlePosition="left"
         app:titleBarTitleTextColor="@color/color_main_text"
         tools:ignore="MissingConstraints" />
@@ -37,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_item_height"
                 android:background="@color/white"
+                android:layout_marginStart="16dp"
                 android:foreground="@drawable/ease_ripple_click_gray"
                 app:arrowItemAvatarHeight="@dimen/about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/about_me_avatar_size"

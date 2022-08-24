@@ -32,7 +32,7 @@ public class CustomPresenceActivity extends BaseInitActivity implements EaseTitl
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        setFitSystemForTheme(true,R.color.black);
+        setFitSystemForTheme(true,R.color.white);
         titleBar = findViewById(R.id.title_bar);
         edtCustom = findViewById(R.id.edt_custom);
         ivDelete = findViewById(R.id.iv_delete);

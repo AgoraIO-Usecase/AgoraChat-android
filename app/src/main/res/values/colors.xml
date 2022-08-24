@@ -52,7 +52,7 @@
     <color name="group_blue_20154dfe">#20154dfe</color>
 
     <color name="dialog_color_btn_bg_normal">@color/white</color>
-    <color name="dialog_color_btn_bg_select">@color/gray</color>
+    <color name="dialog_color_btn_bg_select">@color/ease_toolbar_color_sub_title</color>
     <color name="dialog_color_btn_stroke">@color/gray</color>
     <color name="dialog_color_title">#ff424242</color>
     <color name="dialog_color_normal">@color/color_main_blue</color>

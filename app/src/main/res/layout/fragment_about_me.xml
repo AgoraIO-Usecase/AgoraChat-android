@@ -98,7 +98,7 @@
             android:id="@+id/btn_logout"
             android:gravity="left"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="54dp"
             android:paddingLeft="@dimen/margin_15"
             android:paddingRight="@dimen/margin_15"
             android:paddingTop="@dimen/margin_15"

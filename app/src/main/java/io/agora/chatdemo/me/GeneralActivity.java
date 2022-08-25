@@ -1,6 +1,7 @@
 package io.agora.chatdemo.me;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 
@@ -29,6 +30,7 @@ public class GeneralActivity extends BaseInitActivity implements EaseTitleBar.On
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        setTextStyle(mBinding.titleBar.getTitle(),Typeface.BOLD);
     }
 
     @Override

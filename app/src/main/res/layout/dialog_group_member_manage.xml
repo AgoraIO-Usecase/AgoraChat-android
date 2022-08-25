@@ -20,7 +20,7 @@
             android:textColor="#8F8F8F"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/text_size_normal"/>
+            android:textSize="@dimen/text_size_big_18"/>
 
         <View
             android:layout_width="match_parent"

@@ -202,6 +202,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
         // save invitation as messages
         ChatClient.getInstance().chatManager().saveMessage(msg);
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         Intent intent = new Intent(getApplication(), ChatActivity.class);
         intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, to);
         intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseChatType.SINGLE_CHAT);

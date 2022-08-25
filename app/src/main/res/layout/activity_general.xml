@@ -12,7 +12,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleBarTitleTextStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/scroll_view"
         android:background="@color/white"
         app:titleBarDisplayHomeAsUpEnabled="true"
@@ -47,7 +46,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:switchItemShowDivider="false"
                 app:switchItemTitle="@string/general_show_typing"
-                app:switchItemTitleSize="@dimen/text_size_normal" />
+                app:switchItemTitleSize="@dimen/text_size_big" />
 
             <io.agora.chatdemo.general.widget.SwitchItemView
                 android:id="@+id/item_switch_add_group_request"
@@ -61,7 +60,7 @@
                 app:switchItemShowDivider="false"
                 android:layout_marginStart="16dp"
                 app:switchItemTitle="@string/general_add_group_request"
-                app:switchItemTitleSize="@dimen/text_size_normal" />
+                app:switchItemTitleSize="@dimen/text_size_big" />
 
             <io.agora.chatdemo.general.widget.SwitchItemView
                 android:id="@+id/item_switch_delete_after_leaving_group"
@@ -75,7 +74,7 @@
                 app:layout_constraintTop_toBottomOf="@id/item_switch_add_group_request"
                 app:switchItemShowDivider="false"
                 app:switchItemTitle="@string/general_delete_after_leaving_group"
-                app:switchItemTitleSize="@dimen/text_size_normal" />
+                app:switchItemTitleSize="@dimen/text_size_big" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

@@ -15,7 +15,6 @@
         app:titleBarLeftImage="@drawable/ease_titlebar_back"
         app:titleBarTitle="@string/me_setting_notifications"
         app:titleBarTitlePosition="left"
-        app:titleBarTitleTextStyle="bold"
         app:titleBarTitleTextColor="@color/color_main_text"
         tools:ignore="MissingConstraints" />
 
@@ -37,12 +36,12 @@
                 android:id="@+id/push_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="@string/notification_push_title"
                 android:textColor="@color/ease_gray_normal"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_big"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +54,7 @@
                 app:arrowItemAvatarHeight="@dimen/about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/about_me_avatar_size"
                 app:arrowItemTitle="@string/notification_setting"
-                app:arrowItemTitleSize="@dimen/text_size_normal"
+                app:arrowItemTitleSize="@dimen/text_size_big"
                 app:arrowItemTitleStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -71,7 +70,7 @@
                 app:arrowItemAvatarHeight="@dimen/about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/about_me_avatar_size"
                 app:arrowItemTitle="@string/notification_do_not_disturb"
-                app:arrowItemTitleSize="@dimen/text_size_normal"
+                app:arrowItemTitleSize="@dimen/text_size_big"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_notification_setting" />
@@ -82,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:textColor="@color/ease_gray_normal"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_big"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/item_notification_do_not_disturb" />
 
@@ -96,13 +95,14 @@
                 android:layout_marginBottom="17dp"
                 android:ellipsize="end"
                 android:textColor="@color/color_light_gray_999999"
-                android:textSize="@dimen/text_size_normal"
+                android:textSize="@dimen/text_size_big"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="@id/item_notification_do_not_disturb"
                 app:layout_constraintTop_toBottomOf="@id/item_notification_do_not_disturb" />
 
             <io.agora.chatdemo.general.widget.SwitchItemView
                 android:id="@+id/item_switch_show_preview_text"
+                android:layout_marginStart="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_item_height"
                 android:layout_marginTop="20dp"
@@ -113,24 +113,25 @@
                 app:layout_constraintTop_toBottomOf="@+id/not_disturb_time"
                 app:switchItemShowDivider="false"
                 app:switchItemTitle="@string/notification_show_preview_text"
-                app:switchItemTitleSize="@dimen/text_size_normal" />
+                app:switchItemTitleSize="@dimen/text_size_big" />
 
             <TextView
                 android:id="@+id/app_setting_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="@string/notification_app_setting_title"
                 android:textColor="@color/ease_gray_normal"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_big"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_switch_show_preview_text" />
 
 
             <io.agora.chatdemo.general.widget.SwitchItemView
                 android:id="@+id/item_switch_alert_sound"
+                android:layout_marginStart="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_item_height"
                 android:background="@color/white"
@@ -140,11 +141,12 @@
                 app:layout_constraintTop_toBottomOf="@id/app_setting_title"
                 app:switchItemShowDivider="false"
                 app:switchItemTitle="@string/notification_alert_sound"
-                app:switchItemTitleSize="@dimen/text_size_normal" />
+                app:switchItemTitleSize="@dimen/text_size_big" />
 
             <io.agora.chatdemo.general.widget.SwitchItemView
                 android:id="@+id/item_switch_vibrate"
                 android:layout_width="match_parent"
+                android:layout_marginStart="4dp"
                 android:layout_height="@dimen/common_item_height"
                 android:background="@color/white"
                 app:switchItemTitleStyle="bold"
@@ -153,7 +155,7 @@
                 app:layout_constraintTop_toBottomOf="@id/item_switch_alert_sound"
                 app:switchItemShowDivider="false"
                 app:switchItemTitle="@string/notification_vibrate"
-                app:switchItemTitleSize="@dimen/text_size_normal" />
+                app:switchItemTitleSize="@dimen/text_size_big" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

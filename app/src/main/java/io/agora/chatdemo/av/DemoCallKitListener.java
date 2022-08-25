@@ -230,8 +230,6 @@ public class DemoCallKitListener implements EaseCallKitListener {
 
     /**
      * Get the userIDS of all people in the channel based on channelName and agora uId
-     * 根据channelName和声网uId获取频道内所有人的UserId
-     *
      * @param uId
      * @param url
      * @param callback

@@ -127,6 +127,7 @@ public class GroupNoticeActivity extends BaseInitActivity implements EaseTitleBa
                 .setContent(group.getAnnouncement())
                 .setTitle(R.string.group_edit_notice_dialog_title)
                 .showCancelButton(true)
+                .setShowInput(true)
                 .show();
     }
 

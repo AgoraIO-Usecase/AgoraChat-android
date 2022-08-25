@@ -61,8 +61,11 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
         String extField = conversation.getExtField();
         binding.itemToTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseUtils.isTimestamp(extField));
-        if (chatType == EaseChatType.SINGLE_CHAT) {
-            binding.itemMuteNotification.setVisibility(View.GONE);
+        if (null != EasePreferenceManager.getInstance().getMuteMap()){
+            Map<String,Boolean> map = EasePreferenceManager.getInstance().getMuteMap();
+            if (map.containsKey(conversationId)){
+                binding.itemMuteNotification.getSwitch().setChecked(Boolean.TRUE.equals(map.get(conversationId)));
+            }
         }
     }
 

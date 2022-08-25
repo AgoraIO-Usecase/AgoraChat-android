@@ -1,6 +1,5 @@
 package io.agora.chatdemo.sign;
 
-import android.animation.Animator;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -11,6 +10,7 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.main.MainActivity;
+import io.agora.util.EMLog;
 
 
 public class SplashActivity extends BaseActivity {
@@ -29,40 +29,23 @@ public class SplashActivity extends BaseActivity {
         iv_icon.animate()
                 .alpha(1)
                 .setDuration(500)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        loginSDK();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                })
                 .start();
 
         iv_brand_icon.animate()
                 .alpha(1)
                 .setDuration(500)
                 .start();
+
+        iv_brand_icon.postDelayed(this::loginSDK, 500);
     }
 
     private void loginSDK() {
+        EMLog.d("splash", "loginSDK");
         model.getLoginData().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>(true) {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
+                    EMLog.d("splash", "loginSDK onSuccess");
                     MainActivity.actionStart(mContext);
                     finish();
                 }
@@ -70,6 +53,7 @@ public class SplashActivity extends BaseActivity {
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
+                    EMLog.e("splash", "loginSDK onError");
                     SignInActivity.actionStart(mContext);
                     finish();
                 }

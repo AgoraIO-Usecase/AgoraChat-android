@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.bumptech.glide.Glide;
 
 import io.agora.chat.Presence;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.R;
@@ -73,7 +74,7 @@ public class EasePresenceView extends ConstraintLayout {
         }
         tvPresence.setText(EasePresenceUtil.getPresenceString(getContext(), presence));
         ivPresence.setImageResource(EasePresenceUtil.getPresenceIcon(getContext(), presence));
-        tvName.setText(presence.getPublisher());
+        EaseUserUtils.setUserNick(presence.getPublisher(), tvName);
     }
 
     public interface OnPresenceClickListener {

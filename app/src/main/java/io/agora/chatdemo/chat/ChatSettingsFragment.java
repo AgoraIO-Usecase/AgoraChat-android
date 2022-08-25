@@ -61,12 +61,14 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
         String extField = conversation.getExtField();
         binding.itemToTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseUtils.isTimestamp(extField));
-        if (null != EasePreferenceManager.getInstance().getMuteMap()){
-            Map<String,Boolean> map = EasePreferenceManager.getInstance().getMuteMap();
-            if (map.containsKey(conversationId)){
-                binding.itemMuteNotification.getSwitch().setChecked(Boolean.TRUE.equals(map.get(conversationId)));
-            }
-        }
+        binding.itemMuteNotification.setVisibility(View.GONE);
+//        if (null != EasePreferenceManager.getInstance().getMuteMap()){
+//            Map<String,Long> map = EasePreferenceManager.getInstance().getMuteMap();
+//            if (map.containsKey(conversationId)){
+//                long mute_time = map.get(conversationId);
+//                binding.itemMuteNotification.getSwitch().setChecked((System.currentTimeMillis() - mute_time) < 0);
+//            }
+//        }
     }
 
     @Override
@@ -163,15 +165,15 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_mute_notification:
-                Map<String,Boolean> map = new HashMap<>();
-                if(chatType == EaseChatType.SINGLE_CHAT) {
-                    viewModel.setUserNotDisturb(conversationId, isChecked);
-                }else {
-                    viewModel.setGroupNotDisturb(conversationId, isChecked);
-                }
-                map.put(conversationId,isChecked);
-                EasePreferenceManager.getInstance().setMuteMap(map);
-                LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
+//                Map<String,Long> map = new HashMap<>();
+//                if(chatType == EaseChatType.SINGLE_CHAT) {
+//                    viewModel.setUserNotDisturb(conversationId, isChecked);
+//                }else {
+//                    viewModel.setGroupNotDisturb(conversationId, isChecked);
+//                }
+//                map.put(conversationId,isChecked? 7972767216000L:0L);
+//                EasePreferenceManager.getInstance().setMuteMap(map);
+//                LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
                 break;
             case R.id.item_to_top:
                 Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);

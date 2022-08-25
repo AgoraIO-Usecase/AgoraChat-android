@@ -11,10 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
+import io.agora.chat.uikit.manager.EasePreferenceManager;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.R;
@@ -157,11 +160,15 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_mute_notification:
+                Map<String,Boolean> map = new HashMap<>();
                 if(chatType == EaseChatType.SINGLE_CHAT) {
                     viewModel.setUserNotDisturb(conversationId, isChecked);
                 }else {
                     viewModel.setGroupNotDisturb(conversationId, isChecked);
                 }
+                map.put(conversationId,isChecked);
+                EasePreferenceManager.getInstance().setMuteMap(map);
+                LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
                 break;
             case R.id.item_to_top:
                 Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);

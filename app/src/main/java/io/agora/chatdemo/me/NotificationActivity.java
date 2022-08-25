@@ -18,7 +18,9 @@ import androidx.lifecycle.ViewModelProvider;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
@@ -27,6 +29,7 @@ import io.agora.chat.SilentModeParam;
 import io.agora.chat.SilentModeResult;
 import io.agora.chat.SilentModeTime;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
+import io.agora.chat.uikit.manager.EasePreferenceManager;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chat.uikit.widget.dialog.EaseAlertDialog;
 import io.agora.chatdemo.DemoHelper;
@@ -34,7 +37,10 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.databinding.ActivityNotificationBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.general.widget.SwitchItemView;
 import io.agora.chatdemo.general.dialog.SelectDialog;
@@ -60,6 +66,7 @@ public class NotificationActivity extends BaseInitActivity implements EaseTitleB
     private boolean isPopup = false;
     private String timeStr;
     private boolean viewInited = false;
+    private Map<String,Boolean> mute = new HashMap<>();
 
     private List<SelectDialogItemBean> mNotificationSettingSelectDialogItemBeans;
 
@@ -194,6 +201,16 @@ public class NotificationActivity extends BaseInitActivity implements EaseTitleB
                 @Override
                 public void onSuccess(@Nullable SilentModeResult data) {
                     initSelectedView(data);
+                    if (null != data ){
+                        if ( data.getExpireTimestamp() == 0){
+                            EasePreferenceManager.getInstance().removeMute(data.getConversationId());
+                        }else {
+                            mute.clear();
+                            mute.put(data.getConversationId(),true);
+                            EasePreferenceManager.getInstance().setMuteMap(mute);
+                        }
+                        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                    }
                 }
             });
         });

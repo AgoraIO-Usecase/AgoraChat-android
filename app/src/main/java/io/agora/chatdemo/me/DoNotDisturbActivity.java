@@ -44,6 +44,7 @@ public class DoNotDisturbActivity extends BaseInitActivity implements EaseTitleB
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         setTextStyle(mBinding.titleBar.getTitle(),Typeface.BOLD);
+        setTextStyle(mBinding.titleBar.getRightText(),Typeface.BOLD);
         itemList.add(new DoNotDisturbAdapter.SelectItem(this.getResources().getString(R.string.not_disturb_15_min), 15));
         itemList.add(new DoNotDisturbAdapter.SelectItem(this.getResources().getString(R.string.not_disturb_1_hour), 60));
         itemList.add(new DoNotDisturbAdapter.SelectItem(this.getResources().getString(R.string.not_disturb_8_hours), 480));

@@ -21,7 +21,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
-    private ContactsListViewModel mViewModel;
+    private ContactsListViewModel mContactListViewModel;
     protected PresenceViewModel presenceViewModel;
     protected List<EaseUser> mData = new ArrayList<>();
     private String searchKey;
@@ -53,8 +53,8 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     }
 
     private void initContactsListViewModel() {
-        mViewModel = new ViewModelProvider(this).get(ContactsListViewModel.class);
-        mViewModel.getContactObservable().observe(this, response -> {
+        mContactListViewModel = new ViewModelProvider(this).get(ContactsListViewModel.class);
+        mContactListViewModel.getContactObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
@@ -85,25 +85,25 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 }
             });
         });
-        mViewModel.resultObservable().observe(getViewLifecycleOwner(), response -> {
+        mContactListViewModel.resultObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    mViewModel.loadContactList(false);
+                    mContactListViewModel.loadContactList(false);
                 }
             });
         });
 
-        mViewModel.deleteObservable().observe(getViewLifecycleOwner(), response -> {
+        mContactListViewModel.deleteObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    mViewModel.loadContactList(false);
+                    mContactListViewModel.loadContactList(false);
                 }
             });
         });
 
-        mViewModel.getSearchObservable().observe(getViewLifecycleOwner(), result -> {
+        mContactListViewModel.getSearchObservable().observe(getViewLifecycleOwner(), result -> {
             parseResource(result, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
@@ -113,50 +113,50 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
             });
         });
 
-        mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+        mContactListViewModel.messageChangeObservable().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
             if (event == null) {
                 return;
             }
             if (event.isContactChange()) {
-                mViewModel.loadContactList(false);
+                mContactListViewModel.loadContactList(false);
             }
         });
 
-        mViewModel.messageChangeObservable().with(DemoConstant.REMOVE_BLACK, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+        mContactListViewModel.messageChangeObservable().with(DemoConstant.REMOVE_BLACK, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
             if (event == null) {
                 return;
             }
             if (event.isContactChange()) {
-                mViewModel.loadContactList(true);
-            }
-        });
-
-
-        mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if (event == null) {
-                return;
-            }
-            if (event.isContactChange()) {
-                mViewModel.loadContactList(false);
+                mContactListViewModel.loadContactList(true);
             }
         });
 
 
-        mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_DELETE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+        mContactListViewModel.messageChangeObservable().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
             if (event == null) {
                 return;
             }
             if (event.isContactChange()) {
-                mViewModel.loadContactList(false);
+                mContactListViewModel.loadContactList(false);
             }
         });
 
-        mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+
+        mContactListViewModel.messageChangeObservable().with(DemoConstant.CONTACT_DELETE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
             if (event == null) {
                 return;
             }
             if (event.isContactChange()) {
-                mViewModel.loadContactList(false);
+                mContactListViewModel.loadContactList(false);
+            }
+        });
+
+        mContactListViewModel.messageChangeObservable().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if (event == null) {
+                return;
+            }
+            if (event.isContactChange()) {
+                mContactListViewModel.loadContactList(false);
             }
         });
     }
@@ -173,13 +173,13 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     @Override
     protected void initData() {
         super.initData();
-        mViewModel.loadContactList(true);
+        mContactListViewModel.loadContactList(true);
     }
 
     @Override
     public void onRefresh() {
         super.onRefresh();
-        mViewModel.loadContactList(true);
+        mContactListViewModel.loadContactList(true);
     }
 
     @Override
@@ -196,9 +196,9 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
 
     protected void checkSearchContent(String content) {
         if (TextUtils.isEmpty(content)) {
-            mViewModel.loadContactList(false);
+            mContactListViewModel.loadContactList(false);
         } else {
-            mViewModel.searchContact(content);
+            mContactListViewModel.searchContact(content);
         }
     }
 

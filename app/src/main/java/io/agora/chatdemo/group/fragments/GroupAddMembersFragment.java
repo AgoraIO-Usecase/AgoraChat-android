@@ -1,7 +1,6 @@
 package io.agora.chatdemo.group.fragments;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -54,7 +53,7 @@ public class GroupAddMembersFragment extends NewGroupSelectContactsFragment{
                 }
             });
         });
-        viewModel.addMemberObservable().observe(getViewLifecycleOwner(), response -> {
+        groupViewModel.addMemberObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
@@ -76,7 +75,7 @@ public class GroupAddMembersFragment extends NewGroupSelectContactsFragment{
         if(checkedList==null) {
             checkedList=new ArrayList<>();
         }
-        viewModel.addGroupMembers(GroupHelper.isOwner(group), groupId, checkedList);
+        groupViewModel.addGroupMembers(GroupHelper.isOwner(group), groupId, checkedList);
         LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
         return true;
     }

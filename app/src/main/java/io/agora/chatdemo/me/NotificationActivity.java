@@ -66,7 +66,7 @@ public class NotificationActivity extends BaseInitActivity implements EaseTitleB
     private boolean isPopup = false;
     private String timeStr;
     private boolean viewInited = false;
-    private Map<String,Boolean> mute = new HashMap<>();
+    private Map<String,Long> mute = new HashMap<>();
 
     private List<SelectDialogItemBean> mNotificationSettingSelectDialogItemBeans;
 
@@ -202,11 +202,11 @@ public class NotificationActivity extends BaseInitActivity implements EaseTitleB
                 public void onSuccess(@Nullable SilentModeResult data) {
                     initSelectedView(data);
                     if (null != data ){
-                        if ( data.getExpireTimestamp() == 0){
+                        if ( data.getExpireTimestamp() <= 0){
                             EasePreferenceManager.getInstance().removeMute(data.getConversationId());
                         }else {
                             mute.clear();
-                            mute.put(data.getConversationId(),true);
+                            mute.put(data.getConversationId(),data.getExpireTimestamp());
                             EasePreferenceManager.getInstance().setMuteMap(mute);
                         }
                         LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));

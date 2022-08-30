@@ -35,6 +35,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.models.LoginBean;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
+import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.cloud.HttpClientManager;
 import io.agora.cloud.HttpResponse;
 import io.agora.exceptions.ChatException;
@@ -435,7 +436,7 @@ public class EMClientRepository extends BaseEMRepository{
                         callBack.onError(code, responseInfo);
                     }
                 } else {
-                    if (responseInfo != null && responseInfo.length() > 0) {
+                    if (responseInfo != null && responseInfo.length() > 0 && CommonUtils.isJson(responseInfo)) {
                         JSONObject object = new JSONObject(responseInfo);
                         callBack.onError(code, object.getString("errorInfo"));
                     }else {

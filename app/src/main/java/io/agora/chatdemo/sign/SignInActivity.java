@@ -38,7 +38,9 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.interfaces.SimpleTextWatcher;
 import io.agora.chatdemo.general.manager.SoftKeyboardChangeHelper;
+import io.agora.chatdemo.general.utils.MyTextUtils;
 import io.agora.chatdemo.main.MainActivity;
 import io.agora.util.EMLog;
 
@@ -110,21 +112,13 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
         btn_back_login.setOnClickListener(this);
         btn_login.setOnClickListener(this);
 
-        et_agora_id.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+        et_agora_id.addTextChangedListener(new SimpleTextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
                 String content = s.toString().trim();
-                if(TextUtils.isEmpty(content)) {
+                int length = MyTextUtils.getBytesLength(content);
+                if(length == 0) {
                     setErrorHint("");
                     btn_login.setEnabled(true);
                     img_clear.setVisibility(View.GONE);
@@ -138,11 +132,32 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
                     setErrorHint("");
                     btn_login.setEnabled(true);
                 }
-
-                byte[] contentBytes = content.getBytes(StandardCharsets.UTF_8);
-                if(contentBytes.length > 64) {
+                if(length > 64) {
                     setErrorHint(getString(R.string.username_too_long));
                     btn_login.setEnabled(false);
+                }
+            }
+        });
+        et_password.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString().trim();
+                int length = MyTextUtils.getBytesLength(content);
+                if(length > 64) {
+                    content = content.substring(0, 64);
+                    int length1 = MyTextUtils.getBytesLength(content);
+                    et_password.setText(content);
+                }
+            }
+        });
+        et_confirm_pwd.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString().trim();
+                int length = MyTextUtils.getBytesLength(content);
+                if(length > 64) {
+                    content = content.substring(0, 64);
+                    et_confirm_pwd.setText(content);
                 }
             }
         });

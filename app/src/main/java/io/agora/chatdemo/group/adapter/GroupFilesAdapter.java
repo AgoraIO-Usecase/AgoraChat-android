@@ -2,6 +2,7 @@ package io.agora.chatdemo.group.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import io.agora.chat.ChatClient;
 import io.agora.chat.MucSharedFile;
 import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
@@ -43,6 +45,7 @@ public class GroupFilesAdapter extends EaseBaseRecyclerViewAdapter<MucSharedFile
         private TextView tvFileName;
         private TextView tvFileDesc;
         private TextView deleteTv;
+        private TextView tvLabel;
 
         public void setContext(Context context) {
             this.context = context;
@@ -63,6 +66,7 @@ public class GroupFilesAdapter extends EaseBaseRecyclerViewAdapter<MucSharedFile
             tvFileName = findViewById(R.id.tv_file_name);
             tvFileDesc = findViewById(R.id.tv_file_desc);
             deleteTv = findViewById(R.id.txt_delete);
+            tvLabel = findViewById(R.id.tv_label);
 
             itemLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,6 +98,11 @@ public class GroupFilesAdapter extends EaseBaseRecyclerViewAdapter<MucSharedFile
 
             tvFileName.setText(item.getFileName());
             tvFileDesc.setText(String.format(context.getResources().getString(R.string.group_file_desc), item.getFileOwner(), TextFormater.getDataSize(item.getFileSize())));
+            if(TextUtils.equals(item.getFileOwner(), ChatClient.getInstance().getCurrentUser())) {
+                tvLabel.setVisibility(View.VISIBLE);
+            }else {
+                tvLabel.setVisibility(View.GONE);
+            }
         }
     }
 

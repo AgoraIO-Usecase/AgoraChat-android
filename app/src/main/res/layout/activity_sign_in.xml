@@ -69,7 +69,7 @@
             android:paddingStart="24dp"
             android:inputType="text"
             android:imeOptions="actionNone"
-            android:paddingEnd="24dp" />
+            android:paddingEnd="40dp" />
 
 
         <ImageView
@@ -97,7 +97,7 @@
             android:imeOptions="actionSend"
             android:inputType="textPassword"
             android:paddingStart="24dp"
-            android:paddingEnd="24dp"/>
+            android:paddingEnd="40dp"/>
 
         <ImageView
             android:id="@+id/see_pwd"
@@ -126,7 +126,7 @@
             android:imeOptions="actionSend"
             android:inputType="textPassword"
             android:paddingStart="24dp"
-            android:paddingEnd="24dp"
+            android:paddingEnd="40dp"
             />
 
         <ImageView

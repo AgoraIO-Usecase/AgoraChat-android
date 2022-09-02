@@ -29,7 +29,7 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
     private EaseCallType callType;
     private String groupId;
     private List<String> existMembers=new ArrayList<>();
-    private GroupContactViewModel viewModel;
+    private GroupContactViewModel groupContactViewModel;
     private Set<String> finalUsers=new HashSet<>();
 
     @Override
@@ -49,10 +49,11 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
 
     @Override
     protected void initViewModel() {
+        super.initViewModel();
         initPresenceViewModel();
-        viewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
+        groupContactViewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
 
-        viewModel.getGroupMember().observe(getViewLifecycleOwner(), response -> {
+        groupContactViewModel.getGroupMember().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> users) {
@@ -84,12 +85,12 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
     protected void initData() {
         mRecyclerView.setAdapter(concatAdapter);
         ((ContactListAdapter) mListAdapter).setCheckModel(true);
-        viewModel.getGroupMembers(groupId);
+        groupContactViewModel.getGroupMembers(groupId);
     }
 
     @Override
     public void onRefresh() {
-        viewModel.getGroupMembers(groupId);
+        groupContactViewModel.getGroupMembers(groupId);
     }
 
     @Override

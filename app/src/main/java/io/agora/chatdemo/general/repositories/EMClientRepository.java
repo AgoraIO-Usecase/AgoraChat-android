@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.crypto.Cipher;
 import io.agora.CallBack;
 import io.agora.Error;
 import io.agora.chat.ChatClient;
@@ -36,6 +35,7 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.models.LoginBean;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
+import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.cloud.HttpClientManager;
 import io.agora.cloud.HttpResponse;
 import io.agora.exceptions.ChatException;
@@ -60,7 +60,7 @@ public class EMClientRepository extends BaseEMRepository{
                 if(isAutoLogin()) {
                     runOnIOThread(() -> {
                         if(isLoggedIn()) {
-                            success(null, callBack);
+                            success("", callBack);
                         }else {
                             callBack.onError(ErrorCode.NOT_LOGIN);
                         }
@@ -372,13 +372,16 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     private void success(String pwd, @NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-        encryptData(pwd);
-        // ** manually load all local groups and conversation
-        initLocalDb();
-        // get current user
-        DemoHelper.getInstance().getUsersManager().reload();
-        DemoHelper.getInstance().getUsersManager().initUserInfo();
-        new EMContactManagerRepository().updateCurrentUserNickname(getCurrentUser(), null);
+        if (!TextUtils.isEmpty(pwd)){
+            encryptData(pwd);
+            // ** manually load all local groups and conversation
+            initLocalDb();
+            // get current user
+            DemoHelper.getInstance().getUsersManager().reload();
+            //Pull the joined group from the server to prevent only the id from entering the conversation page
+            DemoHelper.getInstance().getUsersManager().initUserInfo();
+            new EMContactManagerRepository().updateCurrentUserNickname(getCurrentUser(), null);
+        }
         callBack.onSuccess(createLiveData(true));
     }
 
@@ -392,6 +395,7 @@ public class EMClientRepository extends BaseEMRepository{
             editor.commit();
         } catch (Exception e) {
             e.printStackTrace();
+            EMLog.e("EMClientRepository : ",e.getMessage());
         }
     }
 
@@ -401,7 +405,7 @@ public class EMClientRepository extends BaseEMRepository{
         return DemoHelper.getInstance().getEncryptUtils().aesGcmDecrypt(encryptedData,getContext().getString(R.string.sign_aes).getBytes(),1);
     }
 
-    private void loginToAppServer(String username, String nickname, ResultCallBack<LoginBean> callBack) {
+    private void loginToAppServer(String username, String password, ResultCallBack<LoginBean> callBack) {
         runOnIOThread(() -> {
             try {
                 Map<String, String> headers = new HashMap<>();
@@ -409,7 +413,7 @@ public class EMClientRepository extends BaseEMRepository{
 
                 JSONObject request = new JSONObject();
                 request.putOpt("userAccount", username);
-                request.putOpt("userPassword", nickname);
+                request.putOpt("userPassword", password);
 
                 String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_URL;
                 HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
@@ -423,7 +427,7 @@ public class EMClientRepository extends BaseEMRepository{
                         int agoraUid = object.getInt("agoraUid");
                         LoginBean bean = new LoginBean();
                         bean.setAccessToken(token);
-                        bean.setUserNickname(nickname);
+                        bean.setPassword(password);
                         bean.setAgoraUid(agoraUid);
                         if(callBack != null) {
                             callBack.onSuccess(bean);
@@ -432,7 +436,7 @@ public class EMClientRepository extends BaseEMRepository{
                         callBack.onError(code, responseInfo);
                     }
                 } else {
-                    if (responseInfo != null && responseInfo.length() > 0) {
+                    if (responseInfo != null && responseInfo.length() > 0 && CommonUtils.isJson(responseInfo)) {
                         JSONObject object = new JSONObject(responseInfo);
                         callBack.onError(code, object.getString("errorInfo"));
                     }else {

@@ -521,7 +521,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(userIds, new ValueCallBack<Map<String, UserInfo>>() {
                     @Override
                     public void onSuccess(Map<String, UserInfo> value) {
-                        Log.e("TAG", "getUserInfoById success");
+                        EMLog.i("TAG", "getUserInfoById success");
                         if(callBack != null) {
                             EaseUser easeUser = transformEMUserInfo(value.get(finalUserId));
                             addDefaultAvatar(easeUser,null);
@@ -557,7 +557,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
         ChatClient.getInstance().userInfoManager().fetchUserInfoByUserId(userIds, new ValueCallBack<Map<String, UserInfo>>() {
             @Override
             public void onSuccess(Map<String, UserInfo> value) {
-                Log.e("TAG", "getUserInfoById success");
+                EMLog.i("TAG", "getUserInfoById success");
                 EaseUser easeUser  = transformEMUserInfo(value.get(finalUserId));
                 addDefaultAvatar(easeUser,null);
                 getUserDao().insert(EmUserEntity.parseParent(easeUser));

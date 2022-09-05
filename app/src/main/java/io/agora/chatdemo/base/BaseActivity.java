@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
@@ -64,6 +65,17 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // should be in launcher activity, but all app use this can avoid the problem
+        if(!isTaskRoot()){
+            Intent intent = getIntent();
+            String action = intent.getAction();
+            if(intent.hasCategory(Intent.CATEGORY_LAUNCHER) && action.equals(Intent.ACTION_MAIN)){
+                finish();
+                return;
+            }
+        }
+
         mContext = this;
         clearFragmentsBeforeCreate();
         registerAccountObservable();
@@ -469,5 +481,15 @@ public class BaseActivity extends AppCompatActivity {
             fragmentTransaction.remove(fragment);
         }
         fragmentTransaction.commitNow();
+    }
+
+    /**
+     * set titleText Style
+     * @param view textView
+     * @param type Typeface {NORMAL, BOLD, ITALIC, BOLD_ITALIC}
+     */
+    public void setTextStyle(TextView view, int type){
+        if (null != view && type >= 0 && type<= 3)
+            view.setTypeface(null,type);
     }
 }

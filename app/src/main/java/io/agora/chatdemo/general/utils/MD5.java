@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class MD5 {
     /**
-     * 进行MD5加密
+     * MD5 encryption
      * @param str
      * @return
      */
@@ -19,7 +19,7 @@ public class MD5 {
         String hexStr = "";
         try {
             byte[] hash = MessageDigest.getInstance("MD5").digest(str.getBytes("utf-8"));
-            //对生成的16字节数组进行补零操作
+            //use Zero-pad the resulting 16-byte array
             StringBuilder hex = new StringBuilder(hash.length * 2);
             for (byte b : hash) {
                 if ((b & 0xFF) < 0x10){

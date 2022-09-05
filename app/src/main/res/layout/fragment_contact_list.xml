@@ -26,20 +26,22 @@
         <io.agora.chat.uikit.widget.EaseRecyclerView
             android:id="@+id/contact_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <io.agora.chatdemo.general.widget.EaseSidebar
         android:id="@+id/side_bar_contact"
         android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_alignParentRight="true"
+        android:layout_height="400dp"
         android:layout_below="@id/et_search"
-        app:ease_side_bar_text_size="10sp"
-        app:ease_side_bar_focus_bg_color="@color/color_main_blue"/>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="50dp"
+        app:ease_side_bar_focus_bg_color="@color/color_main_blue"
+        app:ease_side_bar_text_size="10sp" />
 
     <TextView
         android:id="@+id/floating_header"

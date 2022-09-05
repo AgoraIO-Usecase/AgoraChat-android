@@ -152,6 +152,14 @@ public class EditInfoDialog extends BaseDialogFragment implements View.OnClickLi
             }
             boolean cancelable = bundle.getBoolean("set_cancelable");
             setCancelable(cancelable);
+
+            boolean isShowInput = bundle.getBoolean("set_show_input");
+            if (isShowInput){
+                mEtDialogContent.requestFocus();
+                mEtDialogContent.setFocusableInTouchMode(true);
+                InputMethodManager inputManager = (InputMethodManager)mEtDialogContent.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(mEtDialogContent, 0);
+            }
         }
     }
 
@@ -297,6 +305,11 @@ public class EditInfoDialog extends BaseDialogFragment implements View.OnClickLi
 
         public EditInfoDialog.Builder setCancelable(boolean cancelable) {
             this.bundle.putBoolean("set_cancelable", cancelable);
+            return this;
+        }
+
+        public EditInfoDialog.Builder setShowInput(boolean isShow){
+            this.bundle.putBoolean("set_show_input",isShow);
             return this;
         }
 

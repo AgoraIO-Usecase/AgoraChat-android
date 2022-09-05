@@ -45,7 +45,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
     private String reason;
     private boolean groupPublic;
     private boolean groupAllowInvite;
-    protected NewGroupViewModel viewModel;
+    protected NewGroupViewModel groupViewModel;
     private int groupMaxUsers;
 
     @Override
@@ -76,8 +76,8 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        viewModel = new ViewModelProvider(this).get(NewGroupViewModel.class);
-        viewModel.groupObservable().observe(this, response -> {
+        groupViewModel = new ViewModelProvider(this).get(NewGroupViewModel.class);
+        groupViewModel.groupObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Group>() {
                 @Override
                 public void onSuccess(Group data) {
@@ -155,7 +155,7 @@ public class NewGroupSelectContactsFragment extends ContactListFragment implemen
         }else{
             option.style = groupAllowInvite ? GroupManager.GroupStyle.GroupStylePrivateMemberCanInvite : GroupManager.GroupStyle.GroupStylePrivateOnlyOwnerInvite;
         }
-        viewModel.createGroup(groupName, groupDesc, checkedList.toArray(new String[checkedList.size()]), reason, option);
+        groupViewModel.createGroup(groupName, groupDesc, checkedList.toArray(new String[checkedList.size()]), reason, option);
         return true;
     }
 

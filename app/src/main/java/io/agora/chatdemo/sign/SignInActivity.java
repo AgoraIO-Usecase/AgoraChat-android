@@ -38,14 +38,17 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.interfaces.SimpleTextWatcher;
 import io.agora.chatdemo.general.manager.SoftKeyboardChangeHelper;
+import io.agora.chatdemo.general.utils.MyTextUtils;
 import io.agora.chatdemo.main.MainActivity;
+import io.agora.util.EMLog;
 
 public class SignInActivity extends BaseInitActivity implements View.OnClickListener{
 
     private TextView tv_hint;
     private EditText et_agora_id;
-    private EditText et_nickname;
+    private EditText et_password;
     private EditText et_confirm_pwd;
     private Button btn_login;
     private TextView btn_register;
@@ -80,7 +83,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
         super.initView(savedInstanceState);
         tv_hint = findViewById(R.id.tv_hint);
         et_agora_id = findViewById(R.id.et_agora_id);
-        et_nickname = findViewById(R.id.et_nickname);
+        et_password = findViewById(R.id.et_password);
         btn_login = findViewById(R.id.btn_login);
         llRoot = findViewById(R.id.ll_root);
         et_confirm_pwd = findViewById(R.id.et_confirm_pwd);
@@ -109,21 +112,13 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
         btn_back_login.setOnClickListener(this);
         btn_login.setOnClickListener(this);
 
-        et_agora_id.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+        et_agora_id.addTextChangedListener(new SimpleTextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
                 String content = s.toString().trim();
-                if(TextUtils.isEmpty(content)) {
+                int length = MyTextUtils.getBytesLength(content);
+                if(length == 0) {
                     setErrorHint("");
                     btn_login.setEnabled(true);
                     img_clear.setVisibility(View.GONE);
@@ -137,15 +132,36 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
                     setErrorHint("");
                     btn_login.setEnabled(true);
                 }
-
-                byte[] contentBytes = content.getBytes(StandardCharsets.UTF_8);
-                if(contentBytes.length > 64) {
+                if(length > 64) {
                     setErrorHint(getString(R.string.username_too_long));
                     btn_login.setEnabled(false);
                 }
             }
         });
-        et_nickname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        et_password.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString().trim();
+                int length = MyTextUtils.getBytesLength(content);
+                if(length > 64) {
+                    content = content.substring(0, 64);
+                    int length1 = MyTextUtils.getBytesLength(content);
+                    et_password.setText(content);
+                }
+            }
+        });
+        et_confirm_pwd.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString().trim();
+                int length = MyTextUtils.getBytesLength(content);
+                if(length > 64) {
+                    content = content.substring(0, 64);
+                    et_confirm_pwd.setText(content);
+                }
+            }
+        });
+        et_password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEND && isLoginModule) {
@@ -176,13 +192,13 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             setErrorHint(getString(R.string.sign_error_not_id));
             return;
         }
-        String nickname = et_nickname.getText().toString().trim();
-        if(TextUtils.isEmpty(nickname)) {
+        String password = et_password.getText().toString().trim();
+        if(TextUtils.isEmpty(password)) {
             setErrorHint(getString(R.string.sign_error_not_nickname));
             return;
         }
         btn_login.setEnabled(false);
-        viewModel.login(agoraID, nickname);
+        viewModel.login(agoraID, password);
     }
 
     public void initData() {
@@ -228,7 +244,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
-                    Log.e("getRegisterObservable","onSuccess");
+                    EMLog.i("getRegisterObservable","onSuccess");
                     changeUI(true);
                     showToast(R.string.sign_register_suc);
                 }
@@ -294,12 +310,12 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
 
     public void registerToAgoraChat(){
         setErrorHint("");
-        String agoraID = et_agora_id.getText().toString().trim();
+        String agoraID = et_agora_id.getText().toString().trim().toLowerCase();
         if(TextUtils.isEmpty(agoraID)) {
             setErrorHint(getString(R.string.sign_error_not_id));
             return;
         }
-        String pwd = et_nickname.getText().toString().trim();
+        String pwd = et_password.getText().toString().trim();
         if(TextUtils.isEmpty(pwd)) {
             setErrorHint(getString(R.string.sign_error_not_nickname));
             return;
@@ -322,9 +338,9 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             case R.id.see_pwd:
                 img_see_pwd.setSelected(!img_see_pwd.isSelected());
                 if (img_see_pwd.isSelected()){
-                    et_nickname.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    et_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }else {
-                    et_nickname.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    et_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
                 break;
             case R.id.see_confirm_pwd:

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="102dp">
+    android:layout_height="122dp">
 
     <io.agora.chat.uikit.widget.EaseImageView
         android:id="@+id/iv_from"
@@ -21,8 +21,8 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_12"
+        android:layout_marginTop="@dimen/margin_12"
         android:textAllCaps="false"
         android:textColor="@color/color_main_text"
         android:textSize="16sp"
@@ -34,7 +34,7 @@
         android:id="@+id/tv_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_16"
         android:maxLines="2"
         android:textAllCaps="false"
         android:textColor="@color/color_main_text"
@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_12"
-        android:layout_marginRight="@dimen/margin_15"
+        android:layout_marginRight="@dimen/margin_16"
         android:textColor="@color/color_second_text"
         android:textSize="14sp"
         app:layout_constraintRight_toRightOf="parent"
@@ -61,7 +61,7 @@
         android:layout_width="72dp"
         android:layout_height="28dp"
         android:layout_marginRight="52dp"
-        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_15"
         android:background="@drawable/shape_blue_005fff_corner_18"
         android:text="@string/contact_request_notification_accept"
         android:textColor="@color/white"
@@ -72,8 +72,8 @@
         android:id="@+id/iv_msg_delete"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginRight="@dimen/margin_15"
-        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_15"
         android:src="@drawable/contacts_notification_delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

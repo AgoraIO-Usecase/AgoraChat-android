@@ -47,7 +47,7 @@ public class PresenceViewModel extends AndroidViewModel {
         List<String> ids = new ArrayList<>();
         if (users != null && !users.isEmpty()) {
             for (EaseUser user : users) {
-                //不能订阅自己，否则会error
+                //Can't subscribe yourself, otherwise it will error
                 if(TextUtils.equals(user.getUsername(), ChatClient.getInstance().getCurrentUser())) {
                     continue;
                 }

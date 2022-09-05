@@ -319,10 +319,6 @@ public class GroupFilesActivity extends BaseInitActivity implements EaseTitleBar
         if (GroupHelper.isOwner(group) || GroupHelper.isAdmin(group)) {
             return true;
         }
-        // Private group which allow member to invite
-        if (!group.isPublic() && group.isMemberAllowToInvite()) {
-            return true;
-        }
         return false;
     }
 

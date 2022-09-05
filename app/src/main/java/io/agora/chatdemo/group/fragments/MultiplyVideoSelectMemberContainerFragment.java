@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import io.agora.chatdemo.av.CallInviteUsersActivity;
 import io.agora.chatdemo.global.BottomSheetContainerFragment;
 
 public class MultiplyVideoSelectMemberContainerFragment extends BottomSheetContainerFragment {
@@ -21,7 +22,7 @@ public class MultiplyVideoSelectMemberContainerFragment extends BottomSheetConta
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         FragmentActivity activity = getActivity();
-        if(activity!=null) {
+        if(activity!=null&&activity instanceof CallInviteUsersActivity) {
             activity.finish();
         }
     }

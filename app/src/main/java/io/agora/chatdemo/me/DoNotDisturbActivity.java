@@ -1,6 +1,7 @@
 package io.agora.chatdemo.me;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,12 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.databinding.ActivityDoNotDisturbBinding;
 
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_ID;
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE;
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_CHAT;
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_GROUP;
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_THREAD;
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_USER;
 import static io.agora.chatdemo.general.constant.DemoConstant.SILENT_DURATION;
 
 public class DoNotDisturbActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener, AdapterView.OnItemClickListener{
@@ -24,6 +31,8 @@ public class DoNotDisturbActivity extends BaseInitActivity implements EaseTitleB
     private ActivityDoNotDisturbBinding mBinding;
     private List<DoNotDisturbAdapter.SelectItem> itemList = new ArrayList<>();
     private DoNotDisturbAdapter adapter;
+    private int detailType;
+    private String detailId;
 
     @Override
     protected View getContentView() {
@@ -34,6 +43,8 @@ public class DoNotDisturbActivity extends BaseInitActivity implements EaseTitleB
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        setTextStyle(mBinding.titleBar.getTitle(),Typeface.BOLD);
+        setTextStyle(mBinding.titleBar.getRightText(),Typeface.BOLD);
         itemList.add(new DoNotDisturbAdapter.SelectItem(this.getResources().getString(R.string.not_disturb_15_min), 15));
         itemList.add(new DoNotDisturbAdapter.SelectItem(this.getResources().getString(R.string.not_disturb_1_hour), 60));
         itemList.add(new DoNotDisturbAdapter.SelectItem(this.getResources().getString(R.string.not_disturb_8_hours), 480));
@@ -41,6 +52,21 @@ public class DoNotDisturbActivity extends BaseInitActivity implements EaseTitleB
         itemList.add(new DoNotDisturbAdapter.SelectItem(this.getResources().getString(R.string.not_disturb_8_tomorrow), -1));
         adapter = new DoNotDisturbAdapter(mContext, itemList);
         mBinding.listView.setAdapter(adapter);
+
+        switch (detailType){
+            case DETAIL_TYPE_USER:
+                mBinding.titleBar.setTitle(this.getResources().getString(R.string.notification_do_not_disturb));
+                break;
+            case DETAIL_TYPE_THREAD:
+                mBinding.titleBar.setTitle(this.getResources().getString(R.string.notification_mute_thread));
+                break;
+            case DETAIL_TYPE_GROUP:
+                mBinding.titleBar.setTitle(this.getResources().getString(R.string.notification_mute_group));
+                break;
+            case DETAIL_TYPE_CHAT:
+                mBinding.titleBar.setTitle(this.getResources().getString(R.string.notification_mute_contact));
+                break;
+        }
     }
 
     @Override
@@ -50,6 +76,13 @@ public class DoNotDisturbActivity extends BaseInitActivity implements EaseTitleB
         mBinding.titleBar.setOnRightClickListener(this);
         mBinding.listView.setOnItemClickListener(this);
 
+    }
+
+    @Override
+    protected void initIntent(Intent intent) {
+        super.initIntent(intent);
+        detailType = intent.getIntExtra(DETAIL_TYPE, 0);
+        detailId = intent.getStringExtra(DETAIL_ID);
     }
 
     @Override

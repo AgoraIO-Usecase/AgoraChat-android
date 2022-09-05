@@ -23,7 +23,6 @@
             android:layout_height="54dp"
             android:background="@drawable/shape_white_corner_14"
             android:gravity="center"
-            android:paddingLeft="@dimen/dialog_drawable_padding"
             android:text="@string/dialog_change_presence_title"
             android:textAllCaps="false"
             android:textColor="@color/color_light_gray_999999"

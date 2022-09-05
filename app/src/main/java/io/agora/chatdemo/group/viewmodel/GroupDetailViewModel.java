@@ -20,6 +20,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<String>> refreshObservable;
     private SingleSourceLiveData<Resource<Boolean>> leaveGroupObservable;
     private SingleSourceLiveData<Resource<Boolean>> joinObservable;
+    private SingleSourceLiveData<Resource<String>> setGroupNameObservable;
 
 
     public GroupDetailViewModel(@NonNull Application application) {
@@ -30,6 +31,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
         refreshObservable = new SingleSourceLiveData<>();
         leaveGroupObservable = new SingleSourceLiveData<>();
         joinObservable = new SingleSourceLiveData<>();
+        setGroupNameObservable = new SingleSourceLiveData<>();
     }
     public LiveData<Resource<Boolean>> getJoinObservable() {
         return joinObservable;
@@ -60,8 +62,12 @@ public class GroupDetailViewModel extends AndroidViewModel {
         return refreshObservable;
     }
 
+    public LiveData<Resource<String>> getSetGroupNameObservable() {
+        return setGroupNameObservable;
+    }
+
     public void setGroupName(String groupId, String groupName) {
-        refreshObservable.setSource(repository.setGroupName(groupId, groupName));
+        setGroupNameObservable.setSource(repository.setGroupName(groupId, groupName));
     }
 
     public void setGroupAnnouncement(String groupId, String announcement) {

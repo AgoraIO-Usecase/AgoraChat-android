@@ -66,10 +66,10 @@
             android:id="@+id/et_agora_id"
             android:hint="@string/sign_agora_id"
             style="@style/sign_edit_style"
-            android:paddingStart="20dp"
+            android:paddingStart="24dp"
             android:inputType="text"
             android:imeOptions="actionNone"
-            android:paddingEnd="20dp" />
+            android:paddingEnd="40dp" />
 
 
         <ImageView
@@ -78,7 +78,7 @@
             android:layout_centerVertical="true"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="12dp"
             android:src="@drawable/sign_clear_icon"
             android:visibility="gone"/>
 
@@ -91,21 +91,21 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/et_nickname"
+            android:id="@+id/et_password"
             android:hint="@string/sign_password"
             style="@style/sign_edit_style"
             android:imeOptions="actionSend"
             android:inputType="textPassword"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
+            android:paddingStart="24dp"
+            android:paddingEnd="40dp"/>
 
         <ImageView
             android:id="@+id/see_pwd"
-            android:layout_alignEnd="@id/et_nickname"
+            android:layout_alignEnd="@id/et_password"
             android:layout_centerVertical="true"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="12dp"
             android:state_selected="false"
             android:src="@drawable/sign_eye_selector"/>
 
@@ -125,8 +125,8 @@
             style="@style/sign_edit_style"
             android:imeOptions="actionSend"
             android:inputType="textPassword"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="40dp"
             />
 
         <ImageView
@@ -135,7 +135,7 @@
             android:layout_centerVertical="true"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="12dp"
             android:state_selected="false"
             android:src="@drawable/sign_eye_selector"/>
 

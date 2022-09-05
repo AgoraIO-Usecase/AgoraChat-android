@@ -14,6 +14,11 @@
         <attr name="arrowItemTitle" format="string|reference"/>
         <attr name="arrowItemTitleColor" format="color|reference"/>
         <attr name="arrowItemTitleSize" format="dimension|reference"/>
+        <attr name="arrowItemTitleStyle" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="bold" value="1"/>
+            <enum name="italic" value="2"/>
+        </attr>
         <attr name="arrowItemContent" format="string|reference"/>
         <attr name="arrowItemContentColor" format="color|reference"/>
         <attr name="arrowItemContentSize" format="dimension|reference"/>
@@ -44,6 +49,11 @@
         <attr name="switchItemTitle" format="string|reference"/>
         <attr name="switchItemTitleColor" format="color|reference"/>
         <attr name="switchItemTitleSize" format="dimension|reference"/>
+        <attr name="switchItemTitleStyle" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="bold" value="1"/>
+            <enum name="italic" value="2"/>
+        </attr>
         <attr name="switchItemShowDivider" format="boolean"/>
         <attr name="switchItemHint" format="string|reference"/>
         <attr name="switchItemCheckEnable" format="boolean"/>

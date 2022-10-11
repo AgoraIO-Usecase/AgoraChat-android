@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--Need to add after Android 12, apply for alarm clock timing permission -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <!-- IM SDK required end -->
     <!-- Remove unused permission in remote library start -->
     <uses-permission

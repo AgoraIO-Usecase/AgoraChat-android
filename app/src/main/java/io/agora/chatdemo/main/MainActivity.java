@@ -134,7 +134,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         mainViewModel.getMsgConversation();
         mainViewModel.checkUnreadMsg();
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
-        checkNeedPermission();
 
         if(GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
             // set enable FCM automatic initialization
@@ -158,13 +157,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             });
         }
 
-    }
-
-    private void checkNeedPermission() {
-        if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
-                    , new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, null);
-        }
     }
 
     private void switchToHome() {

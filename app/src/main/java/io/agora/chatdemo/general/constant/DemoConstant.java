@@ -54,6 +54,7 @@ public interface DemoConstant extends EaseConstant {
     String CONTACT_ALLOW = "contact_allow";
 
     String CONTACT_CHANGE = "contact_change";
+    String CONTACT_UNREAD_CHANGE = "contact_unread_change";
     String CONTACT_ADD = "contact_add";
     String CONTACT_DELETE = "contact_delete";
     String CONTACT_UPDATE = "contact_update";

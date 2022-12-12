@@ -27,6 +27,11 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        dexOptions {
+            javaMaxHeapSize "4g"
+        }
+
         // If you use your own Agora Chat appkey, you should deploy your own App Server.
         // See:
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")

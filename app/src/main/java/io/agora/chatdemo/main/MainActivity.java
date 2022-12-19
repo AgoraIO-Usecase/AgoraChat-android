@@ -86,6 +86,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        messageChange.with(DemoConstant.CONTACT_UNREAD_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this,this::loadData);
 
         messageChange.with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(this, this::loadData);

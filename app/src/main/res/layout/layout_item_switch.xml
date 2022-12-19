@@ -10,7 +10,6 @@
         android:layout_width="32dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="@dimen/margin_12"
@@ -22,12 +21,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/avatar"
+        app:layout_constraintRight_toLeftOf="@id/switch_item"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_hint"
         android:layout_marginStart="8dp"
         android:textSize="@dimen/text_size_big"
         android:textColor="@color/color_black_333333"
+        android:maxLines="2"
+        android:ellipsize="end"
         app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constrainedWidth="true"
         tools:text="Group file"/>
 
     <TextView
@@ -44,6 +49,9 @@
         android:textSize="@dimen/text_size_small"
         android:textColor="@color/color_light_gray_999999"
         android:visibility="gone"
+        app:layout_constrainedWidth="true"
+        android:maxLines="2"
+        android:ellipsize="end"
         tools:text="Group file"/>
 
     <androidx.appcompat.widget.SwitchCompat
@@ -52,9 +60,13 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin_15"
         android:layout_marginEnd="@dimen/margin_15"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:switchMinWidth="20dp"
         android:thumb="@drawable/demo_switch_thumb_selector"
         app:track="@drawable/demo_switch_track_selector"
+        app:layout_constraintLeft_toRightOf="@id/tv_title"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

@@ -16,8 +16,8 @@ android {
         applicationId "io.agora.chatdemo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 8
-        versionName "1.0.8"
+        versionCode 9
+        versionName "1.0.9"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -27,6 +27,11 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        dexOptions {
+            javaMaxHeapSize "4g"
+        }
+
         // If you use your own Agora Chat appkey, you should deploy your own App Server.
         // See:
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")

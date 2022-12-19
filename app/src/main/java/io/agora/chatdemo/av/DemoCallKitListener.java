@@ -12,7 +12,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.haoge.easyandroid.easy.EasyExecutor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +30,7 @@ import io.agora.chat.callkit.general.EaseCallType;
 import io.agora.chat.callkit.listener.EaseCallGetUserAccountCallback;
 import io.agora.chat.callkit.listener.EaseCallKitListener;
 import io.agora.chat.callkit.listener.EaseCallKitTokenCallback;
+import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.BuildConfig;
 import io.agora.chatdemo.R;
@@ -42,8 +42,6 @@ import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.cloud.EMHttpClient;
 import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 
 
 public class DemoCallKitListener implements EaseCallKitListener {
@@ -55,7 +53,6 @@ public class DemoCallKitListener implements EaseCallKitListener {
 
     private UsersManager mUsersManager;
     private Context mContext;
-    private final EasyExecutor executor;
     private Handler handler=new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -70,8 +67,6 @@ public class DemoCallKitListener implements EaseCallKitListener {
     public DemoCallKitListener(Context context, UsersManager usersManager) {
         this.mContext = context;
         this.mUsersManager = usersManager;
-        executor = EasyExecutor.newBuilder(0)
-                .build();
     }
 
     @Override
@@ -184,48 +179,41 @@ public class DemoCallKitListener implements EaseCallKitListener {
 
 
     private void getRtcToken(String tokenUrl, int agoraUid, EaseCallKitTokenCallback callback) {
-        executor.asyncResult(new Function1<Pair<Integer, String>, Unit>() {
-            @Override
-            public Unit invoke(Pair<Integer, String> response) {
-                if (response != null) {
-                    try {
-                        int resCode = response.first;
-                        if (resCode == 200) {
-                            String responseInfo = response.second;
-                            if (responseInfo != null && responseInfo.length() > 0) {
-                                try {
-                                    JSONObject object = new JSONObject(responseInfo);
-                                    String token = object.getString("accessToken");
-                                    //Set your avatar nickname
-                                    setEaseCallKitUserInfo(ChatClient.getInstance().getCurrentUser());
-                                    callback.onSetToken(token, agoraUid);
-                                } catch (Exception e) {
-                                    e.getStackTrace();
-                                }
-                            } else {
-                                callback.onGetTokenError(response.first, response.second);
+        EaseThreadManager.getInstance().runOnIOThread(()-> {
+            Pair<Integer, String> response = null;
+            try {
+                response = EMHttpClient.getInstance().sendRequestWithToken(tokenUrl, null, EMHttpClient.GET);
+            } catch (ChatException e) {
+                e.printStackTrace();
+            }
+            if (response != null) {
+                try {
+                    int resCode = response.first;
+                    if (resCode == 200) {
+                        String responseInfo = response.second;
+                        if (responseInfo != null && responseInfo.length() > 0) {
+                            try {
+                                JSONObject object = new JSONObject(responseInfo);
+                                String token = object.getString("accessToken");
+                                //Set your avatar nickname
+                                setEaseCallKitUserInfo(ChatClient.getInstance().getCurrentUser());
+                                callback.onSetToken(token, agoraUid);
+                            } catch (Exception e) {
+                                e.getStackTrace();
                             }
                         } else {
                             callback.onGetTokenError(response.first, response.second);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        callback.onGetTokenError(response.first, response.second);
                     }
-                } else {
-                    callback.onSetToken(null, 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                return null;
+            } else {
+                callback.onSetToken(null, 0);
             }
-        })
-                .asyncTask(notifier -> {
-                    try {
-                        Pair<Integer, String> response = EMHttpClient.getInstance().sendRequestWithToken(tokenUrl, null, EMHttpClient.GET);
-                        return response;
-                    } catch (ChatException exception) {
-                        exception.printStackTrace();
-                    }
-                    return null;
-                });
+        });
     }
 
     /**
@@ -235,55 +223,49 @@ public class DemoCallKitListener implements EaseCallKitListener {
      * @param callback
      */
     private void getUserIdByAgoraUid(int uId, String url, EaseCallGetUserAccountCallback callback) {
-        executor.asyncResult(new Function1<Pair<Integer, String>, Unit>() {
-            @Override
-            public Unit invoke(Pair<Integer, String> response) {
-                if (response != null) {
-                    try {
-                        int resCode = response.first;
-                        if (resCode == 200) {
-                            String responseInfo = response.second;
-                           EaseUserAccount userAccount =null;
-                            if (responseInfo != null && responseInfo.length() > 0) {
-                                try {
-                                    JSONObject object = new JSONObject(responseInfo);
-                                    JSONObject resToken = object.getJSONObject("result");
-                                    Iterator it = resToken.keys();
-                                    while (it.hasNext()) {
-                                        String uIdStr = it.next().toString();
-                                        int uid = Integer.valueOf(uIdStr).intValue();
-                                        String username = resToken.optString(uIdStr);
-                                        if (uid == uId) {
-                                            //Obtain information such as userName, profile picture, and nickname of the current user
-                                            userAccount=new EaseUserAccount(uid, username);
-                                        }
+        EaseThreadManager.getInstance().runOnIOThread(()-> {
+            Pair<Integer, String> response = null;
+            try {
+                response = EMHttpClient.getInstance().sendRequestWithToken(url, null, EMHttpClient.GET);
+            } catch (ChatException e) {
+                e.printStackTrace();
+            }
+            if (response != null) {
+                try {
+                    int resCode = response.first;
+                    if (resCode == 200) {
+                        String responseInfo = response.second;
+                        EaseUserAccount userAccount =null;
+                        if (responseInfo != null && responseInfo.length() > 0) {
+                            try {
+                                JSONObject object = new JSONObject(responseInfo);
+                                JSONObject resToken = object.getJSONObject("result");
+                                Iterator it = resToken.keys();
+                                while (it.hasNext()) {
+                                    String uIdStr = it.next().toString();
+                                    int uid = Integer.valueOf(uIdStr).intValue();
+                                    String username = resToken.optString(uIdStr);
+                                    if (uid == uId) {
+                                        //Obtain information such as userName, profile picture, and nickname of the current user
+                                        userAccount=new EaseUserAccount(uid, username);
                                     }
-                                    callback.onUserAccount(userAccount);
-                                } catch (Exception e) {
-                                    e.getStackTrace();
                                 }
-                            } else {
-                                callback.onSetUserAccountError(response.first, response.second);
+                                callback.onUserAccount(userAccount);
+                            } catch (Exception e) {
+                                e.getStackTrace();
                             }
                         } else {
                             callback.onSetUserAccountError(response.first, response.second);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        callback.onSetUserAccountError(response.first, response.second);
                     }
-                } else {
-                    callback.onSetUserAccountError(100, "response is null");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                return null;
+            } else {
+                callback.onSetUserAccountError(100, "response is null");
             }
-        }).asyncTask(notifier -> {
-            try {
-                Pair<Integer, String> response = EMHttpClient.getInstance().sendRequestWithToken(url, null, EMHttpClient.GET);
-                return response;
-            } catch (ChatException exception) {
-                exception.printStackTrace();
-            }
-            return null;
         });
     }
 

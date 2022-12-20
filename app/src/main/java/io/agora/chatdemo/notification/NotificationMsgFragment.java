@@ -82,6 +82,9 @@ public class NotificationMsgFragment extends BaseContactListFragment<ChatMessage
             return;
         }
         mMsgsViewModel.getAllMessages();
+        if(this.isVisible()) {
+            mNewFriendViewModel.makeAllMsgRead();
+        }
     }
 
     @Override

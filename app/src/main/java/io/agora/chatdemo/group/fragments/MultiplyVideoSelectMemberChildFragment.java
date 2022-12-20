@@ -49,7 +49,6 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
 
     @Override
     protected void initViewModel() {
-        super.initViewModel();
         initPresenceViewModel();
         groupContactViewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
 
@@ -65,6 +64,7 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
                             mData.add(user);
                         }
                     }
+                    mListAdapter.setData(mData);
                     presenceViewModel.subscribePresences(users, 7 * 24 * 60 * 60);
                 }
 
@@ -72,6 +72,18 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
                 public void onError(int code, String message) {
                     super.onError(code, message);
                     runOnUiThread(()-> finishRefresh());
+                }
+
+                @Override
+                public void onLoading(@Nullable List<EaseUser> data) {
+                    super.onLoading(data);
+                    showLoading();
+                }
+
+                @Override
+                public void onHideLoading() {
+                    super.onHideLoading();
+                    dismissLoading();
                 }
             });
         });
@@ -86,6 +98,24 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
         mRecyclerView.setAdapter(concatAdapter);
         ((ContactListAdapter) mListAdapter).setCheckModel(true);
         groupContactViewModel.getGroupMembers(groupId);
+    }
+
+    @Override
+    protected void checkSearchContent(String keyword) {
+        if(mData == null || mData.isEmpty()) {
+            return;
+        }
+        if(TextUtils.isEmpty(keyword)) {
+            mListAdapter.setData(mData);
+        }else {
+            List<EaseUser> list = new ArrayList<>();
+            for (EaseUser user : mData) {
+                if(user.getUsername().contains(keyword) || (!TextUtils.isEmpty(user.getNickname()) && user.getNickname().contains(keyword))) {
+                    list.add(user);
+                }
+            }
+            mListAdapter.setData(list);
+        }
     }
 
     @Override

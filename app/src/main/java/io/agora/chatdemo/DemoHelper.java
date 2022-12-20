@@ -160,9 +160,6 @@ public class DemoHelper {
     private boolean initSDK(Context context) {
         // Set Chat Options
         ChatOptions options = initChatOptions(context);
-        if (options == null) {
-            return false;
-        }
         // Configure custom rest server and im server
 
 //        options.setRestServer("a1-hsb.easemob.com");
@@ -172,6 +169,14 @@ public class DemoHelper {
         options.setUsingHttpsOnly(true);
         // Use fpa by default
         options.setFpaEnable(true);
+        boolean hasAppkey = checkAgoraChatAppKey(context, options);
+        // You can set your AppKey by options.setAppKey(appkey)
+        if (!hasAppkey) {
+            String error = context.getString(R.string.please_check);
+            EMLog.e(TAG, error);
+            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+            return false;
+        }
         // Call UIKit to initialize Agora Chat SDK
         isSDKInit = EaseUIKit.getInstance().init(context, options);
         return isSDKInit();
@@ -428,14 +433,6 @@ public class DemoHelper {
         EMLog.d(TAG, "init Agora Chat Options");
 
         ChatOptions options = new ChatOptions();
-        boolean hasAppkey = checkAgoraChatAppKey(context);
-        // You can set your AppKey by options.setAppKey(appkey)
-        if (!hasAppkey) {
-            String error = context.getString(R.string.please_check);
-            EMLog.e(TAG, error);
-            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-            return null;
-        }
         // Sets whether to automatically accept friend invitations. Default is true
         options.setAcceptInvitationAlways(false);
         // Set whether read confirmation is required by the recipient
@@ -460,7 +457,14 @@ public class DemoHelper {
         return options;
     }
 
-    private boolean checkAgoraChatAppKey(Context context) {
+    private boolean checkAgoraChatAppKey(Context context, ChatOptions options) {
+        if(options == null) {
+            return false;
+        }
+        String appKey = options.getAppKey();
+        if (!TextUtils.isEmpty(appKey)  && appKey.contains("#")) {
+            return true;
+        }
         String appPackageName = context.getPackageName();
         ApplicationInfo ai = null;
         try {

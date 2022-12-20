@@ -86,6 +86,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        messageChange.with(DemoConstant.CONTACT_UNREAD_CHANGE, EaseEvent.class).observe(this, this::loadData);
         messageChange.with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this,this::loadData);
 
         messageChange.with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(this, this::loadData);
@@ -134,7 +135,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         mainViewModel.getMsgConversation();
         mainViewModel.checkUnreadMsg();
         DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(ChatClient.getInstance().getCurrentUser());
-        checkNeedPermission();
 
         if(GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
             // set enable FCM automatic initialization
@@ -158,13 +158,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             });
         }
 
-    }
-
-    private void checkNeedPermission() {
-        if(!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
-                    , new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, null);
-        }
     }
 
     private void switchToHome() {

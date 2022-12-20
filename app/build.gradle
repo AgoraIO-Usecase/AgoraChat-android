@@ -16,8 +16,8 @@ android {
         applicationId "io.agora.chatdemo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.0.7"
+        versionCode 9
+        versionName "1.0.9"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -27,6 +27,11 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+        dexOptions {
+            javaMaxHeapSize "4g"
+        }
+
         // If you use your own Agora Chat appkey, you should deploy your own App Server.
         // See:
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
@@ -112,10 +117,11 @@ dependencies {
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'
     implementation  'com.scwang.smart:refresh-header-material:2.0.3'
     implementation  'com.scwang.smart:refresh-header-classics:2.0.3'
-    implementation "com.github.yjfnypeu:EasyAndroid:1.3.2"
+    // Use EncryptedSharedPreferences
+    implementation "androidx.security:security-crypto:1.0.0"
     // Agora Chat Uikit
-    implementation 'io.agora.rtc:chat-uikit:1.0.7'
-    implementation 'io.agora.rtc:chat-callkit:1.0.7'
+    implementation 'io.agora.rtc:chat-uikit:1.0.9'
+    implementation 'io.agora.rtc:chat-callkit:1.0.9'
 //    implementation project(path: ':chat-uikit')
 //    implementation project(path: ':chat-callkit')
 

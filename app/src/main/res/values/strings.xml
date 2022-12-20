@@ -22,7 +22,6 @@
     <string name="sign_error_not_id">Please enter an AgoraID.</string>
     <string name="sign_error_not_nickname">Please enter a Password.</string>
     <string name="sign_check_pwd">The two passwords are inconsistent</string>
-    <string name="sign_aes">0000000110000000</string>
     <string name="sign_gcm_key">server_key_gcm</string>
 
     <string name="error_network_error">Network unavailable</string>

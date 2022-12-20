@@ -6,7 +6,6 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 
-import com.haoge.easyandroid.EasyAndroid;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -32,7 +31,6 @@ public class DemoApplication extends Application {
         instance = this;
         registerActivityLifecycleCallbacks();
         initAgoraChatSDK();
-        EasyAndroid.init(this);
         closeAndroidPDialog();
     }
 

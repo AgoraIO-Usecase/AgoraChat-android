@@ -391,7 +391,7 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     private void encryptData(String data){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 SharedPreferences preferences = getEncryptedSP();
                 preferences.edit()
@@ -419,7 +419,7 @@ public class EMClientRepository extends BaseEMRepository{
 
     private String decryptData(){
         String data = "";
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 SharedPreferences preferences = getEncryptedSP();
                 data = preferences.getString(getContext().getString(R.string.sign_gcm_key), "");

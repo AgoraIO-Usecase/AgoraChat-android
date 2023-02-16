@@ -187,7 +187,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
     public void makeAllMsgRead() {
         Conversation conversation = ChatClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID, Conversation.ConversationType.Chat, true);
         conversation.markAllMessagesAsRead();
-        messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
+        messageChangeObservable.with(DemoConstant.CONTACT_UNREAD_CHANGE).postValue(EaseEvent.create(DemoConstant.CONTACT_UNREAD_CHANGE, EaseEvent.TYPE.NOTIFY));
     }
 
     public void saveNotificationMessage(String to,String constant,String content){

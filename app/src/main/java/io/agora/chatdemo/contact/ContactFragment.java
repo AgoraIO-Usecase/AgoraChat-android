@@ -29,6 +29,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.fragments.JoinedGroupFragment;
 import io.agora.chatdemo.notification.NotificationMsgFragment;
+import io.agora.chatdemo.notification.viewmodels.NewFriendsViewModel;
 
 public class ContactFragment extends BaseInitFragment implements EaseTitleBar.OnRightClickListener {
     private EaseTitleBar toolbar_contact;
@@ -38,6 +39,7 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     private ArrayList<BaseInitFragment> fragments=new ArrayList();
     private ContactsViewModel contactsViewModel;
     private View redDot;
+    private NewFriendsViewModel mNewFriendViewModel;
 
     @Override
     protected int getLayoutId() {
@@ -72,7 +74,8 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        contactsViewModel=new ViewModelProvider(this).get(ContactsViewModel.class);
+        contactsViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
+        mNewFriendViewModel = new ViewModelProvider(this).get(NewFriendsViewModel.class);
         contactsViewModel.getConversationObservable().observe(this,conversation->{
             initRedDot(conversation);
         });
@@ -161,17 +164,18 @@ public class ContactFragment extends BaseInitFragment implements EaseTitleBar.On
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
         messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
+        messageChange.with(DemoConstant.CONTACT_UNREAD_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadData);
     }
 
     private void initRedDot(Conversation conversation) {
-        int visiable;
+        int visible;
         int unreadMsgCount = conversation.getUnreadMsgCount();
-        if(!isNofificationMsgFragmentVisiable()&&unreadMsgCount>0) {
-            visiable=View.VISIBLE;
+        if(!isNofificationMsgFragmentVisiable() && unreadMsgCount > 0) {
+            visible = View.VISIBLE;
         }else{
-            visiable=View.GONE;
+            visible = View.GONE;
         }
-        redDot.setVisibility(visiable);
+        redDot.setVisibility(visible);
     }
 
     @Override

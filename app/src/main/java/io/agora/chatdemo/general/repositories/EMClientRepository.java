@@ -3,15 +3,20 @@ package io.agora.chatdemo.general.repositories;
 import static io.agora.cloud.HttpClientManager.Method_POST;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -386,23 +391,68 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     private void encryptData(String data){
-        DemoHelper.getInstance().getEncryptUtils().initAESgcm(getContext().getString(R.string.sign_aes).getBytes());
-        SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = setting.edit();
-        try {
-            String encryptedData = DemoHelper.getInstance().getEncryptUtils().aesGcmEncrypt(data,1);
-            editor.putString(getContext().getString(R.string.sign_gcm_key), encryptedData);
-            editor.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            EMLog.e("EMClientRepository : ",e.getMessage());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                SharedPreferences preferences = getEncryptedSP();
+                preferences.edit()
+                        .putString(getContext().getString(R.string.sign_gcm_key), data)
+                        .apply();
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+            DemoHelper.getInstance().getEncryptUtils().initAESgcm("0000000110000000".getBytes());
+            SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences.Editor editor = setting.edit();
+            try {
+                String encryptedData = DemoHelper.getInstance().getEncryptUtils().aesGcmEncrypt(data,1);
+                editor.putString(getContext().getString(R.string.sign_gcm_key), encryptedData);
+                editor.commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+                EMLog.e("EMClientRepository : ",e.getMessage());
+            }
         }
     }
 
     private String decryptData(){
+        String data = "";
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                SharedPreferences preferences = getEncryptedSP();
+                data = preferences.getString(getContext().getString(R.string.sign_gcm_key), "");
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(TextUtils.isEmpty(data)) {
+                data = getDecryptDataBelow23();
+                if(!TextUtils.isEmpty(data)) {
+                    encryptData(data);
+                }
+            }
+        }else {
+            data = getDecryptDataBelow23();
+        }
+        return data;
+    }
+
+    private String getDecryptDataBelow23() {
         SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(getContext());
         String encryptedData = setting.getString(getContext().getString(R.string.sign_gcm_key), "");
-        return DemoHelper.getInstance().getEncryptUtils().aesGcmDecrypt(encryptedData,getContext().getString(R.string.sign_aes).getBytes(),1);
+        return DemoHelper.getInstance().getEncryptUtils().aesGcmDecrypt(encryptedData,"0000000110000000".getBytes(),1);
+    }
+
+    private SharedPreferences getEncryptedSP() throws GeneralSecurityException, IOException {
+        String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+        return EncryptedSharedPreferences.create(getContext().getPackageName() + "_preferences",
+                    masterKeyAlias,
+                    getContext(),
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
     }
 
     private void loginToAppServer(String username, String password, ResultCallBack<LoginBean> callBack) {

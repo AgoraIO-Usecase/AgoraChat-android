@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import io.agora.ConnectionListener;
+import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
 import io.agora.chat.Group;
@@ -51,9 +53,7 @@ import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.general.widget.EaseSearchEditText;
 import io.agora.chatdemo.global.BottomSheetContainerFragment;
-import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.me.CustomPresenceActivity;
-import io.agora.util.EMLog;
 
 public class ConversationListFragment extends EaseConversationListFragment implements EasePresenceView.OnPresenceClickListener, View.OnClickListener {
 
@@ -69,6 +69,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
     private List<EaseConversationInfo> mLastData;
     private EaseConversationListAdapter mAdapter;
     private View titleBarLayout;
+    private ConversationListConnectionListener connectionListener;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -191,6 +192,27 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         DemoHelper.getInstance().getUsersManager().updateUserPresenceView(userInfo.getUsername(), presenceView);
     }
 
+    private class ConversationListConnectionListener implements ConnectionListener {
+
+        @Override
+        public void onConnected() {
+            runOnUiThread(() -> {
+                if (null != mNetworkDisconnectedTip) {
+                    mNetworkDisconnectedTip.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        @Override
+        public void onDisconnected(int errorCode) {
+            runOnUiThread(() -> {
+                if (null != mNetworkDisconnectedTip) {
+                    mNetworkDisconnectedTip.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+    }
+
     @Override
     public void initListener() {
         super.initListener();
@@ -210,46 +232,9 @@ public class ConversationListFragment extends EaseConversationListFragment imple
             }
         });
 
-        EaseUIKit.getInstance().setOnEaseChatConnectionListener(new OnEaseChatConnectionListener() {
-            @Override
-            public void onConnected() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != mNetworkDisconnectedTip) {
-                            mNetworkDisconnectedTip.setVisibility(View.GONE);
-                        }
-                    }
-                });
-            }
+        connectionListener = new ConversationListConnectionListener();
+        ChatClient.getInstance().addConnectionListener(connectionListener);
 
-            @Override
-            public void onDisconnect(int error) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != mNetworkDisconnectedTip) {
-                            mNetworkDisconnectedTip.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onAccountLogout(int error) {
-
-            }
-
-            @Override
-            public void onTokenExpired() {
-
-            }
-
-            @Override
-            public void onTokenWillExpire() {
-
-            }
-        });
         LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(getViewLifecycleOwner(), event -> {
             updatePresence();
         });
@@ -412,6 +397,14 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(connectionListener != null) {
+            ChatClient.getInstance().removeConnectionListener(connectionListener);
+        }
     }
 
     @Override

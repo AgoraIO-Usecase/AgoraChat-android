@@ -16,8 +16,8 @@ android {
         applicationId "io.agora.chatdemo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 11
+        versionName "1.1.0"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -120,8 +120,8 @@ dependencies {
     // Use EncryptedSharedPreferences
     implementation "androidx.security:security-crypto:1.0.0"
     // Agora Chat Uikit
-    implementation 'io.agora.rtc:chat-uikit:1.0.9'
-    implementation 'io.agora.rtc:chat-callkit:1.0.9'
+    implementation 'io.agora.rtc:chat-uikit:1.1.0'
+    implementation 'io.agora.rtc:chat-callkit:1.1.0'
 //    implementation project(path: ':chat-uikit')
 //    implementation project(path: ':chat-callkit')
 

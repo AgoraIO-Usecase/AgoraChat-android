@@ -1,7 +1,9 @@
 package io.agora.chatdemo.global;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -18,6 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import io.agora.CallBack;
 import io.agora.ChatRoomChangeListener;
 import io.agora.ConnectionListener;
 import io.agora.ContactListener;
@@ -40,6 +44,7 @@ import io.agora.chat.uikit.manager.EaseNotificationMsgManager;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
@@ -47,6 +52,8 @@ import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.PushAndMessageHelper;
+import io.agora.chatdemo.general.models.LoginBean;
+import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.repositories.EMClientRepository;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.main.MainActivity;
@@ -70,6 +77,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
     private ConcurrentHashMap<String,Presence> mPresences=new ConcurrentHashMap<>();
 
     Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
+    private List<Activity> resumeActivityList = new ArrayList<>();
+    boolean mIsAppForeground = true;
 
     private GlobalEventsMonitor() {
         appContext = DemoApplication.getInstance();
@@ -90,6 +99,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
         //Initialize presence
         initPresence();
+        registerActivityLifecycleCallbacks();
     }
 
     public static GlobalEventsMonitor getInstance() {
@@ -122,6 +132,96 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         while (!msgQueue.isEmpty()) {
             showToast(msgQueue.remove());
         }
+    }
+
+    private void registerActivityLifecycleCallbacks() {
+        Object lifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+                resumeActivityList.remove(activity);
+                if (resumeActivityList.isEmpty()) {
+                    // app is on background
+                    mIsAppForeground = false;
+                    EMLog.d(TAG, "app on background");
+                }
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+                if(!resumeActivityList.contains(activity)) {
+                    resumeActivityList.add(activity);
+                    if(resumeActivityList.size() == 1) {
+                        // app is on foreground
+                        mIsAppForeground = true;
+                        EMLog.d(TAG, "app on foreground");
+
+                        // check if token expired
+                        long timeStamp = System.currentTimeMillis();
+
+                        if (timeStamp > DemoHelper.getInstance().getUsersManager().getTokenExpireTs()) {
+                            EMLog.d(TAG, "token expired, relogin");
+                            EMClientRepository repo = new EMClientRepository();
+                            String userName = DemoHelper.getInstance().getUsersManager().getCurrentUser();
+                            String pw = repo.decryptData();
+                            if (userName.isEmpty() || pw.isEmpty()) {
+                                EMLog.d(TAG, "user logout, just return");
+                                return;
+                            }
+
+                            DemoHelper.getInstance().logout(false, new CallBack() {
+                                @Override
+                                public void onSuccess() {
+
+                                    repo.reLogin(userName, pw, new ResultCallBack<LoginBean>() {
+                                        @Override
+                                        public void onSuccess(LoginBean value) {
+                                            EMLog.e(TAG, "reLogin success");
+                                        }
+
+                                        @Override
+                                        public void onError(int error, String errorMsg) {
+                                            EMLog.e(TAG, "reLogin failed: error code = " + error + " error message = " + errorMsg);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onError(int i, String s) {
+                                    EMLog.e("logout", "logout error: error code = " + i + " error message = " + s);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+
+        };
+        ((Application) appContext).registerActivityLifecycleCallbacks((Application.ActivityLifecycleCallbacks) lifecycleCallbacks);
     }
 
     void showToast(@StringRes int mesId) {
@@ -279,8 +379,42 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
         @Override
         public void onTokenExpired() {
-            int tokenExpired = Error.TOKEN_EXPIRED;
-            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(tokenExpired), EaseEvent.TYPE.ACCOUNT));
+            EMLog.d(TAG, "onTokenExpired");
+
+            if (!mIsAppForeground) {
+                EMLog.d(TAG, "app is in background, ignore it");
+                return;
+            }
+
+            DemoHelper.getInstance().logout(false, new CallBack() {
+                @Override
+                public void onSuccess() {
+                    EMClientRepository repo = new EMClientRepository();
+                    String userName = DemoHelper.getInstance().getUsersManager().getCurrentUser();
+                    String pw = repo.decryptData();
+                    if (userName.isEmpty() || pw.isEmpty()) {
+                        EMLog.d(TAG, "user logout, just return");
+                        return;
+                    }
+
+                    repo.reLogin(userName, pw, new ResultCallBack<LoginBean>() {
+                        @Override
+                        public void onSuccess(LoginBean value) {
+                            EMLog.e(TAG, "reLogin success");
+                        }
+
+                        @Override
+                        public void onError(int error, String errorMsg) {
+                            EMLog.e(TAG, "reLogin failed: error code = " + error + " error message = " + errorMsg);
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    EMLog.e("logout", "logout error: error code = "+ i + " error message = "+ s);
+                }
+            });
         }
 
         @Override

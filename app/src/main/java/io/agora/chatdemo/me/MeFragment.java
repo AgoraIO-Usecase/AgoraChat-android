@@ -25,6 +25,7 @@ import io.agora.CallBack;
 import io.agora.chat.Presence;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
+import io.agora.chatdemo.general.repositories.EMClientRepository;
 import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
@@ -212,6 +213,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 .setOnConfirmClickListener(R.string.dialog_btn_to_confirm, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
+                        new EMClientRepository().encryptData(""); //clear the password
                         DemoHelper.getInstance().logout(true, new CallBack() {
                             @Override
                             public void onSuccess() {

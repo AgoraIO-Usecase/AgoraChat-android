@@ -559,6 +559,11 @@ public class EMContactManagerRepository extends BaseEMRepository{
             public void onSuccess(Map<String, UserInfo> value) {
                 EMLog.i("TAG", "getUserInfoById success");
                 EaseUser easeUser  = transformEMUserInfo(value.get(finalUserId));
+                if (easeUser == null) {
+                    EMLog.d(TAG, "user info is null");
+                    callBack.onError(Error.NETWORK_ERROR, "no info");
+                    return;
+                }
                 addDefaultAvatar(easeUser,null);
                 getUserDao().insert(EmUserEntity.parseParent(easeUser));
                 if(callBack != null) {

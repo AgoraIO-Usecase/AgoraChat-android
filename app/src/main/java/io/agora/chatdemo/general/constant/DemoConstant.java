@@ -5,6 +5,7 @@ import io.agora.chat.uikit.constants.EaseConstant;
 
 public interface DemoConstant extends EaseConstant {
     String ACCOUNT_CHANGE = "account_change";
+    String LOGIN_SUCESS = "login_success";
     String ACCOUNT_REMOVED = "account_removed";
     String ACCOUNT_CONFLICT = "conflict";
     String ACCOUNT_FORBIDDEN = "user_forbidden";

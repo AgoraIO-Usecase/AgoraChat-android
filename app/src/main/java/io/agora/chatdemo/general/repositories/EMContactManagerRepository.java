@@ -541,8 +541,10 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void saveCallResult(EaseUser item) {
-                getUserDao().insert(EmUserEntity.parseParent(item));
-                DemoHelper.getInstance().updateContactList();
+                if (getUserDao() != null) {
+                    getUserDao().insert(EmUserEntity.parseParent(item));
+                    DemoHelper.getInstance().updateContactList();
+                }
             }
         }.asLiveData();
     }
@@ -565,7 +567,11 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     return;
                 }
                 addDefaultAvatar(easeUser,null);
-                getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                EmUserDao userDao = getUserDao();
+                if(userDao != null) {
+                    getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                }
+
                 if(callBack != null) {
                     callBack.onSuccess(easeUser);
                 }
@@ -771,20 +777,24 @@ public class EMContactManagerRepository extends BaseEMRepository{
             }
         }
     }
-    private void addDefaultAvatar(EaseUser item,List<String> localUsers){
+    private void addDefaultAvatar(EaseUser item,List<String> localUsers) {
+        EmUserDao userDao = getUserDao();
+
         if(localUsers==null) {
-            EmUserDao userDao = getUserDao();
-            if(userDao!=null) {
-                localUsers=userDao.loadAllUsers();
+            if(userDao != null) {
+                localUsers = userDao.loadAllUsers();
             }else{
-                localUsers=Collections.emptyList();
+                localUsers = Collections.emptyList();
             }
         }
+
         if(item!=null&&TextUtils.isEmpty(item.getAvatar())) {
             if(localUsers.contains(item.getUsername())) {
-                String avatar = getUserDao().loadUserByUserId(item.getUsername()).get(0).getAvatar();
-                if(!TextUtils.isEmpty(avatar)) {
-                    item.setAvatar(avatar);
+                if (userDao != null) {
+                    String avatar = userDao.loadUserByUserId(item.getUsername()).get(0).getAvatar();
+                    if(!TextUtils.isEmpty(avatar)) {
+                        item.setAvatar(avatar);
+                    }
                 }else {
                     item.setAvatar(new TestAvatarRepository().getAvatarUrl());
                 }
@@ -794,6 +804,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
         }
     }
     private void addDefaultAvatar(List<EaseUser> items) {
+        EmUserDao userDao = getUserDao();
+        if (userDao == null) return;
+
         List<String> localUsers = getUserDao().loadAllUsers();
         for (EaseUser item : items) {
             addDefaultAvatar(item,localUsers);

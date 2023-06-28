@@ -186,6 +186,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                                         @Override
                                         public void onSuccess(LoginBean value) {
                                             EMLog.e(TAG, "reLogin success");
+                                            EaseEvent event = EaseEvent.create(DemoConstant.LOGIN_SUCESS, EaseEvent.TYPE.NOTIFY);
+                                            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
                                         }
 
                                         @Override
@@ -362,6 +364,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         public void onConnected() {
             EMLog.i(TAG, "onConnected");
             DemoHelper.getInstance().getUsersManager().initUserInfo();
+            EaseEvent event = EaseEvent.create(DemoConstant.LOGIN_SUCESS, EaseEvent.TYPE.NOTIFY);
+            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
         }
 
         @Override
@@ -401,6 +405,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                         @Override
                         public void onSuccess(LoginBean value) {
                             EMLog.e(TAG, "reLogin success");
+                            EaseEvent event = EaseEvent.create(DemoConstant.LOGIN_SUCESS, EaseEvent.TYPE.NOTIFY);
+                            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
                         }
 
                         @Override

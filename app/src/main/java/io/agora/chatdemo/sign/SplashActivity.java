@@ -10,6 +10,9 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.repositories.EMClientRepository;
 import io.agora.chatdemo.main.MainActivity;
 import io.agora.util.EMLog;
 
@@ -42,6 +45,16 @@ public class SplashActivity extends BaseActivity {
 
     private void loginSDK() {
         EMLog.d("splash", "loginSDK");
+        EMClientRepository repo = new EMClientRepository();
+        String userName = DemoHelper.getInstance().getUsersManager().getCurrentUser();
+        String pw = repo.decryptData();
+        if (userName== null || pw == null ||userName.isEmpty() || pw.isEmpty()) {
+            EMLog.d("splash", "no saved login info, goto login activity");
+            SignInActivity.actionStart(mContext);
+            finish();
+            return;
+        }
+
         // check if token expired
         long timeStamp = System.currentTimeMillis();
         if (timeStamp < DemoHelper.getInstance().getUsersManager().getTokenExpireTs()) {

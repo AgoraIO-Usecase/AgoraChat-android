@@ -173,8 +173,10 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                             EMClientRepository repo = new EMClientRepository();
                             String userName = DemoHelper.getInstance().getUsersManager().getCurrentUser();
                             String pw = repo.decryptData();
-                            if (userName.isEmpty() || pw.isEmpty()) {
+                            if (userName== null || pw == null ||userName.isEmpty() || pw.isEmpty()) {
                                 EMLog.d(TAG, "user logout, just return");
+                                EaseEvent event = EaseEvent.create(DemoConstant.LOGIN_SUCESS, EaseEvent.TYPE.NOTIFY);
+                                messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
                                 return;
                             }
 

@@ -132,7 +132,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
 
     private void initChatFragment() {
         CustomChatFragment customChatFragment = new CustomChatFragment();
-        EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType)
+        EaseChatFragment.Builder builder = new EaseChatFragment.Builder(conversationId, chatType)
                 .useHeader(false)
                 .setCustomAdapter(new CustomMessageAdapter())
                 .setCustomFragment(customChatFragment)
@@ -273,9 +273,14 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                     }
                 })
                 .hideSenderAvatar(true)
-                .sendMessageByOriginalImage(true)
-                .build();
+                .sendMessageByOriginalImage(true);
+        setFragmentBuilder(builder);
+        EaseChatFragment fragment = builder.build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
+    }
+
+    public EaseChatFragment.Builder setFragmentBuilder(EaseChatFragment.Builder builder){
+        return builder;
     }
 
     @Override

@@ -704,9 +704,7 @@ public class DemoHelper {
     }
 
     public void saveUrlPreviewInfo(String msgId, UrlPreViewBean bean){
-        if (!TextUtils.isEmpty(msgId)){
-            UrlPreViewHelper.saveUrlPreviewInfo(msgId,bean);
-        }
+        UrlPreViewHelper.saveUrlPreviewInfo(msgId,bean);
     }
 
     public UrlPreViewBean getUrlPreviewInfo(String msgId){

@@ -60,6 +60,8 @@ import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.av.CallMultipleBaseActivity;
 import io.agora.chatdemo.av.CallSingleBaseActivity;
 import io.agora.chatdemo.av.DemoCallKitListener;
+import io.agora.chatdemo.chat.UrlPreViewHelper;
+import io.agora.chatdemo.chat.models.UrlPreViewBean;
 import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.chatdemo.chatthread.ChatThreadCreateActivity;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -568,6 +570,7 @@ public class DemoHelper {
     public void logoutSuccess() {
         EMLog.d(TAG, "logout: onSuccess");
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
+        clearPreviewInfo();
     }
 
     /**
@@ -698,6 +701,30 @@ public class DemoHelper {
     public void addCallkitListener() {
         callKitListener = new DemoCallKitListener(mContext,getUsersManager());
         EaseCallKit.getInstance().setCallKitListener(callKitListener);
+    }
+
+    public void saveUrlPreviewInfo(String msgId, UrlPreViewBean bean){
+        if (!TextUtils.isEmpty(msgId)){
+            UrlPreViewHelper.saveUrlPreviewInfo(msgId,bean);
+        }
+    }
+
+    public UrlPreViewBean getUrlPreviewInfo(String msgId){
+        return UrlPreViewHelper.getUrlPreviewInfo(msgId);
+    }
+
+    public void clearPreviewInfo(){
+        UrlPreViewHelper.clearPreviewInfo();
+    }
+
+    public boolean containsUrl(String content){
+        boolean isContainsUrl = UrlPreViewHelper.containsUrl(content);
+        return isContainsUrl;
+    }
+
+    public boolean isPicture(String url){
+        boolean isPicture = UrlPreViewHelper.isPicture(url);
+        return isPicture;
     }
 
 }

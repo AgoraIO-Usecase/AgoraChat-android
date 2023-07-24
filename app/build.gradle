@@ -124,6 +124,8 @@ dependencies {
     implementation 'io.agora.rtc:chat-callkit:1.1.0'
 //    implementation project(path: ':chat-uikit')
 //    implementation project(path: ':chat-callkit')
+    // url preview
+    implementation 'org.jsoup:jsoup:1.13.1'
 
 }
 

@@ -80,4 +80,23 @@
         <item name="colorControlActivated">@color/thread_edit_line_color</item>
     </style>
 
+    <style name="url_preview_style">
+        <item name="android:padding">2dp</item>
+        <item name="android:paddingTop">2dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:paddingLeft">12dip</item>
+        <item name="android:paddingRight">12dip</item>
+        <item name="android:textColor">#999999</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="url_preview_user_style">
+        <item name="android:layout_width">28dp</item>
+        <item name="android:layout_height">28dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:src">@drawable/ease_default_avatar</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
 </resources>

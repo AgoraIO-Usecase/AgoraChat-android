@@ -70,4 +70,7 @@
     <color name="report_content">#979797</color>
     <color name="report_username">#999999</color>
     <color name="thread_edit_line_color">#E6E6E6</color>
+
+    <color name="url_preview_icon_bg">#EBF2FF</color>
+
 </resources>

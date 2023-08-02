@@ -42,12 +42,12 @@ import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
+import io.agora.chat.uikit.chat.interfaces.OnMessageSelectResultListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.chat.interfaces.OnPeerTypingListener;
 import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.utils.StatusBarCompat;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.av.CallSingleBaseActivity;
@@ -61,6 +61,7 @@ import io.agora.chatdemo.databinding.ActivityChatBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.AlertDialog;
+import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
@@ -272,11 +273,38 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                         mChatLayout = chatLayout;
                     }
                 })
+                .setOnMessageSelectResultListener(new OnMessageSelectResultListener() {
+                    @Override
+                    public boolean onMessageDelete(List<String> deleteMsgIdList) {
+                        showDeleteDialog(deleteMsgIdList);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMessageReply(List<String> replyMsgIdList) {
+                        return false;
+                    }
+                })
                 .hideSenderAvatar(true)
                 .sendMessageByOriginalImage(true);
         setFragmentBuilder(builder);
         EaseChatFragment fragment = builder.build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
+    }
+
+    private void showDeleteDialog(List<String> deleteMsgIdList) {
+        new SimpleDialog.Builder(this)
+                .setTitle(getString(R.string.chat_delete_multi_messages_title, deleteMsgIdList.size()))
+                .setOnConfirmClickListener(R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        mChatLayout.deleteMessages(deleteMsgIdList);
+                    }
+                })
+                .setConfirmColor(R.color.color_alert)
+                .showCancelButton(true)
+                .setCancelColor(R.color.color_main_text)
+                .show();
     }
 
     public EaseChatFragment.Builder setFragmentBuilder(EaseChatFragment.Builder builder){

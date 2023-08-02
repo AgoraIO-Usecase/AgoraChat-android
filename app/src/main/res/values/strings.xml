@@ -394,5 +394,6 @@
     <string name="report_label_racy">Mature/sexually suggestive</string>
     <string name="report_label_other">Other</string>
     <string name="ease_action_report">Report</string>
+    <string name="chat_delete_multi_messages_title">Delete %1$d messages</string>
 
 </resources>

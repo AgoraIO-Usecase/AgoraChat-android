@@ -51,6 +51,7 @@ public class GroupBaseManageFragment extends BaseContactListFragment<EaseUser> {
     protected ContactListAdapter listAdapter;
     protected String groupId;
     protected Group group;
+    protected boolean isPickAt;
     protected int groupRole;
     protected List<EaseUser> mDataList = new ArrayList<>();
     protected boolean isFirstMeasure = true;
@@ -70,6 +71,7 @@ public class GroupBaseManageFragment extends BaseContactListFragment<EaseUser> {
         if(bundle != null) {
             groupId = bundle.getString("group_id");
             groupRole = bundle.getInt("group_role");
+            isPickAt = bundle.getBoolean("group_at",false);
         }
     }
 

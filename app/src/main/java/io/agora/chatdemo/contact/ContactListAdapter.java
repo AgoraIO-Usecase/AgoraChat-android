@@ -38,6 +38,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private OnSelectListener listener;
     private List<String> memberList;
     private ConcurrentHashMap<String,Presence> presences;
+    private boolean isPickAt = false;
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
@@ -87,6 +88,10 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     public void setMuteList(List<String> muteList) {
         this.muteList = muteList;
         notifyDataSetChanged();
+    }
+
+    public void setIsPickAt(boolean isPickAt){
+        this.isPickAt = isPickAt;
     }
 
     public List<String> getMuteList() {
@@ -147,12 +152,15 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
 
             EaseUserProfileProvider provider = EaseUIKit.getInstance().getUserProvider();
             String username = item.getUsername();
-            if(provider != null) {
-                EaseUser user = provider.getUser(username);
-                if(user != null) {
-                    item = user;
+            if (!isPickAt && position != 0){
+                if(provider != null) {
+                    EaseUser user = provider.getUser(username);
+                    if(user != null) {
+                        item = user;
+                    }
                 }
             }
+
             if(showInitials) {
                 String header = item.getInitialLetter();
                 mHeader.setVisibility(View.GONE);
@@ -163,22 +171,25 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                     }
                 }
             }
-            if(isContains(adminList, username)) {
-                setLabel(label, mContext.getString(R.string.group_role_admin));
-            }else {
-                label.setVisibility(View.GONE);
-            }
-            if(label.getVisibility() == View.VISIBLE) {
-                if(isContains(muteList, username)) {
-                    setLabel(label, mContext.getString(R.string.group_admin_muted));
+
+            if (!isPickAt){
+                if(isContains(adminList, username)) {
+                    setLabel(label, mContext.getString(R.string.group_role_admin));
+                }else {
+                    label.setVisibility(View.GONE);
                 }
-            }else {
-                if(isContains(muteList, username)) {
-                    setLabel(label, mContext.getString(R.string.group_permission_mute));
+                if(label.getVisibility() == View.VISIBLE) {
+                    if(isContains(muteList, username)) {
+                        setLabel(label, mContext.getString(R.string.group_admin_muted));
+                    }
+                }else {
+                    if(isContains(muteList, username)) {
+                        setLabel(label, mContext.getString(R.string.group_permission_mute));
+                    }
                 }
-            }
-            if(TextUtils.equals(owner, username)) {
-                setLabel(label, mContext.getString(R.string.group_role_owner));
+                if(TextUtils.equals(owner, username)) {
+                    setLabel(label, mContext.getString(R.string.group_role_owner));
+                }
             }
             if(!TextUtils.isEmpty(groupId)) {
                 MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
@@ -195,6 +206,15 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                 originNickName.setVisibility(View.GONE);
                 DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
             }
+
+            if (isPickAt && position == 0){
+                mName.setText(item.getUsername());
+                int resourceId = Integer.parseInt(item.getAvatar());
+                mAvatar.setImageResource(resourceId);
+            }else {
+                DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
+            }
+
             if(isCheckModel) {
                 cb_select.setVisibility(View.VISIBLE);
                 if(checkedList!=null&&checkedList.contains(username)) {

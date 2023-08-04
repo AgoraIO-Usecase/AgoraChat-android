@@ -11,11 +11,17 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -30,6 +36,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.agora.Error;
 import io.agora.chat.ChatClient;
@@ -87,6 +95,9 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
     private ActivityChatBinding binding;
     private EaseChatLayout mChatLayout;
     private List<String> mReplyMsgIdList;
+    private EaseChatFragment fragment;
+    private CustomChatFragment customChatFragment;
+    private boolean isGroupChat;
 
     public static void actionStart(Context context, String conversationId, EaseChatType chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -140,8 +151,8 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
     }
 
     private void initChatFragment() {
-        CustomChatFragment customChatFragment = new CustomChatFragment();
-        EaseChatFragment.Builder builder = new EaseChatFragment.Builder(conversationId, chatType)
+        customChatFragment = new CustomChatFragment();
+        fragment = new EaseChatFragment.Builder(conversationId, chatType)
                 .useHeader(false)
                 .setCustomAdapter(new CustomMessageAdapter())
                 .setCustomFragment(customChatFragment)
@@ -190,6 +201,31 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         EMLog.e("TAG", "onTextChanged: s: " + s.toString());
+                        isGroupChat = fragment.chatLayout.getChatMessageListLayout().isGroupChat();
+                        if(!isGroupChat) {
+                            return;
+                        }
+
+                        if(count == 1 && "@".equals(String.valueOf(s.charAt(start)))){
+                            Bundle bundle = new Bundle();
+                            bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
+                            PickAtUserDialogFragment fragment = new PickAtUserDialogFragment();
+                            fragment.setPickAtSelectListener(username -> {
+                                setInputAtUsername(username,false);
+                            });
+                            fragment.setArguments(bundle);
+                            fragment.show(getSupportFragmentManager(), "pick_at_user");
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        setPickAtContentStyle(editable);
+                    }
+
+                    @Override
+                    public boolean editTextOnKeyListener(View v, int keyCode, KeyEvent event) {
+                        return removePickAt(v,keyCode,event);
                     }
                 })
                 .setOnChatRecordTouchListener(new OnChatRecordTouchListener() {
@@ -656,4 +692,41 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         }
         callSelectedDialog.dismiss();
     }
+
+    private void setInputAtUsername(String username,boolean autoAddAtSymbol){
+        fragment.chatLayout.inputAtUsername(username,autoAddAtSymbol);
+    }
+
+    private void setPickAtContentStyle(Editable editable){
+        Pattern pattern = Pattern.compile("@([^\\s]+)");
+        Matcher matcher = pattern.matcher(editable);
+        while (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            editable.setSpan(
+                    new ForegroundColorSpan(
+                            getResources().getColor(io.agora.chat.uikit.R.color.color_conversation_title)
+                    ), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+    }
+
+    private boolean removePickAt(View v, int keyCode, KeyEvent event){
+        if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN && v instanceof EditText) {
+            int selectionStart = ((EditText)v).getSelectionStart();
+            int selectionEnd = ((EditText)v).getSelectionEnd();
+            SpannableStringBuilder text = (SpannableStringBuilder) ((EditText)v).getText();
+            ForegroundColorSpan[] spans = text.getSpans(0, text.length(), ForegroundColorSpan.class);
+            for (ForegroundColorSpan span : spans) {
+                int spanStart = text.getSpanStart(span);
+                int spanEnd = text.getSpanEnd(span);
+                if (selectionStart >= spanStart && selectionEnd <= spanEnd) {
+                    if (spanStart != -1 && spanEnd != -1){
+                        text.delete(spanStart+1, spanEnd);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }

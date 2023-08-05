@@ -143,4 +143,8 @@ public interface DemoConstant extends EaseConstant {
 
     String REPORT_MESSAGE_ID = "report_message_id";
 
+    String EVENT_SEND_COMBINE = "event_send_combine";
+
+    String EVENT_CHAT_MODEL_TO_SELECT = "is_select_model";
+    String EVENT_CHAT_MODEL_TO_NORMAL = "is_normal_model";
 }

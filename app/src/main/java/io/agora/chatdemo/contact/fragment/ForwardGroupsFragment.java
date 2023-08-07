@@ -75,7 +75,7 @@ public class ForwardGroupsFragment extends SearchFragment<Group> implements OnRe
         JSONObject object = new JSONObject();
         try {
             object.put("to", to);
-            object.put("chatType", ChatMessage.ChatType.Chat.name());
+            object.put("chatType", ChatMessage.ChatType.GroupChat.name());
             object.put("isFromChatThread", isFromChatThread);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -77,9 +77,10 @@ public class ChatThreadFragment extends EaseChatThreadFragment {
         titleBar.setRightTitle(getString(R.string.ease_cancel));
         titleBar.getRightText().setTextColor(ContextCompat.getColor(mContext, R.color.color_action_text));
         titleBar.getRightText().setVisibility(View.VISIBLE);
-        titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
+        titleBar.getRightImage().setVisibility(View.GONE);
+        titleBar.getRightText().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRightClick(View view) {
+            public void onClick(View v) {
                 showNormalModelTitle();
                 IChatTopExtendMenu chatTopExtendMenu = chatLayout.getChatInputMenu().getChatTopExtendMenu();
                 if(chatTopExtendMenu instanceof EaseChatMultiSelectView) {
@@ -103,6 +104,7 @@ public class ChatThreadFragment extends EaseChatThreadFragment {
             titleBar.setDisplayHomeAsUpEnabled(canBack);
         }
         titleBar.getRightText().setVisibility(View.GONE);
+        titleBar.getRightImage().setVisibility(View.VISIBLE);
         ViewParent parent = titleBar.getTitle().getParent();
         if(parent instanceof ViewGroup) {
             ViewGroup.LayoutParams params = ((ViewGroup) parent).getLayoutParams();

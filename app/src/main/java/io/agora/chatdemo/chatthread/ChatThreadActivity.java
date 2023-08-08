@@ -91,17 +91,15 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
     public void setChildFragmentBuilder(EaseChatFragment.Builder builder) {
         super.setChildFragmentBuilder(builder);
         builder.setOnChatLayoutFinishInflateListener(new OnChatLayoutFinishInflateListener() {
+            @Override
+            public void onChatListFinishInflate(EaseChatLayout chatLayout) {
+                mChatLayout = chatLayout;
+            }
 
             @Override
             public void onTitleBarFinishInflate(EaseTitleBar titleBar) {
                 ChatThreadActivity.this.titleBar = titleBar;
                 setThreadTitle();
-            }
-        })
-        .setOnChatLayoutFinishInflateListener(new OnChatLayoutFinishInflateListener() {
-            @Override
-            public void onChatListFinishInflate(EaseChatLayout chatLayout) {
-                mChatLayout = chatLayout;
             }
         })
         .setOnChatExtendMenuItemClickListener(new OnChatExtendMenuItemClickListener() {

@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import io.agora.chat.ChatClient;
@@ -22,7 +21,6 @@ import io.agora.chat.LocationMessageBody;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.interfaces.IChatTopExtendMenu;
 import io.agora.chat.uikit.chat.widget.EaseChatMultiSelectView;
-import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.menu.EasePopupWindowHelper;
 import io.agora.chat.uikit.menu.MenuItemBean;
@@ -84,9 +82,11 @@ public class CustomChatFragment extends EaseChatFragment {
         }else {
             helper.findItemVisible(R.id.action_chat_report,true);
         }
-        boolean isThreadNotify = message.getBooleanAttribute(EaseConstant.EASE_THREAD_NOTIFICATION_TYPE, false);
-        if(isThreadNotify) {
-            helper.findItemVisible(R.id.action_chat_report,false);
+        boolean isRecallNote = message.getBooleanAttribute(DemoConstant.MESSAGE_TYPE_RECALL, false);
+        if(isRecallNote) {
+            helper.setAllItemsVisible(false);
+            helper.showHeaderView(false);
+            helper.findItemVisible(R.id.action_chat_delete, true);
         }
     }
 

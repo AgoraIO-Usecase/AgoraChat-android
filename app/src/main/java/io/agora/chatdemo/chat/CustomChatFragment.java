@@ -4,6 +4,7 @@ import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -24,17 +25,25 @@ import java.util.List;
 import java.util.Set;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.CustomMessageBody;
 import io.agora.chat.LocationMessageBody;
+import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
 import io.agora.chat.uikit.chat.widget.EaseChatMessageListLayout;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.interfaces.MessageListItemClickListener;
 import io.agora.chat.uikit.menu.EasePopupWindowHelper;
 import io.agora.chat.uikit.menu.MenuItemBean;
+import io.agora.chatdemo.DemoHelper;
+import io.agora.chat.uikit.models.EaseReactionEmojiconEntity;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -118,7 +127,13 @@ public class CustomChatFragment extends EaseChatFragment {
         super.initView();
         MenuItemBean menuItemBean = new MenuItemBean(0, R.id.action_chat_report, 99, getResources().getString(R.string.ease_action_report));
         menuItemBean.setResourceId(R.drawable.chat_item_menu_report);
+        MenuItemBean menuTranslationBean = new MenuItemBean(0, R.id.action_chat_translation,88, getResources().getString(R.string.ease_action_translation));
+        menuTranslationBean.setResourceId(R.drawable.chat_item_menu_translation);
+        MenuItemBean menuReTranslationBean = new MenuItemBean(0, R.id.action_chat_re_translation,111, getResources().getString(R.string.ease_action_re_translation));
+        menuReTranslationBean.setResourceId(R.drawable.chat_item_menu_translation);
         chatLayout.getMenuHelper().addItemMenu(menuItemBean);
+        chatLayout.getMenuHelper().addItemMenu(menuTranslationBean);
+        chatLayout.getMenuHelper().addItemMenu(menuReTranslationBean);
     }
 
     @Override
@@ -128,27 +143,51 @@ public class CustomChatFragment extends EaseChatFragment {
         if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser())
                 || message.getBody() instanceof LocationMessageBody
                 || message.getBody() instanceof CustomMessageBody
-                || message.status() != ChatMessage.Status.SUCCESS){
-            helper.findItemVisible(R.id.action_chat_report,false);
-        }else {
-            helper.findItemVisible(R.id.action_chat_report,true);
-        }
-        boolean isRecallNote = message.getBooleanAttribute(DemoConstant.MESSAGE_TYPE_RECALL, false);
-        if(isRecallNote) {
-            helper.setAllItemsVisible(false);
-            helper.showHeaderView(false);
-            helper.findItemVisible(R.id.action_chat_delete, true);
+                || message.status() != ChatMessage.Status.SUCCESS) {
+            helper.findItemVisible(R.id.action_chat_report, false);
+            chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, false);
+            if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser()) ||
+                    message.getBody() instanceof LocationMessageBody || message.getBody() instanceof CustomMessageBody) {
+                chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_report, false);
+            } else {
+                helper.findItemVisible(R.id.action_chat_report, true);
+            }
+            boolean isRecallNote = message.getBooleanAttribute(DemoConstant.MESSAGE_TYPE_RECALL, false);
+            if (isRecallNote) {
+                helper.setAllItemsVisible(false);
+                helper.showHeaderView(false);
+                helper.findItemVisible(R.id.action_chat_delete, true);
+            }
+            if (message.getBody() instanceof TextMessageBody) {
+                if (((TextMessageBody) message.getBody()).getTranslations().size() > 0) {
+                    chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
+                    chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, true);
+                } else {
+                    chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, true);
+                }
+            } else {
+                chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
+            }
         }
     }
 
     @Override
     public boolean onMenuItemClick(MenuItemBean item, ChatMessage message) {
-        if (item.getItemId() == R.id.action_chat_report) {
-            if (message.status() == ChatMessage.Status.SUCCESS)
-                ChatReportActivity.actionStart(getActivity(),message.getMsgId());
-        }else if(item.getItemId() == R.id.action_chat_select) {
-            showSelectModelTitle();
-            LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT).postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT, EaseEvent.TYPE.NOTIFY));
+        switch (item.getItemId()){
+            case R.id.action_chat_report:
+                if (message.status() == ChatMessage.Status.SUCCESS)
+                    ChatReportActivity.actionStart(getActivity(),message.getMsgId());
+                break;
+            case R.id.action_chat_select:
+                showSelectModelTitle();
+                LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT).postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT, EaseEvent.TYPE.NOTIFY));
+                break;
+            case R.id.action_chat_translation:
+                translationMessage(message);
+                break;
+            case R.id.action_chat_re_translation:
+
+                break;
         }
         return super.onMenuItemClick(item, message);
     }
@@ -286,5 +325,28 @@ public class CustomChatFragment extends EaseChatFragment {
         //refresh conversation
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+    }
+
+
+    private void translationMessage(ChatMessage message){
+        String targetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
+        List<String> list = new ArrayList<>();
+        list.add(targetLanguage);
+        ChatClient.getInstance().chatManager().translateMessage(message, list, new ValueCallBack<ChatMessage>() {
+            @Override
+            public void onSuccess(ChatMessage value) {
+                if (value.getBody() instanceof TextMessageBody){
+                    Log.e("apex","translateMessage: "
+                            + "\n"+((TextMessageBody) value.getBody()).getTranslations()
+                            + "\n"+((TextMessageBody) value.getBody()).getTargetLanguages().toString());
+                }
+
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+
+            }
+        });
     }
 }

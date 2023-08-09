@@ -221,6 +221,8 @@
     <string name="chat_setting_to_top">Pin to Top</string>
     <string name="chat_settings_clear_history_warning">Are you sure you want to delete all chat history?</string>
     <string name="chat_thread_message_send_success">Message was sent successfully</string>
+    <string name="chat_setting_auto_translation">Auto Translation</string>
+
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_confirm">OK</string>
     <string name="group_detail_members">Members</string>
@@ -415,5 +417,15 @@
     <string name="is_deleting">Deleting. . .</string>
     <string name="demo_pick_at_user_title">\@Mention</string>
     <string name="demo_pick_at_all_members">ALL</string>
+
+    <string name="finish">Done</string>
+    <string name="translation">Translation Settings</string>
+    <string name="ease_action_translation">Translation</string>
+    <string name="ease_action_re_translation">Re-Translation</string>
+    <string name="translation_language_settings">Language Setting</string>
+    <string name="translation_target">Target Language</string>
+    <string name="translation_push">Push Translation Setting</string>
+    <string name="translation_auto_about">About Auto Translation</string>
+    <string name="translation_auto_about_info">Agora Chat will auto translate the text into your current interface language.You can change the language in Setting > General > Translation Setting.</string>
 
 </resources>

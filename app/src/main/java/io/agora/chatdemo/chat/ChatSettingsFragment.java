@@ -3,23 +3,26 @@ package io.agora.chatdemo.chat;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.HashMap;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.List;
-import java.util.Map;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
-import io.agora.chat.uikit.manager.EasePreferenceManager;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
@@ -27,6 +30,7 @@ import io.agora.chatdemo.chat.viewmodel.ChatSettingsViewModel;
 import io.agora.chatdemo.databinding.FragmentChatSettingsBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
@@ -37,6 +41,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     private String conversationId;
     private ChatSettingsViewModel viewModel;
     private EaseChatType chatType;
+    private AlertDialog dialog;
 
     @Nullable
     @Override
@@ -58,10 +63,20 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     @Override
     protected void initView() {
         super.initView();
+        AlertDialog();
         Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
         String extField = conversation.getExtField();
         binding.itemToTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseUtils.isTimestamp(extField));
         binding.itemMuteNotification.setVisibility(View.GONE);
+        String enableAutoTranslation = DemoHelper.getInstance().getModel().getEnableAutoTranslation();
+        if (!TextUtils.isEmpty(enableAutoTranslation)){
+            try {
+                JSONObject jsonObject = new JSONObject(enableAutoTranslation);
+                binding.itemToAutoTranslation.setChecked((Boolean) jsonObject.get(conversationId));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -81,6 +96,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         });
         binding.itemMuteNotification.setOnCheckedChangeListener(this);
         binding.itemToTop.setOnCheckedChangeListener(this);
+        binding.itemToAutoTranslation.setOnCheckedChangeListener(this);
     }
 
     private void showDialog() {
@@ -168,6 +184,39 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
                 }
                 LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                 break;
+            case R.id.item_to_auto_translation:
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put(conversationId,isChecked);
+                    DemoHelper.getInstance().getModel().setEnableAutoTranslation(jsonObject.toString());
+                    if (isChecked && dialog != null){
+                        dialog.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
+
+    private void AlertDialog(){
+
+        dialog = new AlertDialog.Builder(mContext)
+                .setContentView(R.layout.dialog_auto_translation)
+                .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setGravity(Gravity.CENTER)
+                .setCancelable(false)
+                .setOnClickListener(R.id.btn_ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                }).create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        }
+
+    }
+
 }

@@ -121,6 +121,9 @@ public interface DemoConstant extends EaseConstant {
     int VIEW_TYPE_MESSAGE_URL_PREVIEW_ME = 20;
     int VIEW_TYPE_MESSAGE_URL_PREVIEW_OTHER = 21;
 
+    int VIEW_TYPE_TRANSLATION_ME = 22;
+    int VIEW_TYPE_TRANSLATION_OTHER = 23;
+
     String CALL_TYPE = "easeCallType";
 
      String DETAIL_TYPE = "detail_type";
@@ -151,4 +154,11 @@ public interface DemoConstant extends EaseConstant {
 
     String EVENT_CHAT_MODEL_TO_SELECT = "is_select_model";
     String EVENT_CHAT_MODEL_TO_NORMAL = "is_normal_model";
+
+    int TRANSLATION_TYPE_MESSAGE = 0;
+    int TRANSLATION_TYPE_PUSH = 1;
+    String TRANSLATION_TYPE = "translation_type";
+    String TRANSLATION_SELECT_MAX_COUNT = "translation_select_max_count";
+
+
 }

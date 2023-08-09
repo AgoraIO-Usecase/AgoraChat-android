@@ -1,6 +1,5 @@
 package io.agora.chatdemo.general.dialog;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -29,7 +28,6 @@ import java.lang.reflect.Field;
 
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.base.BaseDialogFragment;
 
 public class SimpleDialog extends BaseDialogFragment implements View.OnClickListener {
@@ -251,6 +249,10 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
 
     public interface onCancelClickListener {
         void onCancelClick(View view);
+    }
+
+    public <T extends View> T getViewById(int viewId) {
+        return findViewById(viewId);
     }
 
     public static class Builder {

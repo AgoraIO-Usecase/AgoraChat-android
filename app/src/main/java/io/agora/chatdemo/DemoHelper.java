@@ -1,5 +1,7 @@
 package io.agora.chatdemo;
 
+import static io.agora.chat.uikit.utils.EaseUserUtils.getUserInfo;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -69,6 +71,7 @@ import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -311,6 +314,11 @@ public class DemoHelper {
                     @Override
                     public EaseUser getUser(String userID) {
                         return getUsersManager().getUserInfo(userID);
+                    }
+
+                    @Override
+                    public EaseUser getGroupUser(String groupId, String userId) {
+                        return getGroupUserInfo(groupId,userId);
                     }
 
                 })
@@ -698,6 +706,40 @@ public class DemoHelper {
     public void addCallkitListener() {
         callKitListener = new DemoCallKitListener(mContext,getUsersManager());
         EaseCallKit.getInstance().setCallKitListener(callKitListener);
+    }
+
+    public void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
+        GroupHelper.saveMemberAttribute(groupId,userName,bean);
+    }
+
+    public MemberAttributeBean getMemberAttribute(String groupId, String userName){
+        return GroupHelper.getMemberAttribute(groupId,userName);
+    }
+
+    //Clears the cache of all member properties of a specified group
+    public void clearGroupMemberAttribute(String groupId){
+        GroupHelper.clearGroupMemberAttribute(groupId);
+    }
+
+    //Clear the cache of all group member attributes of the current login userId
+    public void clearAllMemberAttribute(){
+        GroupHelper.clearAllGroupMemberAttribute();
+    }
+
+    //Clear the cache of group membership attributes for userId in the specified group
+    public void clearGroupMemberAttributeByUserId(String groupId,String userId){
+        GroupHelper.clearGroupMemberAttributeByUserId(groupId,userId);
+    }
+
+    public EaseUser getGroupUserInfo(String groupId,String username) {
+        MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
+        EaseUser user = getUserInfo(username);
+        if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)){
+            if (user != null){
+                user.setNickname(groupBean.getNickName());
+            }
+        }
+        return user;
     }
 
 }

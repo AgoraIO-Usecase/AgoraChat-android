@@ -1,11 +1,12 @@
 package io.agora.chatdemo.general.repositories;
 
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
+import io.agora.chatdemo.general.utils.GsonTools;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.exceptions.ChatException;
 
 public class EMGroupManagerRepository extends BaseEMRepository{
@@ -1258,6 +1261,115 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onProgress(int progress, String status) {
 
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 设置我在群里的昵称
+     * @param groupId
+     * @param userId
+     * @param attributeMap
+     * @return
+     */
+    public LiveData<Resource<Map<String, MemberAttributeBean>>> setGroupMemberAttributes(String groupId, String userId, Map<String,String> attributeMap) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+                getGroupManager().asyncSetGroupMemberAttributes(groupId, userId, attributeMap, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        Map<String,MemberAttributeBean> result = new HashMap<>();
+                        MemberAttributeBean bean = new MemberAttributeBean();
+
+                        for (Map.Entry<String, String> entry : attributeMap.entrySet()) {
+                            if(entry.getKey().equals("nickName")){
+                                bean.setNickName(entry.getValue());
+                                result.put(userId,bean);
+                                DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
+                            }
+                        }
+                        callBack.onSuccess(createLiveData(result));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取我在群里的属性
+     * @param groupId
+     * @param userId
+     * @return
+     */
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> fetchGroupMemberDetail(String groupId, String userId) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+                getGroupManager().asyncFetchGroupMemberAllAttributes(groupId, userId, new ValueCallBack<Map<String, Map<String, String>>>() {
+                    @Override
+                    public void onSuccess(Map<String, Map<String, String>> value) {
+                        if (value != null){
+                            Map<String,MemberAttributeBean> result = new HashMap<>();
+                            Map<String, String> map = value.get(userId);
+                            if (map != null){
+                                MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class);
+                                DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
+                                result.put(userId,bean);
+                                callBack.onSuccess(createLiveData(result));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取多个成员在群里的昵称属性
+     * @param groupId
+     * @param userList
+     * @return
+     */
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> fetchGroupMemberDetail(String groupId,List<String> userList ) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+
+                List<String> keyList = new ArrayList<>();
+                keyList.add("nickName");
+                Map<String,MemberAttributeBean> result = new HashMap<>();
+                getGroupManager().asyncFetchGroupMembersAttributes(groupId, userList, keyList, new ValueCallBack<Map<String, Map<String, String>>>() {
+                    @Override
+                    public void onSuccess(Map<String, Map<String, String>> value) {
+                        if (value != null){
+                            for (String user : userList) {
+                                Map<String,String> map = value.get(user);
+                                if (map != null){
+                                    MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class);
+                                    DemoHelper.getInstance().saveMemberAttribute(groupId,user,bean);
+                                    result.put(user,bean);
+                                }
+                            }
+                            callBack.onSuccess(createLiveData(result));
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
                     }
                 });
             }

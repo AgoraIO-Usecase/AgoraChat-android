@@ -224,6 +224,7 @@
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_confirm">OK</string>
     <string name="group_detail_members">Members</string>
+    <string name="group_detail_alias">My ALias in Group</string>
     <string name="group_detail_notice">Group Notice</string>
     <string name="group_detail_files">Group Files</string>
     <string name="group_detail_transfer">Transfer Ownership</string>
@@ -253,6 +254,7 @@
     <string name="group_members_dialog_menu_mute">Mute</string>
     <string name="group_members_dialog_menu_unmute">Unmute</string>
     <string name="group_members_dialog_menu_block">Block</string>
+    <string name="group_members_dialog_menu_alias">Alias in Group</string>
     <string name="group_members_dialog_menu_remove_block">Remove from Blocked List</string>
     <string name="group_members_dialog_menu_to_allow">Move to Allowed List</string>
     <string name="group_members_dialog_menu_remove_from_allow">Remove from Allowed List</string>
@@ -396,4 +398,9 @@
     <string name="ease_action_report">Report</string>
     <string name="chat_delete_multi_messages_title">Delete %1$d messages</string>
 
+    <string name="demo_my_alias_in_group">My Alias in Group</string>
+    <string name="demo_discard_alias_title">Discard Changes?</string>
+    <string name="demo_discard_alias_content">Your edits will not be saved when discarded.</string>
+    <string name="demo_remark_cancel">Remark has been canceled</string>
+    <string name="demo_saved">Saved</string>
 </resources>

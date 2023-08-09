@@ -142,5 +142,6 @@ public interface DemoConstant extends EaseConstant {
     String SYSTEM_CHANGE_GROUP_NAME = "system_change_group_name";
 
     String REPORT_MESSAGE_ID = "report_message_id";
+    String GROUP_MEMBER_ATTRIBUTE_CHANGE = "group_member_attribute_change";
 
 }

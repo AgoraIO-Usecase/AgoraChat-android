@@ -9,8 +9,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 
 public class EditMemberAliasDialog extends SimpleDialog {
@@ -101,7 +102,7 @@ public class EditMemberAliasDialog extends SimpleDialog {
 
         private ConfirmClickListener cancelClickListener;
 
-        public Builder(BaseActivity context) {
+        public Builder(AppCompatActivity context) {
             super(context);
         }
 

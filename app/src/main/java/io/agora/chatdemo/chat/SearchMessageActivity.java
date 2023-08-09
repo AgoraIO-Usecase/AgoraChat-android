@@ -72,7 +72,7 @@ public class SearchMessageActivity extends SearchActivity {
         } else if (ChatMessage.ChatType.ChatRoom == messageChatType) {
             chatType = EaseChatType.CHATROOM;
         }
-        ChatHistoryActivity.actionStart(mContext, item.conversationId(), chatType);
+        ChatHistoryActivity.actionStart(mContext, item.conversationId(), chatType, item.getMsgId());
 
     }
 }

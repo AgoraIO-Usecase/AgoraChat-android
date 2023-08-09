@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.agora.CallBack;
+import io.agora.Error;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
@@ -177,6 +178,42 @@ public class EMChatManagerRepository extends BaseEMRepository{
                 ChatClient.getInstance().chatManager().asyncReportMessage(reportMsgId, reportType, reportReason, new CallBack() {
                     @Override
                     public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
+    /**
+     * Remove message of conversation from server.
+     * @param conversationId
+     * @param type
+     * @param msgIdList
+     * @return
+     */
+    public LiveData<Resource<Boolean>> removeMessagesFromServer(String conversationId, Conversation.ConversationType type, List<String> msgIdList) {
+        return new NetworkOnlyResource<Boolean>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId, type);
+                if(conversation == null) {
+                    callBack.onError(Error.GENERAL_ERROR, "Not found conversation: "+conversationId);
+                    return;
+                }
+                conversation.removeMessagesFromServer(msgIdList, new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        for (String msgId : msgIdList) {
+                            conversation.removeMessage(msgId);
+                        }
                         callBack.onSuccess(createLiveData(true));
                     }
 

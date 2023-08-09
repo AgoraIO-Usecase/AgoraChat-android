@@ -1,5 +1,6 @@
 package io.agora.chatdemo.base;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,12 +24,12 @@ import io.agora.chatdemo.general.net.Resource;
 public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
     private int topOffset;
     private BottomSheetBehavior mBehavior;
-    public BaseActivity mContext;
+    public Activity mContext;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mContext = (BaseActivity) context;
+        mContext = (Activity) context;
     }
 
     @NonNull
@@ -127,7 +128,7 @@ public class BaseBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     public void dismissLoading() {
-        if(mContext != null) {
+        if(mContext != null && mContext instanceof BaseActivity) {
             ((BaseActivity)mContext).dismissLoading();
         }
     }

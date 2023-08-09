@@ -3,6 +3,8 @@ package io.agora.chatdemo.chatthread;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,8 +12,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -21,19 +27,24 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.activities.EaseChatThreadActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
+import io.agora.chat.uikit.chat.EaseChatLayout;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
-import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
+import io.agora.chat.uikit.chat.interfaces.OnMessageSelectResultListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
+import io.agora.chat.uikit.chat.widget.EaseChatMultiSelectView;
 import io.agora.chat.uikit.chatthread.EaseChatThreadFragment;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.manager.EaseChatMessageMultiSelectHelper;
 import io.agora.chat.uikit.menu.EasePopupWindow;
 import io.agora.chat.uikit.chatthread.EaseChatThreadRole;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.chatthread.adapter.ChatThreadCustomMessageAdapter;
+import io.agora.chatdemo.contact.BottomSheetForwardContactsFragment;
 import io.agora.chatdemo.databinding.LayoutThreadSettingMenuBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -53,9 +64,13 @@ import io.agora.util.EMLog;
  * and load it to your activity also.
  */
 public class ChatThreadActivity extends EaseChatThreadActivity implements MessageListener {
+    private static final int MAX_COMBINE_MESSAGE_LIST = 300;
     private EaseTitleBar titleBar;
     private ChatThreadViewModel viewModel;
+    private ChatViewModel chatViewModel;
     private boolean isReachLatestThreadMessage;
+    private List<String> mReplyMsgIdList;
+    private EaseChatLayout mChatLayout;
 
     public static void actionStart(Context context, String conversationId, String parentMsgId) {
         Intent intent = new Intent(context, ChatThreadActivity.class);
@@ -76,6 +91,10 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
     public void setChildFragmentBuilder(EaseChatFragment.Builder builder) {
         super.setChildFragmentBuilder(builder);
         builder.setOnChatLayoutFinishInflateListener(new OnChatLayoutFinishInflateListener() {
+            @Override
+            public void onChatListFinishInflate(EaseChatLayout chatLayout) {
+                mChatLayout = chatLayout;
+            }
 
             @Override
             public void onTitleBarFinishInflate(EaseTitleBar titleBar) {
@@ -152,7 +171,71 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
             public void onError(int code, String errorMsg) {
                 ToastUtils.showFailToast(errorMsg);
             }
+        })
+        .setOnMessageSelectResultListener(new OnMessageSelectResultListener() {
+            @Override
+            public boolean onMessageDelete(View view, List<String> deleteMsgIdList) {
+                if(deleteMsgIdList == null || deleteMsgIdList.isEmpty()) {
+                    dismissMultiSelectView(view);
+                    return true;
+                }
+                dismissMultiSelectView(view);
+                showDeleteDialog(deleteMsgIdList);
+                return true;
+            }
+
+            @Override
+            public boolean onMessageReply(View view, List<String> replyMsgIdList) {
+                mReplyMsgIdList = replyMsgIdList;
+                if(mReplyMsgIdList == null || mReplyMsgIdList.isEmpty()) {
+                    dismissMultiSelectView(view);
+                    return true;
+                }
+                if(mReplyMsgIdList.size() > MAX_COMBINE_MESSAGE_LIST) {
+                    ToastUtils.showFailToast(getString(R.string.forward_max_count_hint));
+                    return true;
+                }
+                dismissMultiSelectView(view);
+                showForwardContactsDialog();
+                return true;
+            }
         });
+    }
+
+    private void dismissMultiSelectView(View view) {
+        if(view instanceof EaseChatMultiSelectView) {
+            ((EaseChatMultiSelectView) view).dismiss();
+        }
+        LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL)
+                .postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.TYPE.NOTIFY, "chatThread"));
+    }
+
+    private void showDeleteDialog(List<String> deleteMsgIdList) {
+        new SimpleDialog.Builder(this)
+                .setTitle(getString(R.string.chat_delete_multi_messages_title, deleteMsgIdList.size()))
+                .setOnConfirmClickListener(R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        chatViewModel.removeMessagesFromServer(conversationId, Conversation.ConversationType.GroupChat, deleteMsgIdList);
+                    }
+                })
+                .setConfirmColor(R.color.color_alert)
+                .showCancelButton(true)
+                .setCancelColor(R.color.color_main_text)
+                .show();
+    }
+
+    private void showForwardContactsDialog() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("forwardContacts");
+        if(fragment == null) {
+            fragment = new BottomSheetForwardContactsFragment();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isFromChatThread", true);
+        fragment.setArguments(bundle);
+        if(fragment instanceof BottomSheetForwardContactsFragment) {
+            ((BottomSheetForwardContactsFragment)fragment).show(getSupportFragmentManager(),"forwardContacts");
+        }
     }
 
     private void setThreadTitle() {
@@ -179,6 +262,7 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
     public void initData() {
         super.initData();
         viewModel = new ViewModelProvider(this).get(ChatThreadViewModel.class);
+        chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         viewModel.getResultObservable().observe(this, new Observer<Resource<Boolean>>() {
             @Override
             public void onChanged(Resource<Boolean> booleanResource) {
@@ -229,6 +313,65 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
             }
         });
 
+        LiveDataBus.get().with(DemoConstant.EVENT_SEND_COMBINE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            String message = event.message;
+            String to = null;
+            ChatMessage.ChatType chatType = null;
+            try {
+                JSONObject object = new JSONObject(message);
+                boolean isFromChatThread = object.optBoolean("isFromChatThread");
+                if(!isFromChatThread) {
+                    return;
+                }
+                to = object.optString("to");
+                chatType = ChatMessage.ChatType.valueOf(object.optString("chatType"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if(!TextUtils.isEmpty(to) && mReplyMsgIdList != null) {
+                ChatMessage chatMessage = ChatMessage.createCombinedSendMessage(getString(R.string.ease_combine_default)
+                        , EaseChatMessageMultiSelectHelper.getCombineMessageSummary(mReplyMsgIdList)
+                        , getString(R.string.forward_compatible_text), mReplyMsgIdList, to);
+                if(chatType == ChatMessage.ChatType.GroupChat) {
+                    chatMessage.setChatType(ChatMessage.ChatType.GroupChat);
+                }
+                if(mChatLayout != null) {
+                    mChatLayout.sendCombineMessage(chatMessage);
+                }
+            }
+        });
+
+        chatViewModel.getRemoveMessagesObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(@Nullable Boolean data) {
+                    if(mChatLayout != null) {
+                        mChatLayout.getChatMessageListLayout().refreshMessages();
+                    }
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    ToastUtils.showFailToast(message);
+                }
+
+                @Override
+                public void onLoading(@Nullable Boolean data) {
+                    super.onLoading(data);
+                    showLoading(getString(R.string.is_deleting));
+                }
+
+                @Override
+                public void onHideLoading() {
+                    super.onHideLoading();
+                    dismissLoading();
+                }
+            });
+        });
     }
 
     @Override

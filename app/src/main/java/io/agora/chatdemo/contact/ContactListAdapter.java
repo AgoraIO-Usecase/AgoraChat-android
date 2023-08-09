@@ -25,10 +25,12 @@ import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 
 public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private boolean showInitials;
     private boolean isCheckModel;
+    private String groupId;
     private List<String> adminList;
     private List<String> muteList;
     private List<String> checkedList;
@@ -64,6 +66,10 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     public void setSelectedMembers(List<String> existMembers) {
         checkedList=existMembers;
         notifyDataSetChanged();
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public void setOwner(String owner) {
@@ -112,6 +118,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         private ConstraintLayout clUser;
         private CheckBox cb_select;
         private TextView label;
+        private TextView originNickName;
         private View presenceGroup;
         private EaseImageView ivPresence;
 
@@ -131,11 +138,13 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             label = findViewById(R.id.label);
             ivPresence = findViewById(R.id.iv_presence);
             presenceGroup = findViewById(R.id.presence_group);
+            originNickName = findViewById(R.id.tv_origin_nickName);
             EaseUserUtils.setUserAvatarStyle(mAvatar);
         }
 
         @Override
         public void setData(EaseUser item, int position) {
+
             EaseUserProfileProvider provider = EaseUIKit.getInstance().getUserProvider();
             String username = item.getUsername();
             if(provider != null) {
@@ -171,7 +180,21 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             if(TextUtils.equals(owner, username)) {
                 setLabel(label, mContext.getString(R.string.group_role_owner));
             }
-            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
+            if(!TextUtils.isEmpty(groupId)) {
+                MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
+                if(groupBean!=null&&!TextUtils.isEmpty(groupBean.getNickName())) {
+                    originNickName.setVisibility(View.VISIBLE);
+                    EaseUserUtils.setUserAvatar(mContext, groupId, item.getUsername(), mAvatar);
+                    EaseUserUtils.setUserNick(groupId,item.getUsername(), mName);
+                    originNickName.setText(TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername());
+                }else{
+                    originNickName.setVisibility(View.GONE);
+                    DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
+                }
+            }else{
+                originNickName.setVisibility(View.GONE);
+                DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
+            }
             if(isCheckModel) {
                 cb_select.setVisibility(View.VISIBLE);
                 if(checkedList!=null&&checkedList.contains(username)) {

@@ -19,10 +19,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +46,14 @@ import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
+import io.agora.chat.uikit.chat.interfaces.OnMessageSelectResultListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
 import io.agora.chat.uikit.chat.interfaces.OnPeerTypingListener;
+import io.agora.chat.uikit.chat.widget.EaseChatMultiSelectView;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.manager.EaseChatMessageMultiSelectHelper;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chat.uikit.utils.StatusBarCompat;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.av.CallSingleBaseActivity;
@@ -55,12 +61,14 @@ import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.chatthread.ChatThreadActivity;
+import io.agora.chatdemo.contact.BottomSheetForwardContactsFragment;
 import io.agora.chatdemo.contact.ContactDetailActivity;
 import io.agora.chatdemo.contact.GroupMemberDetailBottomSheetFragment;
 import io.agora.chatdemo.databinding.ActivityChatBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.AlertDialog;
+import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
@@ -71,13 +79,14 @@ import io.agora.chatdemo.group.fragments.MultiplyVideoSelectMemberContainerFragm
 import io.agora.util.EMLog;
 
 public class ChatActivity extends BaseInitActivity implements EasePresenceView.OnPresenceClickListener, View.OnClickListener{
-
+    private static final int MAX_COMBINE_MESSAGE_LIST = 300;
     private String conversationId;
     private EaseChatType chatType;
     private ChatViewModel viewModel;
     private AlertDialog callSelectedDialog;
     private ActivityChatBinding binding;
     private EaseChatLayout mChatLayout;
+    private List<String> mReplyMsgIdList;
 
     public static void actionStart(Context context, String conversationId, EaseChatType chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -132,7 +141,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
 
     private void initChatFragment() {
         CustomChatFragment customChatFragment = new CustomChatFragment();
-        EaseChatFragment fragment = new EaseChatFragment.Builder(conversationId, chatType)
+        EaseChatFragment.Builder builder = new EaseChatFragment.Builder(conversationId, chatType)
                 .useHeader(false)
                 .setCustomAdapter(new CustomMessageAdapter())
                 .setCustomFragment(customChatFragment)
@@ -250,6 +259,9 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
                         if (code == Error.MESSAGE_EXTERNAL_LOGIC_BLOCKED) {
                             errorMsg = getString(R.string.error_message_external_logic_blocked);
+                        }else if(code == Error.GENERAL_ERROR) {
+                            showToast(errorMsg);
+                            return;
                         }
                         showToast(getString(R.string.chat_msg_error_toast, code, errorMsg));
                     }
@@ -272,10 +284,76 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                         mChatLayout = chatLayout;
                     }
                 })
+                .setOnMessageSelectResultListener(new OnMessageSelectResultListener() {
+                    @Override
+                    public boolean onMessageDelete(View view, List<String> deleteMsgIdList) {
+                        if(deleteMsgIdList == null || deleteMsgIdList.isEmpty()) {
+                            restTitleBar(view);
+                            return true;
+                        }
+                        restTitleBar(view);
+                        showDeleteDialog(deleteMsgIdList);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMessageReply(View view, List<String> replyMsgIdList) {
+                        mReplyMsgIdList = replyMsgIdList;
+                        if(mReplyMsgIdList == null || mReplyMsgIdList.isEmpty()) {
+                            restTitleBar(view);
+                            return true;
+                        }
+                        if(mReplyMsgIdList.size() > MAX_COMBINE_MESSAGE_LIST) {
+                            showToast(getString(R.string.forward_max_count_hint));
+                            return true;
+                        }
+                        restTitleBar(view);
+                        showForwardContactsDialog();
+                        return true;
+                    }
+                })
                 .hideSenderAvatar(true)
-                .sendMessageByOriginalImage(true)
-                .build();
+                .sendMessageByOriginalImage(true);
+        setFragmentBuilder(builder);
+        EaseChatFragment fragment = builder.build();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
+    }
+
+    private void restTitleBar(View view) {
+        if(view instanceof EaseChatMultiSelectView) {
+            ((EaseChatMultiSelectView) view).dismiss();
+        }
+        binding.titleBar.setVisibility(View.VISIBLE);
+        LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL).postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.TYPE.NOTIFY));
+    }
+
+    private void showForwardContactsDialog() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("forwardContacts");
+        if(fragment == null) {
+            fragment = new BottomSheetForwardContactsFragment();
+        }
+        if(fragment instanceof BottomSheetForwardContactsFragment) {
+            ((BottomSheetForwardContactsFragment)fragment).show(getSupportFragmentManager(),"forwardContacts");
+        }
+    }
+
+    private void showDeleteDialog(List<String> deleteMsgIdList) {
+        new SimpleDialog.Builder(this)
+                .setTitle(getString(R.string.chat_delete_multi_messages_title, deleteMsgIdList.size()))
+                .setOnConfirmClickListener(R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        mChatLayout.deleteMessages(deleteMsgIdList);
+                    }
+                })
+                .setConfirmColor(R.color.color_alert)
+                .showCancelButton(true)
+                .setCancelColor(R.color.color_main_text)
+                .show();
+    }
+
+    public EaseChatFragment.Builder setFragmentBuilder(EaseChatFragment.Builder builder){
+        return builder;
     }
 
     @Override
@@ -414,11 +492,64 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(this, event -> {
             updatePresence();
         });
+        LiveDataBus.get().with(DemoConstant.EVENT_SEND_COMBINE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            String message = event.message;
+            String to = null;
+            ChatMessage.ChatType chatType = null;
+            try {
+                JSONObject object = new JSONObject(message);
+                to = object.optString("to");
+                chatType = ChatMessage.ChatType.valueOf(object.optString("chatType"));
+                boolean isFromChatThread = object.optBoolean("isFromChatThread");
+                if(isFromChatThread) {
+                    return;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if(!TextUtils.isEmpty(to) && mReplyMsgIdList != null) {
+                ChatMessage chatMessage = ChatMessage.createCombinedSendMessage(getString(R.string.ease_combine_default)
+                        , EaseChatMessageMultiSelectHelper.getCombineMessageSummary(mReplyMsgIdList)
+                        , getString(R.string.forward_compatible_text), mReplyMsgIdList, to);
+                if(chatType == ChatMessage.ChatType.GroupChat) {
+                    chatMessage.setChatType(ChatMessage.ChatType.GroupChat);
+                }
+                if(mChatLayout != null) {
+                    mChatLayout.sendCombineMessage(chatMessage);
+                }
+            }
+
+        });
+
+        LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
+                showSelectTitle();
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
+                binding.titleBar.setVisibility(View.VISIBLE);
+                setDefaultTitle();
+            }
+        });
         checkUnreadCount();
         setDefaultTitle();
         if (chatType == SINGLE_CHAT) {
             getPresenceData();
         }
+    }
+
+    private void showSelectTitle() {
+        binding.titleBar.setVisibility(View.GONE);
     }
 
     private void updatePresence() {

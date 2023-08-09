@@ -403,4 +403,14 @@
     <string name="demo_discard_alias_content">Your edits will not be saved when discarded.</string>
     <string name="demo_remark_cancel">Remark has been canceled</string>
     <string name="demo_saved">Saved</string>
+
+    <string name="dialog_action_cancel">Cancel</string>
+    <string name="dialog_action_close">Close</string>
+    <string name="dialog_forward_title">Forward To</string>
+    <string name="forward_contact_send">Send</string>
+    <string name="forward_contact_sent">Sent</string>
+
+    <string name="forward_compatible_text">Your current version is too low to support the current message, please upgrade to the latest version.</string>
+    <string name="forward_max_count_hint">Exceed the Maximum number of supported messages</string>
+    <string name="is_deleting">Deleting. . .</string>
 </resources>

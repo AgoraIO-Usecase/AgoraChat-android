@@ -1,8 +1,13 @@
 package io.agora.chatdemo.chat;
 
+import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +22,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import androidx.core.content.ContextCompat;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
+import io.agora.chat.ChatRoom;
 import io.agora.chat.CustomMessageBody;
 import io.agora.chat.LocationMessageBody;
 import io.agora.chat.uikit.chat.EaseChatFragment;
@@ -37,6 +44,12 @@ import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.utils.RecyclerViewUtils;
 import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.chatdemo.group.viewmodel.GroupDetailViewModel;
+import io.agora.chat.uikit.chat.interfaces.IChatTopExtendMenu;
+import io.agora.chat.uikit.chat.widget.EaseChatMultiSelectView;
+import io.agora.chat.uikit.menu.EaseChatType;
+import io.agora.chat.uikit.utils.EaseUtils;
+import io.agora.chat.uikit.widget.EaseTitleBar;
+import io.agora.chatdemo.group.GroupHelper;
 
 public class CustomChatFragment extends EaseChatFragment {
     private boolean isFirstMeasure = true;
@@ -73,6 +86,18 @@ public class CustomChatFragment extends EaseChatFragment {
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
+        LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
+                IChatTopExtendMenu chatTopExtendMenu = chatLayout.getChatInputMenu().getChatTopExtendMenu();
+                if(chatTopExtendMenu instanceof EaseChatMultiSelectView) {
+                    ((EaseChatMultiSelectView) chatTopExtendMenu).dismissSelectView(null);
+                }
+                titleBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -99,11 +124,20 @@ public class CustomChatFragment extends EaseChatFragment {
     @Override
     public void onPreMenu(EasePopupWindowHelper helper, ChatMessage message) {
         super.onPreMenu(helper, message);
-        if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser()) ||
-                message.getBody() instanceof LocationMessageBody || message.getBody() instanceof CustomMessageBody) {
-            chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_report, false);
-        } else {
-            chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_report, true);
+
+        if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser())
+                || message.getBody() instanceof LocationMessageBody
+                || message.getBody() instanceof CustomMessageBody
+                || message.status() != ChatMessage.Status.SUCCESS){
+            helper.findItemVisible(R.id.action_chat_report,false);
+        }else {
+            helper.findItemVisible(R.id.action_chat_report,true);
+        }
+        boolean isRecallNote = message.getBooleanAttribute(DemoConstant.MESSAGE_TYPE_RECALL, false);
+        if(isRecallNote) {
+            helper.setAllItemsVisible(false);
+            helper.showHeaderView(false);
+            helper.findItemVisible(R.id.action_chat_delete, true);
         }
     }
 
@@ -111,10 +145,61 @@ public class CustomChatFragment extends EaseChatFragment {
     public boolean onMenuItemClick(MenuItemBean item, ChatMessage message) {
         if (item.getItemId() == R.id.action_chat_report) {
             if (message.status() == ChatMessage.Status.SUCCESS)
-                ChatReportActivity.actionStart(getActivity(), message.getMsgId());
+                ChatReportActivity.actionStart(getActivity(),message.getMsgId());
+        }else if(item.getItemId() == R.id.action_chat_select) {
+            showSelectModelTitle();
+            LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT).postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT, EaseEvent.TYPE.NOTIFY));
         }
         return super.onMenuItemClick(item, message);
+    }
 
+    private void showSelectModelTitle() {
+        titleBar.setVisibility(View.VISIBLE);
+        titleBar.setDisplayHomeAsUpEnabled(false);
+        titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
+        titleBar.setRightTitle(getString(R.string.ease_cancel));
+        titleBar.getRightText().setTextColor(ContextCompat.getColor(mContext, R.color.color_action_text));
+        titleBar.getIcon().setVisibility(View.VISIBLE);
+        titleBar.getLeftLayout().setVisibility(View.GONE);
+        ViewParent parent = titleBar.getTitle().getParent();
+        if(parent instanceof ViewGroup) {
+            ViewGroup.LayoutParams params = ((ViewGroup) parent).getLayoutParams();
+            if(params instanceof RelativeLayout.LayoutParams) {
+                ((RelativeLayout.LayoutParams) params).leftMargin = (int) EaseUtils.dip2px(mContext, 12);
+            }
+        }
+        titleBar.setOnRightClickListener(new EaseTitleBar.OnRightClickListener() {
+            @Override
+            public void onRightClick(View view) {
+                LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL).postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.TYPE.NOTIFY));
+            }
+        });
+        if(chatType != SINGLE_CHAT) {
+            boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
+            if(!hasProvided) {
+                setGroupInfo();
+            }
+        } else {
+            DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
+            titleBar.getTitle().setVisibility(View.INVISIBLE);
+            titleBar.getSubTitle().setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setGroupInfo() {
+        String title = "";
+        if(chatType == EaseChatType.GROUP_CHAT) {
+            title = GroupHelper.getGroupName(conversationId);
+            titleBar.getIcon().setImageResource(R.drawable.icon);
+        }else if(chatType == EaseChatType.CHATROOM) {
+            titleBar.getIcon().setImageResource(R.drawable.icon);
+            ChatRoom room = ChatClient.getInstance().chatroomManager().getChatRoom(conversationId);
+            if(room == null) {
+                return;
+            }
+            title =  TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
+        }
+        titleBar.getTitle().setText(title);
     }
 
     private void listenerRecyclerViewItemFinishLayout() {

@@ -21,7 +21,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 
 public class ContactListFragment extends BaseContactListFragment<EaseUser> {
-    private ContactsListViewModel mContactListViewModel;
+    protected ContactsListViewModel mContactListViewModel;
     protected PresenceViewModel presenceViewModel;
     protected List<EaseUser> mData = new ArrayList<>();
     private String searchKey;
@@ -65,7 +65,9 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                     }
                     mListAdapter.setData(data);
                     mData = data;
-                    presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
+                    if(presenceViewModel != null) {
+                        presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
+                    }
                 }
 
                 @Override
@@ -108,7 +110,9 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
                     mListAdapter.setData(data);
-                    presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
+                    if(presenceViewModel != null) {
+                        presenceViewModel.subscribePresences(data, 7 * 24 * 60 * 60);
+                    }
                 }
             });
         });
@@ -165,8 +169,10 @@ public class ContactListFragment extends BaseContactListFragment<EaseUser> {
     protected void initListener() {
         super.initListener();
         LiveDataBus.get().with(DemoConstant.PRESENCES_CHANGED).observe(getViewLifecycleOwner(), event -> {
-            ((ContactListAdapter) mListAdapter).setPresences(DemoHelper.getInstance().getPresences());
-            mListAdapter.setData(mData);
+            if(mListAdapter instanceof ContactListAdapter) {
+                ((ContactListAdapter) mListAdapter).setPresences(DemoHelper.getInstance().getPresences());
+                mListAdapter.setData(mData);
+            }
         });
     }
 

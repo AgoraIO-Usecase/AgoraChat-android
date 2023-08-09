@@ -118,7 +118,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<List<Group>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<Group>>> callBack) {
-                getGroupManager().asyncGetJoinedGroupsFromServer(pageIndex, pageSize, new ValueCallBack<List<Group>>() {
+                getGroupManager().asyncGetJoinedGroupsFromServer(pageIndex, pageSize, false, false, new ValueCallBack<List<Group>>() {
                     @Override
                     public void onSuccess(List<Group> value) {
                         callBack.onSuccess(createLiveData(value));

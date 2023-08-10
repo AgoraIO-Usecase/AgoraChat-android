@@ -525,7 +525,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         if(callBack != null) {
                             EaseUser easeUser = transformEMUserInfo(value.get(finalUserId));
                             addDefaultAvatar(easeUser,null);
-                            getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                            if(getUserDao() != null) {
+                                getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                            }
                             callBack.onSuccess(createLiveData(easeUser));
                         }
                     }
@@ -541,7 +543,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void saveCallResult(EaseUser item) {
-                getUserDao().insert(EmUserEntity.parseParent(item));
+                if(getUserDao() != null) {
+                    getUserDao().insert(EmUserEntity.parseParent(item));
+                }
                 DemoHelper.getInstance().updateContactList();
             }
         }.asLiveData();
@@ -560,7 +564,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 EMLog.i("TAG", "getUserInfoById success");
                 EaseUser easeUser  = transformEMUserInfo(value.get(finalUserId));
                 addDefaultAvatar(easeUser,null);
-                getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                if(getUserDao() != null) {
+                    getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                }
                 if(callBack != null) {
                     callBack.onSuccess(easeUser);
                 }

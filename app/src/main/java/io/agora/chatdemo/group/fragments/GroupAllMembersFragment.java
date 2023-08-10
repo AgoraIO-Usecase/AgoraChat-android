@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ConcatAdapter;
 
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
-import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
 
 public class GroupAllMembersFragment extends GroupBaseManageFragment {
     protected ContactListAdapter managersAdapter;
@@ -39,10 +37,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        // User activity for the ViewModelStoreOwner, not need request data of some common methods
-        // For example get group's mute list
-        viewModel = new ViewModelProvider(mContext).get(GroupMemberAuthorityViewModel.class);
-        viewModel.getGroupManagersObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getGroupManagersObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
@@ -53,11 +48,10 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
                         managersAdapter.setOwner(group.getOwner());
                         managersAdapter.setAdminList(group.getAdminList());
                     }
-
                 }
             });
         });
-        viewModel.getMemberObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getMemberObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(@Nullable List<EaseUser> data) {
@@ -73,7 +67,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
                 }
             });
         });
-        viewModel.getMuteMembersObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getMuteMembersObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Map<String, Long>>() {
                 @Override
                 public void onSuccess(@Nullable Map<String, Long> data) {
@@ -81,7 +75,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
                 }
             });
         });
-        viewModel.getRefreshObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getRefreshObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(@Nullable String data) {
@@ -121,13 +115,14 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
     }
 
     protected void loadData() {
-        viewModel.getGroupManagers(groupId);
-        viewModel.getMembers(groupId);
+        memberAuthorityViewModel.getGroupManagers(groupId);
+        memberAuthorityViewModel.getMembers(groupId);
     }
 
     @Override
     public void addHeader(ConcatAdapter adapter) {
         managersAdapter = new ContactListAdapter();
+        managersAdapter.setGroupId(groupId);
         managersAdapter.setEmptyView(R.layout.ease_layout_no_data_show_nothing);
         adapter.addAdapter(managersAdapter);
     }
@@ -135,8 +130,8 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
     @Override
     public void onRefresh() {
         super.onRefresh();
-        viewModel.getGroupManagers(groupId);
-        viewModel.getMembers(groupId);
+        memberAuthorityViewModel.getGroupManagers(groupId);
+        memberAuthorityViewModel.getMembers(groupId);
     }
 
     @Override
@@ -234,7 +229,17 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
             itemBean.setUsername(username);
             data.add(itemBean);
         }
+        addAliasBeanFirst(data,username);
         return data;
+    }
+
+    private void addAliasBeanFirst(List<GroupManageItemBean> data, String username) {
+        GroupManageItemBean itemBean = new GroupManageItemBean();
+        itemBean.setIcon(R.drawable.group_manage_alias);
+        itemBean.setTitle(getString(R.string.group_members_dialog_menu_alias));
+        itemBean.setId(R.id.action_group_manage_alias);
+        itemBean.setUsername(username);
+        data.add(0,itemBean);
     }
 
     protected void checkSearchContent(String content) {

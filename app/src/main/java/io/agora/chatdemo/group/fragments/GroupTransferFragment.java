@@ -39,7 +39,7 @@ public class GroupTransferFragment extends GroupAllMembersFragment {
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        viewModel.getTransferOwnerObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getTransferOwnerObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
@@ -102,7 +102,7 @@ public class GroupTransferFragment extends GroupAllMembersFragment {
                     public void onConfirmClick(View view) {
                         newOwner = item.getUsername();
                         newOwner_nickname = item.getNickname();
-                        viewModel.changeOwner(groupId, item.getUsername());
+                        memberAuthorityViewModel.changeOwner(groupId, item.getUsername());
                     }
                 })
                 .setConfirmColor(R.color.color_alert)

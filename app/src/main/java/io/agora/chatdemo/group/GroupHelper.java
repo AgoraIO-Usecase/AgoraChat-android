@@ -9,7 +9,9 @@ import androidx.annotation.DrawableRes;
 
 import com.bumptech.glide.Glide;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatRoom;
@@ -19,8 +21,12 @@ import io.agora.chat.uikit.models.EaseGroupInfo;
 import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.DemoHelper;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 
 public class GroupHelper {
+
+    private static final Map<String,Map<String,MemberAttributeBean>> groupMemberAttribute = new HashMap<>();
+    private static final Map<String,MemberAttributeBean> attributeMap = new HashMap<>();
 
     /**
      * Whether is group owner
@@ -168,6 +174,70 @@ public class GroupHelper {
             }
         }
         return false;
+    }
+
+    /**
+     * Stores group member properties
+     * @param groupId
+     * @param userName
+     * @param bean
+     */
+    public static void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
+        attributeMap.put(userName,bean);
+        groupMemberAttribute.put(groupId,attributeMap);
+    }
+
+    /**
+     * Gets group membership properties
+     * @param groupId
+     * @param userId
+     * @return
+     */
+    public static MemberAttributeBean getMemberAttribute(String groupId,String userId){
+        MemberAttributeBean attributeBean = null;
+        if (!TextUtils.isEmpty(groupId) && !TextUtils.isEmpty(userId)){
+            if (groupMemberAttribute.containsKey(groupId)){
+                Map<String,MemberAttributeBean> map = groupMemberAttribute.get(groupId);
+                if (map != null ){
+                    if (map.containsKey(userId)){
+                        attributeBean = map.get(userId);
+                    }
+                }
+            }
+        }
+        return attributeBean;
+    }
+
+    /**
+     * Remove the specified group member property to exit a group yourself
+     * @param groupId
+     */
+    public static void clearGroupMemberAttribute(String groupId){
+        groupMemberAttribute.remove(groupId);
+        attributeMap.clear();
+    }
+
+    /**
+     * Remove all group member properties to log out
+     */
+    public static void clearAllGroupMemberAttribute(){
+        groupMemberAttribute.clear();
+        attributeMap.clear();
+    }
+
+    /**
+     * Remove a Specified group The property of a specified member is used when a member is kicked out of the group or when a member leaves the group
+     * @param groupId
+     * @param userId
+     */
+    public static void clearGroupMemberAttributeByUserId(String groupId,String userId){
+        if (groupMemberAttribute.containsKey(groupId)){
+            Map<String, MemberAttributeBean> map = groupMemberAttribute.get(groupId);
+            if (map != null){
+                map.remove(userId);
+                attributeMap.remove(userId);
+            }
+        }
     }
 
     public static boolean setGroupInfo(Context context, String groupId, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {

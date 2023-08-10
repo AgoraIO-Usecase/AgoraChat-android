@@ -37,9 +37,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HyphenateDemoAndroid"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".group.activities.RemarkActivity"
+            android:exported="false" />
         <!-- IM SDK required start -->
         <!-- Set your agora chat AppKey -->
-        <meta-data android:name="EASEMOB_APPKEY"  android:value="${AGORA_CHAT_APPKEY}" />
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="${AGORA_CHAT_APPKEY}" />
         <!-- SDK service -->
         <service
             android:name="io.agora.chat.ChatService"
@@ -106,8 +111,8 @@
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!--Main-->
         <activity
-            android:exported="true"
             android:name=".main.MainActivity"
+            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -188,31 +193,37 @@
         <activity
             android:name=".chatthread.ChatThreadActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".chat.SearchMessageActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".chat.SearchMessageActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".chat.SearchActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".chat.SearchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!-- Do not disturb activity -->
         <activity android:name=".me.DoNotDisturbActivity"
             android:screenOrientation="portrait"/>
         <!-- create chat thread -->
-        <activity android:name=".chatthread.ChatThreadCreateActivity" />
-
+        <activity
+            android:name=".chatthread.ChatThreadCreateActivity" />
         <activity
             android:name=".av.CallInviteUsersActivity"
             android:exported="false"
-            android:launchMode="singleInstance"/>
-
-        <activity android:name=".chat.ChatReportActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".chat.ChatReportActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-
-        <activity android:name=".chat.ChatReportCompleteActivity"
-            android:screenOrientation="portrait"/>
-
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".chat.ChatReportCompleteActivity"
+            android:screenOrientation="portrait" />
+        <!-- chat history -->
+        <activity
+            android:name=".chat.ChatHistoryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package io.agora.chatdemo.group.activities;
 
+import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_GROUP;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Map;
 import java.util.UUID;
 
 import io.agora.chat.ChatClient;
@@ -28,18 +31,18 @@ import io.agora.chatdemo.databinding.ActivityGroupDetailBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.AlertDialog;
+import io.agora.chatdemo.general.dialog.EditInfoDialog;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.utils.CommonUtils;
+import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.dialog.DisbandGroupDialog;
-import io.agora.chatdemo.general.dialog.EditInfoDialog;
 import io.agora.chatdemo.group.dialog.EditGroupInfoDialog;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.chatdemo.group.viewmodel.GroupDetailViewModel;
 import io.agora.chatdemo.me.NotificationActivity;
-
-import static io.agora.chatdemo.general.constant.DemoConstant.DETAIL_TYPE_GROUP;
 
 public class GroupDetailActivity extends BaseInitActivity implements View.OnClickListener {
 
@@ -49,6 +52,8 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     private GroupDetailViewModel viewModel;
     private boolean fromChat;
     private AlertDialog dialog;
+    private MemberAttributeBean memberAttributeBean;
+    private static final int REQUEST_CODE = 10;
 
     public static void actionStart(Context context, String groupId) {
         actionStart(context, groupId, false);
@@ -95,6 +100,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
         super.initListener();
         binding.includeInfo.getRoot().setOnClickListener(this);
         binding.itemGroupMembers.setOnClickListener(this);
+        binding.itemGroupAlias.setOnClickListener(this);
         binding.itemGroupNotice.setOnClickListener(this);
         binding.itemGroupFiles.setOnClickListener(this);
         binding.itemGroupTransfer.setOnClickListener(this);
@@ -120,6 +126,9 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
             case R.id.item_group_members:
                 skipToMemberList();
                 break;
+            case R.id.item_group_alias:
+                skipToSetAlias();
+                break;
             case R.id.item_group_notice:
                 skipToNotice();
                 break;
@@ -144,9 +153,14 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
         }
     }
 
+    private void skipToSetAlias() {
+        RemarkActivity.actionStart(mContext, REQUEST_CODE, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), groupId, memberAttributeBean != null ? memberAttributeBean.getNickName() : "");
+    }
+
     @Override
     protected void initData() {
         super.initData();
+        memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId, DemoHelper.getInstance().getUsersManager().getCurrentUserID());
         viewModel = new ViewModelProvider(this).get(GroupDetailViewModel.class);
         viewModel.getAnnouncementObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<String>() {
@@ -178,8 +192,8 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 }
             });
         });
-        viewModel.getSetGroupNameObservable().observe(this,response ->{
-            parseResource(response,new OnResourceParseCallback<String>() {
+        viewModel.getSetGroupNameObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(@Nullable String data) {
                     loadGroup();
@@ -189,8 +203,8 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                     msg.setMsgId(UUID.randomUUID().toString());
                     msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
                     msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_CHANGE_GROUP_NAME);
-                    msg.setAttribute(DemoConstant.SYSTEM_CHANGE_GROUP_NAME,data);
-                    msg.addBody(new TextMessageBody( getString(R.string.group_change_name,data)));
+                    msg.setAttribute(DemoConstant.SYSTEM_CHANGE_GROUP_NAME, data);
+                    msg.addBody(new TextMessageBody(getString(R.string.group_change_name, data)));
                     msg.setStatus(ChatMessage.Status.SUCCESS);
                     // save invitation as messages
                     ChatClient.getInstance().chatManager().saveMessage(msg);
@@ -206,12 +220,27 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 }
             });
         });
+        viewModel.getFetchMemberAttributeObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Map<String, MemberAttributeBean>>() {
+                @Override
+                public void onSuccess(@Nullable Map<String, MemberAttributeBean> data) {
+                    if (data != null) {
+                        for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
+                            //此页面获取的也是单个userId的群成员属性
+                            memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId, entry.getKey());
+                            setAlias(memberAttributeBean);
+                        }
+                    }
+                }
+            });
+        });
+
         LiveDataBus.get().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
-            if(event.isGroupLeave() && TextUtils.equals(groupId, event.message)) {
+            if (event.isGroupLeave() && TextUtils.equals(groupId, event.message)) {
                 finish();
                 return;
             }
-            if(event.isGroupChange()) {
+            if (event.isGroupChange()) {
                 loadGroup();
             }
         });
@@ -221,37 +250,44 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     private void loadGroup() {
         viewModel.getGroup(groupId);
         viewModel.getGroupAnnouncement(groupId);
+        //低频操作 每次进入详情都获取自己在群组的成员属性
+        viewModel.fetchGroupMemberAttribute(groupId, DemoHelper.getInstance().getUsersManager().getCurrentUserID());
     }
 
     private void setGroupView() {
-        if(group == null) {
+        if (group == null) {
             return;
         }
-        if(GroupHelper.isOwner(group)) {
+        if (GroupHelper.isOwner(group)) {
             binding.itemGroupTransfer.setVisibility(View.VISIBLE);
             binding.itemDisbandGroup.setVisibility(View.VISIBLE);
             binding.itemLeaveGroup.setVisibility(View.GONE);
-        }else if(GroupHelper.isAdmin(group)) {
+        } else if (GroupHelper.isAdmin(group)) {
             binding.itemGroupTransfer.setVisibility(View.GONE);
             binding.itemLeaveGroup.setVisibility(View.VISIBLE);
             binding.itemDisbandGroup.setVisibility(View.GONE);
-        }else {
+        } else {
             binding.itemGroupTransfer.setVisibility(View.GONE);
             binding.itemLeaveGroup.setVisibility(View.VISIBLE);
             binding.itemDisbandGroup.setVisibility(View.GONE);
         }
 
         boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, groupId, binding.includeInfo.tvName, binding.includeInfo.ivUserAvatar);
-        if(!hasProvided) {
+        if (!hasProvided) {
             setGroupInfo();
         }
         binding.includeInfo.tvId.setText(getString(R.string.show_agora_chat_id, groupId));
-        if(!TextUtils.isEmpty(group.getDescription())) {
+        if (!TextUtils.isEmpty(group.getDescription())) {
             binding.includeInfo.tvDescription.setVisibility(View.VISIBLE);
             binding.includeInfo.tvDescription.setText(group.getDescription());
         }
 
         binding.itemGroupMembers.setContent(String.valueOf(group.getMemberCount()));
+        setAlias(memberAttributeBean);
+    }
+
+    private void setAlias(MemberAttributeBean memberAttributeBean) {
+        binding.itemGroupAlias.setContent(memberAttributeBean != null ? memberAttributeBean.getNickName() : "");
     }
 
     private void setGroupInfo() {
@@ -260,7 +296,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     }
 
     private void showEditDialog() {
-        if(GroupHelper.isOwner(group) || GroupHelper.isAdmin(group)) {
+        if (GroupHelper.isOwner(group) || GroupHelper.isAdmin(group)) {
             dialog = new AlertDialog.Builder(mContext)
                     .setContentView(R.layout.dialog_group_info_edit)
                     .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -302,9 +338,9 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 .setConfirmClickListener(new EditGroupInfoDialog.ConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view, String content) {
-                        if(!TextUtils.equals(group.getGroupName(), content)) {
+                        if (!TextUtils.equals(group.getGroupName(), content)) {
                             viewModel.setGroupName(groupId, content);
-                            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP ));
+                            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                         }
                     }
                 })
@@ -345,13 +381,13 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     }
 
     private void skipToTransfer(boolean leave) {
-        if(GroupHelper.isOwner(group)) {
+        if (GroupHelper.isOwner(group)) {
             // Skip to transfer activity
             GroupTransferActivity.actionStart(mContext, groupId, leave);
         }
     }
 
-    private void skipToNotificationSetting(){
+    private void skipToNotificationSetting() {
         NotificationActivity.actionStart(mContext, DETAIL_TYPE_GROUP, groupId);
     }
 
@@ -395,5 +431,15 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                     }
                 })
                 .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_CANCELED) {
+            ToastUtils.showToast(getString(R.string.demo_remark_cancel));
+        } else if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            ToastUtils.showToast(getString(R.string.demo_saved));
+        }
     }
 }

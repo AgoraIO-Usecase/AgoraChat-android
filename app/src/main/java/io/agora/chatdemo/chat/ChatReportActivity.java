@@ -32,9 +32,7 @@ import io.agora.chat.NormalFileMessageBody;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.VideoMessageBody;
 import io.agora.chat.VoiceMessageBody;
-import io.agora.chat.uikit.activities.EaseShowBigImageActivity;
-import io.agora.chat.uikit.activities.EaseShowLocalVideoActivity;
-import io.agora.chat.uikit.activities.EaseShowNormalFileActivity;
+import io.agora.chat.uikit.manager.EaseActivityProviderHelper;
 import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chat.uikit.utils.EaseDateUtils;
 import io.agora.chat.uikit.utils.EaseFileUtils;
@@ -277,17 +275,16 @@ public class ChatReportActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (message.getBody() instanceof ImageMessageBody){
-                    Intent intent = new Intent(ChatReportActivity.this, EaseShowBigImageActivity.class);
                     Uri imgUri =((ImageMessageBody) message.getBody()).getLocalUri();
                     EaseFileUtils.takePersistableUriPermission(ChatReportActivity.this, imgUri);
-                    if(EaseFileUtils.isFileExistByUri(ChatReportActivity.this, imgUri)) {
-                        intent.putExtra("uri", imgUri);
+                    if(EaseFileUtils.isFileExistByUri(mContext, imgUri)) {
+                        EaseActivityProviderHelper.startToLocalImageActivity(mContext, imgUri);
                     } else{
-                        String msgId = message.getMsgId();
-                        intent.putExtra("messageId", msgId);
-                        intent.putExtra("filename", ((ImageMessageBody) message.getBody()).getFileName());
+                        // The local full size pic does not exist yet.
+                        // ShowBigImage needs to download it from the server
+                        // first
+                        EaseActivityProviderHelper.startToLocalImageActivity(mContext, message.getMsgId(), ((ImageMessageBody) message.getBody()).getFileName());
                     }
-                   startActivity(intent);
                 }
             }
         });
@@ -299,7 +296,7 @@ public class ChatReportActivity extends BaseActivity {
         if(EaseFileUtils.isFileExistByUri(ChatReportActivity.this, filePath)){
             EaseCompat.openFile(ChatReportActivity.this, filePath);
         }else {
-            startActivity(new Intent(ChatReportActivity.this, EaseShowNormalFileActivity.class).putExtra("msg", message));
+            EaseActivityProviderHelper.startToDownloadFileActivity(mContext, message);
         }
     }
 

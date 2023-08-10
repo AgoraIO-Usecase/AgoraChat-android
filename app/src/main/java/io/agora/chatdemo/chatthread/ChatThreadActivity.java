@@ -69,7 +69,7 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
     private ChatThreadViewModel viewModel;
     private ChatViewModel chatViewModel;
     private boolean isReachLatestThreadMessage;
-    private List<String> mReplyMsgIdList;
+    private List<String> mForwardMsgIdList;
     private EaseChatLayout mChatLayout;
 
     public static void actionStart(Context context, String conversationId, String parentMsgId) {
@@ -174,30 +174,30 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
         })
         .setOnMessageSelectResultListener(new OnMessageSelectResultListener() {
             @Override
-            public boolean onMessageDelete(View view, List<String> deleteMsgIdList) {
-                if(deleteMsgIdList == null || deleteMsgIdList.isEmpty()) {
+            public boolean onSelectResult(View view, SelectType type, List<String> msgIdList) {
+                if(type == SelectType.DELETE) {
+                    if(msgIdList == null || msgIdList.isEmpty()) {
+                        dismissMultiSelectView(view);
+                        return true;
+                    }
                     dismissMultiSelectView(view);
+                    showDeleteDialog(msgIdList);
                     return true;
-                }
-                dismissMultiSelectView(view);
-                showDeleteDialog(deleteMsgIdList);
-                return true;
-            }
-
-            @Override
-            public boolean onMessageReply(View view, List<String> replyMsgIdList) {
-                mReplyMsgIdList = replyMsgIdList;
-                if(mReplyMsgIdList == null || mReplyMsgIdList.isEmpty()) {
+                }else if(type == SelectType.FORWARD) {
+                    mForwardMsgIdList = msgIdList;
+                    if(mForwardMsgIdList == null || mForwardMsgIdList.isEmpty()) {
+                        dismissMultiSelectView(view);
+                        return true;
+                    }
+                    if(mForwardMsgIdList.size() > MAX_COMBINE_MESSAGE_LIST) {
+                        ToastUtils.showFailToast(getString(R.string.forward_max_count_hint));
+                        return true;
+                    }
                     dismissMultiSelectView(view);
+                    showForwardContactsDialog();
                     return true;
                 }
-                if(mReplyMsgIdList.size() > MAX_COMBINE_MESSAGE_LIST) {
-                    ToastUtils.showFailToast(getString(R.string.forward_max_count_hint));
-                    return true;
-                }
-                dismissMultiSelectView(view);
-                showForwardContactsDialog();
-                return true;
+                return false;
             }
         });
     }
@@ -331,10 +331,10 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(!TextUtils.isEmpty(to) && mReplyMsgIdList != null) {
+            if(!TextUtils.isEmpty(to) && mForwardMsgIdList != null) {
                 ChatMessage chatMessage = ChatMessage.createCombinedSendMessage(getString(R.string.ease_combine_default)
-                        , EaseChatMessageMultiSelectHelper.getCombineMessageSummary(mReplyMsgIdList)
-                        , getString(R.string.forward_compatible_text), mReplyMsgIdList, to);
+                        , EaseChatMessageMultiSelectHelper.getCombineMessageSummary(mForwardMsgIdList)
+                        , getString(R.string.forward_compatible_text), mForwardMsgIdList, to);
                 if(chatType == ChatMessage.ChatType.GroupChat) {
                     chatMessage.setChatType(ChatMessage.ChatType.GroupChat);
                 }

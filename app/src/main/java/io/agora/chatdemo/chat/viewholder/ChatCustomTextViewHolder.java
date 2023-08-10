@@ -8,9 +8,9 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.chat.viewholder.EaseChatRowViewHolder;
 import io.agora.chat.uikit.interfaces.MessageListItemClickListener;
 
-public class UrlPreViewHolder extends EaseChatRowViewHolder {
+public class ChatCustomTextViewHolder extends EaseChatRowViewHolder {
 
-    public UrlPreViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
+    public ChatCustomTextViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
         super(itemView, itemClickListener);
     }
 

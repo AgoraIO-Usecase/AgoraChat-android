@@ -19,8 +19,8 @@ import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.chat.CallViewHolder;
 import io.agora.chatdemo.chat.ChatRowCall;
-import io.agora.chatdemo.chat.ChatRowUrlPreView;
-import io.agora.chatdemo.chat.viewholder.UrlPreViewHolder;
+import io.agora.chatdemo.chat.ChatRowCustomTextView;
+import io.agora.chatdemo.chat.viewholder.ChatCustomTextViewHolder;
 import io.agora.chatdemo.chat.chatrow.ChatRowSystemNotification;
 import io.agora.chatdemo.chat.viewholder.ChatSystemNotificationViewHolder;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -35,7 +35,7 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         }else if(viewType == VIEW_TYPE_MESSAGE_CALL_ME || viewType == VIEW_TYPE_MESSAGE_CALL_OTHER) {
             return new CallViewHolder(new ChatRowCall(mContext,viewType == VIEW_TYPE_MESSAGE_CALL_ME),listener);
         }else if (viewType == VIEW_TYPE_MESSAGE_URL_PREVIEW_ME || viewType == VIEW_TYPE_MESSAGE_URL_PREVIEW_OTHER){
-            return new UrlPreViewHolder(new ChatRowUrlPreView(mContext,viewType == VIEW_TYPE_MESSAGE_URL_PREVIEW_ME),listener);
+            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_URL_PREVIEW_ME),listener);
         }
         return super.getViewHolder(parent, viewType);
     }

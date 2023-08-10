@@ -36,7 +36,7 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.models.UrlPreViewBean;
 import io.agora.util.EMLog;
 
-public class ChatRowUrlPreView extends EaseChatRowText {
+public class ChatRowCustomTextView extends EaseChatRowText {
     private TextView mContent;
     private TextView mTitle;
     private TextView mDescribe;
@@ -44,11 +44,11 @@ public class ChatRowUrlPreView extends EaseChatRowText {
     private RelativeLayout tvContentLayout;
     private ConstraintLayout describeLayout;
 
-    public ChatRowUrlPreView(Context context, boolean isSender) {
+    public ChatRowCustomTextView(Context context, boolean isSender) {
         super(context, isSender);
     }
 
-    public ChatRowUrlPreView(Context context, ChatMessage message, int position, Object adapter) {
+    public ChatRowCustomTextView(Context context, ChatMessage message, int position, Object adapter) {
         super(context, message, position, adapter);
     }
 
@@ -78,6 +78,9 @@ public class ChatRowUrlPreView extends EaseChatRowText {
     private void urlPreView() {
         Spannable spannable = (Spannable) mContent.getText();
         URLSpan[] spans = spannable.getSpans(0, spannable.length(), URLSpan.class);
+        if (spans.length <= 0){
+            return;
+        }
         String url = spans[0].getURL();
         int index = spannable.toString().indexOf(url);
         int end = index + url.length();

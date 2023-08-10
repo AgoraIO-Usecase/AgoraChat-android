@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -86,7 +87,7 @@ import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.group.fragments.MultiplyVideoSelectMemberContainerFragment;
 import io.agora.util.EMLog;
 
-public class ChatActivity extends BaseInitActivity implements EasePresenceView.OnPresenceClickListener, View.OnClickListener{
+public class ChatActivity extends BaseInitActivity implements EasePresenceView.OnPresenceClickListener, View.OnClickListener, TextWatcher, View.OnKeyListener {
     private static final int MAX_COMBINE_MESSAGE_LIST = 300;
     private String conversationId;
     private EaseChatType chatType;
@@ -95,7 +96,6 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
     private ActivityChatBinding binding;
     private EaseChatLayout mChatLayout;
     private List<String> mReplyMsgIdList;
-    private EaseChatFragment fragment;
     private CustomChatFragment customChatFragment;
     private boolean isGroupChat;
 
@@ -152,7 +152,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
 
     private void initChatFragment() {
         customChatFragment = new CustomChatFragment();
-        fragment = new EaseChatFragment.Builder(conversationId, chatType)
+        EaseChatFragment.Builder builder = new EaseChatFragment.Builder(conversationId, chatType)
                 .useHeader(false)
                 .setCustomAdapter(new CustomMessageAdapter())
                 .setCustomFragment(customChatFragment)
@@ -201,7 +201,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         EMLog.e("TAG", "onTextChanged: s: " + s.toString());
-                        isGroupChat = fragment.chatLayout.getChatMessageListLayout().isGroupChat();
+                        isGroupChat = customChatFragment.chatLayout.getChatMessageListLayout().isGroupChat();
                         if(!isGroupChat) {
                             return;
                         }
@@ -216,16 +216,6 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                             fragment.setArguments(bundle);
                             fragment.show(getSupportFragmentManager(), "pick_at_user");
                         }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        setPickAtContentStyle(editable);
-                    }
-
-                    @Override
-                    public boolean editTextOnKeyListener(View v, int keyCode, KeyEvent event) {
-                        return removePickAt(v,keyCode,event);
                     }
                 })
                 .setOnChatRecordTouchListener(new OnChatRecordTouchListener() {
@@ -318,6 +308,11 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                     @Override
                     public void onChatListFinishInflate(EaseChatLayout chatLayout) {
                         mChatLayout = chatLayout;
+                        EditText editText = chatLayout.getChatInputMenu().getPrimaryMenu().getEditText();
+                        if (editText != null){
+                            editText.addTextChangedListener(ChatActivity.this);
+                            editText.setOnKeyListener(ChatActivity.this);
+                        }
                     }
                 })
                 .setOnMessageSelectResultListener(new OnMessageSelectResultListener() {
@@ -694,7 +689,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
     }
 
     private void setInputAtUsername(String username,boolean autoAddAtSymbol){
-        fragment.chatLayout.inputAtUsername(username,autoAddAtSymbol);
+        customChatFragment.chatLayout.inputAtUsername(username,autoAddAtSymbol);
     }
 
     private void setPickAtContentStyle(Editable editable){
@@ -729,4 +724,24 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         return false;
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        setPickAtContentStyle(editable);
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        removePickAt(v,keyCode,event);
+        return false;
+    }
 }

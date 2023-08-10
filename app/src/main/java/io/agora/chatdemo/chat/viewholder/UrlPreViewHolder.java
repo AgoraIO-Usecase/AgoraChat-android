@@ -1,4 +1,4 @@
-package io.agora.chatdemo.chat;
+package io.agora.chatdemo.chat.viewholder;
 
 import android.view.View;
 

@@ -7,11 +7,11 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
-import android.util.Log;
-import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -27,22 +27,22 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatMessage;
-import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.manager.EaseThreadManager;
-import io.agora.chat.uikit.utils.EaseSmileUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.chatrow.AutolinkSpan;
-import io.agora.chat.uikit.widget.chatrow.EaseChatRow;
+import io.agora.chat.uikit.widget.chatrow.EaseChatRowText;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.models.UrlPreViewBean;
 import io.agora.util.EMLog;
 
-public class ChatRowUrlPreView extends EaseChatRow {
+public class ChatRowUrlPreView extends EaseChatRowText {
     private TextView mContent;
     private TextView mTitle;
     private TextView mDescribe;
     private EaseImageView mIcon;
+    private RelativeLayout tvContentLayout;
+    private ConstraintLayout describeLayout;
 
     public ChatRowUrlPreView(Context context, boolean isSender) {
         super(context, isSender);
@@ -60,39 +60,22 @@ public class ChatRowUrlPreView extends EaseChatRow {
 
     @Override
     protected void onFindViewById() {
+        super.onFindViewById();
         mTitle = findViewById(R.id.tv_title);
-        mContent = findViewById(R.id.tv_content);
+        mContent = findViewById(R.id.tv_chatcontent);
         mDescribe = findViewById(R.id.tv_describe);
         mIcon = findViewById(R.id.iv_icon);
+        describeLayout = findViewById(R.id.describe_layout);
+        tvContentLayout = findViewById(R.id.tv_chatcontent_layout);
     }
 
     @Override
-    protected void onSetUpView() {
-        if (message.getBody() != null && message.getBody() instanceof TextMessageBody){
-            TextMessageBody messageBody = (TextMessageBody)message.getBody();
-            String content = messageBody.getMessage();
-            Spannable span = EaseSmileUtils.getSmiledText(context, content);
-            // 设置内容
-            mContent.setText(span, TextView.BufferType.SPANNABLE);
-
-            mContent.setOnLongClickListener(new OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    mContent.setTag(R.id.action_chat_long_click,true);
-                    if (itemClickListener != null) {
-                        return itemClickListener.onBubbleLongClick(v, message);
-                    }
-                    return false;
-                }
-            });
-        }
-        replaceSpan();
+    public void onSetUpView() {
+        super.onSetUpView();
+        urlPreView();
     }
 
-    /**
-     * 解决长按事件与relink冲突，参考：https://www.jianshu.com/p/d3bef8449960
-     */
-    private void replaceSpan() {
+    private void urlPreView() {
         Spannable spannable = (Spannable) mContent.getText();
         URLSpan[] spans = spannable.getSpans(0, spannable.length(), URLSpan.class);
         String url = spans[0].getURL();
@@ -117,18 +100,20 @@ public class ChatRowUrlPreView extends EaseChatRow {
                 @Override
                 public void onSuccess(UrlPreViewBean value) {
                     itemActionCallback.refreshView();
+                    if (isSender){
+                        tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_url_preview_send_top_bg));
+                    }else {
+                        tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_url_preview_receive_top_bg));
+                    }
                 }
 
                 @Override
                 public void onError(int error, String errorMsg) {
-                    mIcon.setVisibility(GONE);
-                    mDescribe.setVisibility(GONE);
-                    mTitle.setVisibility(GONE);
+                    loadErrorChangeBg();
                     EMLog.e("ChatRowUrlPreview","parsingUrl onError" + errorMsg + error);
                 }
             });
         }else {
-
             if (TextUtils.isEmpty(urlPreviewInfo.getPrimaryImg())){
                 mIcon.setVisibility(GONE);
             }else {
@@ -140,6 +125,7 @@ public class ChatRowUrlPreView extends EaseChatRow {
                                 @Override
                                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
                                     mIcon.setVisibility(GONE);
+                                    loadErrorChangeBg();
                                     return false;
                                 }
 
@@ -156,6 +142,7 @@ public class ChatRowUrlPreView extends EaseChatRow {
                                 @Override
                                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                     mIcon.setVisibility(GONE);
+                                    loadErrorChangeBg();
                                     return false;
                                 }
 
@@ -182,6 +169,12 @@ public class ChatRowUrlPreView extends EaseChatRow {
             }else {
                 mTitle.setVisibility(VISIBLE);
                 mTitle.setText(urlPreviewInfo.getTitle());
+            }
+
+            if (TextUtils.isEmpty(urlPreviewInfo.getDescribe()) && TextUtils.isEmpty(urlPreviewInfo.getTitle())){
+                describeLayout.setVisibility(GONE);
+            }else {
+                describeLayout.setVisibility(VISIBLE);
             }
 
         }
@@ -280,5 +273,15 @@ public class ChatRowUrlPreView extends EaseChatRow {
                 });
             }
         });
+    }
+
+    private void loadErrorChangeBg(){
+        mIcon.setVisibility(GONE);
+        describeLayout.setVisibility(GONE);
+        if (isSender){
+            tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.ease_chat_bubble_send_bg));
+        }else {
+            tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.ease_chat_bubble_receive_bg));
+        }
     }
 }

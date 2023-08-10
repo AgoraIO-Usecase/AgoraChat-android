@@ -20,7 +20,7 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.chat.CallViewHolder;
 import io.agora.chatdemo.chat.ChatRowCall;
 import io.agora.chatdemo.chat.ChatRowUrlPreView;
-import io.agora.chatdemo.chat.UrlPreViewHolder;
+import io.agora.chatdemo.chat.viewholder.UrlPreViewHolder;
 import io.agora.chatdemo.chat.chatrow.ChatRowSystemNotification;
 import io.agora.chatdemo.chat.viewholder.ChatSystemNotificationViewHolder;
 import io.agora.chatdemo.general.constant.DemoConstant;

@@ -1,143 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:paddingTop="13dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingTop="13dp">
 
     <TextView
         android:id="@+id/timestamp"
-        style="@style/url_preview_style"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <io.agora.chat.uikit.widget.EaseImageView
-        android:id="@+id/iv_userhead"
-        android:layout_marginStart="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        style="@style/url_preview_user_style"/>
-
-    <TextView
-        android:id="@+id/tv_userid"
-        style="@style/chat_text_name_style"
+        style="@style/chat_text_date_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/ease_chat_nick_margin_left"
-        android:layout_marginTop="10dp"
-        android:textSize="@dimen/ease_chat_nick_text_size"
-        android:textColor="@color/ease_msg_name_color"
-        app:layout_constraintTop_toBottomOf="@+id/timestamp"
-        app:layout_constraintLeft_toLeftOf="@+id/bubble"
-        android:visibility="visible" />
+        android:layout_gravity="center" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/bubble"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toRightOf="@+id/iv_userhead"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userid"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:layout_width="253dp"
-        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_bubble_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ease_margin_chat_activity" >
 
-        <RelativeLayout
-            android:background="@drawable/shape_url_preview_receive_top_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/rb_select"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_userhead"
+            app:layout_constraintBottom_toBottomOf="@id/iv_userhead"
+            app:layout_constraintEnd_toStartOf="@id/iv_userhead"
+            app:layout_constraintHorizontal_bias="0"
+            style="@style/ease_row_radio_select_style"/>
 
-            <TextView
-                android:id="@+id/tv_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="left"
-                android:lineSpacingExtra="2dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="visible"
-                app:layout_constraintHorizontal_bias="0"
-                tools:text="Hello, Agora Chat!" />
-
-
-        </RelativeLayout>
+        <io.agora.chat.uikit.widget.EaseChatQuoteView
+            android:id="@+id/chat_quote_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_userid"
+            app:layout_constraintStart_toStartOf="@id/bubble"
+            app:layout_constraintBottom_toTopOf="@id/bubble"
+            app:ease_chat_quote_sender="false"
+            android:visibility="gone"/>
 
         <io.agora.chat.uikit.widget.EaseImageView
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:id="@+id/iv_icon"
-            android:background="@color/url_preview_icon_bg"
-            android:layout_width="253dp"
-            android:layout_height="130dp"/>
+            android:id="@+id/iv_userhead"
+            app:layout_constraintStart_toEndOf="@id/rb_select"
+            app:layout_constraintBottom_toBottomOf="@id/bubble"
+            app:layout_goneMarginStart="15dp"
+            style="@style/ease_row_receive_iv_userhead_style"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:background="@drawable/shape_url_preview_receive_bottom_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/bubble"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/iv_userhead"
+            app:layout_constraintTop_toBottomOf="@id/chat_quote_view"
+            app:layout_constraintBottom_toTopOf="@id/tv_subReactionContent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_width="253dp"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                android:visibility="visible"
-                android:gravity="left"
-                android:lineSpacingExtra="2dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:textStyle="bold"
-                tools:text="Agora.io" />
+            <RelativeLayout
+                android:id="@+id/tv_chatcontent_layout"
+                android:background="@drawable/shape_url_preview_receive_top_bg"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_describe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                android:visibility="visible"
-                android:autoLink="web"
-                android:gravity="left"
-                android:lineSpacingExtra="2dp"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:maxLines="3"
-                android:ellipsize="end"
-                tools:text="Real-Time Voice and Video Engagement" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_chatcontent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:gravity="left"
+                    android:lineSpacingExtra="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="visible"
+                    app:layout_constraintHorizontal_bias="0"
+                    tools:text="Hello, Agora Chat!" />
 
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        app:layout_constraintStart_toEndOf="@+id/bubble"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="@dimen/ease_msg_status_icon_margin_bubble"
-        android:indeterminateDrawable="@drawable/ease_chat_loading_progress_bar"
-        android:visibility="invisible" />
+            <io.agora.chat.uikit.widget.EaseImageView
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:id="@+id/iv_icon"
+                android:background="@color/url_preview_icon_bg"
+                android:layout_width="253dp"
+                android:layout_height="130dp"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/describe_layout"
+                android:background="@drawable/shape_url_preview_receive_bottom_bg"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    android:visibility="visible"
+                    android:gravity="left"
+                    android:lineSpacingExtra="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textStyle="bold"
+                    tools:text="Agora.io" />
+
+                <TextView
+                    android:id="@+id/tv_describe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    android:visibility="visible"
+                    android:autoLink="web"
+                    android:gravity="left"
+                    android:lineSpacingExtra="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    tools:text="Real-Time Voice and Video Engagement" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <io.agora.chat.uikit.chat.widget.EaseChatReactionView
+            android:id="@+id/tv_subReactionContent"
+            app:ease_chat_item_sender="false"
+            app:layout_constraintStart_toStartOf="@id/bubble"
+            app:layout_constraintTop_toBottomOf="@id/bubble"
+            style="@style/ease_chat_row_reaction_style"/>
+
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/ease_chat_row_text_name_style"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/chat_quote_view"
+            app:layout_constraintStart_toStartOf="@id/bubble"
+            tools:text="som" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

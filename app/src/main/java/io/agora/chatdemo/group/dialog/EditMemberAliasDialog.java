@@ -1,6 +1,6 @@
 package io.agora.chatdemo.group.dialog;
 
-import static io.agora.chatdemo.general.utils.UIUtils.showKeyboard;
+import static io.agora.chat.uikit.manager.EaseSoftKeyboardHelper.showKeyboard;
 
 import android.os.Bundle;
 import android.os.Handler;

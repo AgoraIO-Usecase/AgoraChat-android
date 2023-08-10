@@ -1,9 +1,12 @@
 package io.agora.chatdemo.group.activities;
 
+import static io.agora.chatdemo.general.utils.UIUtils.showKeyboard;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -129,6 +132,7 @@ public class RemarkActivity extends BaseInitActivity implements View.OnClickList
                     binding.tvDone.setEnabled(false);
                     binding.edtRemark.requestFocus();
                 } else {
+                    binding.edtRemark.setSelection(length);
                     if (TextUtils.equals(s.toString().trim(), alias)) {
                         binding.tvDone.setEnabled(false);
                     } else {
@@ -139,6 +143,12 @@ public class RemarkActivity extends BaseInitActivity implements View.OnClickList
             }
         });
         binding.edtRemark.setText(alias == null ? "" : alias);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showKeyboard(binding.edtRemark);
+            }
+        }, 200);
     }
 
     @Override

@@ -29,6 +29,7 @@
         android:maxLines="1"
         android:paddingStart="5dp"
         android:paddingEnd="15dp"
+        android:textCursorDrawable="@drawable/ease_live_input_cursor_bg"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_small"
         app:layout_constraintBottom_toBottomOf="parent"

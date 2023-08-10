@@ -2,6 +2,7 @@ package io.agora.chatdemo.group.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -256,12 +257,13 @@ public class GroupBaseManageFragment extends BaseContactListFragment<EaseUser> {
                         }
                     }
                 })
-                .setHint(getString(R.string.group_detail_chang_group_name_dialog_hint))
+                .setHint(getString(R.string.demo_admin_edit_alias_hint))
                 .setContent(memberAttributeBean==null?"":memberAttributeBean.getNickName())
-                .setTitle(R.string.group_detail_chang_group_name_dialog_title)
+                .setTitle(R.string.demo_admin_edit_alias_title)
                 .showCancelButton(true)
                 .hideConfirmButton(false)
                 .show();
+
     }
 
     private void showRemoveAdminDialog(GroupManageItemBean bean) {

@@ -61,6 +61,7 @@
         android:background="@null"
         android:ellipsize="start"
         android:singleLine="true"
+        android:textCursorDrawable="@drawable/ease_live_input_cursor_bg"
         android:textColor="@color/color_main_text"
         android:textColorHint="@color/color_light_gray_999999"
         android:textSize="16sp"

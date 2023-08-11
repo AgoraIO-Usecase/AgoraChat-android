@@ -67,7 +67,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     private ConstraintLayout lyTranslation;
     private String translationContent;
     private String oldTranslationContent;
-    private boolean isShowOriginal = false;
+    private boolean isShowOriginal = true;
     private translationClickListener listener;
 
     public ChatRowCustomTextView(Context context, boolean isSender) {
@@ -134,7 +134,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                             translationContent = translationInfo.translationText;
                         }
                         tvTranslationTag.setVisibility(VISIBLE);
-                        lyTranslation.setVisibility(VISIBLE);
+//                        lyTranslation.setVisibility(VISIBLE);
                         switchTranslation();
                     }
                 }else {
@@ -376,13 +376,15 @@ public class ChatRowCustomTextView extends EaseChatRowText {
             // 设置内容
             String oldTranslation = convertSpecialSymbols(oldTranslationContent);
             Spannable span = EaseSmileUtils.getSmiledText(context, oldTranslation);
-            tvTranslation.setText(span, TextView.BufferType.SPANNABLE);
+//            tvTranslation.setText(span, TextView.BufferType.SPANNABLE);
+            mContent.setText(span, TextView.BufferType.SPANNABLE);
             tag = context.getResources().getString(R.string.translation_view_translation);
             start = tag.length() - 16;
         }else{
             String translation = convertSpecialSymbols(translationContent);
             Spannable span = EaseSmileUtils.getSmiledText(context, translation);
-            tvTranslation.setText(span, TextView.BufferType.SPANNABLE);
+//            tvTranslation.setText(span, TextView.BufferType.SPANNABLE);
+            mContent.setText(span, TextView.BufferType.SPANNABLE);
             tag = context.getResources().getString(R.string.translation_original_text);
             start = tag.length() - 18;
         }

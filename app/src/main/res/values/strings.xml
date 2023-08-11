@@ -414,7 +414,7 @@
     <string name="forward_contact_send">Send</string>
     <string name="forward_contact_sent">Sent</string>
 
-    <string name="forward_compatible_text">Your current version is too low to support the current message, please upgrade to the latest version.</string>
+    <string name="forward_compatible_text">The version is low and unable to display the content.</string>
     <string name="forward_max_count_hint">Exceed the Maximum number of supported messages</string>
     <string name="is_deleting">Deleting. . .</string>
     <string name="demo_pick_at_user_title">\@Mention</string>

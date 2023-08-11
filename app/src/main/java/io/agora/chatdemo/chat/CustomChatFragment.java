@@ -152,6 +152,7 @@ public class CustomChatFragment extends EaseChatFragment {
         chatLayout.getMenuHelper().addItemMenu(menuItemBean);
         chatLayout.getMenuHelper().addItemMenu(menuTranslationBean);
         chatLayout.getMenuHelper().addItemMenu(menuReTranslationBean);
+        chatLayout.setPresenter(new ChatCustomPresenter());
     }
 
     @Override

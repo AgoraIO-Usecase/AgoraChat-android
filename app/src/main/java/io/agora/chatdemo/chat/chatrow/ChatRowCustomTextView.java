@@ -10,6 +10,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -25,6 +26,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+
+import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,8 +39,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.agora.ValueCallBack;
+import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.TextMessageBody;
+import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.utils.EaseSmileUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
@@ -49,6 +54,8 @@ import io.agora.chatdemo.chat.models.UrlPreViewBean;
 import io.agora.util.EMLog;
 
 public class ChatRowCustomTextView extends EaseChatRowText {
+    public static final String AT_PREFIX = "@";
+    public static final String AT_SUFFIX = " ";
     private TextView mContent;
     private TextView mTitle;
     private TextView mDescribe;
@@ -112,30 +119,34 @@ public class ChatRowCustomTextView extends EaseChatRowText {
 
         if (message.getType() == ChatMessage.Type.TXT){
             TextMessageBody body = (TextMessageBody)message.getBody();
-            String localTargetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
-            oldTranslationContent = body.getMessage();
-            List<TextMessageBody.TranslationInfo> translations = body.getTranslations();
-            if (translations.size() > 0 && !isSender){
-                for (TextMessageBody.TranslationInfo translation : translations) {
-                    if (translation.languageCode.equals(localTargetLanguage)){
-                        translationContent = translation.translationText;
-                    }else {
-                        TextMessageBody.TranslationInfo translationInfo = translations.get(0);
-                        translationContent = translationInfo.translationText;
+            if (body != null){
+                String localTargetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
+                oldTranslationContent = body.getMessage();
+                List<TextMessageBody.TranslationInfo> translations = body.getTranslations();
+                if (translations.size() > 0 && !isSender){
+                    for (TextMessageBody.TranslationInfo translation : translations) {
+                        if (translation.languageCode.equals(localTargetLanguage)){
+                            translationContent = translation.translationText;
+                        }else {
+                            TextMessageBody.TranslationInfo translationInfo = translations.get(0);
+                            translationContent = translationInfo.translationText;
+                        }
+                        tvTranslationTag.setVisibility(VISIBLE);
+                        lyTranslation.setVisibility(VISIBLE);
+                        switchTranslation();
                     }
-                    tvTranslationTag.setVisibility(VISIBLE);
-                    lyTranslation.setVisibility(VISIBLE);
-                    switchTranslation();
+                }else {
+                    lyTranslation.setVisibility(GONE);
+                    tvTranslationTag.setVisibility(GONE);
                 }
-            }else {
-                lyTranslation.setVisibility(GONE);
-                tvTranslationTag.setVisibility(GONE);
-            }
 
-            if (DemoHelper.getInstance().containsUrl(((TextMessageBody) message.getBody()).getMessage())){
-                urlPreView();
-            }else {
-                loadErrorChangeBg();
+                if (DemoHelper.getInstance().containsUrl(((TextMessageBody) message.getBody()).getMessage())){
+                    urlPreView();
+                }else {
+                    loadErrorChangeBg();
+                }
+
+                replacePickAtSpan();
             }
         }
     }
@@ -426,5 +437,45 @@ public class ChatRowCustomTextView extends EaseChatRowText {
             str = str.replace(specialSymbols[i], convertedSymbols[i]);
         }
         return str;
+    }
+
+    private void replacePickAtSpan(){
+        if (message.ext().containsKey(EaseConstant.MESSAGE_ATTR_AT_MSG)){
+            String atAll = ""; String atMe = "";
+            int start = 0;  int end = 0;
+            try {
+                JSONArray jsonArray = message.getJSONArrayAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG);
+                for(int i = 0; i < jsonArray.length(); i++){
+                    String username = jsonArray.getString(i);
+                    if(ChatClient.getInstance().getCurrentUser().equals(username)){
+                        atMe = username;
+                    }
+                }
+            } catch (Exception e) {
+                String atUsername = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG, null);
+                if(atUsername != null){
+                    String s = atUsername.toUpperCase();
+                    if(s.equals((EaseConstant.MESSAGE_ATTR_VALUE_AT_MSG_ALL).toUpperCase())){
+                        atAll = atUsername;
+                    }
+                }
+            }
+
+            if (!TextUtils.isEmpty(atMe)){
+                atMe = AT_PREFIX + atMe + AT_SUFFIX;
+                start = mContent.getText().toString().indexOf(atMe);
+                end = start + atMe.length();
+            }else {
+                atAll = AT_PREFIX + atAll + AT_SUFFIX;
+                start = mContent.getText().toString().indexOf(atAll);
+                end = start + atAll.length();
+            }
+
+            if (start != -1 && end > 0){
+                Spannable spannable = (Spannable) mContent.getText();
+                spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(io.agora.chat.uikit.R.color.color_conversation_title)), start
+                        , end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+        }
     }
 }

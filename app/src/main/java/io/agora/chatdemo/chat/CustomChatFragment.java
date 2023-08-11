@@ -138,8 +138,7 @@ public class CustomChatFragment extends EaseChatFragment {
             editText.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    removePickAt(v,keyCode,event);
-                    return false;
+                    return removePickAt(v,keyCode,event);
                 }
             });
             editText.addTextChangedListener(new TextWatcher() {

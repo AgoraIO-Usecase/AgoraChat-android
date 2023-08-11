@@ -35,9 +35,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv_userid"
             app:layout_constraintStart_toStartOf="@id/bubble"
-            app:layout_constraintBottom_toTopOf="@id/bubble"
             app:ease_chat_quote_sender="false"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <io.agora.chat.uikit.widget.EaseImageView
             android:id="@+id/iv_userhead"
@@ -46,15 +45,41 @@
             app:layout_goneMarginStart="15dp"
             style="@style/ease_row_receive_iv_userhead_style"/>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_translationLayout"
+            android:background="@drawable/ease_chat_bubble_quote_receive_bg"
+            app:layout_constraintTop_toBottomOf="@id/bubble"
+            app:layout_constraintStart_toStartOf="@id/bubble"
+            android:visibility="visible"
+            android:layout_marginTop="-8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:maxWidth="260dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_translation"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="16sp"
+                android:maxWidth="245dp"
+                android:textColor="@color/color_black_333333"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/bubble"
             android:orientation="vertical"
             app:layout_constraintStart_toEndOf="@id/iv_userhead"
             app:layout_constraintTop_toBottomOf="@id/chat_quote_view"
-            app:layout_constraintBottom_toTopOf="@id/tv_subReactionContent"
             android:layout_marginStart="10dp"
             android:layout_marginTop="2dp"
-            android:layout_width="253dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <RelativeLayout
@@ -73,13 +98,13 @@
                     android:layout_height="wrap_content"
                     android:autoLink="web"
                     android:gravity="left"
+                    android:maxWidth="225dp"
                     android:lineSpacingExtra="2dp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:visibility="visible"
                     app:layout_constraintHorizontal_bias="0"
                     tools:text="Hello, Agora Chat!" />
-
 
             </RelativeLayout>
 
@@ -144,8 +169,22 @@
             android:id="@+id/tv_subReactionContent"
             app:ease_chat_item_sender="false"
             app:layout_constraintStart_toStartOf="@id/bubble"
-            app:layout_constraintTop_toBottomOf="@id/bubble"
+            app:layout_constraintTop_toBottomOf="@id/cl_translationLayout"
             style="@style/ease_chat_row_reaction_style"/>
+
+        <TextView
+            android:id="@+id/tv_translation_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/ease_color_gray_999999"
+            android:textSize="11sp"
+            android:padding="4dp"
+            android:textStyle="normal"
+            android:clickable="true"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="@id/bubble"
+            app:layout_constraintTop_toBottomOf="@id/tv_subReactionContent" />
 
         <TextView
             android:id="@+id/tv_userid"

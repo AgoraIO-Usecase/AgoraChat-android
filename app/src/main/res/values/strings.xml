@@ -427,5 +427,9 @@
     <string name="translation_push">Push Translation Setting</string>
     <string name="translation_auto_about">About Auto Translation</string>
     <string name="translation_auto_about_info">Agora Chat will auto translate the text into your current interface language.You can change the language in Setting > General > Translation Setting.</string>
+    <string name="translation_hide">Translated by Agora Chat Hide</string>
+    <string name="translation_failed">Translation failed Retry</string>
+    <string name="translation_original_text">Translated by Agora Chat View Original Text</string>
+    <string name="translation_view_translation">Translated by Agora Chat View Translation</string>
 
 </resources>

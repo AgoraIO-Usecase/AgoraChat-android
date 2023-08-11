@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Set;
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +49,7 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chat.uikit.models.EaseReactionEmojiconEntity;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
@@ -59,10 +63,12 @@ import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.util.EMLog;
 
 public class CustomChatFragment extends EaseChatFragment {
     private boolean isFirstMeasure = true;
     private GroupDetailViewModel groupDetailViewModel;
+    private ChatViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +87,18 @@ public class CustomChatFragment extends EaseChatFragment {
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
+        viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        viewModel.getTranslationObservable().observe(this,response ->{
+            if(response == null) {
+                return;
+            }
+            if(response.status == Status.SUCCESS) {
+                chatLayout.getChatMessageListLayout().refreshMessages();
+            }else {
+                EMLog.e("translationMessage","onError: " + response.errorCode + " - " + response.getMessage());
+            }
+        });
+
         LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
             if(event == null) {
                 return;
@@ -158,16 +176,24 @@ public class CustomChatFragment extends EaseChatFragment {
                 helper.showHeaderView(false);
                 helper.findItemVisible(R.id.action_chat_delete, true);
             }
-            if (message.getBody() instanceof TextMessageBody) {
+        }
+
+        if (message.getBody() instanceof TextMessageBody) {
+            if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser())){
+                chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
+                chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, false);
+            }else {
                 if (((TextMessageBody) message.getBody()).getTranslations().size() > 0) {
                     chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
                     chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, true);
                 } else {
                     chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, true);
+                    chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, false);
                 }
-            } else {
-                chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
             }
+        } else {
+            chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
+            chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, false);
         }
     }
 
@@ -183,10 +209,8 @@ public class CustomChatFragment extends EaseChatFragment {
                 LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT).postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT, EaseEvent.TYPE.NOTIFY));
                 break;
             case R.id.action_chat_translation:
-                translationMessage(message);
-                break;
             case R.id.action_chat_re_translation:
-
+                translationMessage(message);
                 break;
         }
         return super.onMenuItemClick(item, message);
@@ -332,21 +356,22 @@ public class CustomChatFragment extends EaseChatFragment {
         String targetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
         List<String> list = new ArrayList<>();
         list.add(targetLanguage);
-        ChatClient.getInstance().chatManager().translateMessage(message, list, new ValueCallBack<ChatMessage>() {
-            @Override
-            public void onSuccess(ChatMessage value) {
-                if (value.getBody() instanceof TextMessageBody){
-                    Log.e("apex","translateMessage: "
-                            + "\n"+((TextMessageBody) value.getBody()).getTranslations()
-                            + "\n"+((TextMessageBody) value.getBody()).getTargetLanguages().toString());
+        viewModel.translationMessage(message,list);
+    }
+
+    @Override
+    public void addMsgAttrsBeforeSend(ChatMessage message) {
+        super.addMsgAttrsBeforeSend(message);
+        String enableAutoTranslation = DemoHelper.getInstance().getModel().getEnableAutoTranslation();
+        if (!TextUtils.isEmpty(enableAutoTranslation)){
+            try {
+                JSONObject jsonObject = new JSONObject(enableAutoTranslation);
+                if ((Boolean) jsonObject.get(conversationId)){
+                    translationMessage(message);
                 }
-
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-
-            }
-        });
+        }
     }
 }

@@ -2,31 +2,25 @@ package io.agora.chatdemo.chat.adapter;
 
 import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CALL_ME;
 import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CALL_OTHER;
-import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_TRANSLATION_ME;
-import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_TRANSLATION_OTHER;
 import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VIDEO_CALL;
 import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VOICE_CALL;
-import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_URL_PREVIEW_ME;
-import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_URL_PREVIEW_OTHER;
+import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME;
+import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER;
 
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import io.agora.chat.ChatMessage;
-import io.agora.chat.TextMessageBody;
 import io.agora.chat.callkit.general.EaseCallAction;
 import io.agora.chat.callkit.general.EaseCallType;
 import io.agora.chat.callkit.utils.EaseCallMsgUtils;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
-import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.chat.CallViewHolder;
 import io.agora.chatdemo.chat.ChatRowCall;
-import io.agora.chatdemo.chat.ChatRowCustomTextView;
+import io.agora.chatdemo.chat.chatrow.ChatRowCustomTextView;
 import io.agora.chatdemo.chat.viewholder.ChatCustomTextViewHolder;
 import io.agora.chatdemo.chat.chatrow.ChatRowSystemNotification;
-import io.agora.chatdemo.chat.chatrow.ChatRowTextTranslation;
 import io.agora.chatdemo.chat.viewholder.ChatSystemNotificationViewHolder;
-import io.agora.chatdemo.chat.viewholder.ChatTextTranslationViewHolder;
 import io.agora.chatdemo.general.constant.DemoConstant;
 
 public class CustomMessageAdapter extends EaseMessageAdapter {
@@ -38,10 +32,8 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
             return new ChatSystemNotificationViewHolder(new ChatRowSystemNotification(mContext, true), listener);
         }else if(viewType == VIEW_TYPE_MESSAGE_CALL_ME || viewType == VIEW_TYPE_MESSAGE_CALL_OTHER) {
             return new CallViewHolder(new ChatRowCall(mContext,viewType == VIEW_TYPE_MESSAGE_CALL_ME),listener);
-        }else if (viewType == VIEW_TYPE_MESSAGE_URL_PREVIEW_ME || viewType == VIEW_TYPE_MESSAGE_URL_PREVIEW_OTHER){
-            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_URL_PREVIEW_ME),listener);
-        }else if (viewType == VIEW_TYPE_TRANSLATION_ME || viewType == VIEW_TYPE_TRANSLATION_OTHER){
-            return new ChatTextTranslationViewHolder(new ChatRowTextTranslation(mContext,viewType == VIEW_TYPE_TRANSLATION_ME),listener);
+        }else if (viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME || viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER){
+            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME),listener);
         }
         return super.getViewHolder(parent, viewType);
     }
@@ -73,22 +65,10 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         }
 
         if (message.getType() == ChatMessage.Type.TXT){
-            if (DemoHelper.getInstance().containsUrl(((TextMessageBody) message.getBody()).getMessage())){
-                if(message.direct()==ChatMessage.Direct.SEND) {
-                    return VIEW_TYPE_MESSAGE_URL_PREVIEW_ME;
-                }else {
-                    return VIEW_TYPE_MESSAGE_URL_PREVIEW_OTHER;
-                }
-            }
-        }
-        if (message.getType() == ChatMessage.Type.TXT){
-            if (message.getBody() instanceof TextMessageBody &&
-                    ((TextMessageBody) message.getBody()).getTargetLanguages().size() > 0){
-                if(message.direct()==ChatMessage.Direct.SEND) {
-                    return VIEW_TYPE_TRANSLATION_ME;
-                }else {
-                    return VIEW_TYPE_TRANSLATION_OTHER;
-                }
+            if (message.direct() == ChatMessage.Direct.SEND) {
+                return VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME;
+            } else {
+                return VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER;
             }
         }
 

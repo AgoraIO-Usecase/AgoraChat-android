@@ -12,6 +12,7 @@ import io.agora.CallBack;
 import io.agora.Error;
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
+import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.conversation.model.EaseConversationInfo;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
@@ -224,6 +225,31 @@ public class EMChatManagerRepository extends BaseEMRepository{
                 });
             }
 
+        }.asLiveData();
+    }
+
+    /**
+     * translation message
+     * @param message
+     * @param targetLanguage
+     * @return
+     */
+    public LiveData<Resource<ChatMessage>> translationMessage(ChatMessage message,List<String> targetLanguage) {
+        return new NetworkOnlyResource<ChatMessage>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<ChatMessage>> callBack) {
+                getChatManager().translateMessage(message, targetLanguage, new ValueCallBack<ChatMessage>() {
+                    @Override
+                    public void onSuccess(ChatMessage value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error,errorMsg);
+                    }
+                });
+            }
         }.asLiveData();
     }
 

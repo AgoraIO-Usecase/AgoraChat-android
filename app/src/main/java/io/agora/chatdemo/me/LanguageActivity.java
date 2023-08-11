@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +24,7 @@ import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
+import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.me.adapter.LanguageAdapter;
 import io.agora.util.EMLog;
@@ -32,6 +35,7 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
     private LanguageAdapter adapter;
     private int maxSelectionCount = 1;
     private int languageType;
+    private MeViewModel viewModel;
 
     private List<Language> emLanguageList = new ArrayList<>();
 
@@ -79,6 +83,25 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
         rvList.setLayoutManager(new LinearLayoutManager(this));
         rvList.setAdapter(adapter);
 
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        viewModel = new ViewModelProvider(this).get(MeViewModel.class);
+        viewModel.getUpdatePushTranslationLanguageObservable().observe(this,response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(@Nullable Boolean data) {
+                    EMLog.d("LanguageActivity","setPushTranslationLanguage onSuccess");
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    EMLog.d("LanguageActivity","setPushTranslationLanguage onError" + code + " - " + message);
+                }
+            });
+        });
     }
 
     @Override
@@ -150,6 +173,7 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
                     jsonArray.put(emLanguageList.get(selectedPosition).LanguageCode);
                 }
                 DemoHelper.getInstance().getModel().setPushLanguage(jsonArray.toString());
+                viewModel.updatePushPerformLanguage(emLanguageList.get(0).LanguageCode);
             }
         }else {
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){

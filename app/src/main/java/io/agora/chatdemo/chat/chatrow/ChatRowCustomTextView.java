@@ -1,15 +1,21 @@
-package io.agora.chatdemo.chat;
+package io.agora.chatdemo.chat.chatrow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -25,9 +31,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.agora.ValueCallBack;
 import io.agora.chat.ChatMessage;
+import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.manager.EaseThreadManager;
+import io.agora.chat.uikit.utils.EaseSmileUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.chatrow.AutolinkSpan;
 import io.agora.chat.uikit.widget.chatrow.EaseChatRowText;
@@ -40,16 +52,19 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     private TextView mContent;
     private TextView mTitle;
     private TextView mDescribe;
+    private TextView tvTranslation;
+    private TextView tvTranslationTag;
     private EaseImageView mIcon;
     private RelativeLayout tvContentLayout;
     private ConstraintLayout describeLayout;
+    private ConstraintLayout lyTranslation;
+    private String translationContent;
+    private String oldTranslationContent;
+    private boolean isShowOriginal = false;
+    private translationClickListener listener;
 
     public ChatRowCustomTextView(Context context, boolean isSender) {
         super(context, isSender);
-    }
-
-    public ChatRowCustomTextView(Context context, ChatMessage message, int position, Object adapter) {
-        super(context, message, position, adapter);
     }
 
     @Override
@@ -67,12 +82,62 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         mIcon = findViewById(R.id.iv_icon);
         describeLayout = findViewById(R.id.describe_layout);
         tvContentLayout = findViewById(R.id.tv_chatcontent_layout);
+        lyTranslation = findViewById(R.id.cl_translationLayout);
+        tvTranslation = findViewById(R.id.tv_translation);
+        tvTranslationTag = findViewById(R.id.tv_translation_tag);
     }
 
     @Override
     public void onSetUpView() {
         super.onSetUpView();
-        urlPreView();
+
+        lyTranslation.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null){
+                    listener.onTranslationClick(v,message);
+                }
+            }
+        });
+
+        lyTranslation.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (listener != null){
+                    return listener.onTranslationLongClick(v,message);
+                }
+                return false;
+            }
+        });
+
+        if (message.getType() == ChatMessage.Type.TXT){
+            TextMessageBody body = (TextMessageBody)message.getBody();
+            String localTargetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
+            oldTranslationContent = body.getMessage();
+            List<TextMessageBody.TranslationInfo> translations = body.getTranslations();
+            if (translations.size() > 0 && !isSender){
+                for (TextMessageBody.TranslationInfo translation : translations) {
+                    if (translation.languageCode.equals(localTargetLanguage)){
+                        translationContent = translation.translationText;
+                    }else {
+                        TextMessageBody.TranslationInfo translationInfo = translations.get(0);
+                        translationContent = translationInfo.translationText;
+                    }
+                    tvTranslationTag.setVisibility(VISIBLE);
+                    lyTranslation.setVisibility(VISIBLE);
+                    switchTranslation();
+                }
+            }else {
+                lyTranslation.setVisibility(GONE);
+                tvTranslationTag.setVisibility(GONE);
+            }
+
+            if (DemoHelper.getInstance().containsUrl(((TextMessageBody) message.getBody()).getMessage())){
+                urlPreView();
+            }else {
+                loadErrorChangeBg();
+            }
+        }
     }
 
     private void urlPreView() {
@@ -211,12 +276,10 @@ public class ChatRowCustomTextView extends EaseChatRowText {
 
                 Elements linkTags = document.select("head link");
                 if (linkTags != null){
-                    // 遍历linkTags，解析相关属性值
                     for (Element linkTag : linkTags) {
                         String href = linkTag.attr("href");
                         String rel = linkTag.attr("rel");
 
-                        // 如果rel属性值为"apple-touch-icon-precomposed"，则输出href属性值
                         if (rel.equals("apple-touch-icon-precomposed") && DemoHelper.getInstance().isPicture(href)) {
                             src = href;
                         }
@@ -234,7 +297,6 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 }
 
                 if (!DemoHelper.getInstance().containsUrl(src)){
-                    // 如果不是标准url路径 判断是否是 //开头或者 /开头做相应处理
                     if(src.startsWith("//")){
                         logoUrl = "http:" + src;
                     }else {
@@ -255,9 +317,9 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                     descriptionContent = description.attr("content");
                 }
 
-                urlPreViewBean.setTitle(title);//标题
-                urlPreViewBean.setPrimaryImg(logoUrl); // 首图
-                urlPreViewBean.setDescribe(descriptionContent); // 内容
+                urlPreViewBean.setTitle(title);
+                urlPreViewBean.setPrimaryImg(logoUrl);
+                urlPreViewBean.setDescribe(descriptionContent);
 
                 EMLog.d("ChatRowUrlPreview",
                         "title:" + title +"\n"
@@ -286,5 +348,83 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         }else {
             tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.ease_chat_bubble_receive_bg));
         }
+    }
+
+
+    private void switchTranslation(){
+        int start = 0; int end = 0;
+        String tag = "";
+        if (isShowOriginal){
+            // 设置内容
+            String oldTranslation = convertSpecialSymbols(oldTranslationContent);
+            Spannable span = EaseSmileUtils.getSmiledText(context, oldTranslation);
+            tvTranslation.setText(span, TextView.BufferType.SPANNABLE);
+            tag = context.getResources().getString(R.string.translation_view_translation);
+            start = tag.length() - 16;
+        }else{
+            String translation = convertSpecialSymbols(translationContent);
+            Spannable span = EaseSmileUtils.getSmiledText(context, translation);
+            tvTranslation.setText(span, TextView.BufferType.SPANNABLE);
+            tag = context.getResources().getString(R.string.translation_original_text);
+            start = tag.length() - 18;
+        }
+        end = tag.length();
+        if (!TextUtils.isEmpty(tag)){
+            SpannableString spannableString = new SpannableString(tag);
+            ClickableSpan ClickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    isShowOriginal = !isShowOriginal;
+                    switchTranslation();
+                }
+
+                @Override
+                public void updateDrawState(@NonNull TextPaint ds) {
+                    ds.setColor(getResources().getColor(R.color.color_main_blue));
+                    ds.setUnderlineText(false);
+                }
+            };
+
+            if (end > 0){
+                spannableString.setSpan(ClickableSpan, start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvTranslationTag.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+            tvTranslationTag.setText(spannableString);
+        }
+    }
+
+    public void setTranslationOnClickListener(translationClickListener listener){
+        this.listener = listener;
+    }
+
+    public interface translationClickListener{
+        void onTranslationClick(View view, ChatMessage message);
+        boolean onTranslationLongClick(View view,ChatMessage message);
+    }
+
+    private static String convertSpecialSymbols(String str) {
+        String pattern = "\\[([^\\]]+)\\]";
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(str);
+        StringBuffer sb = new StringBuffer();
+
+        while (m.find()) {
+            String insideBracket = m.group(1);
+            String converted = convertSymbols(insideBracket);
+            m.appendReplacement(sb, "[" + Matcher.quoteReplacement(converted) + "]");
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
+
+    private static String convertSymbols(String str) {
+        // Replace special symbols
+        String[] specialSymbols = {"：","！","/", "@", "#", "$", "……", "&", "*", "（", "）", "_", "+", "{}", "<>", "?",};
+        String[] convertedSymbols = {":","!","|", "@", "#", "$", "^", "&", "*", "(", ")", "_", "+", "{", "<", ">", "?",};
+
+        for (int i = 0; i < specialSymbols.length; i++) {
+            str = str.replace(specialSymbols[i], convertedSymbols[i]);
+        }
+        return str;
     }
 }

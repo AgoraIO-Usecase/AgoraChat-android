@@ -3,11 +3,17 @@ package io.agora.chatdemo.chat;
 import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.util.Log;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -28,10 +34,9 @@ import androidx.core.content.ContextCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
@@ -42,11 +47,8 @@ import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
 import io.agora.chat.uikit.chat.widget.EaseChatMessageListLayout;
 import io.agora.chat.uikit.constants.EaseConstant;
-import io.agora.chat.uikit.interfaces.MessageListItemClickListener;
 import io.agora.chat.uikit.menu.EasePopupWindowHelper;
 import io.agora.chat.uikit.menu.MenuItemBean;
-import io.agora.chatdemo.DemoHelper;
-import io.agora.chat.uikit.models.EaseReactionEmojiconEntity;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
@@ -131,6 +133,46 @@ public class CustomChatFragment extends EaseChatFragment {
     public void initListener() {
         super.initListener();
         listenerRecyclerViewItemFinishLayout();
+        EditText editText = chatLayout.getChatInputMenu().getPrimaryMenu().getEditText();
+        if (editText != null){
+            editText.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    removePickAt(v,keyCode,event);
+                    return false;
+                }
+            });
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(!chatLayout.getChatMessageListLayout().isGroupChat()) {
+                        return;
+                    }
+                    if(count == 1 && "@".equals(String.valueOf(s.charAt(start)))){
+                        Bundle bundle = new Bundle();
+                        bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
+                        PickAtUserDialogFragment fragment = new PickAtUserDialogFragment();
+                        fragment.setPickAtSelectListener(username -> {
+                            setInputAtUsername(username,false);
+                        });
+                        fragment.setArguments(bundle);
+                        if (getActivity() != null){
+                            fragment.show(getActivity().getSupportFragmentManager(), "pick_at_user");
+                        }
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    setPickAtContentStyle(editable);
+                }
+            });
+        }
     }
 
 
@@ -328,7 +370,6 @@ public class CustomChatFragment extends EaseChatFragment {
                 String userId = iterator.next();
                 MemberAttributeBean bean = DemoHelper.getInstance().getMemberAttribute(conversationId, userId);
                 if (bean == null) {
-                    //当从本地获取bean对象为空时 默认创建bean对象 并赋值nickName为userId
                     MemberAttributeBean emptyBean = new MemberAttributeBean();
                     emptyBean.setNickName(userId);
                     DemoHelper.getInstance().saveMemberAttribute(conversationId, userId, emptyBean);
@@ -374,5 +415,41 @@ public class CustomChatFragment extends EaseChatFragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void setPickAtContentStyle(Editable editable){
+        Pattern pattern = Pattern.compile("@([^\\s]+)");
+        Matcher matcher = pattern.matcher(editable);
+        while (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            editable.setSpan(
+                    new ForegroundColorSpan(
+                            getResources().getColor(io.agora.chat.uikit.R.color.color_conversation_title)
+                    ), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+    }
+
+    private boolean removePickAt(View v, int keyCode, KeyEvent event){
+        if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN && v instanceof EditText) {
+            int selectionStart = ((EditText)v).getSelectionStart();
+            int selectionEnd = ((EditText)v).getSelectionEnd();
+            SpannableStringBuilder text = (SpannableStringBuilder) ((EditText)v).getText();
+            ForegroundColorSpan[] spans = text.getSpans(0, text.length(), ForegroundColorSpan.class);
+            for (ForegroundColorSpan span : spans) {
+                int spanStart = text.getSpanStart(span);
+                int spanEnd = text.getSpanEnd(span);
+                if (selectionStart >= spanStart && selectionEnd <= spanEnd) {
+                    if (spanStart != -1 && spanEnd != -1){
+                        text.delete(spanStart+1, spanEnd);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private void setInputAtUsername(String username,boolean autoAddAtSymbol){
+        chatLayout.inputAtUsername(username,autoAddAtSymbol);
     }
 }

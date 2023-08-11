@@ -3,12 +3,10 @@ package io.agora.chatdemo.chat;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,7 +61,6 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     @Override
     protected void initView() {
         super.initView();
-        AlertDialog();
         Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
         String extField = conversation.getExtField();
         binding.itemToTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseUtils.isTimestamp(extField));
@@ -189,9 +186,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
                 try {
                     jsonObject.put(conversationId,isChecked);
                     DemoHelper.getInstance().getModel().setEnableAutoTranslation(jsonObject.toString());
-                    if (isChecked && dialog != null){
-                        dialog.show();
-                    }
+                    showAlertDialog(isChecked);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -199,24 +194,23 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         }
     }
 
-    private void AlertDialog(){
-
-        dialog = new AlertDialog.Builder(mContext)
-                .setContentView(R.layout.dialog_auto_translation)
-                .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                .setGravity(Gravity.CENTER)
-                .setCancelable(false)
-                .setOnClickListener(R.id.btn_ok, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                }).create();
-
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+    private void showAlertDialog(boolean isChecked){
+        if (dialog == null){
+            dialog = new AlertDialog.Builder(mContext)
+                    .setContentView(R.layout.dialog_auto_translation)
+                    .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    .setGravity(Gravity.CENTER)
+                    .setCancelable(false)
+                    .setOnClickListener(R.id.btn_ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    }).create();
         }
-
+        if (isChecked){
+            dialog.show();
+        }
     }
 
 }

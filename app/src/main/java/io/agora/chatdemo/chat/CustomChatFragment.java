@@ -158,7 +158,7 @@ public class CustomChatFragment extends EaseChatFragment {
                         bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
                         PickAtUserDialogFragment fragment = new PickAtUserDialogFragment();
                         fragment.setPickAtSelectListener(username -> {
-                            setInputAtUsername(username,false);
+                            chatLayout.inputAtUsername(username,false);
                         });
                         fragment.setArguments(bundle);
                         if (getActivity() != null){
@@ -447,9 +447,5 @@ public class CustomChatFragment extends EaseChatFragment {
             }
         }
         return false;
-    }
-
-    private void setInputAtUsername(String username,boolean autoAddAtSymbol){
-        chatLayout.inputAtUsername(username,autoAddAtSymbol);
     }
 }

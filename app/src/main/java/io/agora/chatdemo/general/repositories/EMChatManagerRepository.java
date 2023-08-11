@@ -14,6 +14,7 @@ import io.agora.ValueCallBack;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
+import io.agora.chat.Language;
 import io.agora.chat.uikit.conversation.model.EaseConversationInfo;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.net.ErrorCode;
@@ -241,6 +242,29 @@ public class EMChatManagerRepository extends BaseEMRepository{
                 getChatManager().translateMessage(message, targetLanguage, new ValueCallBack<ChatMessage>() {
                     @Override
                     public void onSuccess(ChatMessage value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error,errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * Gets all languages supported by the translation service.
+     * @return
+     */
+    public LiveData<Resource<List<Language>>> fetchSupportLanguages() {
+        return new NetworkOnlyResource<List<Language>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<Language>>> callBack) {
+                getChatManager().fetchSupportLanguages(new ValueCallBack<List<Language>>() {
+                    @Override
+                    public void onSuccess(List<Language> value) {
                         callBack.onSuccess(createLiveData(value));
                     }
 

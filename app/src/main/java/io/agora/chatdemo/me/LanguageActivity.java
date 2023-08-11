@@ -17,8 +17,6 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.agora.ValueCallBack;
-import io.agora.chat.ChatClient;
 import io.agora.chat.Language;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
@@ -64,21 +62,6 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
         titleBar = findViewById(R.id.title_bar_language);
         rvList = findViewById(R.id.language_list);
 
-        //获取微软支持的翻译语言
-        ChatClient.getInstance().chatManager().fetchSupportLanguages(new ValueCallBack<List<Language>>() {
-            @Override
-            public void onSuccess(List<Language> value) {
-                emLanguageList = value;
-                adapter.refreshData(value);
-                initSelectedLanguage();
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-                EMLog.e("LanguageActivity","fetchSupportLanguages: " + error + errorMsg);
-            }
-        });
-
         adapter = new LanguageAdapter(mContext,emLanguageList,maxSelectionCount);
         rvList.setLayoutManager(new LinearLayoutManager(this));
         rvList.setAdapter(adapter);
@@ -89,6 +72,7 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
     protected void initData() {
         super.initData();
         viewModel = new ViewModelProvider(this).get(MeViewModel.class);
+        viewModel.fetchSupportLanguages();
         viewModel.getUpdatePushTranslationLanguageObservable().observe(this,response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
@@ -99,6 +83,21 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
                 @Override
                 public void onError(int code, String message) {
                     EMLog.d("LanguageActivity","setPushTranslationLanguage onError" + code + " - " + message);
+                }
+            });
+        });
+        viewModel.getLanguageObservable().observe(this,response->{
+            parseResource(response, new OnResourceParseCallback<List<Language>>() {
+                @Override
+                public void onSuccess(@Nullable List<Language> value) {
+                    emLanguageList = value;
+                    adapter.refreshData(value);
+                    initSelectedLanguage();
+                }
+
+                @Override
+                public void onError(int code, String errorMsg) {
+                    EMLog.e("LanguageActivity","fetchSupportLanguages: " + code + errorMsg);
                 }
             });
         });
@@ -172,8 +171,12 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
                 for (Integer selectedPosition : selectedPositions) {
                     jsonArray.put(emLanguageList.get(selectedPosition).LanguageCode);
                 }
-                DemoHelper.getInstance().getModel().setPushLanguage(jsonArray.toString());
-                viewModel.updatePushPerformLanguage(emLanguageList.get(0).LanguageCode);
+                try {
+                    DemoHelper.getInstance().getModel().setPushLanguage(jsonArray.getString(0));
+                    viewModel.updatePushPerformLanguage(jsonArray.getString(0));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }else {
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){

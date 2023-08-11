@@ -26,11 +26,6 @@ public class ChatCustomTextViewHolder extends EaseChatRowViewHolder implements C
         super.onBubbleClick(message);
     }
 
-    @Override
-    public void refreshView() {
-        getAdapter().notifyDataSetChanged();
-    }
-
 
     @Override
     public void onTranslationClick(View view, ChatMessage message) {

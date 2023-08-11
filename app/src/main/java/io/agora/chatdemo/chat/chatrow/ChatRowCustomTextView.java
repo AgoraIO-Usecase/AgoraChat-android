@@ -97,6 +97,8 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     @Override
     public void onSetUpView() {
         super.onSetUpView();
+        describeLayout.setVisibility(GONE);
+        mIcon.setVisibility(GONE);
 
         lyTranslation.setOnClickListener(new OnClickListener() {
             @Override
@@ -178,12 +180,14 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onSuccess(UrlPreViewBean value) {
-                    itemActionCallback.refreshView();
-                    if (isSender){
-                        tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_url_preview_send_top_bg));
-                    }else {
-                        tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_url_preview_receive_top_bg));
-                    }
+                    post(()->{
+                        setUrlPreview(value);
+                        if (isSender){
+                            tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_url_preview_send_top_bg));
+                        }else {
+                            tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_url_preview_receive_top_bg));
+                        }
+                    });
                 }
 
                 @Override
@@ -193,69 +197,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 }
             });
         }else {
-            if (TextUtils.isEmpty(urlPreviewInfo.getPrimaryImg())){
-                mIcon.setVisibility(GONE);
-            }else {
-                mIcon.setVisibility(VISIBLE);
-                if (urlPreviewInfo.getPrimaryImg().endsWith(".gif")){
-                    Glide.with(context)
-                            .asGif().load(urlPreviewInfo.getPrimaryImg())
-                            .listener(new RequestListener<GifDrawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
-                                    mIcon.setVisibility(GONE);
-                                    loadErrorChangeBg();
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    return false;
-                                }
-                            })
-                            .into(mIcon);
-                }else {
-                    Glide.with(context)
-                            .load(urlPreviewInfo.getPrimaryImg())
-                            .listener(new RequestListener<Drawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                    mIcon.setVisibility(GONE);
-                                    loadErrorChangeBg();
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    return false;
-                                }
-                            })
-                            .into(mIcon);
-                }
-            }
-
-            if (TextUtils.isEmpty(urlPreviewInfo.getDescribe())){
-                mDescribe.setVisibility(GONE);
-            }else {
-                mDescribe.setVisibility(VISIBLE);
-                mDescribe.setText(urlPreviewInfo.getDescribe());
-            }
-
-            if (TextUtils.isEmpty(urlPreviewInfo.getTitle())){
-                mIcon.setVisibility(GONE);
-                mDescribe.setVisibility(GONE);
-                mTitle.setVisibility(GONE);
-            }else {
-                mTitle.setVisibility(VISIBLE);
-                mTitle.setText(urlPreviewInfo.getTitle());
-            }
-
-            if (TextUtils.isEmpty(urlPreviewInfo.getDescribe()) && TextUtils.isEmpty(urlPreviewInfo.getTitle())){
-                describeLayout.setVisibility(GONE);
-            }else {
-                describeLayout.setVisibility(VISIBLE);
-            }
-
+            setUrlPreview(urlPreviewInfo);
         }
 
         if (index != -1) {
@@ -349,6 +291,71 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 });
             }
         });
+    }
+
+    private void setUrlPreview(UrlPreViewBean urlPreviewInfo){
+        if (TextUtils.isEmpty(urlPreviewInfo.getPrimaryImg())){
+            mIcon.setVisibility(GONE);
+        }else {
+            mIcon.setVisibility(VISIBLE);
+            if (urlPreviewInfo.getPrimaryImg().endsWith(".gif")){
+                Glide.with(context)
+                        .asGif().load(urlPreviewInfo.getPrimaryImg())
+                        .listener(new RequestListener<GifDrawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                                mIcon.setVisibility(GONE);
+                                loadErrorChangeBg();
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                                return false;
+                            }
+                        })
+                        .into(mIcon);
+            }else {
+                Glide.with(context)
+                        .load(urlPreviewInfo.getPrimaryImg())
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                mIcon.setVisibility(GONE);
+                                loadErrorChangeBg();
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                return false;
+                            }
+                        })
+                        .into(mIcon);
+            }
+        }
+
+        if (TextUtils.isEmpty(urlPreviewInfo.getDescribe())){
+            mDescribe.setVisibility(GONE);
+        }else {
+            mDescribe.setVisibility(VISIBLE);
+            mDescribe.setText(urlPreviewInfo.getDescribe());
+        }
+
+        if (TextUtils.isEmpty(urlPreviewInfo.getTitle())){
+            mIcon.setVisibility(GONE);
+            mDescribe.setVisibility(GONE);
+            mTitle.setVisibility(GONE);
+        }else {
+            mTitle.setVisibility(VISIBLE);
+            mTitle.setText(urlPreviewInfo.getTitle());
+        }
+
+        if (TextUtils.isEmpty(urlPreviewInfo.getDescribe()) && TextUtils.isEmpty(urlPreviewInfo.getTitle())){
+            describeLayout.setVisibility(GONE);
+        }else {
+            describeLayout.setVisibility(VISIBLE);
+        }
     }
 
     private void loadErrorChangeBg(){

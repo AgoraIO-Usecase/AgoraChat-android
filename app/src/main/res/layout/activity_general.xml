@@ -76,6 +76,21 @@
                 app:switchItemTitle="@string/general_delete_after_leaving_group"
                 app:switchItemTitleSize="@dimen/text_size_big" />
 
+            <io.agora.chatdemo.general.widget.ArrowItemView
+                app:layout_constraintTop_toBottomOf="@+id/item_switch_delete_after_leaving_group"
+                android:id="@+id/setting_translation"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:foreground="@drawable/ease_ripple_click_gray"
+                app:arrowItemArrowSrc="@drawable/arrow_right"
+                app:arrowItemAvatarHeight="32dp"
+                android:paddingStart="6dp"
+                app:arrowItemTitleStyle="bold"
+                app:arrowItemAvatarWidth="32dp"
+                app:arrowItemShowAvatar="false"
+                app:arrowItemTitle="@string/translation"
+                app:arrowItemTitleSize="@dimen/text_size_big" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

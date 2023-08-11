@@ -12,4 +12,7 @@
 
     <!--report-->
     <item name="action_chat_report" type="id"/>
+    <!--translation-->
+    <item name="action_chat_translation" type="id"/>
+    <item name="action_chat_re_translation" type="id"/>
 </resources>

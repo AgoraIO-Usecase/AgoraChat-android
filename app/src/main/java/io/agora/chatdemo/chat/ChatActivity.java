@@ -80,7 +80,7 @@ import io.agora.chatdemo.group.activities.GroupDetailActivity;
 import io.agora.chatdemo.group.fragments.MultiplyVideoSelectMemberContainerFragment;
 import io.agora.util.EMLog;
 
-public class ChatActivity extends BaseInitActivity implements EasePresenceView.OnPresenceClickListener, View.OnClickListener{
+public class ChatActivity extends BaseInitActivity implements EasePresenceView.OnPresenceClickListener, View.OnClickListener {
     private static final int MAX_COMBINE_MESSAGE_LIST = 300;
     private String conversationId;
     private EaseChatType chatType;

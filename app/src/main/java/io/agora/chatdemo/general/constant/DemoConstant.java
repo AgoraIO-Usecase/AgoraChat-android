@@ -118,6 +118,9 @@ public interface DemoConstant extends EaseConstant {
     int VIEW_TYPE_MESSAGE_CALL_ME = 18;//must larger than 17,the lagest number which defined in uikit#EaseChatType
     int VIEW_TYPE_MESSAGE_CALL_OTHER = 19;
 
+    int VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME = 20;
+    int VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER = 21;
+
     String CALL_TYPE = "easeCallType";
 
      String DETAIL_TYPE = "detail_type";
@@ -148,4 +151,11 @@ public interface DemoConstant extends EaseConstant {
 
     String EVENT_CHAT_MODEL_TO_SELECT = "is_select_model";
     String EVENT_CHAT_MODEL_TO_NORMAL = "is_normal_model";
+
+    int TRANSLATION_TYPE_MESSAGE = 0;
+    int TRANSLATION_TYPE_PUSH = 1;
+    String TRANSLATION_TYPE = "translation_type";
+    String TRANSLATION_SELECT_MAX_COUNT = "translation_select_max_count";
+
+
 }

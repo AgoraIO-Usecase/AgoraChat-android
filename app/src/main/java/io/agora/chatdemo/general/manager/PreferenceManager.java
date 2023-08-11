@@ -55,6 +55,10 @@ public class PreferenceManager {
 	private static String SHARED_KEY_HTTPS_ONLY = "shared_key_https_only";
 	private static String SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME = "sort_message_by_server_time";
 
+	private static String SHARED_KEY_TARGET_LANGUAGE = "shared_key_target_language";
+	private static String SHARED_KEY_AUTO_TRANSLATION = "shared_key_auto_translation";
+	private static String SHARED_KEY_PUSH_LANGUAGE = "shared_key_push_language";
+
 	private static String SHARED_KEY_ENABLE_TOKEN_LOGIN = "enable_token_login";
 
 	@SuppressLint("CommitPrefEdits")
@@ -331,6 +335,48 @@ public class PreferenceManager {
 
 	public boolean isEnableTokenLogin() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_TOKEN_LOGIN, false);
+	}
+
+	public void setTargetLanguage(String languageCode) {
+		editor.putString(SHARED_KEY_TARGET_LANGUAGE, languageCode);
+		editor.apply();
+	}
+
+	public String getTargetLanguage() {
+		return mSharedPreferences.getString(SHARED_KEY_TARGET_LANGUAGE, "en");
+	}
+
+	public void clearTargetLanguage(){
+		editor.remove(SHARED_KEY_TARGET_LANGUAGE);
+		editor.apply();
+	}
+
+	public void setPushLanguage(String languageCode){
+		editor.putString(SHARED_KEY_PUSH_LANGUAGE, languageCode);
+		editor.apply();
+	}
+
+	public void clearPushLanguage(){
+		editor.remove(SHARED_KEY_PUSH_LANGUAGE);
+		editor.apply();
+	}
+
+	public String getPushLanguage(){
+		return mSharedPreferences.getString(SHARED_KEY_PUSH_LANGUAGE, "");
+	}
+
+	public void setEnableAutoTranslation(String isEnable){
+		editor.putString(SHARED_KEY_AUTO_TRANSLATION,isEnable);
+		editor.apply();
+	}
+
+	public String getEnableAutoTranslation(){
+		return mSharedPreferences.getString(SHARED_KEY_AUTO_TRANSLATION,"");
+	}
+
+	public void clearAutoTranslation(){
+		editor.remove(SHARED_KEY_AUTO_TRANSLATION);
+		editor.apply();
 	}
 
 }

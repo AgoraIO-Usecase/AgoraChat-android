@@ -37,7 +37,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Language item = data.get(position);
-        holder.textView.setText(item.LanguageName);
+        holder.textView.setText(item.LanguageLocalName);
         holder.selectIcon.setImageResource(0);
 
         for (Integer selectedPosition : getSelectedPositions()) {

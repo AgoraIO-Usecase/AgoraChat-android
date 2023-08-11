@@ -57,6 +57,7 @@ import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSelectResultListener;
 import io.agora.chat.uikit.chat.interfaces.OnMessageSendCallBack;
+import io.agora.chat.uikit.chat.interfaces.OnModifyMessageListener;
 import io.agora.chat.uikit.chat.interfaces.OnPeerTypingListener;
 import io.agora.chat.uikit.chat.widget.EaseChatMultiSelectView;
 import io.agora.chat.uikit.constants.EaseConstant;
@@ -81,6 +82,7 @@ import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.permission.PermissionsManager;
+import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.general.widget.EasePresenceView;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.activities.GroupDetailActivity;
@@ -95,9 +97,10 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
     private AlertDialog callSelectedDialog;
     private ActivityChatBinding binding;
     private EaseChatLayout mChatLayout;
-    private List<String> mReplyMsgIdList;
+    private List<String> mForwardMsgIdList;
     private CustomChatFragment customChatFragment;
     private boolean isGroupChat;
+
 
     public static void actionStart(Context context, String conversationId, EaseChatType chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -317,30 +320,42 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                 })
                 .setOnMessageSelectResultListener(new OnMessageSelectResultListener() {
                     @Override
-                    public boolean onMessageDelete(View view, List<String> deleteMsgIdList) {
-                        if(deleteMsgIdList == null || deleteMsgIdList.isEmpty()) {
+                    public boolean onSelectResult(View view, SelectType type, List<String> msgIdList) {
+                        if(type == SelectType.DELETE) {
+                            if(msgIdList == null || msgIdList.isEmpty()) {
+                                restTitleBar(view);
+                                return true;
+                            }
                             restTitleBar(view);
+                            showDeleteDialog(msgIdList);
+                            return true;
+                        }else if(type == SelectType.FORWARD) {
+                            mForwardMsgIdList = msgIdList;
+                            if(mForwardMsgIdList == null || mForwardMsgIdList.isEmpty()) {
+                                restTitleBar(view);
+                                return true;
+                            }
+                            if(mForwardMsgIdList.size() > MAX_COMBINE_MESSAGE_LIST) {
+                                showToast(getString(R.string.forward_max_count_hint));
+                                return true;
+                            }
+                            restTitleBar(view);
+                            showForwardContactsDialog();
                             return true;
                         }
-                        restTitleBar(view);
-                        showDeleteDialog(deleteMsgIdList);
-                        return true;
+                        return false;
+                    }
+                })
+                .setOnModifyMessageListener(new OnModifyMessageListener() {
+                    @Override
+                    public void onModifyMessageSuccess(ChatMessage messageModified) {
+                        EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
+                        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
                     }
 
                     @Override
-                    public boolean onMessageReply(View view, List<String> replyMsgIdList) {
-                        mReplyMsgIdList = replyMsgIdList;
-                        if(mReplyMsgIdList == null || mReplyMsgIdList.isEmpty()) {
-                            restTitleBar(view);
-                            return true;
-                        }
-                        if(mReplyMsgIdList.size() > MAX_COMBINE_MESSAGE_LIST) {
-                            showToast(getString(R.string.forward_max_count_hint));
-                            return true;
-                        }
-                        restTitleBar(view);
-                        showForwardContactsDialog();
-                        return true;
+                    public void onModifyMessageFailure(String messageId, int code, String error) {
+                        ToastUtils.showFailToast(getString(R.string.ease_fail_to_edit));
                     }
                 })
                 .hideSenderAvatar(true)
@@ -541,10 +556,10 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if(!TextUtils.isEmpty(to) && mReplyMsgIdList != null) {
+            if(!TextUtils.isEmpty(to) && mForwardMsgIdList != null) {
                 ChatMessage chatMessage = ChatMessage.createCombinedSendMessage(getString(R.string.ease_combine_default)
-                        , EaseChatMessageMultiSelectHelper.getCombineMessageSummary(mReplyMsgIdList)
-                        , getString(R.string.forward_compatible_text), mReplyMsgIdList, to);
+                        , EaseChatMessageMultiSelectHelper.getCombineMessageSummary(mForwardMsgIdList)
+                        , getString(R.string.forward_compatible_text), mForwardMsgIdList, to);
                 if(chatType == ChatMessage.ChatType.GroupChat) {
                     chatMessage.setChatType(ChatMessage.ChatType.GroupChat);
                 }

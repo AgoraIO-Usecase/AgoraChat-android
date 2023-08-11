@@ -405,6 +405,8 @@
     <string name="demo_discard_alias_content">Your edits will not be saved when discarded.</string>
     <string name="demo_remark_cancel">Remark has been canceled</string>
     <string name="demo_saved">Saved</string>
+    <string name="demo_admin_edit_alias_title">Edit Alias Name</string>
+    <string name="demo_admin_edit_alias_hint">Every members in Group will see this.</string>
 
     <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_action_close">Close</string>

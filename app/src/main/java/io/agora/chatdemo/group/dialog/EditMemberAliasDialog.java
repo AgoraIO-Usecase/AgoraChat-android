@@ -1,6 +1,9 @@
 package io.agora.chatdemo.group.dialog;
 
+import static io.agora.chat.uikit.manager.EaseSoftKeyboardHelper.showKeyboard;
+
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -47,7 +50,15 @@ public class EditMemberAliasDialog extends SimpleDialog {
         }
         if (!TextUtils.isEmpty(content)) {
             etGroupInto.setText(content);
+            etGroupInto.setSelection(content.length());
         }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showKeyboard(etGroupInto);
+            }
+        }, 200);
     }
 
     @Override

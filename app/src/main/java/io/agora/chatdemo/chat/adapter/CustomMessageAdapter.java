@@ -15,6 +15,8 @@ import io.agora.chat.callkit.general.EaseCallAction;
 import io.agora.chat.callkit.general.EaseCallType;
 import io.agora.chat.callkit.utils.EaseCallMsgUtils;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
+import io.agora.chat.uikit.chat.viewholder.EaseMessageViewType;
+import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chatdemo.chat.CallViewHolder;
 import io.agora.chatdemo.chat.ChatRowCall;
 import io.agora.chatdemo.chat.chatrow.ChatRowCustomTextView;
@@ -65,10 +67,15 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         }
 
         if (message.getType() == ChatMessage.Type.TXT){
-            if (message.direct() == ChatMessage.Direct.SEND) {
-                return VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME;
-            } else {
-                return VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER;
+            boolean isThreadNotify = message.getBooleanAttribute(EaseConstant.EASE_THREAD_NOTIFICATION_TYPE, false);
+            if(isThreadNotify) {
+                return EaseMessageViewType.VIEW_TYPE_MESSAGE_CHAT_THREAD_NOTIFY.getValue();
+            }else {
+                if (message.direct() == ChatMessage.Direct.SEND) {
+                    return VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME;
+                } else {
+                    return VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER;
+                }
             }
         }
 

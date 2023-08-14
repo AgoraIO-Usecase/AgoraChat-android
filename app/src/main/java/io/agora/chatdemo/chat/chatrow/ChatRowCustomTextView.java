@@ -13,7 +13,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,19 +56,17 @@ import io.agora.util.EMLog;
 public class ChatRowCustomTextView extends EaseChatRowText {
     public static final String AT_PREFIX = "@";
     public static final String AT_SUFFIX = " ";
-    private TextView mContent;
     private TextView mTitle;
     private TextView mDescribe;
-    private TextView tvTranslation;
     private TextView tvTranslationTag;
     private EaseImageView mIcon;
-    private RelativeLayout tvContentLayout;
     private ConstraintLayout describeLayout;
-    private ConstraintLayout lyTranslation;
     private String translationContent;
     private String oldTranslationContent;
     private boolean isShowOriginal = true;
-    private translationClickListener listener;
+    protected FrameLayout flContentFillArea;
+    protected FrameLayout flBubbleBottomFillArea;
+
 
     public ChatRowCustomTextView(Context context, boolean isSender) {
         super(context, isSender);
@@ -76,22 +74,36 @@ public class ChatRowCustomTextView extends EaseChatRowText {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(!showSenderType ? R.layout.layout_chat_url_preview_recieved
-                : R.layout.layout_chat_url_preview_send, this);
+        super.onInflateView();
     }
 
     @Override
     protected void onFindViewById() {
         super.onFindViewById();
-        mTitle = findViewById(R.id.tv_title);
-        mContent = findViewById(R.id.tv_chatcontent);
-        mDescribe = findViewById(R.id.tv_describe);
-        mIcon = findViewById(R.id.iv_icon);
-        describeLayout = findViewById(R.id.describe_layout);
-        tvContentLayout = findViewById(R.id.tv_chatcontent_layout);
-        lyTranslation = findViewById(R.id.cl_translationLayout);
-        tvTranslation = findViewById(R.id.tv_translation);
-        tvTranslationTag = findViewById(R.id.tv_translation_tag);
+        flContentFillArea = (FrameLayout)findViewById(io.agora.chat.uikit.R.id.flContentFillArea);
+        flBubbleBottomFillArea = (FrameLayout)findViewById(io.agora.chat.uikit.R.id.flBubbleBottomFillArea);
+
+        View contentFillLayout = null;
+        View bubbleBottomFillLayout = null;
+        if (!showSenderType){
+            contentFillLayout = inflater.inflate(R.layout.layout_custom_content_fill_received, flContentFillArea, false);
+            bubbleBottomFillLayout = inflater.inflate(R.layout.layout_custom_bubble_bottom_fill_received, flBubbleBottomFillArea, false);
+        }else {
+            contentFillLayout = inflater.inflate(R.layout.layout_custom_content_fill_send, flContentFillArea, false);
+            bubbleBottomFillLayout = inflater.inflate(R.layout.layout_custom_bubble_bottom_fill_send, flBubbleBottomFillArea, false);
+        }
+        flContentFillArea.addView(contentFillLayout);
+        flBubbleBottomFillArea.addView(bubbleBottomFillLayout);
+
+        // flContentFillArea
+        mTitle = flContentFillArea.findViewById(R.id.tv_title);
+        mDescribe = flContentFillArea.findViewById(R.id.tv_describe);
+        mIcon = flContentFillArea.findViewById(R.id.iv_icon);
+        describeLayout = flContentFillArea.findViewById(R.id.describe_layout);
+
+        // flBubbleBottomFillArea
+        tvTranslationTag = flBubbleBottomFillArea.findViewById(R.id.tv_translation_tag);
+
     }
 
     @Override
@@ -99,25 +111,6 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         super.onSetUpView();
         describeLayout.setVisibility(GONE);
         mIcon.setVisibility(GONE);
-
-        lyTranslation.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null){
-                    listener.onTranslationClick(v,message);
-                }
-            }
-        });
-
-        lyTranslation.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (listener != null){
-                    return listener.onTranslationLongClick(v,message);
-                }
-                return false;
-            }
-        });
 
         if (message.getType() == ChatMessage.Type.TXT){
             TextMessageBody body = (TextMessageBody)message.getBody();
@@ -134,11 +127,9 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                             translationContent = translationInfo.translationText;
                         }
                         tvTranslationTag.setVisibility(VISIBLE);
-//                        lyTranslation.setVisibility(VISIBLE);
                         switchTranslation();
                     }
                 }else {
-                    lyTranslation.setVisibility(GONE);
                     tvTranslationTag.setVisibility(GONE);
                 }
 
@@ -154,7 +145,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     }
 
     private void urlPreView() {
-        Spannable spannable = (Spannable) mContent.getText();
+        Spannable spannable = (Spannable) contentView.getText();
         URLSpan[] spans = spannable.getSpans(0, spannable.length(), URLSpan.class);
         if (spans.length <= 0){
             return;
@@ -182,11 +173,6 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 public void onSuccess(UrlPreViewBean value) {
                     post(()->{
                         setUrlPreview(value);
-                        if (isSender){
-                            tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_url_preview_send_top_bg));
-                        }else {
-                            tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_url_preview_receive_top_bg));
-                        }
                     });
                 }
 
@@ -361,11 +347,6 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     private void loadErrorChangeBg(){
         mIcon.setVisibility(GONE);
         describeLayout.setVisibility(GONE);
-        if (isSender){
-            tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.ease_chat_bubble_send_bg));
-        }else {
-            tvContentLayout.setBackground(context.getResources().getDrawable(R.drawable.ease_chat_bubble_receive_bg));
-        }
     }
 
 
@@ -373,18 +354,15 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         int start = 0; int end = 0;
         String tag = "";
         if (isShowOriginal){
-            // 设置内容
             String oldTranslation = convertSpecialSymbols(oldTranslationContent);
             Spannable span = EaseSmileUtils.getSmiledText(context, oldTranslation);
-//            tvTranslation.setText(span, TextView.BufferType.SPANNABLE);
-            mContent.setText(span, TextView.BufferType.SPANNABLE);
+            contentView.setText(span, TextView.BufferType.SPANNABLE);
             tag = context.getResources().getString(R.string.translation_view_translation);
             start = tag.length() - 16;
         }else{
             String translation = convertSpecialSymbols(translationContent);
             Spannable span = EaseSmileUtils.getSmiledText(context, translation);
-//            tvTranslation.setText(span, TextView.BufferType.SPANNABLE);
-            mContent.setText(span, TextView.BufferType.SPANNABLE);
+            contentView.setText(span, TextView.BufferType.SPANNABLE);
             tag = context.getResources().getString(R.string.translation_original_text);
             start = tag.length() - 18;
         }
@@ -411,15 +389,6 @@ public class ChatRowCustomTextView extends EaseChatRowText {
             }
             tvTranslationTag.setText(spannableString);
         }
-    }
-
-    public void setTranslationOnClickListener(translationClickListener listener){
-        this.listener = listener;
-    }
-
-    public interface translationClickListener{
-        void onTranslationClick(View view, ChatMessage message);
-        boolean onTranslationLongClick(View view,ChatMessage message);
     }
 
     private static String convertSpecialSymbols(String str) {
@@ -472,16 +441,16 @@ public class ChatRowCustomTextView extends EaseChatRowText {
 
             if (!TextUtils.isEmpty(atMe)){
                 atMe = AT_PREFIX + atMe + AT_SUFFIX;
-                start = mContent.getText().toString().indexOf(atMe);
+                start = contentView.getText().toString().indexOf(atMe);
                 end = start + atMe.length();
             }else {
                 atAll = AT_PREFIX + atAll + AT_SUFFIX;
-                start = mContent.getText().toString().indexOf(atAll);
+                start = contentView.getText().toString().indexOf(atAll);
                 end = start + atAll.length();
             }
 
             if (start != -1 && end > 0){
-                Spannable spannable = (Spannable) mContent.getText();
+                Spannable spannable = (Spannable) contentView.getText();
                 spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(io.agora.chat.uikit.R.color.color_conversation_title)), start
                         , end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }

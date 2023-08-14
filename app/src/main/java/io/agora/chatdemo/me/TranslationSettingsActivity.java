@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import io.agora.chat.uikit.widget.EaseTitleBar;
@@ -47,8 +48,17 @@ public class TranslationSettingsActivity extends BaseInitActivity implements Eas
         super.onResume();
         String targetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
         String pushLanguage = DemoHelper.getInstance().getModel().getPushLanguage();
-        mBinding.settingTargetTranslation.setContent(targetLanguage);
-        mBinding.settingPushTranslation.setContent(pushLanguage);
+        if (TextUtils.isEmpty(targetLanguage)){
+            mBinding.settingTargetTranslation.setContent("");
+        }else {
+            mBinding.settingTargetTranslation.setContent(targetLanguage);
+        }
+
+        if (TextUtils.isEmpty(pushLanguage)){
+            mBinding.settingPushTranslation.setContent("");
+        }else {
+            mBinding.settingPushTranslation.setContent(pushLanguage);
+        }
     }
 
     @Override

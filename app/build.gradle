@@ -9,13 +9,13 @@ android {
     InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream() ;
     properties.load( inputStream )
 
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "io.agora.chatdemo"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 11
         versionName "1.1.0"
         multiDexEnabled true
@@ -96,7 +96,6 @@ android {
     viewBinding {
         enabled = true
     }
-    //打开注释后，可以直接在studio里查看和编辑emclient-linux里的代码
 //    externalNativeBuild {
 //        ndkBuild {
 //            path file('jni/Android.mk')
@@ -139,9 +138,6 @@ dependencies {
     implementation "androidx.security:security-crypto:1.0.0"
 
     implementation 'com.google.code.gson:gson:2.6.2'
-//    implementation project(path: ':chat-uikit')
-//    implementation project(path: ':chat-callkit')
-//    implementation project(path: ':hyphenatechatsdk')
     // Agora Chat Uikit
     implementation 'io.agora.rtc:chat-uikit:1.1.0'
     implementation 'io.agora.rtc:chat-callkit:1.1.0'

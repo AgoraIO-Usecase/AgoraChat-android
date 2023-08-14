@@ -1,5 +1,6 @@
 package io.agora.chatdemo.chat.adapter;
 
+import static io.agora.chatdemo.general.constant.DemoConstant.TEXT_SYSTEM_NOTIFICATION;
 import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CALL_ME;
 import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CALL_OTHER;
 import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VIDEO_CALL;
@@ -26,7 +27,6 @@ import io.agora.chatdemo.chat.viewholder.ChatSystemNotificationViewHolder;
 import io.agora.chatdemo.general.constant.DemoConstant;
 
 public class CustomMessageAdapter extends EaseMessageAdapter {
-    private static final int TEXT_SYSTEM_NOTIFICATION = 66;
 
     @Override
     public ViewHolder<ChatMessage> getViewHolder(ViewGroup parent, int viewType) {

@@ -115,11 +115,15 @@ public interface DemoConstant extends EaseConstant {
     int GROUP_ROLE_MEMBER = 0;
 
 
-    int VIEW_TYPE_MESSAGE_CALL_ME = 18;//must larger than 17,the lagest number which defined in uikit#EaseChatType
-    int VIEW_TYPE_MESSAGE_CALL_OTHER = 19;
+    int TEXT_SYSTEM_NOTIFICATION = 106;
+    int VIEW_TYPE_MESSAGE_CALL_ME = 118;//must larger than 100
+    int VIEW_TYPE_MESSAGE_CALL_OTHER = 119;
 
-    int VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME = 20;
-    int VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER = 21;
+    int VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME = 120;
+    int VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER = 121;
+
+    int CUSTOM_THREAD_UNSENT_ME = 1001;
+    int CUSTOM_THREAD_UNSENT_OTHER = 1002;
 
     String CALL_TYPE = "easeCallType";
 

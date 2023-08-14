@@ -22,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@id/iv_icon"
         app:layout_constraintLeft_toLeftOf="parent"
         android:visibility="gone"
-        android:background="@drawable/shape_url_preview_send_bottom_bg"
+        android:background="@drawable/shape_url_preview_receive_bottom_bg"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:paddingTop="8dp"

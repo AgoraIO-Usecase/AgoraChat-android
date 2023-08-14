@@ -28,6 +28,9 @@
     <!-- Remove unused permission in remote library end -->
 
     <uses-sdk tools:overrideLibrary="androidx.security"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:name=".DemoApplication"
@@ -37,9 +40,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HyphenateDemoAndroid"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".group.activities.RemarkActivity"
-            android:exported="false" />
         <!-- IM SDK required start -->
         <!-- Set your agora chat AppKey -->
         <meta-data
@@ -48,24 +48,12 @@
         <!-- SDK service -->
         <service
             android:name="io.agora.chat.ChatService"
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name="io.agora.chat.ChatJobService"
-            android:exported="true"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <!-- SDK receiver -->
-        <receiver android:name="io.agora.chat.MonitorReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-            <!-- optional filter -->
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
         <!-- IM SDK required end -->
         <!--Add FileProvider-->
         <provider
@@ -79,7 +67,8 @@
         </provider>
 
         <!-- FCM required start -->
-        <service android:name=".fcm.FCMMSGService">
+        <service android:name=".fcm.FCMMSGService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -96,6 +85,7 @@
         <!--Splash-->
         <activity
             android:name=".sign.SplashActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -106,6 +96,7 @@
         <!-- Sign in -->
         <activity
             android:name=".sign.SignInActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
@@ -122,53 +113,68 @@
         <!--Chat-->
         <activity
             android:name=".chat.ChatActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Group detail -->
         <activity android:name=".group.activities.GroupDetailActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!-- Group members -->
         <activity android:name=".group.activities.GroupMembersActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!-- Group notice -->
         <activity android:name=".group.activities.GroupNoticeActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!-- Group files -->
         <activity android:name=".group.activities.GroupFilesActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!-- Transfer group owner -->
         <activity android:name=".group.activities.GroupTransferActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!--General-->
         <activity android:name=".me.GeneralActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
         <!--Notification-->
         <activity android:name=".me.NotificationActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
         <!--Privacy-->
         <activity android:name=".me.PrivacyActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
         <!--Contact Black List-->
         <activity android:name=".me.ContactBlackListActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
         <!--About-->
         <activity android:name=".me.AboutActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
         <!--Replace avatar-->
         <activity android:name=".me.UserAvatarSelectActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!-- Contact detail -->
         <activity
             android:name=".contact.ContactDetailActivity"
+            android:exported="false"
             android:screenOrientation="portrait" /> <!-- video call -->
         <activity
             android:name=".av.CallSingleBaseActivity"
+            android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_video_call"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".av.CallMultipleBaseActivity"
+            android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_multi_call"
             android:launchMode="singleInstance"
@@ -184,50 +190,56 @@
         <!-- Thread member list -->
         <activity
             android:name=".chatthread.ChatThreadMembersActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
         <!-- Thread edit -->
         <activity
             android:name=".chatthread.ChatThreadEditActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
         <!-- Thread chat -->
         <activity
             android:name=".chatthread.ChatThreadActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".chat.SearchMessageActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".chat.SearchActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!-- Do not disturb activity -->
         <activity android:name=".me.DoNotDisturbActivity"
+            android:exported="false"
             android:screenOrientation="portrait"/>
         <!-- create chat thread -->
         <activity
-            android:name=".chatthread.ChatThreadCreateActivity" />
+            android:name=".chatthread.ChatThreadCreateActivity"
+            android:exported="false"/>
         <activity
             android:name=".av.CallInviteUsersActivity"
             android:exported="false"
             android:launchMode="singleInstance" />
         <activity
             android:name=".chat.ChatReportActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".chat.ChatReportCompleteActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <!-- chat history -->
         <activity
             android:name=".chat.ChatHistoryActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-
-        <activity android:name=".chat.ChatReportCompleteActivity"
-            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".me.LanguageActivity"
@@ -238,6 +250,9 @@
             android:name=".me.TranslationSettingsActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
+        <activity
+            android:name=".group.activities.RemarkActivity"
+            android:exported="false" />
 
     </application>
 

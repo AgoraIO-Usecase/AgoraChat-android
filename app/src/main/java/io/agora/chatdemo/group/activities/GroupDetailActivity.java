@@ -226,7 +226,6 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 public void onSuccess(@Nullable Map<String, MemberAttributeBean> data) {
                     if (data != null) {
                         for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
-                            //此页面获取的也是单个userId的群成员属性
                             memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId, entry.getKey());
                             setAlias(memberAttributeBean);
                         }
@@ -244,13 +243,20 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
                 loadGroup();
             }
         });
+
+        LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId, DemoHelper.getInstance().getUsersManager().getCurrentUserID());
+            setAlias(memberAttributeBean);
+        });
         loadGroup();
     }
 
     private void loadGroup() {
         viewModel.getGroup(groupId);
         viewModel.getGroupAnnouncement(groupId);
-        //低频操作 每次进入详情都获取自己在群组的成员属性
         viewModel.fetchGroupMemberAttribute(groupId, DemoHelper.getInstance().getUsersManager().getCurrentUserID());
     }
 

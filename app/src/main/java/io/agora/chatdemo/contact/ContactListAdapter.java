@@ -20,11 +20,11 @@ import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
-import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chatdemo.group.model.MemberAttributeBean;
 
 public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
@@ -191,28 +191,28 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                     setLabel(label, mContext.getString(R.string.group_role_owner));
                 }
             }
-            if(!TextUtils.isEmpty(groupId)) {
-                MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
-                if(groupBean!=null&&!TextUtils.isEmpty(groupBean.getNickName())) {
-                    originNickName.setVisibility(View.VISIBLE);
-                    EaseUserUtils.setUserAvatar(mContext, groupId, item.getUsername(), mAvatar);
-                    EaseUserUtils.setUserNick(groupId,item.getUsername(), mName);
-                    originNickName.setText(TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername());
-                }else{
-                    originNickName.setVisibility(View.GONE);
-                    DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
-                }
-            }else{
-                originNickName.setVisibility(View.GONE);
-                DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
-            }
+
 
             if (isPickAt && position == 0){
                 mName.setText(item.getUsername());
                 int resourceId = Integer.parseInt(item.getAvatar());
                 mAvatar.setImageResource(resourceId);
             }else {
-                DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
+                if(!TextUtils.isEmpty(groupId)) {
+                    MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
+                    if(groupBean!=null&&!TextUtils.isEmpty(groupBean.getNickName())) {
+                        originNickName.setVisibility(View.VISIBLE);
+                        EaseUserUtils.setUserAvatar(mContext, groupId, item.getUsername(), mAvatar);
+                        EaseUserUtils.setUserNick(groupId,item.getUsername(), mName);
+                        originNickName.setText(TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername());
+                    }else{
+                        originNickName.setVisibility(View.GONE);
+                        DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
+                    }
+                }else{
+                    originNickName.setVisibility(View.GONE);
+                    DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, TextUtils.isEmpty(item.getNickname())?item.getNickname():item.getUsername(), mName, mAvatar);
+                }
             }
 
             if(isCheckModel) {

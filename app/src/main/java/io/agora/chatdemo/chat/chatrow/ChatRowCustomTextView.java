@@ -80,29 +80,24 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     @Override
     protected void onFindViewById() {
         super.onFindViewById();
-        flContentFillArea = (FrameLayout)findViewById(io.agora.chat.uikit.R.id.flContentFillArea);
-        flBubbleBottomFillArea = (FrameLayout)findViewById(io.agora.chat.uikit.R.id.flBubbleBottomFillArea);
 
-        View contentFillLayout = null;
-        View bubbleBottomFillLayout = null;
-        if (!showSenderType){
-            contentFillLayout = inflater.inflate(R.layout.layout_custom_content_fill_received, flContentFillArea, false);
-            bubbleBottomFillLayout = inflater.inflate(R.layout.layout_custom_bubble_bottom_fill_received, flBubbleBottomFillArea, false);
-        }else {
-            contentFillLayout = inflater.inflate(R.layout.layout_custom_content_fill_send, flContentFillArea, false);
-            bubbleBottomFillLayout = inflater.inflate(R.layout.layout_custom_bubble_bottom_fill_send, flBubbleBottomFillArea, false);
-        }
-        flContentFillArea.addView(contentFillLayout);
-        flBubbleBottomFillArea.addView(bubbleBottomFillLayout);
+        inflater.inflate(showSenderType
+                        ? R.layout.layout_custom_content_fill_send
+                        : R.layout.layout_custom_content_fill_received
+                        , findViewById(R.id.flContentFillArea), true);
+        inflater.inflate(showSenderType
+                        ? R.layout.layout_custom_bubble_bottom_fill_send
+                        : R.layout.layout_custom_bubble_bottom_fill_received
+                        , findViewById(R.id.flBubbleBottomFillArea), true);
 
         // flContentFillArea
-        mTitle = flContentFillArea.findViewById(R.id.tv_title);
-        mDescribe = flContentFillArea.findViewById(R.id.tv_describe);
-        mIcon = flContentFillArea.findViewById(R.id.iv_icon);
-        describeLayout = flContentFillArea.findViewById(R.id.describe_layout);
+        mTitle = findViewById(R.id.tv_title);
+        mDescribe = findViewById(R.id.tv_describe);
+        mIcon = findViewById(R.id.iv_icon);
+        describeLayout = findViewById(R.id.describe_layout);
 
         // flBubbleBottomFillArea
-        tvTranslationTag = flBubbleBottomFillArea.findViewById(R.id.tv_translation_tag);
+        tvTranslationTag = findViewById(R.id.tv_translation_tag);
 
     }
 

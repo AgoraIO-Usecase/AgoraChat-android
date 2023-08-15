@@ -15,6 +15,7 @@
         android:textColor="@color/ease_color_gray_999999"
         android:textSize="11sp"
         android:padding="4dp"
+        android:paddingStart="0dp"
         android:textStyle="normal"
         android:clickable="true"
         android:visibility="visible"/>

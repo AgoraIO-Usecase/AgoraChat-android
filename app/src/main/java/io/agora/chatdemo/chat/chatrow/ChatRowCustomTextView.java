@@ -121,9 +121,9 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                             TextMessageBody.TranslationInfo translationInfo = translations.get(0);
                             translationContent = translationInfo.translationText;
                         }
-                        tvTranslationTag.setVisibility(VISIBLE);
-                        switchTranslation();
                     }
+                    tvTranslationTag.setVisibility(VISIBLE);
+                    switchTranslation();
                 }else {
                     tvTranslationTag.setVisibility(GONE);
                 }

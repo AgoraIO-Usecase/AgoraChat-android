@@ -3,16 +3,12 @@ package io.agora.chatdemo.me;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +61,10 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
         adapter = new LanguageAdapter(mContext,emLanguageList,maxSelectionCount);
         rvList.setLayoutManager(new LinearLayoutManager(this));
         rvList.setAdapter(adapter);
+
+        if (languageType == DemoConstant.TRANSLATION_TYPE_PUSH){
+            titleBar.setTitle(getResources().getString(R.string.translation_push));
+        }
 
     }
 
@@ -125,58 +125,32 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
 
     private void initSelectedLanguage() {
         String languageCode;
+        int selectedIndex = -1;
         if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){
-            int selectedIndex = -1;
             languageCode = DemoHelper.getInstance().getModel().getTargetLanguage();
-            for(int index = 0 ; index < emLanguageList.size(); index++) {
-                Language language = emLanguageList.get(index);
-                if(language.LanguageCode.equals(languageCode)) {
-                    selectedIndex = index;
-                    break;
-                }
-            }
-            if (selectedIndex != -1)
-                adapter.setSelectedIndex(selectedIndex,true);
         }else {
             languageCode = DemoHelper.getInstance().getModel().getPushLanguage();
-            if (!TextUtils.isEmpty(languageCode)){
-                try {
-                    JSONArray array = new JSONArray(languageCode);
-                    if (array.length() > 0){
-                        for(int index = 0 ; index < emLanguageList.size(); index++) {
-                            Language language = emLanguageList.get(index);
-                            for (int i = 0; i < array.length(); i++) {
-                                if(language.LanguageCode.equals(array.get(i))) {
-                                    adapter.setSelectedIndex(index,true);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        }
+        for(int index = 0 ; index < emLanguageList.size(); index++) {
+            Language language = emLanguageList.get(index);
+            if(language.LanguageCode.equals(languageCode)) {
+                selectedIndex = index;
+                break;
             }
         }
+        if (selectedIndex != -1)
+            adapter.setSelectedIndex(selectedIndex,true);
     }
 
     private void updateLanguage() {
         List<Integer> selectedPositions = adapter.getSelectedPositions();
         if (selectedPositions.size() > 0){
+            String languageCode = emLanguageList.get(selectedPositions.get(0)).LanguageCode;
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){
-                String languageCode = emLanguageList.get(selectedPositions.get(0)).LanguageCode;
                 DemoHelper.getInstance().getModel().setTargetLanguage(languageCode);
             }else {
-                JSONArray jsonArray = new JSONArray();
-                for (Integer selectedPosition : selectedPositions) {
-                    jsonArray.put(emLanguageList.get(selectedPosition).LanguageCode);
-                }
-                try {
-                    DemoHelper.getInstance().getModel().setPushLanguage(jsonArray.getString(0));
-                    viewModel.updatePushPerformLanguage(jsonArray.getString(0));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                DemoHelper.getInstance().getModel().setPushLanguage(languageCode);
+                viewModel.updatePushPerformLanguage(languageCode);
             }
         }else {
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){

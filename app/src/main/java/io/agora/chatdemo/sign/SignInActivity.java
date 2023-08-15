@@ -213,6 +213,7 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
+                    EMLog.d("SignInActivity", "observed login success, finish");
                     Intent intent = new Intent(mContext, MainActivity.class);
                     startActivity(intent);
                     finish();

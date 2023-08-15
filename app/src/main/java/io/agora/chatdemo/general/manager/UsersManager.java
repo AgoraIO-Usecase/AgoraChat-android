@@ -98,6 +98,20 @@ public class UsersManager {
 		return PreferenceManager.getInstance().getCurrentUserAgoraUid();
 	}
 
+	public void setTokenExpireTs(long ts) {
+		PreferenceManager.getInstance().setTokenExpireTs(ts);
+	}
+	public long getTokenExpireTs() {
+		return PreferenceManager.getInstance().getTokenExpireTs();
+	}
+
+	public void setCurrentUser(String user) {
+		PreferenceManager.getInstance().setCurrentUserName(user);
+	}
+	public String getCurrentUser() {
+		return PreferenceManager.getInstance().getCurrentUsername();
+	}
+
 	private void setCurrentUserNick(String nickname) {
 		getCurrentUserInfo().setNickname(nickname);
 		PreferenceManager.getInstance().setCurrentUserNick(nickname);

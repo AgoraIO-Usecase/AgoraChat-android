@@ -6,9 +6,13 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.livedatas.EaseEvent;
+import io.agora.chatdemo.general.repositories.EMClientRepository;
 import io.agora.chatdemo.main.MainActivity;
 import io.agora.util.EMLog;
 
@@ -41,23 +45,41 @@ public class SplashActivity extends BaseActivity {
 
     private void loginSDK() {
         EMLog.d("splash", "loginSDK");
-        model.getLoginData().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<Boolean>(true) {
-                @Override
-                public void onSuccess(@Nullable Boolean data) {
-                    EMLog.d("splash", "loginSDK onSuccess");
-                    MainActivity.actionStart(mContext);
-                    finish();
-                }
+        EMClientRepository repo = new EMClientRepository();
+        String userName = DemoHelper.getInstance().getUsersManager().getCurrentUser();
+        String pw = repo.decryptData();
+        if (userName== null || pw == null ||userName.isEmpty() || pw.isEmpty()) {
+            EMLog.d("splash", "no saved login info, goto login activity");
+            SignInActivity.actionStart(mContext);
+            finish();
+            return;
+        }
 
-                @Override
-                public void onError(int code, String message) {
-                    super.onError(code, message);
-                    EMLog.e("splash", "loginSDK onError");
-                    SignInActivity.actionStart(mContext);
-                    finish();
-                }
+        // check if token expired
+        long timeStamp = System.currentTimeMillis();
+        if (timeStamp < DemoHelper.getInstance().getUsersManager().getTokenExpireTs()) {
+            model.getLoginData().observe(this, response -> {
+                parseResource(response, new OnResourceParseCallback<Boolean>(true) {
+                    @Override
+                    public void onSuccess(@Nullable Boolean data) {
+                        EMLog.d("splash", "loginSDK onSuccess");
+                        MainActivity.actionStart(mContext);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(int code, String message) {
+                        super.onError(code, message);
+                        EMLog.e("splash", "loginSDK onError");
+                        SignInActivity.actionStart(mContext);
+                        finish();
+                    }
+                });
             });
-        });
+        } else {
+            EMLog.d("splash", "token expired, wait for re-login in global monitor");
+            MainActivity.actionStart(mContext);
+            finish();
+        }
     }
 }

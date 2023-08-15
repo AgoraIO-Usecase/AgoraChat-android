@@ -97,6 +97,10 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         if(easeEvent==null) {
             return;
         }
+        if (easeEvent.event == DemoConstant.LOGIN_SUCESS) {
+            initData();
+            ChatClient.getInstance().chatManager().loadAllConversations();
+        }
         if(!easeEvent.isMessageChange()) {
             mainViewModel.getMsgConversation();
         }

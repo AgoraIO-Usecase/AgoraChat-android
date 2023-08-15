@@ -4,7 +4,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +16,13 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
-import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
 
 public class GroupMuteListFragment extends GroupBaseManageFragment {
 
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        // User activity for the ViewModelStoreOwner, not need request data of some common methods
-        viewModel = new ViewModelProvider(mContext).get(GroupMemberAuthorityViewModel.class);
-        viewModel.getMuteMembersObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getMuteMembersObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Map<String, Long>>() {
                 @Override
                 public void onSuccess(@Nullable Map<String, Long> data) {
@@ -60,7 +56,7 @@ public class GroupMuteListFragment extends GroupBaseManageFragment {
     @Override
     public void onRefresh() {
         super.onRefresh();
-        viewModel.getMuteMembers(groupId);
+        memberAuthorityViewModel.getMuteMembers(groupId);
     }
 
     @Override

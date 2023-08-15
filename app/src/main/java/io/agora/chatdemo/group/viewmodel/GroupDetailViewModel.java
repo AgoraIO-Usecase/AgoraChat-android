@@ -6,12 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.agora.chat.Group;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.repositories.EMGroupManagerRepository;
 import io.agora.chatdemo.general.repositories.EMPushManagerRepository;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 
 public class GroupDetailViewModel extends AndroidViewModel {
     private EMGroupManagerRepository repository;
@@ -21,6 +26,9 @@ public class GroupDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Boolean>> leaveGroupObservable;
     private SingleSourceLiveData<Resource<Boolean>> joinObservable;
     private SingleSourceLiveData<Resource<String>> setGroupNameObservable;
+    private SingleSourceLiveData<Resource<Map<String,MemberAttributeBean>>> groupMemberAttributeObservable;
+    private SingleSourceLiveData<Resource<Map<String,MemberAttributeBean>>> fetchMemberAttributeObservable;
+    private SingleSourceLiveData<Resource<Map<String, MemberAttributeBean>>> fetchMemberAttributesObservable;
 
 
     public GroupDetailViewModel(@NonNull Application application) {
@@ -32,6 +40,9 @@ public class GroupDetailViewModel extends AndroidViewModel {
         leaveGroupObservable = new SingleSourceLiveData<>();
         joinObservable = new SingleSourceLiveData<>();
         setGroupNameObservable = new SingleSourceLiveData<>();
+        groupMemberAttributeObservable = new SingleSourceLiveData<>();
+        fetchMemberAttributeObservable = new SingleSourceLiveData<>();
+        fetchMemberAttributesObservable = new SingleSourceLiveData<>();
     }
     public LiveData<Resource<Boolean>> getJoinObservable() {
         return joinObservable;
@@ -92,6 +103,32 @@ public class GroupDetailViewModel extends AndroidViewModel {
 
     public void joinGroup(Group group, String reason) {
         joinObservable.setSource(repository.joinGroup(group, reason));
+    }
+
+    public void setGroupMemberAttributes(String groupId, String userId,String nickName){
+        Map<String,String> map = new HashMap<>();
+        map.put("nickName",nickName);
+        groupMemberAttributeObservable.setSource(repository.setGroupMemberAttributes(groupId,userId,map));
+    }
+
+    public void fetchGroupMemberAttribute(String groupId, String userId){
+        fetchMemberAttributeObservable.setSource(repository.fetchGroupMemberDetail(groupId,userId));
+    }
+
+    public void fetchGroupMemberAttribute(String groupId, List<String> userList){
+        fetchMemberAttributesObservable.setSource(repository.fetchGroupMemberDetail(groupId,userList));
+    }
+
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> getFetchMemberAttributeObservable() {
+        return fetchMemberAttributeObservable;
+    }
+
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> getFetchMemberAttributesObservable() {
+        return fetchMemberAttributesObservable;
+    }
+
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> setMemberAttributeObservable() {
+        return groupMemberAttributeObservable;
     }
 
 }

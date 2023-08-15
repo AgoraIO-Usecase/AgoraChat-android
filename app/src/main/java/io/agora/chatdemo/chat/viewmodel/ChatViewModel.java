@@ -10,7 +10,9 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import io.agora.chat.ChatClient;
+import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
+import io.agora.chat.Conversation;
 import io.agora.chat.Presence;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
@@ -28,6 +30,8 @@ public class ChatViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource< List<String>>> getNoPushUsersObservable;
     private SingleSourceLiveData<Resource<Boolean>> setNoPushUsersObservable;
     private SingleSourceLiveData<Resource<Boolean>> chatManagerObservable;
+    private SingleSourceLiveData<Resource<Boolean>> removeMessagesObservable;
+    private SingleSourceLiveData<Resource<ChatMessage>> translationMessagesObservable;
 
     public ChatViewModel(@NonNull Application application) {
         super(application);
@@ -40,6 +44,8 @@ public class ChatViewModel extends AndroidViewModel {
         setNoPushUsersObservable = new SingleSourceLiveData<>();
         presenceObservable = new SingleSourceLiveData<>();
         chatManagerObservable = new SingleSourceLiveData<>();
+        removeMessagesObservable = new SingleSourceLiveData<>();
+        translationMessagesObservable = new SingleSourceLiveData<>();
     }
     public LiveData<Resource<List<Presence>>> getPresenceObservable(){
         return presenceObservable;
@@ -58,6 +64,10 @@ public class ChatViewModel extends AndroidViewModel {
     }
     public LiveData<Resource<Boolean>> setNoPushUsersObservable() {
         return setNoPushUsersObservable;
+    }
+
+    public LiveData<Resource<ChatMessage>> getTranslationObservable(){
+        return translationMessagesObservable;
     }
 
     public void getChatRoom(String roomId) {
@@ -95,5 +105,28 @@ public class ChatViewModel extends AndroidViewModel {
 
     public void reportMessage(String reportMsgId, String reportType, String reportReason ){
         chatManagerObservable.setSource(chatManagerRepository.reportMessage(reportMsgId,reportType,reportReason));
+    }
+
+    public LiveData<Resource<Boolean>> getRemoveMessagesObservable() {
+        return removeMessagesObservable;
+    }
+
+    /**
+     * Remove messages from server
+     * @param conversationId
+     * @param type
+     * @param msgIdList
+     */
+    public void removeMessagesFromServer(String conversationId, Conversation.ConversationType type, List<String> msgIdList) {
+        removeMessagesObservable.setSource(chatManagerRepository.removeMessagesFromServer(conversationId, type, msgIdList));
+    }
+
+    /**
+     * Translation message
+     * @param message
+     * @param targetLanguage
+     */
+    public void translationMessage(ChatMessage message,List<String> targetLanguage){
+        translationMessagesObservable.setSource(chatManagerRepository.translationMessage(message,targetLanguage));
     }
 }

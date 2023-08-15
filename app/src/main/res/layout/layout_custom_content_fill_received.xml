@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <io.agora.chat.uikit.widget.EaseImageView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:id="@+id/iv_icon"
+        android:visibility="gone"
+        android:background="@color/url_preview_icon_bg"
+        android:layout_width="253dp"
+        android:layout_height="130dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/describe_layout"
+        app:layout_constraintTop_toBottomOf="@id/iv_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:visibility="gone"
+        android:background="@drawable/shape_url_preview_receive_bottom_bg"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_width="253dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            android:visibility="visible"
+            android:gravity="left"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/black"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Agora.io" />
+
+        <TextView
+            android:id="@+id/tv_describe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            android:visibility="visible"
+            android:autoLink="web"
+            android:gravity="left"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="Real-Time Voice and Video Engagement" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

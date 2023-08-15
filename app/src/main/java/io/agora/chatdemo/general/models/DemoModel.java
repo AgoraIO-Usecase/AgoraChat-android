@@ -3,6 +3,8 @@ package io.agora.chatdemo.general.models;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.json.JSONArray;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -476,6 +478,48 @@ public class DemoModel {
 
         //noinspection unchecked
         return (List<String>) val;
+    }
+
+    /**
+     *  get target translation language
+     */
+    public String getTargetLanguage() {
+        return PreferenceManager.getInstance().getTargetLanguage();
+    }
+
+    /**
+     *  set target translation language
+     */
+    public void setTargetLanguage(String languageCode) {
+        PreferenceManager.getInstance().setTargetLanguage(languageCode);
+    }
+
+    public void clearTargetLanguage(){
+        PreferenceManager.getInstance().clearTargetLanguage();
+    }
+
+    public void setPushLanguage(String languageCode){
+        PreferenceManager.getInstance().setPushLanguage(languageCode);
+    }
+
+    public String getPushLanguage(){
+        return PreferenceManager.getInstance().getPushLanguage();
+    }
+
+    public void clearPushLanguage(){
+        PreferenceManager.getInstance().clearPushLanguage();
+    }
+
+    public void setEnableAutoTranslation(String isEnable){
+        PreferenceManager.getInstance().setEnableAutoTranslation(isEnable);
+    }
+
+    public String getEnableAutoTranslation(){
+        return PreferenceManager.getInstance().getEnableAutoTranslation();
+    }
+
+    public void clearAutoTranslation(){
+        PreferenceManager.getInstance().clearAutoTranslation();
     }
 
 

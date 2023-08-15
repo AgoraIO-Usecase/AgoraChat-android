@@ -4,7 +4,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +17,13 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.GroupManageItemBean;
-import io.agora.chatdemo.group.viewmodel.GroupMemberAuthorityViewModel;
 
 public class GroupBlockListFragment extends GroupBaseManageFragment {
 
     @Override
     protected void initViewModel() {
         super.initViewModel();
-        // User activity for the ViewModelStoreOwner, not need request data of some common methods
-        viewModel = new ViewModelProvider(this).get(GroupMemberAuthorityViewModel.class);
-        viewModel.getBlockObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getBlockObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<String>>() {
                 @Override
                 public void onSuccess(@Nullable List<String> data) {
@@ -55,11 +51,11 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
                 }
             });
         });
-        viewModel.getRefreshObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getRefreshObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(@Nullable String data) {
-                    viewModel.getBlockMembers(groupId);
+                    memberAuthorityViewModel.getBlockMembers(groupId);
                     EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
                     easeEvent.message = groupId;
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
@@ -72,13 +68,13 @@ public class GroupBlockListFragment extends GroupBaseManageFragment {
     @Override
     protected void initData() {
         super.initData();
-        viewModel.getBlockMembers(groupId);
+        memberAuthorityViewModel.getBlockMembers(groupId);
     }
 
     @Override
     public void onRefresh() {
         super.onRefresh();
-        viewModel.getBlockMembers(groupId);
+        memberAuthorityViewModel.getBlockMembers(groupId);
     }
 
     @Override

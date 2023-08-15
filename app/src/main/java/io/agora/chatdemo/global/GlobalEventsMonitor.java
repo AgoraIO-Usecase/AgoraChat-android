@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.StringRes;
 
 import java.util.ArrayList;
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -55,7 +57,9 @@ import io.agora.chatdemo.general.manager.PushAndMessageHelper;
 import io.agora.chatdemo.general.models.LoginBean;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.repositories.EMClientRepository;
+import io.agora.chatdemo.general.utils.GsonTools;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.chatdemo.main.MainActivity;
 import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
@@ -285,6 +289,13 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         }
     }
 
+    @Override
+    public void onMessageContentChanged(ChatMessage message, String operatorId, long operationTime) {
+        EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
+        messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+        EMLog.d(TAG, "onMessageContentChanged id : " + message.getMsgId());
+        EMLog.d(TAG, "onMessageContentChanged type: " + message.getType());
+    }
 
 
     /**
@@ -705,6 +716,18 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         public void onSharedFileDeleted(String groupId, String fileId) {
             LiveDataBus.get().with(DemoConstant.GROUP_SHARE_FILE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_SHARE_FILE_CHANGE, EaseEvent.TYPE.GROUP));
             EMLog.i(TAG, context.getString(R.string.group_listener_onSharedFileDeleted, fileId));
+        }
+
+        @Override
+        public void onGroupMemberAttributeChanged(String groupId,String userId,Map<String, String> attribute, String from) {
+            if ( attribute != null && attribute.size() > 0){
+                EMLog.d(TAG,"onGroupMemberAttributeChanged: " + groupId +" - "+ attribute.toString());
+                MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(attribute).toString(), MemberAttributeBean.class);
+                if (bean != null && bean.getNickName() != null){
+                    DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
+                    LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
+                }
+            }
         }
 
     }

@@ -525,7 +525,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         if(callBack != null) {
                             EaseUser easeUser = transformEMUserInfo(value.get(finalUserId));
                             addDefaultAvatar(easeUser,null);
-                            getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                            if(getUserDao() != null) {
+                                getUserDao().insert(EmUserEntity.parseParent(easeUser));
+                            }
                             callBack.onSuccess(createLiveData(easeUser));
                         }
                     }

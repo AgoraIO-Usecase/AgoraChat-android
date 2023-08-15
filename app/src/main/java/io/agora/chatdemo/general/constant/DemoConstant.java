@@ -116,8 +116,15 @@ public interface DemoConstant extends EaseConstant {
     int GROUP_ROLE_MEMBER = 0;
 
 
-    int VIEW_TYPE_MESSAGE_CALL_ME = 18;//must larger than 17,the lagest number which defined in uikit#EaseChatType
-    int VIEW_TYPE_MESSAGE_CALL_OTHER = 19;
+    int TEXT_SYSTEM_NOTIFICATION = 106;
+    int VIEW_TYPE_MESSAGE_CALL_ME = 118;//must larger than 100
+    int VIEW_TYPE_MESSAGE_CALL_OTHER = 119;
+
+    int VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME = 120;
+    int VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER = 121;
+
+    int CUSTOM_THREAD_UNSENT_ME = 1001;
+    int CUSTOM_THREAD_UNSENT_OTHER = 1002;
 
     String CALL_TYPE = "easeCallType";
 
@@ -143,5 +150,17 @@ public interface DemoConstant extends EaseConstant {
     String SYSTEM_CHANGE_GROUP_NAME = "system_change_group_name";
 
     String REPORT_MESSAGE_ID = "report_message_id";
+    String GROUP_MEMBER_ATTRIBUTE_CHANGE = "group_member_attribute_change";
+
+    String EVENT_SEND_COMBINE = "event_send_combine";
+
+    String EVENT_CHAT_MODEL_TO_SELECT = "is_select_model";
+    String EVENT_CHAT_MODEL_TO_NORMAL = "is_normal_model";
+
+    int TRANSLATION_TYPE_MESSAGE = 0;
+    int TRANSLATION_TYPE_PUSH = 1;
+    String TRANSLATION_TYPE = "translation_type";
+    String TRANSLATION_SELECT_MAX_COUNT = "translation_select_max_count";
+
 
 }

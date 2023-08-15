@@ -72,4 +72,18 @@
         app:switchItemTitleColor="@color/black"
         app:switchItemTitleSize="16sp" />
 
+    <io.agora.chatdemo.general.widget.SwitchItemView
+        android:id="@+id/item_to_auto_translation"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:switchItemAvatarHeight="32dp"
+        app:switchItemAvatarSrc="@drawable/chat_settings_auto_translation"
+        app:switchItemAvatarWidth="32dp"
+        app:switchItemTitleStyle="bold"
+        app:switchItemShowAvatar="true"
+        app:switchItemShowDivider="false"
+        app:switchItemTitle="@string/chat_setting_auto_translation"
+        app:switchItemTitleColor="@color/black"
+        app:switchItemTitleSize="16sp" />
+
 </LinearLayout>

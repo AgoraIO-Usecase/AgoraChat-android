@@ -13,7 +13,6 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -64,8 +63,6 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     private String translationContent;
     private String oldTranslationContent;
     private boolean isShowOriginal = true;
-    protected FrameLayout flContentFillArea;
-    protected FrameLayout flBubbleBottomFillArea;
 
 
     public ChatRowCustomTextView(Context context, boolean isSender) {
@@ -106,6 +103,8 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         super.onSetUpView();
         describeLayout.setVisibility(GONE);
         mIcon.setVisibility(GONE);
+        mDescribe.setVisibility(GONE);
+        mTitle.setVisibility(GONE);
 
         if (message.getType() == ChatMessage.Type.TXT){
             TextMessageBody body = (TextMessageBody)message.getBody();
@@ -162,12 +161,13 @@ public class ChatRowCustomTextView extends EaseChatRowText {
 
         UrlPreViewBean urlPreviewInfo = DemoHelper.getInstance().getUrlPreviewInfo(message.getMsgId());
         if (urlPreviewInfo == null){
-            parsingUrl(spans[0].getURL(),message.getMsgId(),new ValueCallBack<UrlPreViewBean>() {
+            String msgId = message.getMsgId();
+            parsingUrl(spans[0].getURL(),msgId,new ValueCallBack<UrlPreViewBean>() {
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onSuccess(UrlPreViewBean value) {
                     post(()->{
-                        setUrlPreview(value);
+                        setUrlPreview(msgId, value);
                     });
                 }
 
@@ -178,7 +178,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 }
             });
         }else {
-            setUrlPreview(urlPreviewInfo);
+            setUrlPreview(message.getMsgId(), urlPreviewInfo);
         }
 
         if (index != -1) {
@@ -274,7 +274,13 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         });
     }
 
-    private void setUrlPreview(UrlPreViewBean urlPreviewInfo){
+    private void setUrlPreview(String msgId, UrlPreViewBean urlPreviewInfo){
+        if (!msgId.equals(message.getMsgId())){
+            return;
+        }
+        if(context == null || mIcon == null || mDescribe == null || mTitle == null || describeLayout == null){
+            return;
+        }
         if (TextUtils.isEmpty(urlPreviewInfo.getPrimaryImg())){
             mIcon.setVisibility(GONE);
         }else {

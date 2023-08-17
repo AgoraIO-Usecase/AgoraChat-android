@@ -42,9 +42,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
         if (isPickAt){
             listAdapter.setShowInitials(true);
             managersAdapter.setIsPickAt(true);
-            if (groupRole == DemoConstant.GROUP_ROLE_OWNER || groupRole == DemoConstant.GROUP_ROLE_ADMIN){
-                checkIfAddHeader();
-            }
+            AddHeader();
         }
     }
 
@@ -311,16 +309,6 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
             managersAdapter.setData(managerList);
             sideBarContact.setVisibility(View.GONE);
             srlContactRefresh.setEnabled(false);
-        }
-    }
-
-    private void checkIfAddHeader() {
-        Group group = DemoHelper.getInstance().getGroupManager().getGroup(groupId);
-        if(group != null) {
-            String owner = group.getOwner();
-            if(TextUtils.equals(owner, DemoHelper.getInstance().getUsersManager().getCurrentUserID())) {
-                AddHeader();
-            }
         }
     }
 

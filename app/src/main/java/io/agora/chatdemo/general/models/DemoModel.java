@@ -3,8 +3,6 @@ package io.agora.chatdemo.general.models;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.json.JSONArray;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

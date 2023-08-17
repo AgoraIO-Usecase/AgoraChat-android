@@ -82,6 +82,8 @@ public class TranslationSettingsActivity extends BaseInitActivity implements Eas
             case R.id.setting_push_translation:
                 LanguageActivity.actionStart(mContext, DemoConstant.TRANSLATION_TYPE_PUSH,1);
                 break;
+            default:
+                break;
         }
     }
 }

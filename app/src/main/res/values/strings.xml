@@ -426,6 +426,8 @@
     <string name="ease_action_re_translation">Re-Translation</string>
     <string name="translation_language_settings">Language Setting</string>
     <string name="translation_target">Target Language</string>
+    <string name="translation_auto_target">Auto Target Language</string>
+    <string name="translation_auto">Auto Translation Setting</string>
     <string name="translation_push">Push Translation Setting</string>
     <string name="translation_auto_about">About Auto Translation</string>
     <string name="translation_auto_about_info">Agora Chat will auto translate the text into your current interface language.You can change the language in Setting > General > Translation Setting.</string>

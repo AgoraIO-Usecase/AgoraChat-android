@@ -252,7 +252,10 @@ public class CustomChatFragment extends EaseChatFragment {
                 break;
             case R.id.action_chat_translation:
             case R.id.action_chat_re_translation:
-                translationMessage(message);
+                String tagLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
+                if (!TextUtils.isEmpty(tagLanguage)){
+                    translationMessage(message,tagLanguage);
+                }
                 break;
         }
         return super.onMenuItemClick(item, message);
@@ -393,26 +396,18 @@ public class CustomChatFragment extends EaseChatFragment {
     }
 
 
-    private void translationMessage(ChatMessage message){
-        String targetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
+    private void translationMessage(ChatMessage message,String language){
         List<String> list = new ArrayList<>();
-        list.add(targetLanguage);
+        list.add(language);
         viewModel.translationMessage(message,list);
     }
 
     @Override
     public void addMsgAttrsBeforeSend(ChatMessage message) {
         super.addMsgAttrsBeforeSend(message);
-        String enableAutoTranslation = DemoHelper.getInstance().getModel().getEnableAutoTranslation();
-        if (!TextUtils.isEmpty(enableAutoTranslation)){
-            try {
-                JSONObject jsonObject = new JSONObject(enableAutoTranslation);
-                if ((Boolean) jsonObject.get(conversationId)){
-                    translationMessage(message);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        String autoLanguage = DemoHelper.getInstance().getModel().getAutoTargetLanguage(conversationId);
+        if (!TextUtils.isEmpty(autoLanguage)){
+            translationMessage(message,autoLanguage);
         }
     }
 

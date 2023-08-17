@@ -62,7 +62,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     private ConstraintLayout describeLayout;
     private String translationContent;
     private String oldTranslationContent;
-    private boolean isShowOriginal = true;
+    private boolean isShowOriginal = false;
 
 
     public ChatRowCustomTextView(Context context, boolean isSender) {
@@ -109,18 +109,11 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         if (message.getType() == ChatMessage.Type.TXT){
             TextMessageBody body = (TextMessageBody)message.getBody();
             if (body != null){
-                String localTargetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
                 oldTranslationContent = body.getMessage();
                 List<TextMessageBody.TranslationInfo> translations = body.getTranslations();
-                if (translations.size() > 0 && !isSender){
-                    for (TextMessageBody.TranslationInfo translation : translations) {
-                        if (translation.languageCode.equals(localTargetLanguage)){
-                            translationContent = translation.translationText;
-                        }else {
-                            TextMessageBody.TranslationInfo translationInfo = translations.get(0);
-                            translationContent = translationInfo.translationText;
-                        }
-                    }
+                if (translations.size() > 0){
+                    TextMessageBody.TranslationInfo translationInfo = translations.get(0);
+                    translationContent = translationInfo.translationText;
                     tvTranslationTag.setVisibility(VISIBLE);
                     switchTranslation();
                 }else {

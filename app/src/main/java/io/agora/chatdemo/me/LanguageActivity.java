@@ -3,12 +3,17 @@ package io.agora.chatdemo.me;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,7 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
     private int maxSelectionCount = 1;
     private int languageType;
     private MeViewModel viewModel;
+    private String conversationId;
 
     private List<Language> emLanguageList = new ArrayList<>();
 
@@ -40,11 +46,22 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
         context.startActivity(starter);
     }
 
+    public static void actionStart(Context context,int type,int maxSelectionCount,String conversationId) {
+        Intent starter = new Intent(context, LanguageActivity.class);
+        starter.putExtra(DemoConstant.TRANSLATION_TYPE, type);
+        starter.putExtra(DemoConstant.TRANSLATION_SELECT_MAX_COUNT, maxSelectionCount);
+        starter.putExtra(DemoConstant.TRANSLATION_SELECT_CONVERSATION_ID, conversationId);
+        context.startActivity(starter);
+    }
+
     @Override
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         languageType = intent.getIntExtra(DemoConstant.TRANSLATION_TYPE,0);
         maxSelectionCount = intent.getIntExtra(DemoConstant.TRANSLATION_SELECT_MAX_COUNT,1);
+        if (intent.hasExtra(DemoConstant.TRANSLATION_SELECT_CONVERSATION_ID) && languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
+            conversationId = intent.getStringExtra(DemoConstant.TRANSLATION_SELECT_CONVERSATION_ID);
+        }
     }
 
     @Override
@@ -64,6 +81,8 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
 
         if (languageType == DemoConstant.TRANSLATION_TYPE_PUSH){
             titleBar.setTitle(getResources().getString(R.string.translation_push));
+        }else if (languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
+            titleBar.setTitle(getResources().getString(R.string.translation_auto));
         }
 
     }
@@ -124,22 +143,26 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
     }
 
     private void initSelectedLanguage() {
-        String languageCode;
+        String languageCode = "";
         int selectedIndex = -1;
         if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){
             languageCode = DemoHelper.getInstance().getModel().getTargetLanguage();
+        }else if (languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
+            languageCode = DemoHelper.getInstance().getModel().getAutoTargetLanguage(conversationId);
         }else {
             languageCode = DemoHelper.getInstance().getModel().getPushLanguage();
         }
-        for(int index = 0 ; index < emLanguageList.size(); index++) {
-            Language language = emLanguageList.get(index);
-            if(language.LanguageCode.equals(languageCode)) {
-                selectedIndex = index;
-                break;
+        if (!TextUtils.isEmpty(languageCode)){
+            for(int index = 0 ; index < emLanguageList.size(); index++) {
+                Language language = emLanguageList.get(index);
+                if(language.LanguageCode.equals(languageCode)) {
+                    selectedIndex = index;
+                    break;
+                }
             }
+            if (selectedIndex != -1)
+                adapter.setSelectedIndex(selectedIndex,true);
         }
-        if (selectedIndex != -1)
-            adapter.setSelectedIndex(selectedIndex,true);
     }
 
     private void updateLanguage() {
@@ -148,6 +171,14 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
             String languageCode = emLanguageList.get(selectedPositions.get(0)).LanguageCode;
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){
                 DemoHelper.getInstance().getModel().setTargetLanguage(languageCode);
+            }else if (languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put(conversationId,languageCode);
+                    DemoHelper.getInstance().getModel().setAutoTargetLanguage(jsonObject.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }else {
                 DemoHelper.getInstance().getModel().setPushLanguage(languageCode);
                 viewModel.updatePushPerformLanguage(languageCode);
@@ -155,6 +186,10 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
         }else {
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){
                 DemoHelper.getInstance().getModel().clearTargetLanguage();
+            }else if (languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
+                if (!TextUtils.isEmpty(conversationId)){
+                    DemoHelper.getInstance().getModel().clearAutoTargetLanguage(conversationId);
+                }
             }else {
                 DemoHelper.getInstance().getModel().clearPushLanguage();
             }

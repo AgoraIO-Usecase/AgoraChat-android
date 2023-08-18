@@ -3,8 +3,6 @@ package io.agora.chatdemo.general.models;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.json.JSONArray;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -498,10 +496,16 @@ public class DemoModel {
         PreferenceManager.getInstance().clearTargetLanguage();
     }
 
+    /**
+     *  set push translation language
+     */
     public void setPushLanguage(String languageCode){
         PreferenceManager.getInstance().setPushLanguage(languageCode);
     }
 
+    /**
+     *  get push translation language
+     */
     public String getPushLanguage(){
         return PreferenceManager.getInstance().getPushLanguage();
     }
@@ -510,18 +514,21 @@ public class DemoModel {
         PreferenceManager.getInstance().clearPushLanguage();
     }
 
-    public void setEnableAutoTranslation(String isEnable){
-        PreferenceManager.getInstance().setEnableAutoTranslation(isEnable);
+    public void setAutoTargetLanguage(String languageCode){
+        PreferenceManager.getInstance().setAutoTargetLanguage(languageCode);
     }
 
-    public String getEnableAutoTranslation(){
-        return PreferenceManager.getInstance().getEnableAutoTranslation();
+    public String getAutoTargetLanguage(){
+        return PreferenceManager.getInstance().getAutoTargetLanguage();
     }
 
-    public void clearAutoTranslation(){
-        PreferenceManager.getInstance().clearAutoTranslation();
+    public void clearAutoTargetLanguage(String conversationId){
+        PreferenceManager.getInstance().clearAutoTargetLanguage(conversationId);
     }
 
+    public void clearAutoTargetLanguage(){
+        PreferenceManager.getInstance().clearAutoTargetLanguage();
+    }
 
     enum Key{
         VibrateAndPlayToneOn,

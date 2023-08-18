@@ -12,15 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.List;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
-import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
@@ -33,8 +30,10 @@ import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.widget.SwitchItemView;
+import io.agora.chatdemo.me.LanguageActivity;
+import io.agora.chatdemo.me.TranslationHelper;
 
-public class ChatSettingsFragment extends BaseBottomSheetFragment implements SwitchItemView.OnCheckedChangeListener {
+public class ChatSettingsFragment extends BaseBottomSheetFragment implements SwitchItemView.OnCheckedChangeListener, View.OnClickListener {
     private FragmentChatSettingsBinding binding;
     private String conversationId;
     private ChatSettingsViewModel viewModel;
@@ -65,14 +64,17 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         String extField = conversation.getExtField();
         binding.itemToTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseUtils.isTimestamp(extField));
         binding.itemMuteNotification.setVisibility(View.GONE);
-        String enableAutoTranslation = DemoHelper.getInstance().getModel().getEnableAutoTranslation();
-        if (!TextUtils.isEmpty(enableAutoTranslation)){
-            try {
-                JSONObject jsonObject = new JSONObject(enableAutoTranslation);
-                binding.itemToAutoTranslation.setChecked((Boolean) jsonObject.get(conversationId));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        String[] autoLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_AUTO, conversationId);
+        if (TextUtils.isEmpty(autoLanguage[1])){
+            binding.settingAutoTranslation.setContent("");
+        }else {
+            binding.settingAutoTranslation.setContent(autoLanguage[1]);
         }
     }
 
@@ -93,7 +95,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         });
         binding.itemMuteNotification.setOnCheckedChangeListener(this);
         binding.itemToTop.setOnCheckedChangeListener(this);
-        binding.itemToAutoTranslation.setOnCheckedChangeListener(this);
+        binding.settingAutoTranslation.setOnClickListener(this);
     }
 
     private void showDialog() {
@@ -181,16 +183,6 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
                 }
                 LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                 break;
-            case R.id.item_to_auto_translation:
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put(conversationId,isChecked);
-                    DemoHelper.getInstance().getModel().setEnableAutoTranslation(jsonObject.toString());
-                    showAlertDialog(isChecked);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
         }
     }
 
@@ -213,4 +205,15 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.setting_auto_translation:
+                LanguageActivity.actionStart(mContext, DemoConstant.TRANSLATION_TYPE_AUTO,1,conversationId);
+                break;
+            default:
+                break;
+        }
+    }
 }

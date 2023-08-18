@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import io.agora.chat.uikit.widget.EaseTitleBar;
-import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.databinding.ActivityTranslationSettingBinding;
@@ -46,18 +45,19 @@ public class TranslationSettingsActivity extends BaseInitActivity implements Eas
     @Override
     protected void onResume() {
         super.onResume();
-        String targetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
-        String pushLanguage = DemoHelper.getInstance().getModel().getPushLanguage();
-        if (TextUtils.isEmpty(targetLanguage)){
+        String[] targetLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_MESSAGE, "");
+        String[] pushLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_PUSH, "");
+
+        if (TextUtils.isEmpty(targetLanguage[1])){
             mBinding.settingTargetTranslation.setContent("");
         }else {
-            mBinding.settingTargetTranslation.setContent(targetLanguage);
+            mBinding.settingTargetTranslation.setContent(targetLanguage[1]);
         }
 
-        if (TextUtils.isEmpty(pushLanguage)){
+        if (TextUtils.isEmpty(pushLanguage[1])){
             mBinding.settingPushTranslation.setContent("");
         }else {
-            mBinding.settingPushTranslation.setContent(pushLanguage);
+            mBinding.settingPushTranslation.setContent(pushLanguage[1]);
         }
     }
 
@@ -81,6 +81,8 @@ public class TranslationSettingsActivity extends BaseInitActivity implements Eas
                 break;
             case R.id.setting_push_translation:
                 LanguageActivity.actionStart(mContext, DemoConstant.TRANSLATION_TYPE_PUSH,1);
+                break;
+            default:
                 break;
         }
     }

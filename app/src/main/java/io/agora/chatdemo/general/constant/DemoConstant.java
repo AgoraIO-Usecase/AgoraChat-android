@@ -158,9 +158,12 @@ public interface DemoConstant extends EaseConstant {
     String EVENT_CHAT_MODEL_TO_NORMAL = "is_normal_model";
 
     int TRANSLATION_TYPE_MESSAGE = 0;
-    int TRANSLATION_TYPE_PUSH = 1;
+    int TRANSLATION_TYPE_AUTO = 1;
+    int TRANSLATION_TYPE_PUSH = 2;
+
     String TRANSLATION_TYPE = "translation_type";
     String TRANSLATION_SELECT_MAX_COUNT = "translation_select_max_count";
+    String TRANSLATION_SELECT_CONVERSATION_ID = "translation_select_conversation_id";
 
 
 }

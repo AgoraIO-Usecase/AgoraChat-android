@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Set;
 import androidx.core.content.ContextCompat;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,9 +49,11 @@ import io.agora.chat.uikit.menu.EasePopupWindowHelper;
 import io.agora.chat.uikit.menu.MenuItemBean;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.enums.Status;
+import io.agora.chatdemo.general.interfaces.TranslationListener;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.utils.RecyclerViewUtils;
@@ -65,6 +65,7 @@ import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.me.TranslationHelper;
 import io.agora.util.EMLog;
 
 public class CustomChatFragment extends EaseChatFragment {
@@ -194,6 +195,18 @@ public class CustomChatFragment extends EaseChatFragment {
         chatLayout.getMenuHelper().addItemMenu(menuTranslationBean);
         chatLayout.getMenuHelper().addItemMenu(menuReTranslationBean);
         chatLayout.setPresenter(new ChatCustomPresenter());
+
+        EaseMessageAdapter adapter = chatLayout.getChatMessageListLayout().getMessageAdapter();
+        if (adapter instanceof CustomMessageAdapter){
+            ((CustomMessageAdapter)adapter).setTranslationListener(new TranslationListener() {
+                @Override
+                public void onTranslationRetry(ChatMessage message,String languageCode) {
+                    if (message.getBody() instanceof TextMessageBody){
+                        translationMessage(message,languageCode);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -248,7 +261,10 @@ public class CustomChatFragment extends EaseChatFragment {
                 break;
             case R.id.action_chat_translation:
             case R.id.action_chat_re_translation:
-                translationMessage(message);
+                String[] tagLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_MESSAGE, "");
+                if (!TextUtils.isEmpty(tagLanguage[0])){
+                    translationMessage(message,tagLanguage[0]);
+                }
                 break;
         }
         return super.onMenuItemClick(item, message);
@@ -389,26 +405,18 @@ public class CustomChatFragment extends EaseChatFragment {
     }
 
 
-    private void translationMessage(ChatMessage message){
-        String targetLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
+    private void translationMessage(ChatMessage message,String language){
         List<String> list = new ArrayList<>();
-        list.add(targetLanguage);
+        list.add(language);
         viewModel.translationMessage(message,list);
     }
 
     @Override
     public void addMsgAttrsBeforeSend(ChatMessage message) {
         super.addMsgAttrsBeforeSend(message);
-        String enableAutoTranslation = DemoHelper.getInstance().getModel().getEnableAutoTranslation();
-        if (!TextUtils.isEmpty(enableAutoTranslation)){
-            try {
-                JSONObject jsonObject = new JSONObject(enableAutoTranslation);
-                if ((Boolean) jsonObject.get(conversationId)){
-                    translationMessage(message);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        String[] autoLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_AUTO, conversationId);
+        if (!TextUtils.isEmpty(autoLanguage[0])){
+            translationMessage(message,autoLanguage[0]);
         }
     }
 

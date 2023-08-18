@@ -11,6 +11,8 @@ import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
 import io.agora.chat.ChatMessage;
 import io.agora.chat.callkit.general.EaseCallAction;
 import io.agora.chat.callkit.general.EaseCallType;
@@ -25,8 +27,10 @@ import io.agora.chatdemo.chat.viewholder.ChatCustomTextViewHolder;
 import io.agora.chatdemo.chat.chatrow.ChatRowSystemNotification;
 import io.agora.chatdemo.chat.viewholder.ChatSystemNotificationViewHolder;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.interfaces.TranslationListener;
 
 public class CustomMessageAdapter extends EaseMessageAdapter {
+    private TranslationListener translationlistener;
 
     @Override
     public ViewHolder<ChatMessage> getViewHolder(ViewGroup parent, int viewType) {
@@ -80,6 +84,19 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         }
 
         return super.getItemNotEmptyViewType(position);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        if (holder.itemView instanceof ChatRowCustomTextView){
+            ((ChatRowCustomTextView)holder.itemView).setTranslationListener(translationlistener);
+        }
+    }
+
+    public void setTranslationListener(TranslationListener listener){
+        this.translationlistener = listener;
+        notifyDataSetChanged();
     }
 
 }

@@ -579,6 +579,7 @@ public class DemoHelper {
         EMLog.d(TAG, "logout: onSuccess");
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
         clearPreviewInfo();
+        getModel().clearAutoTargetLanguage();
     }
 
     /**

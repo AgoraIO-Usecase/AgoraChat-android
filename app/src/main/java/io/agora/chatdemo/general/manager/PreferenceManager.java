@@ -16,6 +16,10 @@ package io.agora.chatdemo.general.manager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class PreferenceManager {
 	/**
@@ -57,8 +61,9 @@ public class PreferenceManager {
 	private static String SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME = "sort_message_by_server_time";
 
 	private static String SHARED_KEY_TARGET_LANGUAGE = "shared_key_target_language";
-	private static String SHARED_KEY_AUTO_TRANSLATION = "shared_key_auto_translation";
 	private static String SHARED_KEY_PUSH_LANGUAGE = "shared_key_push_language";
+	private static String SHARED_KEY_AUTO_TARGET_LANGUAGE = "shared_key_auto_target_language";
+	private static String SHARED_KEY_AUTO_TRANSLATION = "shared_key_auto_translation";
 
 	private static String SHARED_KEY_ENABLE_TOKEN_LOGIN = "enable_token_login";
 
@@ -352,7 +357,7 @@ public class PreferenceManager {
 	}
 
 	public String getTargetLanguage() {
-		return mSharedPreferences.getString(SHARED_KEY_TARGET_LANGUAGE, "en");
+		return mSharedPreferences.getString(SHARED_KEY_TARGET_LANGUAGE, "");
 	}
 
 	public void clearTargetLanguage(){
@@ -374,17 +379,32 @@ public class PreferenceManager {
 		return mSharedPreferences.getString(SHARED_KEY_PUSH_LANGUAGE, "");
 	}
 
-	public void setEnableAutoTranslation(String isEnable){
-		editor.putString(SHARED_KEY_AUTO_TRANSLATION,isEnable);
+	public void setAutoTargetLanguage(String languageCode){
+		editor.putString(SHARED_KEY_AUTO_TARGET_LANGUAGE, languageCode);
 		editor.apply();
 	}
 
-	public String getEnableAutoTranslation(){
-		return mSharedPreferences.getString(SHARED_KEY_AUTO_TRANSLATION,"");
+	public String getAutoTargetLanguage(){
+		return mSharedPreferences.getString(SHARED_KEY_AUTO_TARGET_LANGUAGE, "");
 	}
 
-	public void clearAutoTranslation(){
-		editor.remove(SHARED_KEY_AUTO_TRANSLATION);
+	public void clearAutoTargetLanguage(String conversationId){
+		String json = mSharedPreferences.getString(SHARED_KEY_AUTO_TARGET_LANGUAGE, "");
+		if (!TextUtils.isEmpty(json)){
+			try {
+				JSONObject jsonObject = new JSONObject(json);
+				if (jsonObject.has(conversationId)){
+					jsonObject.remove(conversationId);
+					setAutoTargetLanguage(jsonObject.toString());
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void clearAutoTargetLanguage(){
+		editor.remove(SHARED_KEY_AUTO_TARGET_LANGUAGE);
 		editor.apply();
 	}
 

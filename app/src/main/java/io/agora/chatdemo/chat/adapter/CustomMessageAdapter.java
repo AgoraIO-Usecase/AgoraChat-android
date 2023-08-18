@@ -27,6 +27,7 @@ import io.agora.chatdemo.chat.viewholder.ChatSystemNotificationViewHolder;
 import io.agora.chatdemo.general.constant.DemoConstant;
 
 public class CustomMessageAdapter extends EaseMessageAdapter {
+    private TranslationListener translationlistener;
 
     @Override
     public ViewHolder<ChatMessage> getViewHolder(ViewGroup parent, int viewType) {
@@ -35,7 +36,7 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         }else if(viewType == VIEW_TYPE_MESSAGE_CALL_ME || viewType == VIEW_TYPE_MESSAGE_CALL_OTHER) {
             return new CallViewHolder(new ChatRowCall(mContext,viewType == VIEW_TYPE_MESSAGE_CALL_ME),listener);
         }else if (viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME || viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER){
-            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME),listener);
+            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME),listener,translationlistener);
         }
         return super.getViewHolder(parent, viewType);
     }
@@ -80,6 +81,14 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         }
 
         return super.getItemNotEmptyViewType(position);
+    }
+
+    public void setTranslationListener(TranslationListener listener){
+        this.translationlistener = listener;
+    }
+
+    public interface TranslationListener{
+        void onTranslationRetry(ChatMessage message,String languageCode);
     }
 
 }

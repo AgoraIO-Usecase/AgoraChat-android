@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
@@ -63,6 +64,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     private String translationContent;
     private String oldTranslationContent;
     private boolean isShowOriginal = false;
+    private CustomTranslationListener listener;
 
 
     public ChatRowCustomTextView(Context context, boolean isSender) {
@@ -115,7 +117,11 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                     TextMessageBody.TranslationInfo translationInfo = translations.get(0);
                     translationContent = translationInfo.translationText;
                     tvTranslationTag.setVisibility(VISIBLE);
-                    switchTranslation();
+                    if (!TextUtils.isEmpty(translationInfo.languageCode) && TextUtils.isEmpty(translationContent)){
+                        showRetry(translationInfo.languageCode);
+                    }else {
+                        switchTranslation();
+                    }
                 }else {
                     tvTranslationTag.setVisibility(GONE);
                 }
@@ -385,6 +391,39 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         }
     }
 
+    private void showRetry(String languageCode){
+        int start = 0; int end = 0;
+        Drawable drawable = getResources().getDrawable(R.drawable.chat_translation_fail);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+
+        String retry = context.getResources().getString(R.string.translation_failed);
+        start = retry.length() - 4;
+        end = retry.length() + 2;
+        SpannableString spannableString = new SpannableString("  "+retry);
+        ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
+
+        ClickableSpan retrySpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                if (listener!= null){
+                    listener.onTranslationRetry(message,languageCode);
+                }
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                ds.setColor(getResources().getColor(R.color.color_main_blue));
+                ds.setUnderlineText(false);
+            }
+        };
+        if (end > 0){
+            spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(retrySpan, start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tvTranslationTag.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+        tvTranslationTag.setText(spannableString);
+    }
+
     private static String convertSpecialSymbols(String str) {
         String pattern = "\\[([^\\]]+)\\]";
         Pattern p = Pattern.compile(pattern);
@@ -449,5 +488,13 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                         , end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
         }
+    }
+
+    public interface CustomTranslationListener{
+        void onTranslationRetry(ChatMessage message,String languageCode);
+    }
+
+    public void setTranslationListener(CustomTranslationListener listener){
+        this.listener = listener;
     }
 }

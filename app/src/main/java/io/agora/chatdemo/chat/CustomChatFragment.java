@@ -49,6 +49,7 @@ import io.agora.chat.uikit.menu.EasePopupWindowHelper;
 import io.agora.chat.uikit.menu.MenuItemBean;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.enums.Status;
@@ -192,6 +193,16 @@ public class CustomChatFragment extends EaseChatFragment {
         chatLayout.getMenuHelper().addItemMenu(menuTranslationBean);
         chatLayout.getMenuHelper().addItemMenu(menuReTranslationBean);
         chatLayout.setPresenter(new ChatCustomPresenter());
+
+        EaseMessageAdapter adapter = chatLayout.getChatMessageListLayout().getMessageAdapter();
+        ((CustomMessageAdapter)adapter).setTranslationListener(new CustomMessageAdapter.TranslationListener() {
+            @Override
+            public void onTranslationRetry(ChatMessage message,String languageCode) {
+                if (message.getBody() instanceof TextMessageBody){
+                    translationMessage(message,languageCode);
+                }
+            }
+        });
     }
 
     @Override

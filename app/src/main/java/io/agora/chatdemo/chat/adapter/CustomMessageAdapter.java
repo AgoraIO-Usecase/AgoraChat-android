@@ -35,11 +35,11 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
     @Override
     public ViewHolder<ChatMessage> getViewHolder(ViewGroup parent, int viewType) {
         if(viewType == TEXT_SYSTEM_NOTIFICATION) {
-            return new ChatSystemNotificationViewHolder(new ChatRowSystemNotification(mContext, true), listener);
+            return new ChatSystemNotificationViewHolder(new ChatRowSystemNotification(mContext, true));
         }else if(viewType == VIEW_TYPE_MESSAGE_CALL_ME || viewType == VIEW_TYPE_MESSAGE_CALL_OTHER) {
-            return new CallViewHolder(new ChatRowCall(mContext,viewType == VIEW_TYPE_MESSAGE_CALL_ME),listener);
+            return new CallViewHolder(new ChatRowCall(mContext,viewType == VIEW_TYPE_MESSAGE_CALL_ME));
         }else if (viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME || viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER){
-            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME),listener);
+            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME));
         }
         return super.getViewHolder(parent, viewType);
     }

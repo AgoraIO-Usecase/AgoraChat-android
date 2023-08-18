@@ -41,9 +41,9 @@ public class ChatThreadCustomMessageAdapter extends EaseMessageAdapter {
     @Override
     public ViewHolder<ChatMessage> getViewHolder(ViewGroup parent, int viewType) {
         if(viewType == CUSTOM_THREAD_UNSENT_ME || viewType == CUSTOM_THREAD_UNSENT_OTHER) {
-            return new ChatThreadUnsentViewHolder(new ChatRowThreadUnsent(mContext, viewType == CUSTOM_THREAD_UNSENT_ME), listener);
+            return new ChatThreadUnsentViewHolder(new ChatRowThreadUnsent(mContext, viewType == CUSTOM_THREAD_UNSENT_ME));
         }else if (viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME || viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER){
-            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME),listener);
+            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME));
         }
         return super.getViewHolder(parent, viewType);
     }

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -394,7 +395,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
 
     private void showRetry(String languageCode){
         int start = 0; int end = 0;
-        Drawable drawable = getResources().getDrawable(R.drawable.chat_translation_fail);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.chat_translation_fail);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
         String retry = context.getResources().getString(R.string.translation_failed);

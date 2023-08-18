@@ -96,6 +96,7 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
 
     public void setTranslationListener(TranslationListener listener){
         this.translationlistener = listener;
+        notifyDataSetChanged();
     }
 
 }

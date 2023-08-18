@@ -197,14 +197,16 @@ public class CustomChatFragment extends EaseChatFragment {
         chatLayout.setPresenter(new ChatCustomPresenter());
 
         EaseMessageAdapter adapter = chatLayout.getChatMessageListLayout().getMessageAdapter();
-        ((CustomMessageAdapter)adapter).setTranslationListener(new TranslationListener() {
-            @Override
-            public void onTranslationRetry(ChatMessage message,String languageCode) {
-                if (message.getBody() instanceof TextMessageBody){
-                    translationMessage(message,languageCode);
+        if (adapter instanceof CustomMessageAdapter){
+            ((CustomMessageAdapter)adapter).setTranslationListener(new TranslationListener() {
+                @Override
+                public void onTranslationRetry(ChatMessage message,String languageCode) {
+                    if (message.getBody() instanceof TextMessageBody){
+                        translationMessage(message,languageCode);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override

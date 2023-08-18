@@ -384,20 +384,8 @@ public class PreferenceManager {
 		editor.apply();
 	}
 
-	public String getAutoTargetLanguage(String conversationId){
-		String language = "";
-		String json = mSharedPreferences.getString(SHARED_KEY_AUTO_TARGET_LANGUAGE, "");
-		if (TextUtils.isEmpty(json)){ return language;}
-		try {
-			JSONObject jsonObject = new JSONObject(json);
-			if (jsonObject.has(conversationId)){
-				language = jsonObject.getString(conversationId);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		return language;
+	public String getAutoTargetLanguage(){
+		return mSharedPreferences.getString(SHARED_KEY_AUTO_TARGET_LANGUAGE, "");
 	}
 
 	public void clearAutoTargetLanguage(String conversationId){

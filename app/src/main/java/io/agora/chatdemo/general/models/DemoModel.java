@@ -518,8 +518,8 @@ public class DemoModel {
         PreferenceManager.getInstance().setAutoTargetLanguage(languageCode);
     }
 
-    public String getAutoTargetLanguage(String conversationId){
-        return PreferenceManager.getInstance().getAutoTargetLanguage(conversationId);
+    public String getAutoTargetLanguage(){
+        return PreferenceManager.getInstance().getAutoTargetLanguage();
     }
 
     public void clearAutoTargetLanguage(String conversationId){

@@ -51,6 +51,7 @@ import io.agora.chat.uikit.widget.chatrow.EaseChatRowText;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.models.UrlPreViewBean;
+import io.agora.chatdemo.general.interfaces.TranslationListener;
 import io.agora.util.EMLog;
 
 public class ChatRowCustomTextView extends EaseChatRowText {
@@ -64,7 +65,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     private String translationContent;
     private String oldTranslationContent;
     private boolean isShowOriginal = false;
-    private CustomTranslationListener listener;
+    private TranslationListener listener;
 
 
     public ChatRowCustomTextView(Context context, boolean isSender) {
@@ -490,11 +491,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         }
     }
 
-    public interface CustomTranslationListener{
-        void onTranslationRetry(ChatMessage message,String languageCode);
-    }
-
-    public void setTranslationListener(CustomTranslationListener listener){
+    public void setTranslationListener(TranslationListener listener){
         this.listener = listener;
     }
 }

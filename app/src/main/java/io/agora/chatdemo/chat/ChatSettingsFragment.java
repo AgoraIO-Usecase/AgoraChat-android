@@ -18,7 +18,6 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
-import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseActivity;
 import io.agora.chatdemo.base.BaseBottomSheetFragment;
@@ -32,6 +31,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.widget.SwitchItemView;
 import io.agora.chatdemo.me.LanguageActivity;
+import io.agora.chatdemo.me.TranslationHelper;
 
 public class ChatSettingsFragment extends BaseBottomSheetFragment implements SwitchItemView.OnCheckedChangeListener, View.OnClickListener {
     private FragmentChatSettingsBinding binding;
@@ -70,11 +70,11 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     public void onResume() {
         super.onResume();
 
-        String autoLanguage = DemoHelper.getInstance().getModel().getAutoTargetLanguage(conversationId);
-        if (TextUtils.isEmpty(autoLanguage)){
+        String[] autoLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_AUTO, conversationId);
+        if (TextUtils.isEmpty(autoLanguage[1])){
             binding.settingAutoTranslation.setContent("");
         }else {
-            binding.settingAutoTranslation.setContent(autoLanguage);
+            binding.settingAutoTranslation.setContent(autoLanguage[1]);
         }
     }
 

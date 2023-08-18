@@ -53,6 +53,7 @@ import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.enums.Status;
+import io.agora.chatdemo.general.interfaces.TranslationListener;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.utils.RecyclerViewUtils;
@@ -64,6 +65,7 @@ import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.me.TranslationHelper;
 import io.agora.util.EMLog;
 
 public class CustomChatFragment extends EaseChatFragment {
@@ -195,7 +197,7 @@ public class CustomChatFragment extends EaseChatFragment {
         chatLayout.setPresenter(new ChatCustomPresenter());
 
         EaseMessageAdapter adapter = chatLayout.getChatMessageListLayout().getMessageAdapter();
-        ((CustomMessageAdapter)adapter).setTranslationListener(new CustomMessageAdapter.TranslationListener() {
+        ((CustomMessageAdapter)adapter).setTranslationListener(new TranslationListener() {
             @Override
             public void onTranslationRetry(ChatMessage message,String languageCode) {
                 if (message.getBody() instanceof TextMessageBody){
@@ -257,9 +259,9 @@ public class CustomChatFragment extends EaseChatFragment {
                 break;
             case R.id.action_chat_translation:
             case R.id.action_chat_re_translation:
-                String tagLanguage = DemoHelper.getInstance().getModel().getTargetLanguage();
-                if (!TextUtils.isEmpty(tagLanguage)){
-                    translationMessage(message,tagLanguage);
+                String[] tagLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_MESSAGE, "");
+                if (!TextUtils.isEmpty(tagLanguage[0])){
+                    translationMessage(message,tagLanguage[0]);
                 }
                 break;
         }
@@ -410,9 +412,9 @@ public class CustomChatFragment extends EaseChatFragment {
     @Override
     public void addMsgAttrsBeforeSend(ChatMessage message) {
         super.addMsgAttrsBeforeSend(message);
-        String autoLanguage = DemoHelper.getInstance().getModel().getAutoTargetLanguage(conversationId);
-        if (!TextUtils.isEmpty(autoLanguage)){
-            translationMessage(message,autoLanguage);
+        String[] autoLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_AUTO, conversationId);
+        if (!TextUtils.isEmpty(autoLanguage[0])){
+            translationMessage(message,autoLanguage[0]);
         }
     }
 

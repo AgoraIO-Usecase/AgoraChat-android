@@ -11,6 +11,8 @@ import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
 import io.agora.chat.ChatMessage;
 import io.agora.chat.callkit.general.EaseCallAction;
 import io.agora.chat.callkit.general.EaseCallType;
@@ -25,6 +27,7 @@ import io.agora.chatdemo.chat.viewholder.ChatCustomTextViewHolder;
 import io.agora.chatdemo.chat.chatrow.ChatRowSystemNotification;
 import io.agora.chatdemo.chat.viewholder.ChatSystemNotificationViewHolder;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.interfaces.TranslationListener;
 
 public class CustomMessageAdapter extends EaseMessageAdapter {
     private TranslationListener translationlistener;
@@ -36,7 +39,7 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         }else if(viewType == VIEW_TYPE_MESSAGE_CALL_ME || viewType == VIEW_TYPE_MESSAGE_CALL_OTHER) {
             return new CallViewHolder(new ChatRowCall(mContext,viewType == VIEW_TYPE_MESSAGE_CALL_ME),listener);
         }else if (viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME || viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER){
-            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME),listener,translationlistener);
+            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME),listener);
         }
         return super.getViewHolder(parent, viewType);
     }
@@ -83,12 +86,16 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
         return super.getItemNotEmptyViewType(position);
     }
 
-    public void setTranslationListener(TranslationListener listener){
-        this.translationlistener = listener;
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        if (holder.itemView instanceof ChatRowCustomTextView){
+            ((ChatRowCustomTextView)holder.itemView).setTranslationListener(translationlistener);
+        }
     }
 
-    public interface TranslationListener{
-        void onTranslationRetry(ChatMessage message,String languageCode);
+    public void setTranslationListener(TranslationListener listener){
+        this.translationlistener = listener;
     }
 
 }

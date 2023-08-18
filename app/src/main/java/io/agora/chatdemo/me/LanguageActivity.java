@@ -144,13 +144,10 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
     private void initSelectedLanguage() {
         String languageCode = "";
         int selectedIndex = -1;
-        if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){
-            languageCode = DemoHelper.getInstance().getModel().getTargetLanguage();
-        }else if (languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
-            languageCode = DemoHelper.getInstance().getModel().getAutoTargetLanguage(conversationId);
-        }else {
-            languageCode = DemoHelper.getInstance().getModel().getPushLanguage();
-        }
+
+        String[] languages = TranslationHelper.getLanguageByType(languageType, conversationId);
+        languageCode = languages[0];
+
         if (!TextUtils.isEmpty(languageCode)){
             for(int index = 0 ; index < emLanguageList.size(); index++) {
                 Language language = emLanguageList.get(index);
@@ -168,19 +165,32 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
         List<Integer> selectedPositions = adapter.getSelectedPositions();
         if (selectedPositions.size() > 0){
             String languageCode = emLanguageList.get(selectedPositions.get(0)).LanguageCode;
+            String languageLocalName = emLanguageList.get(selectedPositions.get(0)).LanguageLocalName;
+            JSONObject jsonObject = new JSONObject();
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){
-                DemoHelper.getInstance().getModel().setTargetLanguage(languageCode);
-            }else if (languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
-                JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put(conversationId,languageCode);
+                    jsonObject.put(languageCode,languageLocalName);
+                    DemoHelper.getInstance().getModel().setTargetLanguage(jsonObject.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if (languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
+                try {
+                    JSONObject object = new JSONObject();
+                    object.put(languageCode,languageLocalName);
+                    jsonObject.put(conversationId,object);
                     DemoHelper.getInstance().getModel().setAutoTargetLanguage(jsonObject.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }else {
-                DemoHelper.getInstance().getModel().setPushLanguage(languageCode);
-                viewModel.updatePushPerformLanguage(languageCode);
+                try {
+                    jsonObject.put(languageCode,languageLocalName);
+                    DemoHelper.getInstance().getModel().setPushLanguage(jsonObject.toString());
+                    viewModel.updatePushPerformLanguage(languageCode);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }else {
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){

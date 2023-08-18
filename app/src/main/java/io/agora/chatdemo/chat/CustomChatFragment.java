@@ -205,37 +205,33 @@ public class CustomChatFragment extends EaseChatFragment {
                 || message.getBody() instanceof CustomMessageBody
                 || message.status() != ChatMessage.Status.SUCCESS) {
             helper.findItemVisible(R.id.action_chat_report, false);
-            chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, false);
-            if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser()) ||
-                    message.getBody() instanceof LocationMessageBody || message.getBody() instanceof CustomMessageBody) {
-                chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_report, false);
-            } else {
-                helper.findItemVisible(R.id.action_chat_report, true);
-            }
-            boolean isRecallNote = message.getBooleanAttribute(DemoConstant.MESSAGE_TYPE_RECALL, false);
-            if (isRecallNote) {
-                helper.setAllItemsVisible(false);
-                helper.showHeaderView(false);
-                helper.findItemVisible(R.id.action_chat_delete, true);
-            }
+        } else {
+            helper.findItemVisible(R.id.action_chat_report, true);
+        }
+
+        boolean isRecallNote = message.getBooleanAttribute(DemoConstant.MESSAGE_TYPE_RECALL, false);
+        if (isRecallNote) {
+            helper.setAllItemsVisible(false);
+            helper.showHeaderView(false);
+            helper.findItemVisible(R.id.action_chat_delete, true);
         }
 
         if (message.getBody() instanceof TextMessageBody) {
             if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser())){
-                chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
-                chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, false);
+                helper.findItemVisible(R.id.action_chat_translation, false);
+                helper.findItemVisible(R.id.action_chat_re_translation, false);
             }else {
                 if (((TextMessageBody) message.getBody()).getTranslations().size() > 0) {
-                    chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
-                    chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, true);
+                    helper.findItemVisible(R.id.action_chat_translation, false);
+                    helper.findItemVisible(R.id.action_chat_re_translation, true);
                 } else {
-                    chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, true);
-                    chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, false);
+                    helper.findItemVisible(R.id.action_chat_translation, true);
+                    helper.findItemVisible(R.id.action_chat_re_translation, false);
                 }
             }
         } else {
-            chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_translation, false);
-            chatLayout.getMenuHelper().findItemVisible(R.id.action_chat_re_translation, false);
+            helper.findItemVisible(R.id.action_chat_translation, false);
+            helper.findItemVisible(R.id.action_chat_re_translation, false);
         }
     }
 

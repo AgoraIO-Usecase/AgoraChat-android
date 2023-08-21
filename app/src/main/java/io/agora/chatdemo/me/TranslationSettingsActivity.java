@@ -9,12 +9,14 @@ import android.text.TextUtils;
 import android.view.View;
 
 import io.agora.chat.uikit.widget.EaseTitleBar;
+import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.databinding.ActivityTranslationSettingBinding;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.widget.SwitchItemView;
 
-public class TranslationSettingsActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
+public class TranslationSettingsActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
     private ActivityTranslationSettingBinding mBinding;
 
     public static void actionStart(Context context) {
@@ -40,6 +42,7 @@ public class TranslationSettingsActivity extends BaseInitActivity implements Eas
         mBinding.titleBar.setOnBackPressListener(this);
         mBinding.settingTargetTranslation.setOnClickListener(this);
         mBinding.settingPushTranslation.setOnClickListener(this);
+        mBinding.translationDemand.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -47,11 +50,21 @@ public class TranslationSettingsActivity extends BaseInitActivity implements Eas
         super.onResume();
         String[] targetLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_MESSAGE, "");
         String[] pushLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_PUSH, "");
+        boolean enable = DemoHelper.getInstance().getModel().getDemandTranslationEnable();
+
+        if (enable){
+            mBinding.translationSwitchLayout.setVisibility(View.VISIBLE);
+        }else {
+            mBinding.translationSwitchLayout.setVisibility(View.GONE);
+        }
+        mBinding.translationDemand.setChecked(enable);
 
         if (TextUtils.isEmpty(targetLanguage[1])){
             mBinding.settingTargetTranslation.setContent("");
+            mBinding.translationSwitchLayout.setVisibility(View.GONE);
         }else {
             mBinding.settingTargetTranslation.setContent(targetLanguage[1]);
+            mBinding.translationSwitchLayout.setVisibility(View.VISIBLE);
         }
 
         if (TextUtils.isEmpty(pushLanguage[1])){
@@ -81,6 +94,17 @@ public class TranslationSettingsActivity extends BaseInitActivity implements Eas
                 break;
             case R.id.setting_push_translation:
                 LanguageActivity.actionStart(mContext, DemoConstant.TRANSLATION_TYPE_PUSH,1);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.translation_demand:
+                DemoHelper.getInstance().getModel().setDemandTranslationEnable(isChecked);
                 break;
             default:
                 break;

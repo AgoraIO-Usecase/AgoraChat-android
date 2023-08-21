@@ -1,5 +1,6 @@
 package io.agora.chatdemo.me;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -81,7 +82,7 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
         if (languageType == DemoConstant.TRANSLATION_TYPE_PUSH){
             titleBar.setTitle(getResources().getString(R.string.translation_push));
         }else if (languageType == DemoConstant.TRANSLATION_TYPE_AUTO){
-            titleBar.setTitle(getResources().getString(R.string.translation_auto));
+            titleBar.setTitle(getResources().getString(R.string.translation_preferred));
         }
 
     }
@@ -131,6 +132,7 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
 
     @Override
     public void onBackPress(View view) {
+        setResult(Activity.RESULT_OK);
         onBackPressed();
     }
 
@@ -138,6 +140,7 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
     @Override
     public void onRightClick(View view) {
         updateLanguage();
+        setResult(Activity.RESULT_OK);
         onBackPressed();
     }
 
@@ -170,6 +173,7 @@ public class LanguageActivity extends BaseInitActivity implements EaseTitleBar.O
             if (languageType == DemoConstant.TRANSLATION_TYPE_MESSAGE){
                 try {
                     jsonObject.put(languageCode,languageLocalName);
+                    DemoHelper.getInstance().getModel().setDemandTranslationEnable(true);
                     DemoHelper.getInstance().getModel().setTargetLanguage(jsonObject.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();

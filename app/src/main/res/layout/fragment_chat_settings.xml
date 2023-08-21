@@ -77,6 +77,7 @@
         android:id="@+id/setting_auto_translation"
         android:layout_width="match_parent"
         android:layout_height="54dp"
+        android:visibility="gone"
         android:foreground="@drawable/ease_ripple_click_gray"
         app:arrowItemArrowSrc="@drawable/arrow_right"
         app:arrowItemAvatarHeight="32dp"

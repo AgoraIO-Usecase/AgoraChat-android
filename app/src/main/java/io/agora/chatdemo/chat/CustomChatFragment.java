@@ -2,6 +2,8 @@ package io.agora.chatdemo.chat;
 
 import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spannable;
@@ -9,6 +11,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,8 @@ import android.view.ViewParent;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,6 +57,7 @@ import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
 import io.agora.chatdemo.general.constant.DemoConstant;
+import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.interfaces.TranslationListener;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
@@ -65,6 +71,7 @@ import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.me.LanguageActivity;
 import io.agora.chatdemo.me.TranslationHelper;
 import io.agora.util.EMLog;
 
@@ -72,10 +79,25 @@ public class CustomChatFragment extends EaseChatFragment {
     private boolean isFirstMeasure = true;
     private GroupDetailViewModel groupDetailViewModel;
     private ChatViewModel viewModel;
+    private AlertDialog translationDialog;
+    private int translationType;
+    private ChatMessage translationMsg;
+    private ActivityResultLauncher<Intent> launcher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        boolean enable = DemoHelper.getInstance().getModel().getDemandTranslationEnable();
+                        if (enable && !TextUtils.isEmpty(getPreferredLanguageCode())){
+                            translationMessage(translationMsg,getPreferredLanguageCode());
+                        }
+                    }
+                }
+        );
     }
 
     @Override
@@ -230,17 +252,12 @@ public class CustomChatFragment extends EaseChatFragment {
         }
 
         if (message.getBody() instanceof TextMessageBody) {
-            if (TextUtils.equals(message.getFrom(), ChatClient.getInstance().getCurrentUser())){
+            if (((TextMessageBody) message.getBody()).getTranslations().size() > 0) {
                 helper.findItemVisible(R.id.action_chat_translation, false);
+                helper.findItemVisible(R.id.action_chat_re_translation, true);
+            } else {
+                helper.findItemVisible(R.id.action_chat_translation, true);
                 helper.findItemVisible(R.id.action_chat_re_translation, false);
-            }else {
-                if (((TextMessageBody) message.getBody()).getTranslations().size() > 0) {
-                    helper.findItemVisible(R.id.action_chat_translation, false);
-                    helper.findItemVisible(R.id.action_chat_re_translation, true);
-                } else {
-                    helper.findItemVisible(R.id.action_chat_translation, true);
-                    helper.findItemVisible(R.id.action_chat_re_translation, false);
-                }
             }
         } else {
             helper.findItemVisible(R.id.action_chat_translation, false);
@@ -261,10 +278,19 @@ public class CustomChatFragment extends EaseChatFragment {
                 break;
             case R.id.action_chat_translation:
             case R.id.action_chat_re_translation:
-                String[] tagLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_MESSAGE, "");
-                if (!TextUtils.isEmpty(tagLanguage[0])){
-                    translationMessage(message,tagLanguage[0]);
+                translationMsg = message;
+                if (!TextUtils.isEmpty(getPreferredLanguageCode())){
+                    boolean enable = DemoHelper.getInstance().getModel().getDemandTranslationEnable();
+                    if (enable){
+                        translationMessage(message,getPreferredLanguageCode());
+                        break;
+                    }else {
+                        translationType = DemoConstant.TRANSLATION_DEMAND_ENABLE;
+                    }
+                }else {
+                    translationType = DemoConstant.TRANSLATION_NO_LANGUAGE;
                 }
+                showTranslationDialog();
                 break;
         }
         return super.onMenuItemClick(item, message);
@@ -450,5 +476,48 @@ public class CustomChatFragment extends EaseChatFragment {
             }
         }
         return false;
+    }
+
+    private void showTranslationDialog(){
+        if (translationType == 0){ return;}
+        translationDialog = new AlertDialog.Builder(mContext)
+                .setContentView(R.layout.dialog_auto_translation)
+                .setText(R.id.tv_content,
+                        translationType == DemoConstant.TRANSLATION_NO_LANGUAGE ? getString(R.string.translation_auto_about_info) : getString(R.string.translation_unable)
+                )
+                .setText(R.id.btn_ok,
+                        translationType == DemoConstant.TRANSLATION_NO_LANGUAGE ? getString(R.string.translation_setting) : getString(R.string.translation_turn_on)
+                )
+                .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setGravity(Gravity.CENTER)
+                .setCancelable(true)
+                .setOnClickListener(R.id.btn_ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (translationType == DemoConstant.TRANSLATION_NO_LANGUAGE){
+                            Intent starter = new Intent(mContext, LanguageActivity.class);
+                            starter.putExtra(DemoConstant.TRANSLATION_TYPE, DemoConstant.TRANSLATION_TYPE_MESSAGE);
+                            starter.putExtra(DemoConstant.TRANSLATION_SELECT_MAX_COUNT, 1);
+                            launcher.launch(starter);
+                        }else {
+                            DemoHelper.getInstance().getModel().setDemandTranslationEnable(true);
+                            if (!TextUtils.isEmpty(getPreferredLanguageCode())){
+                                translationMessage(translationMsg,getPreferredLanguageCode());
+                            }
+                        }
+                        translationDialog.dismiss();
+                    }
+                }).setOnClickListener(R.id.btn_cancel, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        translationDialog.dismiss();
+                    }
+                }).create();
+        translationDialog.show();
+    }
+
+    private String getPreferredLanguageCode(){
+        String[] language = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_MESSAGE, "");
+        return language[0];
     }
 }

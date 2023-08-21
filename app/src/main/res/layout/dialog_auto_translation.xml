@@ -40,20 +40,34 @@
             android:text="@string/translation_auto_about_info"
             />
 
-        <View
-            android:layout_marginTop="19dp"
-            android:background="@color/dialog_change_nickname_divider"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+            android:layout_height="40dp"
+            android:layout_marginTop="2dp">
 
-        <Button
-            android:id="@+id/btn_ok"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@color/color_transparent"
-            android:text="@string/ease_call_determine"
-            android:textColor="#005FFF"
-            android:textSize="17sp" />
+            <Button
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_ok"
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_transparent"
+                android:text="@string/ease_call_cancel"
+                android:textColor="#333333"
+                android:textSize="15sp" />
+
+            <Button
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/btn_cancel"
+                android:id="@+id/btn_ok"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_transparent"
+                android:text="@string/ease_call_determine"
+                android:textColor="#04AEF0"
+                android:textSize="15sp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

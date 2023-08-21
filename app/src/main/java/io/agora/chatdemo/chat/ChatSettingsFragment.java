@@ -38,7 +38,6 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     private String conversationId;
     private ChatSettingsViewModel viewModel;
     private EaseChatType chatType;
-    private AlertDialog dialog;
 
     @Nullable
     @Override
@@ -183,25 +182,6 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
                 }
                 LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                 break;
-        }
-    }
-
-    private void showAlertDialog(boolean isChecked){
-        if (dialog == null){
-            dialog = new AlertDialog.Builder(mContext)
-                    .setContentView(R.layout.dialog_auto_translation)
-                    .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                    .setGravity(Gravity.CENTER)
-                    .setCancelable(false)
-                    .setOnClickListener(R.id.btn_ok, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    }).create();
-        }
-        if (isChecked){
-            dialog.show();
         }
     }
 

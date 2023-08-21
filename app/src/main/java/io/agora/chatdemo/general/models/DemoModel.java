@@ -530,6 +530,14 @@ public class DemoModel {
         PreferenceManager.getInstance().clearAutoTargetLanguage();
     }
 
+    public void setDemandTranslationEnable(boolean isDemand){
+        PreferenceManager.getInstance().setDemandTranslation(isDemand);
+    }
+
+    public boolean getDemandTranslationEnable(){
+        return PreferenceManager.getInstance().getDemandTranslation();
+    }
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,

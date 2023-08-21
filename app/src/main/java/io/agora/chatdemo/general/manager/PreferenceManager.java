@@ -63,7 +63,7 @@ public class PreferenceManager {
 	private static String SHARED_KEY_TARGET_LANGUAGE = "shared_key_target_language";
 	private static String SHARED_KEY_PUSH_LANGUAGE = "shared_key_push_language";
 	private static String SHARED_KEY_AUTO_TARGET_LANGUAGE = "shared_key_auto_target_language";
-	private static String SHARED_KEY_AUTO_TRANSLATION = "shared_key_auto_translation";
+	private static String SHARED_KEY_ON_DEMAND_TRANSLATION = "shared_key_on_demand_translation";
 
 	private static String SHARED_KEY_ENABLE_TOKEN_LOGIN = "enable_token_login";
 
@@ -406,6 +406,15 @@ public class PreferenceManager {
 	public void clearAutoTargetLanguage(){
 		editor.remove(SHARED_KEY_AUTO_TARGET_LANGUAGE);
 		editor.apply();
+	}
+
+	public void setDemandTranslation(boolean isDemand){
+		editor.putBoolean(SHARED_KEY_ON_DEMAND_TRANSLATION, isDemand);
+		editor.apply();
+	}
+
+	public boolean getDemandTranslation(){
+		return mSharedPreferences.getBoolean(SHARED_KEY_ON_DEMAND_TRANSLATION, false);
 	}
 
 }

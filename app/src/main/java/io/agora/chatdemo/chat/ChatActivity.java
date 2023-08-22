@@ -291,23 +291,22 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                     public boolean onSelectResult(View view, SelectType type, List<String> msgIdList) {
                         if(type == SelectType.DELETE) {
                             if(msgIdList == null || msgIdList.isEmpty()) {
-                                restTitleBar(view);
+                                resetTitleBar(view);
                                 return true;
                             }
-                            restTitleBar(view);
-                            showDeleteDialog(msgIdList);
+                            showDeleteDialog(msgIdList, view);
                             return true;
                         }else if(type == SelectType.FORWARD) {
                             mForwardMsgIdList = msgIdList;
                             if(mForwardMsgIdList == null || mForwardMsgIdList.isEmpty()) {
-                                restTitleBar(view);
+                                resetTitleBar(view);
                                 return true;
                             }
                             if(mForwardMsgIdList.size() > MAX_COMBINE_MESSAGE_LIST) {
                                 showToast(getString(R.string.forward_max_count_hint));
                                 return true;
                             }
-                            restTitleBar(view);
+                            resetTitleBar(view);
                             showForwardContactsDialog();
                             return true;
                         }
@@ -333,7 +332,10 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }
 
-    private void restTitleBar(View view) {
+    private void resetTitleBar(View view) {
+        if(view == null && mChatLayout.getChatInputMenu().getChatTopExtendMenu() instanceof View) {
+            view = (View) mChatLayout.getChatInputMenu().getChatTopExtendMenu();
+        }
         if(view instanceof EaseChatMultiSelectView) {
             ((EaseChatMultiSelectView) view).dismiss();
         }
@@ -351,12 +353,13 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         }
     }
 
-    private void showDeleteDialog(List<String> deleteMsgIdList) {
+    private void showDeleteDialog(List<String> deleteMsgIdList, View multiView) {
         new SimpleDialog.Builder(this)
                 .setTitle(getString(R.string.chat_delete_multi_messages_title, deleteMsgIdList.size()))
                 .setOnConfirmClickListener(R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
+                        resetTitleBar(multiView);
                         mChatLayout.deleteMessages(deleteMsgIdList);
                     }
                 })

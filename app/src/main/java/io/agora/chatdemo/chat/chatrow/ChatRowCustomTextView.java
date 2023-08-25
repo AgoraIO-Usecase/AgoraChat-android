@@ -483,7 +483,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 end = start + atAll.length();
             }
 
-            if (start != -1 && end > 0){
+            if (start != -1 && end > 0 && message.direct() == ChatMessage.Direct.RECEIVE){
                 Spannable spannable = (Spannable) contentView.getText();
                 spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(io.agora.chat.uikit.R.color.color_conversation_title)), start
                         , end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);

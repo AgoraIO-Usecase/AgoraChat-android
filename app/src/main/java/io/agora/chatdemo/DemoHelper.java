@@ -737,11 +737,14 @@ public class DemoHelper {
 
     public EaseUser getGroupUserInfo(String groupId,String username) {
         MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
-        EaseUser user = getUserInfo(username);
+        EaseUser user;
         if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)){
+            user = getUsersManager().getUserInfo(username,false);
             if (user != null){
                 user.setNickname(groupBean.getNickName());
             }
+        }else {
+            user = getUsersManager().getUserInfo(username,true);
         }
         return user;
     }

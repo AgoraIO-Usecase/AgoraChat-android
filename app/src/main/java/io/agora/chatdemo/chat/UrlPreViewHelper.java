@@ -12,7 +12,6 @@ import io.agora.chatdemo.chat.models.UrlPreViewBean;
 
 public class UrlPreViewHelper {
     private static final Map<String, UrlPreViewBean> previewMap = new HashMap<>();
-    // 匹配URL的正则表达式
     public static final String URL_REGEX = "(((https|http)?://)?([a-z0-9]+[.])|(www.))"
             + "\\w+[.|\\/]([a-z0-9]{0,})?[[.]([a-z0-9]{0,})]+((/[\\S&&[^,;\u4E00-\u9FA5]]+)+)?([.][a-z0-9]{0,}+|/?)";
 
@@ -41,9 +40,9 @@ public class UrlPreViewHelper {
     }
 
     /**
-     * 判断字符串中是否包含URL地址
-     * @param content 要匹配的字符串
-     * @return 是否包含URL地址
+     * Determine whether the string contains a URL address
+     * @param content String to match
+     * @return Does it include a URL address
      */
     public static boolean containsUrl(String content) {
         Pattern p = Pattern.compile(URL_REGEX);
@@ -53,7 +52,7 @@ public class UrlPreViewHelper {
     }
 
     /**
-     * 判断url是否为图片类型
+     * Determine if the URL is an image type
      * @param url
      * @return
      */

@@ -315,7 +315,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
     private void AddHeader() {
         if( managersAdapter != null) {
             EaseUser user = new EaseUser(getString(R.string.demo_pick_at_all_members));
-            user.setAvatar(R.drawable.ease_groups_icon+"");
+            user.setAvatar(R.drawable.demo_icon_pick_at_all+"");
             List<EaseUser> users = new ArrayList<>();
             users.add(user);
             managersAdapter.setData(users);

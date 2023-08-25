@@ -182,6 +182,7 @@ public class ChatReportActivity extends BaseActivity {
                             @Override
                             public void OnItemClick(View view, int position) {
                                 report_type.setText(labels.get(position));
+                                checkDone();
                             }
                         }).show();
             }
@@ -234,6 +235,7 @@ public class ChatReportActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 String content = easeInputEditText.getText().toString();
                 content_count.setText(String.valueOf(content.length()));
+                checkDone();
             }
         });
 
@@ -297,6 +299,16 @@ public class ChatReportActivity extends BaseActivity {
             EaseCompat.openFile(ChatReportActivity.this, filePath);
         }else {
             EaseActivityProviderHelper.startToDownloadFileActivity(mContext, message);
+        }
+    }
+
+    private void checkDone(){
+        if (TextUtils.equals(report_type.getText(),"Please Choose") || TextUtils.isEmpty(easeInputEditText.getText())){
+            titleBar.setRightTitleColor(R.color.color_light_gray_999999);
+            titleBar.getRightText().setEnabled(false);
+        }else {
+            titleBar.setRightTitleColor(R.color.color_main_blue);
+            titleBar.getRightText().setEnabled(true);
         }
     }
 

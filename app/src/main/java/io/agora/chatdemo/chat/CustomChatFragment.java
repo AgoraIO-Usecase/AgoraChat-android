@@ -3,8 +3,10 @@ package io.agora.chatdemo.chat;
 import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -16,6 +18,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -73,6 +76,7 @@ import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.me.LanguageActivity;
 import io.agora.chatdemo.me.TranslationHelper;
+import io.agora.chatdemo.me.TranslationSettingsActivity;
 import io.agora.util.EMLog;
 
 public class CustomChatFragment extends EaseChatFragment {
@@ -185,6 +189,16 @@ public class CustomChatFragment extends EaseChatFragment {
                         fragment.setArguments(bundle);
                         if (getActivity() != null){
                             fragment.show(getActivity().getSupportFragmentManager(), "pick_at_user");
+                            if (getActivity() != null){
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        editText.requestFocus();
+                                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                                    }
+                                },200);
+                            }
                         }
                     }
                 }
@@ -483,28 +497,26 @@ public class CustomChatFragment extends EaseChatFragment {
         translationDialog = new AlertDialog.Builder(mContext)
                 .setContentView(R.layout.dialog_auto_translation)
                 .setText(R.id.tv_content,
-                        translationType == DemoConstant.TRANSLATION_NO_LANGUAGE ? getString(R.string.translation_auto_about_info) : getString(R.string.translation_unable)
+                        translationType == DemoConstant.TRANSLATION_NO_LANGUAGE ?
+                                getString(R.string.translation_auto_about_info)
+                              : getString(R.string.translation_unable)
                 )
-                .setText(R.id.btn_ok,
-                        translationType == DemoConstant.TRANSLATION_NO_LANGUAGE ? getString(R.string.translation_setting) : getString(R.string.translation_turn_on)
-                )
+                .setText(R.id.btn_ok, getString(R.string.translation_setting))
                 .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setGravity(Gravity.CENTER)
                 .setCancelable(true)
                 .setOnClickListener(R.id.btn_ok, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Intent starter;
                         if (translationType == DemoConstant.TRANSLATION_NO_LANGUAGE){
-                            Intent starter = new Intent(mContext, LanguageActivity.class);
+                            starter = new Intent(mContext, LanguageActivity.class);
                             starter.putExtra(DemoConstant.TRANSLATION_TYPE, DemoConstant.TRANSLATION_TYPE_MESSAGE);
                             starter.putExtra(DemoConstant.TRANSLATION_SELECT_MAX_COUNT, 1);
-                            launcher.launch(starter);
                         }else {
-                            DemoHelper.getInstance().getModel().setDemandTranslationEnable(true);
-                            if (!TextUtils.isEmpty(getPreferredLanguageCode())){
-                                translationMessage(translationMsg,getPreferredLanguageCode());
-                            }
+                            starter = new Intent(mContext, TranslationSettingsActivity.class);
                         }
+                        launcher.launch(starter);
                         translationDialog.dismiss();
                     }
                 }).setOnClickListener(R.id.btn_cancel, new View.OnClickListener() {

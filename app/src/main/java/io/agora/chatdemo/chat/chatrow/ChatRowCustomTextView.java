@@ -1,8 +1,12 @@
 package io.agora.chatdemo.chat.chatrow;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.Browser;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -13,6 +17,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,7 +39,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,6 +73,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     private String oldTranslationContent;
     private boolean isShowOriginal = false;
     private TranslationListener listener;
+    private final Map<String,String> urlPreviewMap = new HashMap<>();
 
 
     public ChatRowCustomTextView(Context context, boolean isSender) {
@@ -108,6 +116,25 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         mIcon.setVisibility(GONE);
         mDescribe.setVisibility(GONE);
         mTitle.setVisibility(GONE);
+
+        findViewById(R.id.flContentFillArea).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (urlPreviewMap.containsKey(message.getMsgId())){
+                    openWebPage(urlPreviewMap.get(message.getMsgId()));
+                }
+            }
+        });
+
+        findViewById(R.id.flContentFillArea).setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (itemClickListener != null) {
+                    return itemClickListener.onBubbleLongClick(v, message);
+                }
+                return false;
+            }
+        });
 
         if (message.getType() == ChatMessage.Type.TXT){
             TextMessageBody body = (TextMessageBody)message.getBody();
@@ -158,7 +185,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
             index = spannable.toString().indexOf(url);
             end = index + url.length();
         }
-
+        urlPreviewMap.put(message.getMsgId(),spans[0].getURL());
         UrlPreViewBean urlPreviewInfo = DemoHelper.getInstance().getUrlPreviewInfo(message.getMsgId());
         if (urlPreviewInfo == null){
             String msgId = message.getMsgId();
@@ -493,5 +520,16 @@ public class ChatRowCustomTextView extends EaseChatRowText {
 
     public void setTranslationListener(TranslationListener listener){
         this.listener = listener;
+    }
+
+    public void openWebPage(String url) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        intent.putExtra(Browser.EXTRA_APPLICATION_ID, context.getPackageName());
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.w("URLSpan", "Activity was not found for intent, " + intent.toString());
+        }
     }
 }

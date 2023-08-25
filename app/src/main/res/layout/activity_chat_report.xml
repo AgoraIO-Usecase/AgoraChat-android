@@ -184,7 +184,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/choose"
-                    android:text="Please Choose"
+                    android:hint="@string/report_choose"
+                    android:textColorHint="@color/report_username"
                     android:textColor="@color/report_username"
                     android:textSize="16sp" />
 

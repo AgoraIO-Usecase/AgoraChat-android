@@ -1,11 +1,13 @@
 package io.agora.chatdemo.me;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 
 import io.agora.chat.uikit.widget.EaseTitleBar;
@@ -81,9 +83,19 @@ public class TranslationSettingsActivity extends BaseInitActivity implements Eas
 
     @Override
     public void onBackPress(View view) {
+        setResult(Activity.RESULT_OK);
         onBackPressed();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(Activity.RESULT_OK);
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @SuppressLint("NonConstantResourceId")
     @Override

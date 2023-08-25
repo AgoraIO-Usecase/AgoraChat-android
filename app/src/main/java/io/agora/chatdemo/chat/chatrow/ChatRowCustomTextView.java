@@ -1,10 +1,12 @@
 package io.agora.chatdemo.chat.chatrow;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.Browser;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -15,6 +17,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -117,7 +120,9 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         findViewById(R.id.flContentFillArea).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebPage(urlPreviewMap.get(message.getMsgId()));
+                if (urlPreviewMap.containsKey(message.getMsgId())){
+                    openWebPage(urlPreviewMap.get(message.getMsgId()));
+                }
             }
         });
 
@@ -520,8 +525,11 @@ public class ChatRowCustomTextView extends EaseChatRowText {
     public void openWebPage(String url) {
         Uri webpage = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-        if (intent.resolveActivity(context.getPackageManager()) != null) {
+        intent.putExtra(Browser.EXTRA_APPLICATION_ID, context.getPackageName());
+        try {
             context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.w("URLSpan", "Activity was not found for intent, " + intent.toString());
         }
     }
 }

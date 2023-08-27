@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 
 import androidx.core.content.ContextCompat;
 
-
 import io.agora.chat.ChatMessage;
 import io.agora.chat.uikit.chat.interfaces.IChatTopExtendMenu;
 import io.agora.chat.uikit.chat.widget.EaseChatMultiSelectView;
@@ -17,7 +16,6 @@ import io.agora.chat.uikit.chatthread.EaseChatThreadFragment;
 import io.agora.chat.uikit.menu.EasePopupWindowHelper;
 import io.agora.chat.uikit.menu.MenuItemBean;
 import io.agora.chat.uikit.utils.EaseUtils;
-import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
@@ -35,6 +33,14 @@ public class ChatThreadFragment extends EaseChatThreadFragment {
             }
             if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.equals(event.message, "chatThread")) {
                 showNormalModelTitle();
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isMessageChange()) {
+                chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
     }

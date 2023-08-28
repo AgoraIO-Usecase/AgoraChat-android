@@ -13,9 +13,9 @@ import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 
-import java.util.ArrayList;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -55,7 +55,6 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.PushAndMessageHelper;
 import io.agora.chatdemo.general.models.LoginBean;
-import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.repositories.EMClientRepository;
 import io.agora.chatdemo.general.utils.GsonTools;
 import io.agora.chatdemo.group.GroupHelper;
@@ -409,7 +408,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                     EMClientRepository repo = new EMClientRepository();
                     String userName = DemoHelper.getInstance().getUsersManager().getCurrentUser();
                     String pw = repo.decryptData();
-                    if (userName.isEmpty() || pw.isEmpty()) {
+                    if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(pw)) {
                         EMLog.d(TAG, "user logout, just return");
                         return;
                     }

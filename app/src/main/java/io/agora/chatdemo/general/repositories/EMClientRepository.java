@@ -522,7 +522,6 @@ public class EMClientRepository extends BaseEMRepository{
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {
-                    EMLog.e("loginToAppServer success : ", responseInfo);
                     if (responseInfo != null && responseInfo.length() > 0) {
                         JSONObject object = new JSONObject(responseInfo);
                         String token = object.getString("accessToken");
@@ -540,6 +539,7 @@ public class EMClientRepository extends BaseEMRepository{
                         callBack.onError(code, responseInfo);
                     }
                 } else {
+                    EMLog.e("loginToAppServer failed : ", responseInfo);
                     if (responseInfo != null && responseInfo.length() > 0 && CommonUtils.isJson(responseInfo)) {
                         JSONObject object = new JSONObject(responseInfo);
                         callBack.onError(code, object.getString("errorInfo"));
@@ -549,6 +549,7 @@ public class EMClientRepository extends BaseEMRepository{
                 }
             } catch (Exception e) {
                 //e.printStackTrace();
+                EMLog.e("loginToAppServer error : ", e.getMessage());
                 callBack.onError(Error.NETWORK_ERROR, e.getMessage());
             }
         });

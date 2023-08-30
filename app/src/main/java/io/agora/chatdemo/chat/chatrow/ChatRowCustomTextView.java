@@ -64,7 +64,6 @@ import io.agora.util.EMLog;
 
 public class ChatRowCustomTextView extends EaseChatRowText {
     public static final String AT_PREFIX = "@";
-    public static final String AT_SUFFIX = " ";
     private TextView mTitle;
     private TextView mDescribe;
     private TextView tvTranslationTag;
@@ -502,11 +501,11 @@ public class ChatRowCustomTextView extends EaseChatRowText {
             }
 
             if (!TextUtils.isEmpty(atMe)){
-                atMe = AT_PREFIX + atMe + AT_SUFFIX;
+                atMe = AT_PREFIX + atMe;
                 start = contentView.getText().toString().indexOf(atMe);
                 end = start + atMe.length();
             }else {
-                atAll = AT_PREFIX + atAll + AT_SUFFIX;
+                atAll = AT_PREFIX + atAll;
                 start = contentView.getText().toString().indexOf(atAll);
                 end = start + atAll.length();
             }

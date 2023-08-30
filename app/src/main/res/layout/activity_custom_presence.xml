@@ -27,6 +27,7 @@
         android:paddingBottom="5dp"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:maxLength="10"
         app:layout_constraintTop_toBottomOf="@id/title_bar" />
 
     <ImageView

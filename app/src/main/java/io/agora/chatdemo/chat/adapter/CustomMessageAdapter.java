@@ -1,12 +1,12 @@
 package io.agora.chatdemo.chat.adapter;
 
+import static io.agora.chat.uikit.chat.viewholder.EaseMessageViewType.VIEW_TYPE_MESSAGE_TXT_ME;
+import static io.agora.chat.uikit.chat.viewholder.EaseMessageViewType.VIEW_TYPE_MESSAGE_TXT_OTHER;
 import static io.agora.chatdemo.general.constant.DemoConstant.TEXT_SYSTEM_NOTIFICATION;
 import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CALL_ME;
 import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CALL_OTHER;
 import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VIDEO_CALL;
 import static io.agora.chat.callkit.general.EaseCallType.SINGLE_VOICE_CALL;
-import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME;
-import static io.agora.chatdemo.general.constant.DemoConstant.VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER;
 
 import android.text.TextUtils;
 import android.view.ViewGroup;
@@ -18,8 +18,6 @@ import io.agora.chat.callkit.general.EaseCallAction;
 import io.agora.chat.callkit.general.EaseCallType;
 import io.agora.chat.callkit.utils.EaseCallMsgUtils;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
-import io.agora.chat.uikit.chat.viewholder.EaseMessageViewType;
-import io.agora.chat.uikit.constants.EaseConstant;
 import io.agora.chatdemo.chat.CallViewHolder;
 import io.agora.chatdemo.chat.ChatRowCall;
 import io.agora.chatdemo.chat.chatrow.ChatRowCustomTextView;
@@ -38,8 +36,8 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
             return new ChatSystemNotificationViewHolder(new ChatRowSystemNotification(mContext, true));
         }else if(viewType == VIEW_TYPE_MESSAGE_CALL_ME || viewType == VIEW_TYPE_MESSAGE_CALL_OTHER) {
             return new CallViewHolder(new ChatRowCall(mContext,viewType == VIEW_TYPE_MESSAGE_CALL_ME));
-        }else if (viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME || viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER){
-            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME));
+        }else if (viewType == VIEW_TYPE_MESSAGE_TXT_ME.getValue() || viewType == VIEW_TYPE_MESSAGE_TXT_OTHER.getValue()){
+            return new ChatCustomTextViewHolder(new ChatRowCustomTextView(mContext,viewType == VIEW_TYPE_MESSAGE_TXT_ME.getValue()));
         }
         return super.getViewHolder(parent, viewType);
     }
@@ -67,19 +65,6 @@ public class CustomMessageAdapter extends EaseMessageAdapter {
                 return VIEW_TYPE_MESSAGE_CALL_ME;
             }else {
                 return VIEW_TYPE_MESSAGE_CALL_OTHER;
-            }
-        }
-
-        if (message.getType() == ChatMessage.Type.TXT){
-            boolean isThreadNotify = message.getBooleanAttribute(EaseConstant.EASE_THREAD_NOTIFICATION_TYPE, false);
-            if(isThreadNotify) {
-                return EaseMessageViewType.VIEW_TYPE_MESSAGE_CHAT_THREAD_NOTIFY.getValue();
-            }else {
-                if (message.direct() == ChatMessage.Direct.SEND) {
-                    return VIEW_TYPE_MESSAGE_CUSTOM_TEXT_ME;
-                } else {
-                    return VIEW_TYPE_MESSAGE_CUSTOM_TEXT_OTHER;
-                }
             }
         }
 

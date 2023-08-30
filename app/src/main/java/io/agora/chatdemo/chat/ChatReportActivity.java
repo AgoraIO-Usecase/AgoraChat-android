@@ -303,7 +303,8 @@ public class ChatReportActivity extends BaseActivity {
     }
 
     private void checkDone(){
-        if (TextUtils.equals(report_type.getText(),"Please Choose") || TextUtils.isEmpty(easeInputEditText.getText())){
+        if (TextUtils.equals(report_type.getText(),getString(R.string.report_choose))
+                || TextUtils.isEmpty(easeInputEditText.getText())){
             titleBar.setRightTitleColor(R.color.color_light_gray_999999);
             titleBar.getRightText().setEnabled(false);
         }else {

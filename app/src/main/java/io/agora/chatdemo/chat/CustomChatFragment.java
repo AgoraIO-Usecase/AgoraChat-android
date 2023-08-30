@@ -87,6 +87,7 @@ public class CustomChatFragment extends EaseChatFragment {
     private int translationType;
     private ChatMessage translationMsg;
     private ActivityResultLauncher<Intent> launcher;
+    private boolean isDestroy = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class CustomChatFragment extends EaseChatFragment {
         super.initData();
         groupDetailViewModel = new ViewModelProvider((AppCompatActivity)mContext).get(GroupDetailViewModel.class);
         groupDetailViewModel.getFetchMemberAttributesObservable().observe(this,response ->{
-            if(response == null) {
+            if(response == null || isDestroy) {
                 return;
             }
             if(response.status == Status.SUCCESS) {
@@ -118,7 +119,7 @@ public class CustomChatFragment extends EaseChatFragment {
         });
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         viewModel.getTranslationObservable().observe(this,response ->{
-            if(response == null) {
+            if(response == null || isDestroy) {
                 return;
             }
             if(response.status == Status.SUCCESS) {
@@ -129,13 +130,13 @@ public class CustomChatFragment extends EaseChatFragment {
         });
 
         LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null) {
+            if(event == null || isDestroy) {
                 return;
             }
             chatLayout.getChatMessageListLayout().refreshMessages();
         });
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null) {
+            if(event == null || isDestroy) {
                 return;
             }
             if(event.isMessageChange()) {
@@ -143,7 +144,7 @@ public class CustomChatFragment extends EaseChatFragment {
             }
         });
         LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isDestroy) {
                 return;
             }
             if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
@@ -531,5 +532,19 @@ public class CustomChatFragment extends EaseChatFragment {
     private String getPreferredLanguageCode(){
         String[] language = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_MESSAGE, "");
         return language[0];
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        isDestroy = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mContext != null && mContext.isFinishing()) {
+            isDestroy = true;
+        }
     }
 }

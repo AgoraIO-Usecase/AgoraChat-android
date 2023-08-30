@@ -459,7 +459,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             });
         });
         LiveDataBus.get().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             if (event.isGroupLeave() && TextUtils.equals(conversationId, event.message)) {
@@ -467,7 +467,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             if (event.isChatRoomLeave() && TextUtils.equals(conversationId, event.message)) {
@@ -475,7 +475,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             if (event.isMessageChange()) {
@@ -483,7 +483,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
@@ -492,7 +492,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
@@ -501,7 +501,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.THREAD_CHANGE, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isFinishing()) {
                 return;
             }
             mChatLayout.getChatMessageListLayout().refreshMessages();
@@ -510,7 +510,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             updatePresence();
         });
         LiveDataBus.get().with(DemoConstant.EVENT_SEND_COMBINE, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isFinishing()) {
                 return;
             }
             String message = event.message;
@@ -542,7 +542,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         });
 
         LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isFinishing()) {
                 return;
             }
             if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
@@ -550,7 +550,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isFinishing()) {
                 return;
             }
             if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {

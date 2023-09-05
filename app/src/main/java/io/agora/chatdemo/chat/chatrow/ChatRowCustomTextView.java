@@ -51,8 +51,11 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.manager.EaseAtMessageHelper;
 import io.agora.chat.uikit.manager.EaseThreadManager;
+import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseSmileUtils;
+import io.agora.chat.uikit.utils.EaseUserUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
 import io.agora.chat.uikit.widget.chatrow.AutolinkSpan;
 import io.agora.chat.uikit.widget.chatrow.EaseChatRowText;
@@ -154,7 +157,8 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                     tvTranslationTag.setVisibility(GONE);
                 }
 
-                if (DemoHelper.getInstance().containsUrl(((TextMessageBody) message.getBody()).getMessage())){
+                if (DemoHelper.getInstance().containsUrl(((TextMessageBody) message.getBody()).getMessage())
+                        && message.status() == ChatMessage.Status.SUCCESS){
                     urlPreView();
                 }else {
                     loadErrorChangeBg();
@@ -482,20 +486,28 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         if (message.ext().containsKey(EaseConstant.MESSAGE_ATTR_AT_MSG)){
             String atAll = ""; String atMe = "";
             int start = 0;  int end = 0;
-            try {
-                JSONArray jsonArray = message.getJSONArrayAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG);
-                for(int i = 0; i < jsonArray.length(); i++){
-                    String username = jsonArray.getString(i);
-                    if(ChatClient.getInstance().getCurrentUser().equals(username)){
-                        atMe = username;
+            boolean isAtMe = EaseAtMessageHelper.get().isAtMeMsg(message);
+            if (isAtMe){
+                EaseUser currentUserGroupInfo = EaseUserUtils.getGroupUserInfo(message.conversationId(),ChatClient.getInstance().getCurrentUser());
+                try {
+                    JSONArray jsonArray = message.getJSONArrayAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG);
+                    for(int i = 0; i < jsonArray.length(); i++){
+                        String username = jsonArray.getString(i);
+                        if (currentUserGroupInfo != null){
+                            if (contentView.getText().toString().contains(currentUserGroupInfo.getUsername())){
+                                atMe = currentUserGroupInfo.getUsername();
+                            }else if (contentView.getText().toString().contains(currentUserGroupInfo.getNickname())){
+                                atMe = currentUserGroupInfo.getNickname();
+                            }
+                        }
                     }
-                }
-            } catch (Exception e) {
-                String atUsername = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG, null);
-                if(atUsername != null){
-                    String s = atUsername.toUpperCase();
-                    if(s.equals((EaseConstant.MESSAGE_ATTR_VALUE_AT_MSG_ALL).toUpperCase())){
-                        atAll = atUsername;
+                } catch (Exception e) {
+                    String atUsername = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG, null);
+                    if(atUsername != null){
+                        String s = atUsername.toUpperCase();
+                        if(s.equals((EaseConstant.MESSAGE_ATTR_VALUE_AT_MSG_ALL).toUpperCase())){
+                            atAll = atUsername;
+                        }
                     }
                 }
             }
@@ -504,16 +516,20 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 atMe = AT_PREFIX + atMe;
                 start = contentView.getText().toString().indexOf(atMe);
                 end = start + atMe.length();
-            }else {
+            }
+
+            if (!TextUtils.isEmpty(atAll)){
                 atAll = AT_PREFIX + atAll;
                 start = contentView.getText().toString().indexOf(atAll);
                 end = start + atAll.length();
             }
 
-            if (start != -1 && end > 0 && message.direct() == ChatMessage.Direct.RECEIVE){
-                Spannable spannable = (Spannable) contentView.getText();
-                spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(io.agora.chat.uikit.R.color.color_conversation_title)), start
-                        , end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            if (isAtMe){
+                if (start != -1 && end > 0 && message.direct() == ChatMessage.Direct.RECEIVE){
+                    Spannable spannable = (Spannable) contentView.getText();
+                    spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(io.agora.chat.uikit.R.color.color_conversation_title)), start
+                            , end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                }
             }
         }
     }

@@ -491,7 +491,6 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                 try {
                     JSONArray jsonArray = message.getJSONArrayAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG);
                     for(int i = 0; i < jsonArray.length(); i++){
-                        String username = jsonArray.getString(i);
                         if (currentUserGroupInfo != null){
                             if (contentView.getText().toString().contains(currentUserGroupInfo.getUsername())){
                                 atMe = currentUserGroupInfo.getUsername();
@@ -505,7 +504,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
                     if(atUsername != null){
                         String s = atUsername.toUpperCase();
                         if(s.equals((EaseConstant.MESSAGE_ATTR_VALUE_AT_MSG_ALL).toUpperCase())){
-                            atAll = atUsername;
+                            atAll = atUsername.substring(0, 1).toUpperCase() + atUsername.substring(1).toLowerCase();
                         }
                     }
                 }

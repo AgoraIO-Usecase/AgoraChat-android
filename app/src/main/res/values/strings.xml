@@ -421,7 +421,7 @@
     <string name="forward_max_count_hint">Exceed the Maximum number of supported messages</string>
     <string name="is_deleting">Deleting. . .</string>
     <string name="demo_pick_at_user_title">\@Mention</string>
-    <string name="demo_pick_at_all_members">ALL</string>
+    <string name="demo_pick_at_all_members">All</string>
 
     <string name="finish">Done</string>
     <string name="translation">Translation Settings</string>

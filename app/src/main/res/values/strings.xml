@@ -398,6 +398,8 @@
     <string name="report_label_racy">Mature/sexually suggestive</string>
     <string name="report_label_other">Other</string>
     <string name="report_choose">Please Choose</string>
+    <string name="report_input_count">%d/10</string>
+    <string name="report_input_hint_count">0/10</string>
     <string name="ease_action_report">Report</string>
     <string name="chat_delete_multi_messages_title">Delete %1$d messages</string>
 

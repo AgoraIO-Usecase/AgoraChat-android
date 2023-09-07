@@ -982,7 +982,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 //                msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
                 msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_GROUP_INVITE_ACCEPT);
                 msg.setAttribute(DemoConstant.EM_NOTIFICATION_TYPE, true);
-                msg.addBody(new TextMessageBody(msg.getFrom() + " " +st3));
+                msg.addBody(new TextMessageBody( String.format(st3,msg.getFrom())));
                 msg.setStatus(ChatMessage.Status.SUCCESS);
                 // save invitation as messages
                 ChatClient.getInstance().chatManager().saveMessage(msg);

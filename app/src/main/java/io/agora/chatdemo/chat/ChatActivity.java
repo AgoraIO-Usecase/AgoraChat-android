@@ -615,7 +615,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         } else {
             DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, binding.title, binding.ivIcon);
-            binding.title.setVisibility(View.INVISIBLE);
+            binding.title.setVisibility(View.GONE);
             binding.subTitle.setVisibility(View.INVISIBLE);
         }
     }

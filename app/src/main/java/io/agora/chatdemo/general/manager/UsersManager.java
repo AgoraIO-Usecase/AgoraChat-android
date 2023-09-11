@@ -236,7 +236,7 @@ public class UsersManager {
 		if(username.equalsIgnoreCase(ChatClient.getInstance().getCurrentUser()))
 			return getCurrentUserInfo();
 		// If do not contains the key, will return null
-		user = DemoHelper.getInstance().getContactList().get(username);
+		user = DemoHelper.getInstance().getUsersList().get(username);
 		if(user == null) {
 			if(fetchFromServer) {
 				getUserInfoFromServer(username);

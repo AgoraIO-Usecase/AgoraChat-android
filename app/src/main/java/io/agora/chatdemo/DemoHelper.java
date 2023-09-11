@@ -1,7 +1,5 @@
 package io.agora.chatdemo;
 
-import static io.agora.chat.uikit.utils.EaseUserUtils.getUserInfo;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -90,7 +88,7 @@ public class DemoHelper {
     public boolean isSDKInit;
     private static DemoHelper mInstance;
     private DemoModel demoModel = null;
-    private Map<String, EaseUser> contactList;
+    private Map<String, EaseUser> usersList;
     private UsersManager usersManager;
     private EMAREncryptUtils encryptUtils;
     private EaseCallKitListener callKitListener;
@@ -643,17 +641,17 @@ public class DemoHelper {
      *
      * @return
      */
-    public Map<String, EaseUser> getContactList() {
+    public Map<String, EaseUser> getUsersList() {
         // Fetching data directly from the local database without considering too many complex scenarios
         if (isLoggedIn()) {
-            contactList = demoModel.getAllUserList();
+            usersList = demoModel.getAllUserList();
         }
 
         // return a empty non-null object to avoid app crash
-        if (contactList == null) {
+        if (usersList == null) {
             return new Hashtable<String, EaseUser>();
         }
-        return contactList;
+        return usersList;
     }
 
     /**
@@ -661,7 +659,7 @@ public class DemoHelper {
      */
     public void updateContactList() {
         if (isLoggedIn()) {
-            contactList = demoModel.getContactList();
+            usersList = demoModel.getAllUserList();
         }
     }
 
@@ -737,14 +735,12 @@ public class DemoHelper {
 
     public EaseUser getGroupUserInfo(String groupId,String username) {
         MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
-        EaseUser user;
-        if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)){
-            user = getUsersManager().getUserInfo(username,false);
+        EaseUser user=getUsersManager().getUserInfo(username);
+        if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)
+         && groupBean.getNickName()!=null){
             if (user != null){
                 user.setNickname(groupBean.getNickName());
             }
-        }else {
-            user = getUsersManager().getUserInfo(username,true);
         }
         return user;
     }

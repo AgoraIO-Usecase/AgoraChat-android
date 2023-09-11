@@ -180,8 +180,7 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
                         dismissMultiSelectView(view);
                         return true;
                     }
-                    dismissMultiSelectView(view);
-                    showDeleteDialog(msgIdList);
+                    showDeleteDialog(msgIdList, view);
                     return true;
                 }else if(type == SelectType.FORWARD) {
                     mForwardMsgIdList = msgIdList;
@@ -203,6 +202,9 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
     }
 
     private void dismissMultiSelectView(View view) {
+        if(view == null && mChatLayout.getChatInputMenu().getChatTopExtendMenu() instanceof View) {
+            view = (View) mChatLayout.getChatInputMenu().getChatTopExtendMenu();
+        }
         if(view instanceof EaseChatMultiSelectView) {
             ((EaseChatMultiSelectView) view).dismiss();
         }
@@ -210,12 +212,13 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
                 .postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.TYPE.NOTIFY, "chatThread"));
     }
 
-    private void showDeleteDialog(List<String> deleteMsgIdList) {
+    private void showDeleteDialog(List<String> deleteMsgIdList, View multiView) {
         new SimpleDialog.Builder(this)
                 .setTitle(getString(R.string.chat_delete_multi_messages_title, deleteMsgIdList.size()))
                 .setOnConfirmClickListener(R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
+                        dismissMultiSelectView(multiView);
                         chatViewModel.removeMessagesFromServer(conversationId, Conversation.ConversationType.GroupChat, deleteMsgIdList);
                     }
                 })

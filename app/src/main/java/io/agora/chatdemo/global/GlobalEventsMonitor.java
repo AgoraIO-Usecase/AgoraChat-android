@@ -327,34 +327,9 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
     @Override
     public void onMessageRecalled(List<ChatMessage> messages) {
+        super.onMessageRecalled(messages);
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
         messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
-        for (ChatMessage msg : messages) {
-            if(msg.getChatType() == ChatMessage.ChatType.GroupChat && EaseAtMessageHelper.get().isAtMeMsg(msg)){
-                EaseAtMessageHelper.get().removeAtMeGroup(msg.getTo());
-            }
-            ChatMessage msgNotification = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
-            String content;
-            if(TextUtils.equals(msg.getFrom(), ChatClient.getInstance().getCurrentUser())) {
-                msgNotification.setDirection(ChatMessage.Direct.SEND);
-                content = context.getString(R.string.ease_msg_recall_by_self);
-            }else {
-                msgNotification.setDirection(ChatMessage.Direct.RECEIVE);
-                content = String.format(context.getString(R.string.ease_msg_recall_by_user), msg.getFrom());
-            }
-            TextMessageBody txtBody = new TextMessageBody(content);
-            msgNotification.addBody(txtBody);
-            msgNotification.setFrom(msg.getFrom());
-            msgNotification.setTo(msg.getTo());
-            msgNotification.setUnread(false);
-            msgNotification.setMsgTime(msg.getMsgTime());
-            msgNotification.setLocalTime(msg.getMsgTime());
-            msgNotification.setChatType(msg.getChatType());
-            msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALL, true);
-            msgNotification.setStatus(ChatMessage.Status.SUCCESS);
-            msgNotification.setIsChatThreadMessage(msg.isChatThreadMessage());
-            ChatClient.getInstance().chatManager().saveMessage(msgNotification);
-        }
     }
 
     private class ChatConversationListener implements ConversationListener {

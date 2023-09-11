@@ -363,7 +363,7 @@
     <string name="group_file_delete_content">Are you sure you want to delete %1$s?</string>
     <string name="group_file_delete_confirm_text">Delete</string>
     <string name="title_bar_edit">Edit</string>
-    <string name="alert_during_typing">Entering...</string>
+    <string name="alert_during_typing">Typing…</string>
     <string name="network_disconnected">Network Disconnected</string>
     <string name="dialog_change_presence_title">Status</string>
     <string name="dialog_clear_presence_title">Clear your Custom Status?</string>

@@ -291,23 +291,22 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                     public boolean onSelectResult(View view, SelectType type, List<String> msgIdList) {
                         if(type == SelectType.DELETE) {
                             if(msgIdList == null || msgIdList.isEmpty()) {
-                                restTitleBar(view);
+                                resetTitleBar(view);
                                 return true;
                             }
-                            restTitleBar(view);
-                            showDeleteDialog(msgIdList);
+                            showDeleteDialog(msgIdList, view);
                             return true;
                         }else if(type == SelectType.FORWARD) {
                             mForwardMsgIdList = msgIdList;
                             if(mForwardMsgIdList == null || mForwardMsgIdList.isEmpty()) {
-                                restTitleBar(view);
+                                resetTitleBar(view);
                                 return true;
                             }
                             if(mForwardMsgIdList.size() > MAX_COMBINE_MESSAGE_LIST) {
                                 showToast(getString(R.string.forward_max_count_hint));
                                 return true;
                             }
-                            restTitleBar(view);
+                            resetTitleBar(view);
                             showForwardContactsDialog();
                             return true;
                         }
@@ -333,7 +332,10 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }
 
-    private void restTitleBar(View view) {
+    private void resetTitleBar(View view) {
+        if(view == null && mChatLayout.getChatInputMenu().getChatTopExtendMenu() instanceof View) {
+            view = (View) mChatLayout.getChatInputMenu().getChatTopExtendMenu();
+        }
         if(view instanceof EaseChatMultiSelectView) {
             ((EaseChatMultiSelectView) view).dismiss();
         }
@@ -351,12 +353,13 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         }
     }
 
-    private void showDeleteDialog(List<String> deleteMsgIdList) {
+    private void showDeleteDialog(List<String> deleteMsgIdList, View multiView) {
         new SimpleDialog.Builder(this)
                 .setTitle(getString(R.string.chat_delete_multi_messages_title, deleteMsgIdList.size()))
                 .setOnConfirmClickListener(R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
+                        resetTitleBar(multiView);
                         mChatLayout.deleteMessages(deleteMsgIdList);
                     }
                 })
@@ -456,7 +459,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             });
         });
         LiveDataBus.get().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             if (event.isGroupLeave() && TextUtils.equals(conversationId, event.message)) {
@@ -464,7 +467,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             if (event.isChatRoomLeave() && TextUtils.equals(conversationId, event.message)) {
@@ -472,7 +475,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             if (event.isMessageChange()) {
@@ -480,7 +483,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
@@ -489,7 +492,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(this, event -> {
-            if (event == null) {
+            if (event == null || isFinishing()) {
                 return;
             }
             Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
@@ -498,7 +501,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.THREAD_CHANGE, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isFinishing()) {
                 return;
             }
             mChatLayout.getChatMessageListLayout().refreshMessages();
@@ -507,7 +510,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             updatePresence();
         });
         LiveDataBus.get().with(DemoConstant.EVENT_SEND_COMBINE, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isFinishing()) {
                 return;
             }
             String message = event.message;
@@ -539,7 +542,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         });
 
         LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isFinishing()) {
                 return;
             }
             if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
@@ -547,7 +550,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         });
         LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if(event == null || isFinishing()) {
                 return;
             }
             if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
@@ -612,7 +615,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
             }
         } else {
             DemoHelper.getInstance().getUsersManager().setUserInfo(mContext, conversationId, binding.title, binding.ivIcon);
-            binding.title.setVisibility(View.INVISIBLE);
+            binding.title.setVisibility(View.GONE);
             binding.subTitle.setVisibility(View.INVISIBLE);
         }
     }

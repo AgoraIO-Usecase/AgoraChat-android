@@ -142,6 +142,10 @@ public class BaseEMRepository {
     public String getErrorMsg(int code, String errorMsg) {
         if(code == 408 && !TextUtils.isEmpty(errorMsg) && errorMsg.contains("Unable to resolve host")) {
             errorMsg = DemoApplication.getInstance().getString(R.string.network_disconnect);
+        }else if (code == 400 && !TextUtils.isEmpty(errorMsg) && errorMsg.contains("userAccount password error")){
+            errorMsg = DemoApplication.getInstance().getString(R.string.incorrect_password);
+        }else if (code == 404 && !TextUtils.isEmpty(errorMsg) && errorMsg.contains("does not exist")){
+            errorMsg = DemoApplication.getInstance().getString(R.string.user_not_exist);
         }
         return errorMsg;
     }

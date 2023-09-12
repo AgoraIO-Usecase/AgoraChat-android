@@ -27,6 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,9 +38,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import androidx.core.content.ContextCompat;
-
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,10 +49,15 @@ import io.agora.chat.LocationMessageBody;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
+import io.agora.chat.uikit.chat.interfaces.IChatTopExtendMenu;
 import io.agora.chat.uikit.chat.widget.EaseChatMessageListLayout;
+import io.agora.chat.uikit.chat.widget.EaseChatMultiSelectView;
 import io.agora.chat.uikit.constants.EaseConstant;
+import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.menu.EasePopupWindowHelper;
 import io.agora.chat.uikit.menu.MenuItemBean;
+import io.agora.chat.uikit.utils.EaseUtils;
+import io.agora.chat.uikit.widget.EaseTitleBar;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
@@ -66,14 +69,9 @@ import io.agora.chatdemo.general.interfaces.TranslationListener;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.utils.RecyclerViewUtils;
+import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.chatdemo.group.viewmodel.GroupDetailViewModel;
-import io.agora.chat.uikit.chat.interfaces.IChatTopExtendMenu;
-import io.agora.chat.uikit.chat.widget.EaseChatMultiSelectView;
-import io.agora.chat.uikit.menu.EaseChatType;
-import io.agora.chat.uikit.utils.EaseUtils;
-import io.agora.chat.uikit.widget.EaseTitleBar;
-import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.me.LanguageActivity;
 import io.agora.chatdemo.me.TranslationHelper;
 import io.agora.chatdemo.me.TranslationSettingsActivity;
@@ -421,11 +419,7 @@ public class CustomChatFragment extends EaseChatFragment {
             while (iterator.hasNext()) {
                 String userId = iterator.next();
                 MemberAttributeBean bean = DemoHelper.getInstance().getMemberAttribute(conversationId, userId);
-                if (bean == null) {
-                    MemberAttributeBean emptyBean = new MemberAttributeBean();
-                    emptyBean.setNickName(userId);
-                    DemoHelper.getInstance().saveMemberAttribute(conversationId, userId, emptyBean);
-                } else {
+                if (bean != null) {
                     iterator.remove();
                 }
             }

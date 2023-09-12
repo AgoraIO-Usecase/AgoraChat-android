@@ -23,7 +23,7 @@
             android:maxEms="5"
             android:gravity="center"
             android:layout_centerInParent="true"
-            tools:text=""/>
+            tools:text="title"/>
 
         <TextView
             android:id="@+id/sub_title"
@@ -31,11 +31,13 @@
             android:layout_height="wrap_content"
             android:textColor="@color/ease_toolbar_color_sub_title"
             android:gravity="center_horizontal"
+            android:layout_centerInParent="true"
             android:textSize="@dimen/ease_toolbar_sub_title_size"
             android:maxLines="1"
             android:ellipsize="end"
             android:visibility="visible"
             android:layout_below="@+id/title"
+            android:layout_marginTop="-5dp"
             tools:text="Sub Title"/>
 
 
@@ -51,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="50dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_title"

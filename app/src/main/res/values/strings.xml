@@ -6,6 +6,8 @@
     <string name="ok">Enter</string>
     <string name="Network_error">Network error</string>
     <string name="network_disconnect">Network disconnected</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="user_not_exist">Username does not exist</string>
     <string name="username_too_long">Please choose a shorter username</string>
     <string name="search_text_hint">Search</string>
     <string name="please_check">Key verification error! Please check the key settings in the AndroidManifest.xml file.</string>
@@ -62,7 +64,7 @@
     <string name="group_join">Join</string>
     <string name="group_join_this_group">Join this Group</string>
     <string name="group_public_group_list">Public Group List</string>
-    <string name="group_public_group">Public Group</string>
+    <string name="group_public_group">Public Groups</string>
     <string name="group_apply">Apply</string>
     <string name="group_applying">Applying</string>
     <string name="group_applied">Applied</string>
@@ -283,11 +285,11 @@
     <string name="me_setting_logout">Log Out</string>
     <string name="me_setting_change_avatar">Change Avatar</string>
     <string name="me_setting_change_nickname">Change Nickname</string>
-    <string name="me_setting_copy_agoraid">Copy AgoraID</string>
+    <string name="me_setting_copy_agoraid">Copy Agora ID</string>
     <string name="me_setting_set_status">Set Status</string>
     <string name="me_copy_success">Copy Successful</string>
-    <string name="general_show_typing">Show Typing</string>
-    <string name="general_add_group_request">Add Group Request</string>
+    <string name="general_show_typing">Typing Indicator</string>
+    <string name="general_add_group_request">Need approval when invited to join a group</string>
     <string name="general_delete_after_leaving_group">Delete Chat after Leaving Group</string>
     <string name="notification_push_title">Push Notifications</string>
     <string name="notification_setting">Notification Settings</string>
@@ -313,7 +315,7 @@
     <string name="notification_un_mute_group">Unmute this Group?</string>
     <string name="notification_un_mute_thread">Unmute this Thread?</string>
     <string name="notification_un_mute_contact">Unmute this Contact?</string>
-    <string name="notification_frequency">Frequency</string>
+    <string name="notification_frequency">Notification Setting</string>
     <string name="notification_turn_off_mute">Turn off Do Not Disturb?</string>
     <string name="notification_mute_until">You have set Do Not Disturb until %1$s</string>
     <string name="notification_mute_thread_until">You have muted this Thread until %1$s</string>
@@ -363,7 +365,7 @@
     <string name="group_file_delete_content">Are you sure you want to delete %1$s?</string>
     <string name="group_file_delete_confirm_text">Delete</string>
     <string name="title_bar_edit">Edit</string>
-    <string name="alert_during_typing">Entering...</string>
+    <string name="alert_during_typing">Typing…</string>
     <string name="network_disconnected">Network Disconnected</string>
     <string name="dialog_change_presence_title">Status</string>
     <string name="dialog_clear_presence_title">Clear your Custom Status?</string>
@@ -421,7 +423,7 @@
     <string name="forward_max_count_hint">Exceed the Maximum number of supported messages</string>
     <string name="is_deleting">Deleting. . .</string>
     <string name="demo_pick_at_user_title">\@Mention</string>
-    <string name="demo_pick_at_all_members">ALL</string>
+    <string name="demo_pick_at_all_members">All</string>
 
     <string name="finish">Done</string>
     <string name="translation">Translation Settings</string>

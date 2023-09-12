@@ -172,7 +172,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/sign_btn_bg"
-        android:text="Back to login"
+        android:text="Back to Login"
         />
 
 

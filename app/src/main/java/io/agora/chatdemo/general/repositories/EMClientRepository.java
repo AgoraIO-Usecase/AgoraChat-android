@@ -606,4 +606,20 @@ public class EMClientRepository extends BaseEMRepository{
             }
         });
     }
+
+    /**
+     * Check if the user is logged in to the server.
+     * @return
+     */
+    public LiveData<Resource<Boolean>> checkAndSignOut() {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                if (isLoggedIn()) {
+                    logout(true);
+                }
+                callBack.onSuccess(createLiveData(true));
+            }
+        }.asLiveData();
+    }
 }

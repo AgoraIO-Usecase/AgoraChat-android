@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CommonUtils {
+    private static long lastClickTime = 0;
 
     public static void copyContentToClipboard(Context context,String content ) {
         // Get a clipboard manager：
@@ -35,5 +36,18 @@ public class CommonUtils {
         } catch (JSONException e) {
             return false;
         }
+    }
+
+    /**
+     * Prevent multiple clicks
+     * @return
+     */
+    public static synchronized boolean isCanClick(){
+        long time = System.currentTimeMillis();
+        if ( time - lastClickTime < 1000) {
+            return false;
+        }
+        lastClickTime = time;
+        return true;
     }
 }

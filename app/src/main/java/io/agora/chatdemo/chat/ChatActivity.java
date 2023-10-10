@@ -41,7 +41,6 @@ import io.agora.chat.callkit.EaseCallKit;
 import io.agora.chat.uikit.activities.EaseChatThreadListActivity;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.EaseChatLayout;
-import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatInputChangeListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatLayoutFinishInflateListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
@@ -148,46 +147,6 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                 .setCustomAdapter(new CustomMessageAdapter())
                 .setCustomFragment(customChatFragment)
                 .setEmptyLayout(R.layout.ease_layout_no_data_show_nothing)
-                .setOnChatExtendMenuItemClickListener(new OnChatExtendMenuItemClickListener() {
-                    @Override
-                    public boolean onChatExtendMenuItemClick(View view, int itemId) {
-                        EMLog.e("TAG", "onChatExtendMenuItemClick");
-                        if (itemId == R.id.extend_item_take_picture) {
-                            // check if has permissions
-                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
-                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
-                                        , new String[]{Manifest.permission.CAMERA}, null);
-                                return true;
-                            }
-                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
-                                        , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
-                                return true;
-                            }
-                            return false;
-                        } else if (itemId == R.id.extend_item_picture || itemId == R.id.extend_item_file) {
-                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
-                                        , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
-                                return true;
-                            }
-                            return false;
-                        } else if (itemId == R.id.extend_item_video) {
-                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
-                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
-                                        , new String[]{Manifest.permission.CAMERA}, null);
-                                return true;
-                            }
-                            if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                                PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
-                                        , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
-                                return true;
-                            }
-                            return false;
-                        }
-                        return false;
-                    }
-                })
                 .setOnChatInputChangeListener(new OnChatInputChangeListener() {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {

@@ -45,6 +45,12 @@ public class GroupAdminsFragment extends GroupBaseManageFragment {
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        memberAuthorityViewModel.getGroupManagers(groupId);
+    }
+
+    @Override
     protected void searchText(String content) {
         super.searchText(content);
         checkSearchContent(content);

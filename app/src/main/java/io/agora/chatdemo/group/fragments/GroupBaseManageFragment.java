@@ -61,7 +61,7 @@ public class GroupBaseManageFragment extends BaseContactListFragment<EaseUser> {
     protected void initViewModel() {
         super.initViewModel();
         // User activity for the ViewModelStoreOwner, not need request data of some common methods
-        memberAuthorityViewModel = new ViewModelProvider(this).get(GroupMemberAuthorityViewModel.class);
+        memberAuthorityViewModel = new ViewModelProvider(mContext).get(GroupMemberAuthorityViewModel.class);
         groupDetailViewModel = new ViewModelProvider(this).get(GroupDetailViewModel.class);
     }
 

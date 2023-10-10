@@ -46,6 +46,7 @@ import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.models.PresenceData;
+import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.EasePresenceView;
@@ -217,6 +218,9 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         titleBarLayout.findViewById(R.id.right_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!CommonUtils.isCanClick()) {
+                    return;
+                }
                 new BottomSheetContainerFragment().show(getChildFragmentManager(), "ContainerFragment");
             }
         });

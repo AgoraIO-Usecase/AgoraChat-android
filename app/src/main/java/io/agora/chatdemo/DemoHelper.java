@@ -57,8 +57,8 @@ import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
-import io.agora.chatdemo.av.CallMultipleBaseActivity;
-import io.agora.chatdemo.av.CallSingleBaseActivity;
+import io.agora.chatdemo.av.MultipleCallActivity;
+import io.agora.chatdemo.av.SingleCallActivity;
 import io.agora.chatdemo.av.DemoCallKitListener;
 import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.chatdemo.chatthread.ChatThreadCreateActivity;
@@ -362,8 +362,8 @@ public class DemoHelper {
         callKitConfig.setDefaultHeadImage(getUsersManager().getCurrentUserInfo().getAvatar());
         EaseCallKit.getInstance().init(context, callKitConfig);
         // Register the activities which you have registered in manifest
-        EaseCallKit.getInstance().registerVideoCallClass(CallSingleBaseActivity.class);
-        EaseCallKit.getInstance().registerMultipleVideoClass(CallMultipleBaseActivity.class);
+        EaseCallKit.getInstance().registerVideoCallClass(SingleCallActivity.class);
+        EaseCallKit.getInstance().registerMultipleVideoClass(MultipleCallActivity.class);
         addCallkitListener();
     }
 

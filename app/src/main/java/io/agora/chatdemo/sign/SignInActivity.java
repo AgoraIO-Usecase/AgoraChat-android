@@ -272,6 +272,11 @@ public class SignInActivity extends BaseInitActivity implements View.OnClickList
                 }
             });
         });
+        checkLoginStatus();
+    }
+
+    private void checkLoginStatus() {
+        viewModel.checkLogin();
     }
 
     private void setErrorHint(String error) {

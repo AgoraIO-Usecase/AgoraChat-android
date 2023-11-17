@@ -101,7 +101,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
                 }
             });
         });
-        memberAuthorityViewModel.getMuteMembersObservable().observe(getViewLifecycleOwner(), response -> {
+        memberAuthorityViewModel.getMuteMembersObservable().observe(mContext, response -> {
             parseResource(response, new OnResourceParseCallback<Map<String, Long>>() {
                 @Override
                 public void onSuccess(@Nullable Map<String, Long> data) {

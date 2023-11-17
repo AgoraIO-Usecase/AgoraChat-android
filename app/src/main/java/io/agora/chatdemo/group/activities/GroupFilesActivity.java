@@ -1,5 +1,7 @@
 package io.agora.chatdemo.group.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -13,6 +15,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,11 +32,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.chat.ChatClient;
 import io.agora.chat.Group;
 import io.agora.chat.MucSharedFile;
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
+import io.agora.chat.uikit.manager.EaseActivityProviderHelper;
 import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chat.uikit.utils.EaseFileUtils;
 import io.agora.chat.uikit.utils.EaseUtils;
@@ -47,13 +54,21 @@ import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.models.SelectDialogItemBean;
+import io.agora.chatdemo.general.permission.PermissionCompat;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.adapter.GroupFilesAdapter;
 import io.agora.chatdemo.group.viewmodel.GroupFilesViewModel;
+import io.agora.util.EMLog;
+import io.agora.util.FileHelper;
 import io.agora.util.VersionUtils;
 
 public class GroupFilesActivity extends BaseInitActivity implements EaseTitleBar.OnRightClickListener, OnRefreshListener, OnRefreshLoadMoreListener {
     private static final int REQUEST_CODE_SELECT_FILE = 1;
+    private static final int REQUEST_CODE_SELECT_VIDEO = 2;
+    private static final int REQUEST_CODE_SELECT_IMAGE = 3;
+    private static final int REQUEST_CODE_STORAGE_PICTURE = 100;
+    private static final int REQUEST_CODE_STORAGE_VIDEO = 101;
+    private static final int REQUEST_CODE_STORAGE_FILE = 102;
     private static final int MENU_ID_UPLOAD_IMAGE = 1;
     private static final int MENU_ID_UPLOAD_VIDEO = 2;
     private static final int MENU_ID_UPLOAD_FILE = 3;
@@ -68,6 +83,20 @@ public class GroupFilesActivity extends BaseInitActivity implements EaseTitleBar
 
     private String mSearchContent;
     private List<MucSharedFile> mLastData;
+
+    private final ActivityResultLauncher<String[]> requestImagePermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_PICTURE));
+    private final ActivityResultLauncher<String[]> requestVideoPermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_VIDEO));
+    private final ActivityResultLauncher<String[]> requestFilePermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_FILE));
+
+    private final ActivityResultLauncher<Intent> launcherToAlbum = registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
+            , result -> onActivityResult(result, REQUEST_CODE_SELECT_IMAGE));
+    private final ActivityResultLauncher<Intent> launcherToVideo = registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
+            , result -> onActivityResult(result, REQUEST_CODE_SELECT_VIDEO));
+    private final ActivityResultLauncher<Intent> launcherToFile = registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
+            , result -> onActivityResult(result, REQUEST_CODE_SELECT_FILE));
 
     public static void actionStart(Context context, String groupId) {
         Intent starter = new Intent(context, GroupFilesActivity.class);
@@ -285,33 +314,51 @@ public class GroupFilesActivity extends BaseInitActivity implements EaseTitleBar
     private void executeUploadFileAction(SelectDialogItemBean item) {
         switch (item.getId()) {
             case MENU_ID_UPLOAD_IMAGE:
-                EaseCompat.openImage(this, REQUEST_CODE_SELECT_FILE);
+                if(!PermissionCompat.checkMediaPermission(mContext, requestImagePermission, Manifest.permission.READ_MEDIA_IMAGES)) {
+                    return;
+                }
+                selectPicFromLocal();
                 break;
             case MENU_ID_UPLOAD_VIDEO:
-                Intent intent = new Intent();
-                intent.setType("video/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
+                if(!PermissionCompat.checkMediaPermission(mContext, requestVideoPermission, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.CAMERA)) {
+                    return;
+                }
+                selectVideoFromLocal();
                 break;
             case MENU_ID_UPLOAD_FILE:
-                Intent fileIntent = new Intent();
-                if (VersionUtils.isTargetQ(this)) {
-                    fileIntent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-                } else {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                        fileIntent.setAction(Intent.ACTION_GET_CONTENT);
-                    } else {
-                        fileIntent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-                    }
+                if(!PermissionCompat.checkMediaPermission(mContext, requestFilePermission, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)) {
+                    return;
                 }
-                fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                fileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                fileIntent.setType("*/*");
-
-                startActivityForResult(fileIntent, REQUEST_CODE_SELECT_FILE);
+                selectFileFromLocal();
                 break;
         }
 
+    }
+
+    private void selectPicFromLocal() {
+        EaseCompat.openImage(launcherToAlbum, mContext);
+    }
+
+    private void selectVideoFromLocal() {
+        EaseActivityProviderHelper.startToImageGridActivity(launcherToVideo, mContext);
+    }
+
+    private void selectFileFromLocal() {
+        Intent intent = new Intent();
+        if (VersionUtils.isTargetQ(mContext)) {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        } else {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+            } else {
+                intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            }
+        }
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+
+        launcherToFile.launch(intent);
     }
 
     private boolean isAllowEdit() {
@@ -381,11 +428,27 @@ public class GroupFilesActivity extends BaseInitActivity implements EaseTitleBar
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (REQUEST_CODE_SELECT_FILE == requestCode) {
+    private void onRequestResult(Map<String, Boolean> result, int requestCode) {
+        if(result != null && result.size() > 0) {
+            for (Map.Entry<String, Boolean> entry : result.entrySet()) {
+                EMLog.e("chat", "onRequestResult: " + entry.getKey() + "  " + entry.getValue());
+            }
+            if(PermissionCompat.getMediaAccess(mContext) != PermissionCompat.StorageAccess.Denied) {
+                if(requestCode == REQUEST_CODE_STORAGE_PICTURE) {
+                    selectPicFromLocal();
+                }else if(requestCode == REQUEST_CODE_STORAGE_VIDEO) {
+                    selectVideoFromLocal();
+                }else if(requestCode == REQUEST_CODE_STORAGE_FILE) {
+                    selectFileFromLocal();
+                }
+            }
+        }
+    }
+
+    private void onActivityResult(ActivityResult result, int requestCode) {
+        if(result.getResultCode() == Activity.RESULT_OK) {
+            Intent data = result.getData();
+            if (requestCode == REQUEST_CODE_SELECT_IMAGE || requestCode == REQUEST_CODE_SELECT_FILE) {
                 if (data != null) {
                     Uri uri = data.getData();
                     if (uri != null) {
@@ -396,6 +459,18 @@ public class GroupFilesActivity extends BaseInitActivity implements EaseTitleBar
                             EaseFileUtils.saveUriPermission(mContext, uri, data);
                             viewModel.uploadFileByUri(groupId, uri);
                         }
+                    }
+                }
+            } else if (requestCode == REQUEST_CODE_SELECT_VIDEO) {
+                if (data != null) {
+                    String videoPath = data.getStringExtra("path");
+                    String uriString = data.getStringExtra("uri");
+                    if (!TextUtils.isEmpty(videoPath)) {
+                        sendByPath(Uri.parse(videoPath));
+                    } else {
+                        Uri videoUri = FileHelper.getInstance().formatInUri(uriString);
+                        EaseFileUtils.saveUriPermission(mContext, videoUri, data);
+                        viewModel.uploadFileByUri(groupId, videoUri);
                     }
                 }
             }

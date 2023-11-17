@@ -16,6 +16,10 @@ package io.agora.chatdemo.general.manager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class PreferenceManager {
 	/**
@@ -46,6 +50,7 @@ public class PreferenceManager {
 	private static String SHARED_KEY_CURRENTUSER_NICK = "SHARED_KEY_CURRENTUSER_NICK";
 	private static String SHARED_KEY_CURRENTUSER_AGORAUID = "SHARED_KEY_CURRENTUSER_AGORAUID";
 	private static String SHARED_KEY_CURRENTUSER_AVATAR = "SHARED_KEY_CURRENTUSER_AVATAR";
+	private static String SHARED_KEY_TOKEN_EXPIRE_TS = "SHARED_KEY_TOKEN_EXPIRE_TS";
 
 	private static String SHARED_KEY_MSG_ROAMING = "SHARED_KEY_MSG_ROAMING";
 	private static String SHARED_KEY_SHOW_MSG_TYPING = "SHARED_KEY_SHOW_MSG_TYPING";
@@ -54,6 +59,11 @@ public class PreferenceManager {
 	private static String SHARED_KEY_AUTO_LOGIN = "shared_key_auto_login";
 	private static String SHARED_KEY_HTTPS_ONLY = "shared_key_https_only";
 	private static String SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME = "sort_message_by_server_time";
+
+	private static String SHARED_KEY_TARGET_LANGUAGE = "shared_key_target_language";
+	private static String SHARED_KEY_PUSH_LANGUAGE = "shared_key_push_language";
+	private static String SHARED_KEY_AUTO_TARGET_LANGUAGE = "shared_key_auto_target_language";
+	private static String SHARED_KEY_ON_DEMAND_TRANSLATION = "shared_key_on_demand_translation";
 
 	private static String SHARED_KEY_ENABLE_TOKEN_LOGIN = "enable_token_login";
 
@@ -209,6 +219,14 @@ public class PreferenceManager {
 		editor.commit();
 	}
 
+	public void setTokenExpireTs(long ts) {
+		editor.putLong(SHARED_KEY_TOKEN_EXPIRE_TS, ts);
+		editor.apply();
+	}
+	public long getTokenExpireTs() {
+		return mSharedPreferences.getLong(SHARED_KEY_TOKEN_EXPIRE_TS, 0);
+	}
+
 	public void setCurrentUserAvatar(String avatar) {
 		editor.putString(SHARED_KEY_CURRENTUSER_AVATAR, avatar);
 		editor.apply();
@@ -331,6 +349,72 @@ public class PreferenceManager {
 
 	public boolean isEnableTokenLogin() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_TOKEN_LOGIN, false);
+	}
+
+	public void setTargetLanguage(String languageCode) {
+		editor.putString(SHARED_KEY_TARGET_LANGUAGE, languageCode);
+		editor.apply();
+	}
+
+	public String getTargetLanguage() {
+		return mSharedPreferences.getString(SHARED_KEY_TARGET_LANGUAGE, "");
+	}
+
+	public void clearTargetLanguage(){
+		editor.remove(SHARED_KEY_TARGET_LANGUAGE);
+		editor.apply();
+	}
+
+	public void setPushLanguage(String languageCode){
+		editor.putString(SHARED_KEY_PUSH_LANGUAGE, languageCode);
+		editor.apply();
+	}
+
+	public void clearPushLanguage(){
+		editor.remove(SHARED_KEY_PUSH_LANGUAGE);
+		editor.apply();
+	}
+
+	public String getPushLanguage(){
+		return mSharedPreferences.getString(SHARED_KEY_PUSH_LANGUAGE, "");
+	}
+
+	public void setAutoTargetLanguage(String languageCode){
+		editor.putString(SHARED_KEY_AUTO_TARGET_LANGUAGE, languageCode);
+		editor.apply();
+	}
+
+	public String getAutoTargetLanguage(){
+		return mSharedPreferences.getString(SHARED_KEY_AUTO_TARGET_LANGUAGE, "");
+	}
+
+	public void clearAutoTargetLanguage(String conversationId){
+		String json = mSharedPreferences.getString(SHARED_KEY_AUTO_TARGET_LANGUAGE, "");
+		if (!TextUtils.isEmpty(json)){
+			try {
+				JSONObject jsonObject = new JSONObject(json);
+				if (jsonObject.has(conversationId)){
+					jsonObject.remove(conversationId);
+					setAutoTargetLanguage(jsonObject.toString());
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void clearAutoTargetLanguage(){
+		editor.remove(SHARED_KEY_AUTO_TARGET_LANGUAGE);
+		editor.apply();
+	}
+
+	public void setDemandTranslation(boolean isDemand){
+		editor.putBoolean(SHARED_KEY_ON_DEMAND_TRANSLATION, isDemand);
+		editor.apply();
+	}
+
+	public boolean getDemandTranslation(){
+		return mSharedPreferences.getBoolean(SHARED_KEY_ON_DEMAND_TRANSLATION, false);
 	}
 
 }

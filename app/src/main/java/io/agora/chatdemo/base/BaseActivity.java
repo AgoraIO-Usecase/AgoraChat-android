@@ -45,6 +45,7 @@ import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.UserActivityLifecycleCallbacks;
 import io.agora.chatdemo.general.net.Resource;
+import io.agora.chatdemo.general.repositories.EMClientRepository;
 import io.agora.chatdemo.general.utils.ToastUtils;
 import io.agora.chatdemo.general.widget.EaseProgressDialog;
 import io.agora.chatdemo.sign.SignInActivity;
@@ -104,12 +105,14 @@ public class BaseActivity extends AppCompatActivity {
             String accountEvent = event.event;
             if(errorCode == Error.USER_REMOVED
                     || errorCode == Error.USER_KICKED_BY_CHANGE_PASSWORD
-                    || errorCode == Error.TOKEN_EXPIRED
+//                    || errorCode == Error.TOKEN_EXPIRED // this case handled by reLogin
                     || errorCode == Error.USER_KICKED_BY_OTHER_DEVICE) {
+                new EMClientRepository().encryptData(""); //clear the app user's password
                 DemoHelper.getInstance().logout(false, new CallBack() {
                     @Override
                     public void onSuccess() {
                         finishOtherActivities();
+                        new EMClientRepository().encryptData(""); //clear the password
                         startActivity(new Intent(mContext, SignInActivity.class));
                         finish();
                     }

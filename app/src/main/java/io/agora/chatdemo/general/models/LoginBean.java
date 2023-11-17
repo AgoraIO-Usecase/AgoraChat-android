@@ -4,6 +4,7 @@ public class LoginBean {
     private String accessToken;
     private String password;
     private int agoraUid;
+    private long expireTimestamp;
 
     public int getAgoraUid() {
         return agoraUid;
@@ -27,5 +28,13 @@ public class LoginBean {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public long getExpireTimestamp() {
+        return expireTimestamp;
+    }
+
+    public void setExpireTimestamp(long expireTimestamp) {
+        this.expireTimestamp = expireTimestamp;
     }
 }

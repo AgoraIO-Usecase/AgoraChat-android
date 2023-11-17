@@ -141,6 +141,10 @@ public class SwitchItemView extends ConstraintLayout {
         });
     }
 
+    public void setChecked(boolean checked){
+        switchItem.setChecked(checked);
+    }
+
     private void setTvStyle(int titleStyle){
         switch (titleStyle){
             case 0:

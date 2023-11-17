@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ease_common_title_bar_height">
 
@@ -15,30 +16,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            app:layout_goneMarginStart="0dp"
             android:textColor="@color/ease_toolbar_color_title"
             android:textSize="@dimen/ease_toolbar_title_size"
             android:maxLines="1"
             android:ellipsize="end"
             android:maxEms="5"
             android:gravity="center"
-            android:layout_centerHorizontal="true"
-            app:layout_constrainedWidth="true"
-            tools:text=""/>
+            android:layout_centerInParent="true"
+            tools:text="title"/>
 
         <TextView
             android:id="@+id/sub_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_chainStyle="packed"
             android:textColor="@color/ease_toolbar_color_sub_title"
             android:gravity="center_horizontal"
+            android:layout_centerInParent="true"
             android:textSize="@dimen/ease_toolbar_sub_title_size"
             android:maxLines="1"
             android:ellipsize="end"
             android:visibility="visible"
             android:layout_below="@+id/title"
-            app:layout_constrainedWidth="true"
+            android:layout_marginTop="-5dp"
             tools:text="Sub Title"/>
 
 
@@ -54,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="50dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_title"

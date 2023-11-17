@@ -98,6 +98,20 @@ public class UsersManager {
 		return PreferenceManager.getInstance().getCurrentUserAgoraUid();
 	}
 
+	public void setTokenExpireTs(long ts) {
+		PreferenceManager.getInstance().setTokenExpireTs(ts);
+	}
+	public long getTokenExpireTs() {
+		return PreferenceManager.getInstance().getTokenExpireTs();
+	}
+
+	public void setCurrentUser(String user) {
+		PreferenceManager.getInstance().setCurrentUserName(user);
+	}
+	public String getCurrentUser() {
+		return PreferenceManager.getInstance().getCurrentUsername();
+	}
+
 	private void setCurrentUserNick(String nickname) {
 		getCurrentUserInfo().setNickname(nickname);
 		PreferenceManager.getInstance().setCurrentUserNick(nickname);
@@ -222,7 +236,7 @@ public class UsersManager {
 		if(username.equalsIgnoreCase(ChatClient.getInstance().getCurrentUser()))
 			return getCurrentUserInfo();
 		// If do not contains the key, will return null
-		user = DemoHelper.getInstance().getContactList().get(username);
+		user = DemoHelper.getInstance().getUsersList().get(username);
 		if(user == null) {
 			if(fetchFromServer) {
 				getUserInfoFromServer(username);

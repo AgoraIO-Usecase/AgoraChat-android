@@ -60,6 +60,8 @@ import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chatdemo.av.MultipleCallActivity;
 import io.agora.chatdemo.av.SingleCallActivity;
 import io.agora.chatdemo.av.DemoCallKitListener;
+import io.agora.chatdemo.chat.UrlPreViewHelper;
+import io.agora.chatdemo.chat.models.UrlPreViewBean;
 import io.agora.chatdemo.chatthread.ChatThreadActivity;
 import io.agora.chatdemo.chatthread.ChatThreadCreateActivity;
 import io.agora.chatdemo.general.constant.DemoConstant;
@@ -69,6 +71,7 @@ import io.agora.chatdemo.general.manager.UsersManager;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.global.GlobalEventsMonitor;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.push.PushConfig;
 import io.agora.push.PushHelper;
 import io.agora.push.PushListener;
@@ -85,7 +88,7 @@ public class DemoHelper {
     public boolean isSDKInit;
     private static DemoHelper mInstance;
     private DemoModel demoModel = null;
-    private Map<String, EaseUser> contactList;
+    private Map<String, EaseUser> usersList;
     private UsersManager usersManager;
     private EMAREncryptUtils encryptUtils;
     private EaseCallKitListener callKitListener;
@@ -311,6 +314,11 @@ public class DemoHelper {
                     @Override
                     public EaseUser getUser(String userID) {
                         return getUsersManager().getUserInfo(userID);
+                    }
+
+                    @Override
+                    public EaseUser getGroupUser(String groupId, String userId) {
+                        return getGroupUserInfo(groupId,userId);
                     }
 
                 })
@@ -568,6 +576,8 @@ public class DemoHelper {
     public void logoutSuccess() {
         EMLog.d(TAG, "logout: onSuccess");
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
+        clearPreviewInfo();
+        getModel().clearAutoTargetLanguage();
     }
 
     /**
@@ -631,17 +641,17 @@ public class DemoHelper {
      *
      * @return
      */
-    public Map<String, EaseUser> getContactList() {
+    public Map<String, EaseUser> getUsersList() {
         // Fetching data directly from the local database without considering too many complex scenarios
         if (isLoggedIn()) {
-            contactList = demoModel.getAllUserList();
+            usersList = demoModel.getAllUserList();
         }
 
         // return a empty non-null object to avoid app crash
-        if (contactList == null) {
+        if (usersList == null) {
             return new Hashtable<String, EaseUser>();
         }
-        return contactList;
+        return usersList;
     }
 
     /**
@@ -649,7 +659,7 @@ public class DemoHelper {
      */
     public void updateContactList() {
         if (isLoggedIn()) {
-            contactList = demoModel.getContactList();
+            usersList = demoModel.getAllUserList();
         }
     }
 
@@ -698,6 +708,63 @@ public class DemoHelper {
     public void addCallkitListener() {
         callKitListener = new DemoCallKitListener(mContext,getUsersManager());
         EaseCallKit.getInstance().setCallKitListener(callKitListener);
+    }
+
+    public void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
+        GroupHelper.saveMemberAttribute(groupId,userName,bean);
+    }
+
+    public MemberAttributeBean getMemberAttribute(String groupId, String userName){
+        return GroupHelper.getMemberAttribute(groupId,userName);
+    }
+
+    //Clears the cache of all member properties of a specified group
+    public void clearGroupMemberAttribute(String groupId){
+        GroupHelper.clearGroupMemberAttribute(groupId);
+    }
+
+    //Clear the cache of all group member attributes of the current login userId
+    public void clearAllMemberAttribute(){
+        GroupHelper.clearAllGroupMemberAttribute();
+    }
+
+    //Clear the cache of group membership attributes for userId in the specified group
+    public void clearGroupMemberAttributeByUserId(String groupId,String userId){
+        GroupHelper.clearGroupMemberAttributeByUserId(groupId,userId);
+    }
+
+    public EaseUser getGroupUserInfo(String groupId,String username) {
+        MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
+        EaseUser user=getUsersManager().getUserInfo(username);
+        if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)
+         && groupBean.getNickName()!=null){
+            if (user != null){
+                user.setNickname(groupBean.getNickName());
+            }
+        }
+        return user;
+    }
+
+    public void saveUrlPreviewInfo(String msgId, UrlPreViewBean bean){
+        UrlPreViewHelper.saveUrlPreviewInfo(msgId,bean);
+    }
+
+    public UrlPreViewBean getUrlPreviewInfo(String msgId){
+        return UrlPreViewHelper.getUrlPreviewInfo(msgId);
+    }
+
+    public void clearPreviewInfo(){
+        UrlPreViewHelper.clearPreviewInfo();
+    }
+
+    public boolean containsUrl(String content){
+        boolean isContainsUrl = UrlPreViewHelper.containsUrl(content);
+        return isContainsUrl;
+    }
+
+    public boolean isPicture(String url){
+        boolean isPicture = UrlPreViewHelper.isPicture(url);
+        return isPicture;
     }
 
 }

@@ -12,6 +12,7 @@
         app:titleBarLeftImage="@drawable/ease_titlebar_back"
         app:titleBarTitle="Message Report"
         app:titleBarRightTitle="Done"
+        app:titleBarRightTextColor="@color/color_light_gray_999999"
         app:titleBarRightVisible="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ease_common_title_bar_height"
@@ -181,12 +182,11 @@
                     android:id="@+id/report_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Please Choose"
-                    android:textSize="16sp"
-                    android:textColor="@color/report_username"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/choose"
-                    />
+                    android:text="@string/report_choose"
+                    android:textColor="@color/report_username"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/choose"

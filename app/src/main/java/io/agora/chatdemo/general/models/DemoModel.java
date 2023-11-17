@@ -478,6 +478,65 @@ public class DemoModel {
         return (List<String>) val;
     }
 
+    /**
+     *  get target translation language
+     */
+    public String getTargetLanguage() {
+        return PreferenceManager.getInstance().getTargetLanguage();
+    }
+
+    /**
+     *  set target translation language
+     */
+    public void setTargetLanguage(String languageCode) {
+        PreferenceManager.getInstance().setTargetLanguage(languageCode);
+    }
+
+    public void clearTargetLanguage(){
+        PreferenceManager.getInstance().clearTargetLanguage();
+    }
+
+    /**
+     *  set push translation language
+     */
+    public void setPushLanguage(String languageCode){
+        PreferenceManager.getInstance().setPushLanguage(languageCode);
+    }
+
+    /**
+     *  get push translation language
+     */
+    public String getPushLanguage(){
+        return PreferenceManager.getInstance().getPushLanguage();
+    }
+
+    public void clearPushLanguage(){
+        PreferenceManager.getInstance().clearPushLanguage();
+    }
+
+    public void setAutoTargetLanguage(String languageCode){
+        PreferenceManager.getInstance().setAutoTargetLanguage(languageCode);
+    }
+
+    public String getAutoTargetLanguage(){
+        return PreferenceManager.getInstance().getAutoTargetLanguage();
+    }
+
+    public void clearAutoTargetLanguage(String conversationId){
+        PreferenceManager.getInstance().clearAutoTargetLanguage(conversationId);
+    }
+
+    public void clearAutoTargetLanguage(){
+        PreferenceManager.getInstance().clearAutoTargetLanguage();
+    }
+
+    public void setDemandTranslationEnable(boolean isDemand){
+        PreferenceManager.getInstance().setDemandTranslation(isDemand);
+    }
+
+    public boolean getDemandTranslationEnable(){
+        return PreferenceManager.getInstance().getDemandTranslation();
+    }
 
     enum Key{
         VibrateAndPlayToneOn,

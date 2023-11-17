@@ -57,7 +57,7 @@
             android:name="io.agora.chat.ChatJobService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <!-- SDK receiver -->
+
         <!-- IM SDK required end -->
         <!--Add FileProvider-->
         <provider
@@ -171,14 +171,14 @@
             android:exported="false"
             android:screenOrientation="portrait" /> <!-- video call -->
         <activity
-            android:name=".av.CallSingleBaseActivity"
+            android:name=".av.SingleCallActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_video_call"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".av.CallMultipleBaseActivity"
+            android:name=".av.MultipleCallActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_multi_call"

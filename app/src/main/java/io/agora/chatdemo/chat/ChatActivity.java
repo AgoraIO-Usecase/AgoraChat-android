@@ -56,7 +56,7 @@ import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
-import io.agora.chatdemo.av.CallSingleBaseActivity;
+import io.agora.chatdemo.av.SingleCallActivity;
 import io.agora.chatdemo.base.BaseInitActivity;
 import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
@@ -605,7 +605,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
         switch (v.getId()) {
             case R.id.ll_audio_call:
                 if(chatType==SINGLE_CHAT) {
-                    EaseCallKit.getInstance().startSingleCall(SINGLE_VOICE_CALL,conversationId,null, CallSingleBaseActivity.class);
+                    EaseCallKit.getInstance().startSingleCall(SINGLE_VOICE_CALL,conversationId,null, SingleCallActivity.class);
                 }else{
                     // select members for voice call
                     MultiplyVideoSelectMemberContainerFragment fragment = new MultiplyVideoSelectMemberContainerFragment();
@@ -618,7 +618,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                break;
             case R.id.ll_video_call:
                 if(chatType==SINGLE_CHAT) {
-                    EaseCallKit.getInstance().startSingleCall(SINGLE_VIDEO_CALL,conversationId,null, CallSingleBaseActivity.class);
+                    EaseCallKit.getInstance().startSingleCall(SINGLE_VIDEO_CALL,conversationId,null, SingleCallActivity.class);
                 }else{
                     // select members for video call
                     MultiplyVideoSelectMemberContainerFragment fragment = new MultiplyVideoSelectMemberContainerFragment();

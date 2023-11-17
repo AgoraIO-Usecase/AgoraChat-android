@@ -9,8 +9,8 @@ android {
     InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream() ;
     properties.load( inputStream )
 
-    compileSdkVersion 34
-    //buildToolsVersion "30.0.3"
+
+    compileSdk 34
 
     defaultConfig {
         applicationId "io.agora.chatdemo"

@@ -8,14 +8,15 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import io.agora.chat.uikit.utils.StatusBarCompat;
-import io.agora.chat.callkit.ui.EaseCallSingleBaseActivity;
+import io.agora.chat.callkit.ui.EaseCallMultipleBaseActivity;
 
 
-public class CallSingleBaseActivity extends EaseCallSingleBaseActivity {
+public class MultipleCallActivity extends EaseCallMultipleBaseActivity {
 
     @Override
     public void initView() {
-        setFitSystemForTheme(false, "#00000000");
+        setFitSystem(true);
+        StatusBarCompat.compat(this, Color.parseColor("#858585"));
         setStatusBarTextColor(true);
         super.initView();
     }
@@ -27,17 +28,6 @@ public class CallSingleBaseActivity extends EaseCallSingleBaseActivity {
     public void setStatusBarTextColor(boolean isLight) {
         StatusBarCompat.setLightStatusBar(this, !isLight);
     }
-
-    /**
-     * Set whether it is immersive, and set the status bar color
-     * @param fitSystemForTheme true is not immersive
-     * @param color Status bar color
-     */
-    public void setFitSystemForTheme(boolean fitSystemForTheme, String color) {
-        setFitSystem(fitSystemForTheme);
-        StatusBarCompat.compat(this, Color.parseColor(color));
-    }
-
 
     /**
      * Whether the setting is immersive
@@ -62,5 +52,4 @@ public class CallSingleBaseActivity extends EaseCallSingleBaseActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
     }
-
 }

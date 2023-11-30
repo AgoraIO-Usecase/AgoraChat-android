@@ -247,9 +247,9 @@ public class DemoCallKitListener implements EaseCallKitListener {
                                     String uIdStr = it.next().toString();
                                     int uid = Integer.valueOf(uIdStr).intValue();
                                     String username = resToken.optString(uIdStr);
-                                    if (uid == uId) {
+                                    if (uid == uId||uid==0) {
                                         //Obtain information such as userName, profile picture, and nickname of the current user
-                                        userAccount=new EaseUserAccount(uid, username);
+                                        userAccount=new EaseUserAccount(uId, username);
                                     }
                                 }
                                 callback.onUserAccount(userAccount);

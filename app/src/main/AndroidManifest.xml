@@ -175,6 +175,7 @@
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_video_call"
+            android:taskAffinity=".SingleCallTask"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
@@ -182,6 +183,7 @@
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_multi_call"
+            android:taskAffinity=".MultipleCallTask"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <!-- custom presence -->

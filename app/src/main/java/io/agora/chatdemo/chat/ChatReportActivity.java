@@ -32,9 +32,7 @@ import io.agora.chat.NormalFileMessageBody;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.VideoMessageBody;
 import io.agora.chat.VoiceMessageBody;
-import io.agora.chat.uikit.activities.EaseShowBigImageActivity;
-import io.agora.chat.uikit.activities.EaseShowLocalVideoActivity;
-import io.agora.chat.uikit.activities.EaseShowNormalFileActivity;
+import io.agora.chat.uikit.manager.EaseActivityProviderHelper;
 import io.agora.chat.uikit.utils.EaseCompat;
 import io.agora.chat.uikit.utils.EaseDateUtils;
 import io.agora.chat.uikit.utils.EaseFileUtils;
@@ -184,6 +182,7 @@ public class ChatReportActivity extends BaseActivity {
                             @Override
                             public void OnItemClick(View view, int position) {
                                 report_type.setText(labels.get(position));
+                                checkDone();
                             }
                         }).show();
             }
@@ -236,6 +235,7 @@ public class ChatReportActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 String content = easeInputEditText.getText().toString();
                 content_count.setText(String.valueOf(content.length()));
+                checkDone();
             }
         });
 
@@ -277,17 +277,16 @@ public class ChatReportActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (message.getBody() instanceof ImageMessageBody){
-                    Intent intent = new Intent(ChatReportActivity.this, EaseShowBigImageActivity.class);
                     Uri imgUri =((ImageMessageBody) message.getBody()).getLocalUri();
                     EaseFileUtils.takePersistableUriPermission(ChatReportActivity.this, imgUri);
-                    if(EaseFileUtils.isFileExistByUri(ChatReportActivity.this, imgUri)) {
-                        intent.putExtra("uri", imgUri);
+                    if(EaseFileUtils.isFileExistByUri(mContext, imgUri)) {
+                        EaseActivityProviderHelper.startToLocalImageActivity(mContext, imgUri);
                     } else{
-                        String msgId = message.getMsgId();
-                        intent.putExtra("messageId", msgId);
-                        intent.putExtra("filename", ((ImageMessageBody) message.getBody()).getFileName());
+                        // The local full size pic does not exist yet.
+                        // ShowBigImage needs to download it from the server
+                        // first
+                        EaseActivityProviderHelper.startToLocalImageActivity(mContext, message.getMsgId(), ((ImageMessageBody) message.getBody()).getFileName());
                     }
-                   startActivity(intent);
                 }
             }
         });
@@ -299,7 +298,18 @@ public class ChatReportActivity extends BaseActivity {
         if(EaseFileUtils.isFileExistByUri(ChatReportActivity.this, filePath)){
             EaseCompat.openFile(ChatReportActivity.this, filePath);
         }else {
-            startActivity(new Intent(ChatReportActivity.this, EaseShowNormalFileActivity.class).putExtra("msg", message));
+            EaseActivityProviderHelper.startToDownloadFileActivity(mContext, message);
+        }
+    }
+
+    private void checkDone(){
+        if (TextUtils.equals(report_type.getText(),getString(R.string.report_choose))
+                || TextUtils.isEmpty(easeInputEditText.getText())){
+            titleBar.setRightTitleColor(R.color.color_light_gray_999999);
+            titleBar.getRightText().setEnabled(false);
+        }else {
+            titleBar.setRightTitleColor(R.color.color_main_blue);
+            titleBar.getRightText().setEnabled(true);
         }
     }
 

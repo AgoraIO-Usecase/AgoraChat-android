@@ -72,4 +72,22 @@
         app:switchItemTitleColor="@color/black"
         app:switchItemTitleSize="16sp" />
 
+    <io.agora.chatdemo.general.widget.ArrowItemView
+        app:layout_constraintTop_toBottomOf="@id/setting_target_translation"
+        android:id="@+id/setting_auto_translation"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:visibility="gone"
+        android:foreground="@drawable/ease_ripple_click_gray"
+        app:arrowItemArrowSrc="@drawable/arrow_right"
+        app:arrowItemAvatarHeight="32dp"
+        app:arrowItemAvatarSrc="@drawable/chat_settings_auto_translation"
+        app:arrowItemContentColor="@color/color_light_gray_999999"
+        app:arrowItemContentSize="16sp"
+        app:arrowItemTitleStyle="bold"
+        app:arrowItemAvatarWidth="32dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemTitle="@string/chat_setting_auto_translation"
+        app:arrowItemTitleSize="@dimen/text_size_big" />
+
 </LinearLayout>

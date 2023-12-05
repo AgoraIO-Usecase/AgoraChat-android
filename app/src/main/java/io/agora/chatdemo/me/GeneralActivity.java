@@ -15,7 +15,7 @@ import io.agora.chatdemo.databinding.ActivityGeneralBinding;
 import io.agora.chatdemo.general.models.DemoModel;
 import io.agora.chatdemo.general.widget.SwitchItemView;
 
-public class GeneralActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, SwitchItemView.OnCheckedChangeListener {
+public class GeneralActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, SwitchItemView.OnCheckedChangeListener, View.OnClickListener {
 
     private ActivityGeneralBinding mBinding;
     private DemoModel mSettingsModel;
@@ -40,6 +40,7 @@ public class GeneralActivity extends BaseInitActivity implements EaseTitleBar.On
         mBinding.itemSwitchShowTyping.setOnCheckedChangeListener(this);
         mBinding.itemSwitchAddGroupRequest.setOnCheckedChangeListener(this);
         mBinding.itemSwitchDeleteAfterLeavingGroup.setOnCheckedChangeListener(this);
+        mBinding.settingTranslation.setOnClickListener(this);
     }
 
     @Override
@@ -73,6 +74,13 @@ public class GeneralActivity extends BaseInitActivity implements EaseTitleBar.On
                 mSettingsModel.setDeleteMessagesAsExitGroup(isChecked);
                 mChatOptions.setDeleteMessagesAsExitGroup(isChecked);
                 break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.setting_translation){
+            TranslationSettingsActivity.actionStart(mContext);
         }
     }
 }

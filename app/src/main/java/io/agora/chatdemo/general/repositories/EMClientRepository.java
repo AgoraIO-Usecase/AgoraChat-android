@@ -41,6 +41,7 @@ import io.agora.chatdemo.general.models.LoginBean;
 import io.agora.chatdemo.general.net.ErrorCode;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.utils.CommonUtils;
+import io.agora.chatdemo.sign.SignInActivity;
 import io.agora.cloud.HttpClientManager;
 import io.agora.cloud.HttpResponse;
 import io.agora.exceptions.ChatException;
@@ -62,19 +63,18 @@ public class EMClientRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(ResultCallBack<LiveData<Boolean>> callBack) {
-                if(isAutoLogin()) {
+                if (isAutoLogin()) {
                     runOnIOThread(() -> {
-                        if(isLoggedIn()) {
+                        if (isLoggedIn()) {
                             success("", callBack);
-                        }else {
+                        } else {
                             callBack.onError(ErrorCode.NOT_LOGIN);
                         }
 
                     });
-                }else {
+                } else {
                     callBack.onError(ErrorCode.NOT_LOGIN);
                 }
-
             }
         }.asLiveData();
     }
@@ -207,6 +207,8 @@ public class EMClientRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess() {
                         DemoHelper.getInstance().logoutSuccess();
+                        // clear local data
+                        DemoHelper.getInstance().getUsersManager().setTokenExpireTs(0);
                         //reset();
                         if (callBack != null) {
                             callBack.onSuccess(createLiveData(true));
@@ -308,6 +310,53 @@ public class EMClientRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    public LiveData<Resource<Boolean>> reLogin(String username, String pwd, ResultCallBack<LoginBean> loginBack) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                loginToAppServer(username, pwd, new ResultCallBack<LoginBean>() {
+                    @Override
+                    public void onSuccess(LoginBean value) {
+                        if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
+                            ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
+                                @Override
+                                public void onSuccess() {
+                                    DemoHelper.getInstance().getUsersManager().setCurrentUser(username);
+                                    DemoHelper.getInstance().getUsersManager().setCurrentUserAgoraUid(value.getAgoraUid());
+                                    DemoHelper.getInstance().getUsersManager().setTokenExpireTs(value.getExpireTimestamp());
+                                    loginBack.onSuccess(value);
+                                    EMLog.d(TAG, "reLogin success");
+                                    success(pwd, callBack);
+                                }
+
+                                @Override
+                                public void onError(int code, String error) {
+                                    LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(Error.TOKEN_EXPIRED), EaseEvent.TYPE.ACCOUNT));
+                                    loginBack.onError(code, getErrorMsg(code, error));
+                                }
+
+                                @Override
+                                public void onProgress(int progress, String status) {
+
+                                }
+                            });
+                        }else {
+                            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(Error.TOKEN_EXPIRED), EaseEvent.TYPE.ACCOUNT));
+                            loginBack.onError(Error.GENERAL_ERROR, "AccessToken is null!");
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(Error.TOKEN_EXPIRED), EaseEvent.TYPE.ACCOUNT));
+                        loginBack.onError(Error.GENERAL_ERROR, "login app server failed");
+                    }
+                });
+            }
+        }.asLiveData();
+
+    }
+
     public LiveData<Resource<Boolean>> loginByAppServer(String username, String pwd) {
         return new NetworkOnlyResource<Boolean>() {
             @Override
@@ -319,7 +368,9 @@ public class EMClientRepository extends BaseEMRepository{
                             ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
                                 @Override
                                 public void onSuccess() {
+                                    DemoHelper.getInstance().getUsersManager().setCurrentUser(username);
                                     DemoHelper.getInstance().getUsersManager().setCurrentUserAgoraUid(value.getAgoraUid());
+                                    DemoHelper.getInstance().getUsersManager().setTokenExpireTs(value.getExpireTimestamp());
                                     success(pwd, callBack);
                                 }
 
@@ -390,7 +441,7 @@ public class EMClientRepository extends BaseEMRepository{
         callBack.onSuccess(createLiveData(true));
     }
 
-    private void encryptData(String data){
+    public void encryptData(String data){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 SharedPreferences preferences = getEncryptedSP();
@@ -417,7 +468,7 @@ public class EMClientRepository extends BaseEMRepository{
         }
     }
 
-    private String decryptData(){
+    public String decryptData(){
         String data = "";
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
@@ -456,6 +507,7 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     private void loginToAppServer(String username, String password, ResultCallBack<LoginBean> callBack) {
+
         runOnIOThread(() -> {
             try {
                 Map<String, String> headers = new HashMap<>();
@@ -470,15 +522,16 @@ public class EMClientRepository extends BaseEMRepository{
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {
-                    EMLog.e("loginToAppServer success : ", responseInfo);
                     if (responseInfo != null && responseInfo.length() > 0) {
                         JSONObject object = new JSONObject(responseInfo);
                         String token = object.getString("accessToken");
                         int agoraUid = object.getInt("agoraUid");
+                        long expireTs = object.getLong("expireTimestamp");
                         LoginBean bean = new LoginBean();
                         bean.setAccessToken(token);
                         bean.setPassword(password);
                         bean.setAgoraUid(agoraUid);
+                        bean.setExpireTimestamp(expireTs);
                         if(callBack != null) {
                             callBack.onSuccess(bean);
                         }
@@ -486,6 +539,7 @@ public class EMClientRepository extends BaseEMRepository{
                         callBack.onError(code, responseInfo);
                     }
                 } else {
+                    EMLog.e("loginToAppServer failed : ", responseInfo);
                     if (responseInfo != null && responseInfo.length() > 0 && CommonUtils.isJson(responseInfo)) {
                         JSONObject object = new JSONObject(responseInfo);
                         callBack.onError(code, object.getString("errorInfo"));
@@ -495,6 +549,7 @@ public class EMClientRepository extends BaseEMRepository{
                 }
             } catch (Exception e) {
                 //e.printStackTrace();
+                EMLog.e("loginToAppServer error : ", e.getMessage());
                 callBack.onError(Error.NETWORK_ERROR, e.getMessage());
             }
         });

@@ -25,7 +25,6 @@ import io.agora.CallBack;
 import io.agora.chat.Presence;
 import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chat.uikit.models.EaseUser;
-import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.base.BaseInitFragment;
@@ -36,8 +35,9 @@ import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.general.repositories.EMClientRepository;
 import io.agora.chatdemo.general.utils.CommonUtils;
-import io.agora.chatdemo.general.utils.UIUtils;
+import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chatdemo.sign.SignInActivity;
 import io.agora.util.EMLog;
 
@@ -184,7 +184,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
     private void showChangeNickNameDialog() {
         nickDialog = new AlertDialog.Builder(mContext)
                 .setContentView(R.layout.dialog_change_nickname)
-                .setLayoutParams(UIUtils.dp2px(mContext, 270), ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setOnClickListener(R.id.btn_dialog_cancel, this)
                 .setOnClickListener(R.id.btn_dialog_confirm, this)
                 .setOnClickListener(R.id.iv_nickname_delete, this)
@@ -212,6 +212,7 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
                 .setOnConfirmClickListener(R.string.dialog_btn_to_confirm, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
+                        new EMClientRepository().encryptData(""); //clear the password
                         DemoHelper.getInstance().logout(true, new CallBack() {
                             @Override
                             public void onSuccess() {

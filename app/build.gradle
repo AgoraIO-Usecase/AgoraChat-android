@@ -9,15 +9,15 @@ android {
     InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream() ;
     properties.load( inputStream )
 
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "io.agora.chatdemo"
         minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 11
-        versionName "1.1.0"
+        targetSdkVersion 31
+        versionCode 12
+        versionName "1.2.0"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -41,6 +41,18 @@ android {
 
         buildConfigField ("String", "Agora_AppId", properties.getProperty("AGORA_APPID", "******"))
         manifestPlaceholders = [AGORA_CHAT_APPKEY: properties.getProperty("AGORA_CHAT_APPKEY", "******")]
+
+//        ndk {
+//            abiFilters  "arm64-v8a","armeabi-v7a"
+//        }
+//
+//        externalNativeBuild {
+//            ndkBuild {
+////                arguments "NDK_LIBS_OUT=libs", "all"
+//                abiFilters  "arm64-v8a","armeabi-v7a"
+//                arguments '-j8'
+//            }
+//        }
     }
 
     signingConfigs {
@@ -84,6 +96,11 @@ android {
     viewBinding {
         enabled = true
     }
+//    externalNativeBuild {
+//        ndkBuild {
+//            path file('jni/Android.mk')
+//        }
+//    }
 }
 
 dependencies {
@@ -119,11 +136,15 @@ dependencies {
     implementation  'com.scwang.smart:refresh-header-classics:2.0.3'
     // Use EncryptedSharedPreferences
     implementation "androidx.security:security-crypto:1.0.0"
+
+    implementation 'com.google.code.gson:gson:2.6.2'
     // Agora Chat Uikit
-    implementation 'io.agora.rtc:chat-uikit:1.1.0'
-    implementation 'io.agora.rtc:chat-callkit:1.1.0'
+    implementation 'io.agora.rtc:chat-uikit:1.2.0'
+    implementation 'io.agora.rtc:chat-callkit:1.2.0'
 //    implementation project(path: ':chat-uikit')
 //    implementation project(path: ':chat-callkit')
+    // url preview
+    implementation 'org.jsoup:jsoup:1.13.1'
 
 }
 

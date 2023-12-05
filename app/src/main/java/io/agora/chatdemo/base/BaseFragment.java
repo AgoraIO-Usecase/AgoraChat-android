@@ -20,17 +20,18 @@ import io.agora.chat.uikit.manager.EaseThreadManager;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.general.callbacks.DialogCallBack;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
+import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.utils.ToastUtils;
 
 
 public class BaseFragment extends Fragment {
-    public BaseActivity mContext;
+    public AppCompatActivity mContext;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mContext = (BaseActivity) context;
+        mContext = (AppCompatActivity) context;
     }
 
     /**
@@ -143,25 +144,43 @@ public class BaseFragment extends Fragment {
      */
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
         if(mContext != null) {
-            mContext.parseResource(response, callback);
+            if(mContext instanceof BaseActivity) {
+                ((BaseActivity)mContext).parseResource(response, callback);
+            }else {
+                if(response == null) {
+                    return;
+                }
+                if(response.status == Status.SUCCESS) {
+                    callback.onHideLoading();
+                    callback.onSuccess(response.data);
+                }else if(response.status == Status.ERROR) {
+                    callback.onHideLoading();
+                    if(!callback.hideErrorMsg) {
+                        showToast(response.getMessage());
+                    }
+                    callback.onError(response.errorCode, response.getMessage());
+                }else if(response.status == Status.LOADING) {
+                    callback.onLoading(response.data);
+                }
+            }
         }
     }
 
     public void showLoading() {
-        if(mContext != null) {
-            mContext.showLoading();
+        if(mContext != null  && mContext instanceof BaseActivity) {
+            ((BaseActivity)mContext).showLoading();
         }
     }
 
     public void showLoading(String message) {
-        if(mContext != null) {
-            mContext.showLoading(message);
+        if(mContext != null  && mContext instanceof BaseActivity) {
+            ((BaseActivity)mContext).showLoading(message);
         }
     }
 
     public void dismissLoading() {
-        if(mContext != null) {
-            mContext.dismissLoading();
+        if(mContext != null  && mContext instanceof BaseActivity) {
+            ((BaseActivity)mContext).dismissLoading();
         }
     }
 }

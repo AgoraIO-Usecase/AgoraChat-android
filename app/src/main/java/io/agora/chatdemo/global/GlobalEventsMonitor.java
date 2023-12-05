@@ -1,7 +1,9 @@
 package io.agora.chatdemo.global;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -11,6 +13,9 @@ import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -18,6 +23,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import io.agora.CallBack;
 import io.agora.ChatRoomChangeListener;
 import io.agora.ConnectionListener;
 import io.agora.ContactListener;
@@ -40,6 +46,7 @@ import io.agora.chat.uikit.manager.EaseNotificationMsgManager;
 import io.agora.chatdemo.DemoApplication;
 import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
+import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.db.DemoDbHelper;
 import io.agora.chatdemo.general.db.entity.EmUserEntity;
@@ -47,8 +54,11 @@ import io.agora.chatdemo.general.db.entity.InviteMessageStatus;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.manager.PushAndMessageHelper;
+import io.agora.chatdemo.general.models.LoginBean;
 import io.agora.chatdemo.general.repositories.EMClientRepository;
+import io.agora.chatdemo.general.utils.GsonTools;
 import io.agora.chatdemo.group.GroupHelper;
+import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.chatdemo.main.MainActivity;
 import io.agora.exceptions.ChatException;
 import io.agora.util.EMLog;
@@ -70,6 +80,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
     private ConcurrentHashMap<String,Presence> mPresences=new ConcurrentHashMap<>();
 
     Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
+    private List<Activity> resumeActivityList = new ArrayList<>();
+    boolean mIsAppForeground = true;
 
     private GlobalEventsMonitor() {
         appContext = DemoApplication.getInstance();
@@ -90,6 +102,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
         //Initialize presence
         initPresence();
+        registerActivityLifecycleCallbacks();
     }
 
     public static GlobalEventsMonitor getInstance() {
@@ -122,6 +135,100 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         while (!msgQueue.isEmpty()) {
             showToast(msgQueue.remove());
         }
+    }
+
+    private void registerActivityLifecycleCallbacks() {
+        Object lifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+                resumeActivityList.remove(activity);
+                if (resumeActivityList.isEmpty()) {
+                    // app is on background
+                    mIsAppForeground = false;
+                    EMLog.d(TAG, "app on background");
+                }
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+                if(!resumeActivityList.contains(activity)) {
+                    resumeActivityList.add(activity);
+                    if(resumeActivityList.size() == 1) {
+                        // app is on foreground
+                        mIsAppForeground = true;
+                        EMLog.d(TAG, "app on foreground");
+
+                        // check if token expired
+                        long timeStamp = System.currentTimeMillis();
+
+                        if (timeStamp > DemoHelper.getInstance().getUsersManager().getTokenExpireTs()) {
+                            EMLog.d(TAG, "token expired, relogin");
+                            EMClientRepository repo = new EMClientRepository();
+                            String userName = DemoHelper.getInstance().getUsersManager().getCurrentUser();
+                            String pw = repo.decryptData();
+                            if (userName== null || pw == null ||userName.isEmpty() || pw.isEmpty()) {
+                                EMLog.d(TAG, "user logout, just return");
+                                EaseEvent event = EaseEvent.create(DemoConstant.LOGIN_SUCESS, EaseEvent.TYPE.NOTIFY);
+                                messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
+                                return;
+                            }
+
+                            DemoHelper.getInstance().logout(false, new CallBack() {
+                                @Override
+                                public void onSuccess() {
+
+                                    repo.reLogin(userName, pw, new ResultCallBack<LoginBean>() {
+                                        @Override
+                                        public void onSuccess(LoginBean value) {
+                                            EMLog.e(TAG, "reLogin success");
+                                            EaseEvent event = EaseEvent.create(DemoConstant.LOGIN_SUCESS, EaseEvent.TYPE.NOTIFY);
+                                            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
+                                        }
+
+                                        @Override
+                                        public void onError(int error, String errorMsg) {
+                                            EMLog.e(TAG, "reLogin failed: error code = " + error + " error message = " + errorMsg);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onError(int i, String s) {
+                                    EMLog.e("logout", "logout error: error code = " + i + " error message = " + s);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+
+        };
+        ((Application) appContext).registerActivityLifecycleCallbacks((Application.ActivityLifecycleCallbacks) lifecycleCallbacks);
     }
 
     void showToast(@StringRes int mesId) {
@@ -181,6 +288,13 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         }
     }
 
+    @Override
+    public void onMessageContentChanged(ChatMessage message, String operatorId, long operationTime) {
+        EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
+        messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+        EMLog.d(TAG, "onMessageContentChanged id : " + message.getMsgId());
+        EMLog.d(TAG, "onMessageContentChanged type: " + message.getType());
+    }
 
 
     /**
@@ -213,34 +327,9 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
     @Override
     public void onMessageRecalled(List<ChatMessage> messages) {
+        super.onMessageRecalled(messages);
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
         messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
-        for (ChatMessage msg : messages) {
-            if(msg.getChatType() == ChatMessage.ChatType.GroupChat && EaseAtMessageHelper.get().isAtMeMsg(msg)){
-                EaseAtMessageHelper.get().removeAtMeGroup(msg.getTo());
-            }
-            ChatMessage msgNotification = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
-            String content;
-            if(TextUtils.equals(msg.getFrom(), ChatClient.getInstance().getCurrentUser())) {
-                msgNotification.setDirection(ChatMessage.Direct.SEND);
-                content = context.getString(R.string.ease_msg_recall_by_self);
-            }else {
-                msgNotification.setDirection(ChatMessage.Direct.RECEIVE);
-                content = String.format(context.getString(R.string.ease_msg_recall_by_user), msg.getFrom());
-            }
-            TextMessageBody txtBody = new TextMessageBody(content);
-            msgNotification.addBody(txtBody);
-            msgNotification.setFrom(msg.getFrom());
-            msgNotification.setTo(msg.getTo());
-            msgNotification.setUnread(false);
-            msgNotification.setMsgTime(msg.getMsgTime());
-            msgNotification.setLocalTime(msg.getMsgTime());
-            msgNotification.setChatType(msg.getChatType());
-            msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALL, true);
-            msgNotification.setStatus(ChatMessage.Status.SUCCESS);
-            msgNotification.setIsChatThreadMessage(msg.isChatThreadMessage());
-            ChatClient.getInstance().chatManager().saveMessage(msgNotification);
-        }
     }
 
     private class ChatConversationListener implements ConversationListener {
@@ -262,6 +351,8 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         public void onConnected() {
             EMLog.i(TAG, "onConnected");
             DemoHelper.getInstance().getUsersManager().initUserInfo();
+            EaseEvent event = EaseEvent.create(DemoConstant.LOGIN_SUCESS, EaseEvent.TYPE.NOTIFY);
+            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
         }
 
         @Override
@@ -279,8 +370,44 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 
         @Override
         public void onTokenExpired() {
-            int tokenExpired = Error.TOKEN_EXPIRED;
-            LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(String.valueOf(tokenExpired), EaseEvent.TYPE.ACCOUNT));
+            EMLog.d(TAG, "onTokenExpired");
+
+            if (!mIsAppForeground) {
+                EMLog.d(TAG, "app is in background, ignore it");
+                return;
+            }
+
+            DemoHelper.getInstance().logout(false, new CallBack() {
+                @Override
+                public void onSuccess() {
+                    EMClientRepository repo = new EMClientRepository();
+                    String userName = DemoHelper.getInstance().getUsersManager().getCurrentUser();
+                    String pw = repo.decryptData();
+                    if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(pw)) {
+                        EMLog.d(TAG, "user logout, just return");
+                        return;
+                    }
+
+                    repo.reLogin(userName, pw, new ResultCallBack<LoginBean>() {
+                        @Override
+                        public void onSuccess(LoginBean value) {
+                            EMLog.e(TAG, "reLogin success");
+                            EaseEvent event = EaseEvent.create(DemoConstant.LOGIN_SUCESS, EaseEvent.TYPE.NOTIFY);
+                            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
+                        }
+
+                        @Override
+                        public void onError(int error, String errorMsg) {
+                            EMLog.e(TAG, "reLogin failed: error code = " + error + " error message = " + errorMsg);
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    EMLog.e("logout", "logout error: error code = "+ i + " error message = "+ s);
+                }
+            });
         }
 
         @Override
@@ -565,6 +692,18 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             EMLog.i(TAG, context.getString(R.string.group_listener_onSharedFileDeleted, fileId));
         }
 
+        @Override
+        public void onGroupMemberAttributeChanged(String groupId,String userId,Map<String, String> attribute, String from) {
+            if ( attribute != null && attribute.size() > 0){
+                EMLog.d(TAG,"onGroupMemberAttributeChanged: " + groupId +" - "+ attribute.toString());
+                MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(attribute).toString(), MemberAttributeBean.class);
+                if (bean != null && bean.getNickName() != null){
+                    DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
+                    LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
+                }
+            }
+        }
+
     }
 
     private class ChatContactListener implements ContactListener {
@@ -843,7 +982,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
 //                msg.setAttribute(DemoConstant.EASE_SYSTEM_NOTIFICATION_TYPE, true);
                 msg.setAttribute(DemoConstant.SYSTEM_NOTIFICATION_TYPE, DemoConstant.SYSTEM_GROUP_INVITE_ACCEPT);
                 msg.setAttribute(DemoConstant.EM_NOTIFICATION_TYPE, true);
-                msg.addBody(new TextMessageBody(msg.getFrom() + " " +st3));
+                msg.addBody(new TextMessageBody( String.format(st3,msg.getFrom())));
                 msg.setStatus(ChatMessage.Status.SUCCESS);
                 // save invitation as messages
                 ChatClient.getInstance().chatManager().saveMessage(msg);

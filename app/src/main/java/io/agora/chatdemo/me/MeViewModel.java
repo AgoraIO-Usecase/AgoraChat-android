@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.agora.chat.Conversation;
+import io.agora.chat.Language;
 import io.agora.chat.PushManager;
 import io.agora.chat.SilentModeResult;
 import io.agora.chat.SilentModeParam;
@@ -17,12 +18,15 @@ import io.agora.chat.UserInfo;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chatdemo.general.livedatas.SingleSourceLiveData;
 import io.agora.chatdemo.general.net.Resource;
+import io.agora.chatdemo.general.repositories.EMChatManagerRepository;
 import io.agora.chatdemo.general.repositories.EMContactManagerRepository;
 import io.agora.chatdemo.general.repositories.EMPushManagerRepository;
 
 public class MeViewModel extends AndroidViewModel {
     private EMPushManagerRepository repository;
     private EMContactManagerRepository contactManagerRepository;
+    private EMChatManagerRepository chatManagerRepository;
+    private SingleSourceLiveData<Resource<List<Language>>> languageObservable;
     private SingleSourceLiveData<Resource<EaseUser>> updateNicknameObservable;
     private SingleSourceLiveData<Resource<Boolean>> updatePushStyleObservable;
     private SingleSourceLiveData<Resource<SilentModeResult>> updateAllSilentModeObservable;
@@ -37,6 +41,7 @@ public class MeViewModel extends AndroidViewModel {
         super(application);
         repository = new EMPushManagerRepository();
         contactManagerRepository= new EMContactManagerRepository();
+        chatManagerRepository = new EMChatManagerRepository();
         updateNicknameObservable = new SingleSourceLiveData<>();
         updatePushStyleObservable = new SingleSourceLiveData<>();
         updateAllSilentModeObservable = new SingleSourceLiveData<>();
@@ -47,6 +52,7 @@ public class MeViewModel extends AndroidViewModel {
         fetchConversationsSilentModeObservable = new SingleSourceLiveData<>();
         updatePushTranslationLanguageObservable = new SingleSourceLiveData<>();
         fetchPushTranslationLanguageObservable = new SingleSourceLiveData<>();
+        languageObservable = new SingleSourceLiveData<>();
     }
     public LiveData<Resource<EaseUser>> getUpdateNicknameObservable() {
         return updateNicknameObservable;
@@ -54,6 +60,10 @@ public class MeViewModel extends AndroidViewModel {
     public void updateNickname(String nickname) {
         repository.updatePushNickname(nickname);
         updateNicknameObservable.setSource(contactManagerRepository.updateCurrentUserInfo(UserInfo.UserInfoType.NICKNAME, nickname));
+    }
+
+    public LiveData<Resource<List<Language>>> getLanguageObservable(){
+        return languageObservable;
     }
 
     public LiveData<Resource<Boolean>> getUpdatePushStyleObservable() {
@@ -114,5 +124,9 @@ public class MeViewModel extends AndroidViewModel {
     }
     public void fetchPushPerformLanguage() {
         fetchPushTranslationLanguageObservable.setSource(repository.getPushPerformLanguage());
+    }
+
+    public void fetchSupportLanguages(){
+        languageObservable.setSource(chatManagerRepository.fetchSupportLanguages());
     }
 }

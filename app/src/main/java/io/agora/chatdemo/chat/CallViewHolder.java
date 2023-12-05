@@ -14,14 +14,13 @@ import io.agora.chat.callkit.general.EaseCallType;
 import io.agora.chat.callkit.general.EaseCallAction;
 import io.agora.chat.callkit.utils.EaseCallMsgUtils;
 import io.agora.chat.uikit.chat.viewholder.EaseChatRowViewHolder;
-import io.agora.chat.uikit.interfaces.MessageListItemClickListener;
 
 
 public class CallViewHolder extends EaseChatRowViewHolder {
    private Map<String, Object> ext= new HashMap<>();
 
-   public CallViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
-      super(itemView, itemClickListener);
+   public CallViewHolder(@NonNull View itemView) {
+      super(itemView);
    }
 
    @Override

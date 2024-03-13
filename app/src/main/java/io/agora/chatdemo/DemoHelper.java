@@ -170,8 +170,6 @@ public class DemoHelper {
 //        options.setIMServer("106.75.100.247");
 //        options.setImPort(6717);
         options.setUsingHttpsOnly(true);
-        // Use fpa by default
-        options.setFpaEnable(true);
         boolean hasAppkey = checkAgoraChatAppKey(context, options);
         // You can set your AppKey by options.setAppKey(appkey)
         if (!hasAppkey) {

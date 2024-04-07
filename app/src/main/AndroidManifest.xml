@@ -175,14 +175,18 @@
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_video_call"
+            android:taskAffinity=".SingleCallTask"
             android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".av.MultipleCallActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_multi_call"
+            android:taskAffinity=".MultipleCallTask"
             android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
         <!-- custom presence -->
         <activity

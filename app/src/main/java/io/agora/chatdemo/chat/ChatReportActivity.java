@@ -140,7 +140,7 @@ public class ChatReportActivity extends BaseActivity {
             }
         }
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
-        viewModel.getChatManagerObservable().observe(this,response->{
+        viewModel.getReportMessageObservable().observe(this, response->{
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {

@@ -1,6 +1,7 @@
 package io.agora.chatdemo.chat;
 
 import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
+import static io.agora.chatdemo.general.utils.ToastUtils.showToast;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,7 +15,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,6 +35,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.common.util.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,11 +46,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.agora.MessageListener;
 import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.ChatRoom;
 import io.agora.chat.CustomMessageBody;
 import io.agora.chat.LocationMessageBody;
+import io.agora.chat.MessagePinInfo;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.uikit.chat.EaseChatFragment;
 import io.agora.chat.uikit.chat.adapter.EaseMessageAdapter;
@@ -65,15 +69,22 @@ import io.agora.chatdemo.DemoHelper;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.chat.adapter.CustomMessageAdapter;
 import io.agora.chatdemo.chat.viewmodel.ChatViewModel;
+import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
 import io.agora.chatdemo.general.dialog.AlertDialog;
+import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.interfaces.TranslationListener;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.general.net.Resource;
 import io.agora.chatdemo.general.permission.PermissionCompat;
 import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.general.utils.RecyclerViewUtils;
+import io.agora.chatdemo.general.utils.ToastUtils;
+import io.agora.chatdemo.general.utils.UIUtils;
+import io.agora.chatdemo.general.widget.PinInfoView;
+import io.agora.chatdemo.general.widget.PinMessageListViewGroup;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.MemberAttributeBean;
 import io.agora.chatdemo.group.viewmodel.GroupDetailViewModel;
@@ -82,7 +93,7 @@ import io.agora.chatdemo.me.TranslationHelper;
 import io.agora.chatdemo.me.TranslationSettingsActivity;
 import io.agora.util.EMLog;
 
-public class CustomChatFragment extends EaseChatFragment {
+public class CustomChatFragment extends EaseChatFragment implements MessageListener {
     private static final int REQUEST_CODE_STORAGE_PICTURE = 111;
     private static final int REQUEST_CODE_STORAGE_VIDEO = 112;
     private static final int REQUEST_CODE_STORAGE_FILE = 113;
@@ -100,6 +111,7 @@ public class CustomChatFragment extends EaseChatFragment {
             , result -> onRequestResult(result, REQUEST_CODE_STORAGE_VIDEO));
     private final ActivityResultLauncher<String[]> requestFilePermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
             , result -> onRequestResult(result, REQUEST_CODE_STORAGE_FILE));
+    private PinInfoView pinInfoView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,8 +121,8 @@ public class CustomChatFragment extends EaseChatFragment {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         boolean enable = DemoHelper.getInstance().getModel().getDemandTranslationEnable();
-                        if (enable && !TextUtils.isEmpty(getPreferredLanguageCode())){
-                            translationMessage(translationMsg,getPreferredLanguageCode());
+                        if (enable && !TextUtils.isEmpty(getPreferredLanguageCode())) {
+                            translationMessage(translationMsg, getPreferredLanguageCode());
                         }
                     }
                 }
@@ -120,53 +132,130 @@ public class CustomChatFragment extends EaseChatFragment {
     @Override
     public void initData() {
         super.initData();
-        groupDetailViewModel = new ViewModelProvider((AppCompatActivity)mContext).get(GroupDetailViewModel.class);
-        groupDetailViewModel.getFetchMemberAttributesObservable().observe(this,response ->{
-            if(response == null || isDestroy) {
+        groupDetailViewModel = new ViewModelProvider((AppCompatActivity) mContext).get(GroupDetailViewModel.class);
+        groupDetailViewModel.getFetchMemberAttributesObservable().observe(this, response -> {
+            if (response == null || isDestroy) {
                 return;
             }
-            if(response.status == Status.SUCCESS) {
+            if (response.status == Status.SUCCESS) {
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
-        viewModel.getTranslationObservable().observe(this,response ->{
-            if(response == null || isDestroy) {
+        viewModel.getTranslationObservable().observe(this, response -> {
+            if (response == null || isDestroy) {
                 return;
             }
-            if(response.status == Status.SUCCESS) {
+            if (response.status == Status.SUCCESS) {
                 chatLayout.getChatMessageListLayout().refreshMessages();
-            }else {
-                EMLog.e("translationMessage","onError: " + response.errorCode + " - " + response.getMessage());
+            } else {
+                EMLog.e("translationMessage", "onError: " + response.errorCode + " - " + response.getMessage());
             }
+        });
+        viewModel.pinMessageObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<ChatMessage>() {
+                @Override
+                public void onSuccess(ChatMessage message) {
+                    updatePinMessage(message,ChatClient.getInstance().getCurrentUser());
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    showToast(message);
+                }
+            });
         });
 
         LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null || isDestroy) {
+            if (event == null || isDestroy) {
                 return;
             }
             chatLayout.getChatMessageListLayout().refreshMessages();
         });
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if(event == null || isDestroy) {
+            if (event == null || isDestroy) {
                 return;
             }
-            if(event.isMessageChange()) {
+            if (event.isMessageChange()) {
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
         LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.class).observe(this, event -> {
-            if(event == null || isDestroy) {
+            if (event == null || isDestroy) {
                 return;
             }
-            if(event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
+            if (event.type == EaseEvent.TYPE.NOTIFY && TextUtils.isEmpty(event.message)) {
                 IChatTopExtendMenu chatTopExtendMenu = chatLayout.getChatInputMenu().getChatTopExtendMenu();
-                if(chatTopExtendMenu instanceof EaseChatMultiSelectView) {
+                if (chatTopExtendMenu instanceof EaseChatMultiSelectView) {
                     ((EaseChatMultiSelectView) chatTopExtendMenu).dismissSelectView(null);
                 }
                 titleBar.setVisibility(View.GONE);
             }
         });
+
+        viewModel.getPinMessageObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<List<ChatMessage>>() {
+                @Override
+                public void onSuccess(List<ChatMessage> messages) {
+                    if (CollectionUtils.isEmpty(messages)) {
+                        pinInfoView.setVisibility(View.GONE);
+                    } else {
+                        pinInfoView.setData(messages);
+                    }
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                }
+            });
+        });
+
+        if (chatType != SINGLE_CHAT) {
+            viewModel.getPinnedMessagesFromServer(conversationId);
+        }
+    }
+
+    private void updatePinMessage(ChatMessage message,String operationUser) {
+        runOnUiThread(()->{
+            boolean isPined = message.pinnedInfo()==null||TextUtils.isEmpty(message.pinnedInfo().operatorId());
+            ToastUtils.showToast((isPined ? "unpin success" : "pin success"));
+            if(isPined){
+                pinInfoView.removeData(message);
+            }else{
+                pinInfoView.addData(message);
+            }
+            //insert pin message info in local
+            insertPinNotificationInLocal(message, operationUser);
+            chatLayout.getChatMessageListLayout().refreshToLatest();
+        });
+    }
+
+    private void insertPinNotificationInLocal(ChatMessage msg,String operationUser) {
+        ChatMessage msgNotification = ChatMessage.createReceiveMessage(ChatMessage.Type.TXT);
+        String content;
+        if(msg.pinnedInfo()==null||TextUtils.isEmpty(msg.pinnedInfo().operatorId())) {
+            content = operationUser+" removed a pin message";
+        }else{
+            content = operationUser+" pinned a message";
+        }
+        if(TextUtils.equals(operationUser, ChatClient.getInstance().getCurrentUser())){
+            content = content.replace(operationUser, "You");
+        }
+        TextMessageBody txtBody = new TextMessageBody(content);
+        msgNotification.addBody(txtBody);
+        msgNotification.setFrom(msg.getFrom());
+        msgNotification.setTo(msg.getTo());
+        msgNotification.setUnread(false);
+        msgNotification.setMsgTime(System.currentTimeMillis());
+        msgNotification.setLocalTime(System.currentTimeMillis());
+        msgNotification.setChatType(msg.getChatType());
+        //Just to reuse the recall layout
+        msgNotification.setAttribute(EaseConstant.MESSAGE_TYPE_RECALL, true);
+        msgNotification.setStatus(ChatMessage.Status.SUCCESS);
+        msgNotification.setIsChatThreadMessage(msg.isChatThreadMessage());
+        ChatClient.getInstance().chatManager().saveMessage(msgNotification);
     }
 
     @Override
@@ -174,11 +263,11 @@ public class CustomChatFragment extends EaseChatFragment {
         super.initListener();
         listenerRecyclerViewItemFinishLayout();
         EditText editText = chatLayout.getChatInputMenu().getPrimaryMenu().getEditText();
-        if (editText != null){
+        if (editText != null) {
             editText.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    return removePickAt(v,keyCode,event);
+                    return removePickAt(v, keyCode, event);
                 }
             });
             editText.addTextChangedListener(new TextWatcher() {
@@ -189,20 +278,20 @@ public class CustomChatFragment extends EaseChatFragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(!chatLayout.getChatMessageListLayout().isGroupChat()) {
+                    if (!chatLayout.getChatMessageListLayout().isGroupChat()) {
                         return;
                     }
-                    if(count == 1 && "@".equals(String.valueOf(s.charAt(start)))){
+                    if (count == 1 && "@".equals(String.valueOf(s.charAt(start)))) {
                         Bundle bundle = new Bundle();
                         bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
                         PickAtUserDialogFragment fragment = new PickAtUserDialogFragment();
                         fragment.setPickAtSelectListener(username -> {
-                            chatLayout.inputAtUsername(username,false);
+                            chatLayout.inputAtUsername(username, false);
                         });
                         fragment.setArguments(bundle);
-                        if (getActivity() != null){
+                        if (getActivity() != null) {
                             fragment.show(getActivity().getSupportFragmentManager(), "pick_at_user");
-                            if (getActivity() != null){
+                            if (getActivity() != null) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -210,7 +299,7 @@ public class CustomChatFragment extends EaseChatFragment {
                                         editText.requestFocus();
                                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                                     }
-                                },200);
+                                }, 200);
                             }
                         }
                     }
@@ -222,6 +311,53 @@ public class CustomChatFragment extends EaseChatFragment {
                 }
             });
         }
+
+        if(pinInfoView!=null){
+            pinInfoView.setOnItemClickListener(new PinMessageListViewGroup.OnItemClickListener() {
+                @Override
+                public void onItemClick(ChatMessage message) {
+                    pinInfoView.restView();
+                    //click for pin message list
+                    List<ChatMessage> messageList = chatLayout.getChatMessageListLayout().getMessageAdapter().getData();
+                    boolean isExist = false;
+                    for (int i = 0; i < messageList.size(); i++) {
+                        ChatMessage chatMessage = messageList.get(i);
+                        if (chatMessage.getMsgId().equals(message.getMsgId())) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (!isExist) {
+                        ToastUtils.showToast(getString(R.string.pin_skip_not_exist));
+                    }else{
+                        chatLayout.getChatMessageListLayout().moveToTarget(message);
+                    }
+                }
+            });
+            pinInfoView.setOnItemSubViewClickListener(new EaseMessageAdapter.OnItemSubViewClickListener() {
+                @Override
+                public void onItemSubViewClick(View view, int position) {
+                    ChatMessage message=pinInfoView.getPinMessages().get(position);
+                    showUnPinConfirmDialog(message);
+                }
+            });
+        }
+
+        ChatClient.getInstance().chatManager().addMessageListener(this);
+    }
+
+    private void showUnPinConfirmDialog(ChatMessage message) {
+        new SimpleDialog.Builder(getActivity())
+                .setTitle(R.string.unpin_confirm_message)
+                .showCancelButton(true)
+                .hideConfirmButton(false)
+                .setOnConfirmClickListener(R.string.dialog_btn_to_confirm, new SimpleDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.pinMessage(message, false);
+                    }
+                })
+                .show();
     }
 
 
@@ -234,25 +370,43 @@ public class CustomChatFragment extends EaseChatFragment {
     @Override
     public void initView() {
         super.initView();
+        MenuItemBean pinItemBean = new MenuItemBean(0, R.id.action_chat_pin, 76, getResources().getString(R.string.ease_action_pin));
+        pinItemBean.setResourceId(R.drawable.chat_item_menu_pin);
         MenuItemBean menuItemBean = new MenuItemBean(0, R.id.action_chat_report, 99, getResources().getString(R.string.ease_action_report));
         menuItemBean.setResourceId(R.drawable.chat_item_menu_report);
-        MenuItemBean menuTranslationBean = new MenuItemBean(0, R.id.action_chat_translation,88, getResources().getString(R.string.ease_action_translation));
+        MenuItemBean menuTranslationBean = new MenuItemBean(0, R.id.action_chat_translation, 88, getResources().getString(R.string.ease_action_translation));
         menuTranslationBean.setResourceId(R.drawable.chat_item_menu_translation);
-        MenuItemBean menuReTranslationBean = new MenuItemBean(0, R.id.action_chat_re_translation,111, getResources().getString(R.string.ease_action_re_translation));
+        MenuItemBean menuReTranslationBean = new MenuItemBean(0, R.id.action_chat_re_translation, 111, getResources().getString(R.string.ease_action_re_translation));
         menuReTranslationBean.setResourceId(R.drawable.chat_item_menu_translation);
+        chatLayout.getMenuHelper().addItemMenu(pinItemBean);
         chatLayout.getMenuHelper().addItemMenu(menuItemBean);
         chatLayout.getMenuHelper().addItemMenu(menuTranslationBean);
         chatLayout.getMenuHelper().addItemMenu(menuReTranslationBean);
         chatLayout.setPresenter(new ChatCustomPresenter());
 
         EaseMessageAdapter adapter = chatLayout.getChatMessageListLayout().getMessageAdapter();
-        if (adapter instanceof CustomMessageAdapter){
-            ((CustomMessageAdapter)adapter).setTranslationListener(new TranslationListener() {
+        if (adapter instanceof CustomMessageAdapter) {
+            ((CustomMessageAdapter) adapter).setTranslationListener(new TranslationListener() {
                 @Override
-                public void onTranslationRetry(ChatMessage message,String languageCode) {
-                    if (message.getBody() instanceof TextMessageBody){
-                        translationMessage(message,languageCode);
+                public void onTranslationRetry(ChatMessage message, String languageCode) {
+                    if (message.getBody() instanceof TextMessageBody) {
+                        translationMessage(message, languageCode);
                     }
+                }
+            });
+        }
+
+        if(chatType!=SINGLE_CHAT){
+            pinInfoView = new PinInfoView(getContext());
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            pinInfoView.setVisibility(View.GONE);
+            chatLayout.addView(pinInfoView, layoutParams);
+            chatLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    pinInfoView.setInnerLayoutMaxHeight(chatLayout.getHeight()- UIUtils.dp2px(getContext(), 145));
                 }
             });
         }
@@ -290,14 +444,16 @@ public class CustomChatFragment extends EaseChatFragment {
             helper.findItemVisible(R.id.action_chat_translation, false);
             helper.findItemVisible(R.id.action_chat_re_translation, false);
         }
+        helper.findItem(R.id.action_chat_pin).setTitle((message.pinnedInfo()==null||TextUtils.isEmpty(message.pinnedInfo().operatorId())) ? getString(R.string.ease_action_pin):getString(R.string.ease_action_unpin));
+        helper.findItemVisible(R.id.action_chat_pin, chatType==SINGLE_CHAT?false:true);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItemBean item, ChatMessage message) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_chat_report:
                 if (message.status() == ChatMessage.Status.SUCCESS)
-                    ChatReportActivity.actionStart(getActivity(),message.getMsgId());
+                    ChatReportActivity.actionStart(getActivity(), message.getMsgId());
                 break;
             case R.id.action_chat_select:
                 showSelectModelTitle();
@@ -306,18 +462,21 @@ public class CustomChatFragment extends EaseChatFragment {
             case R.id.action_chat_translation:
             case R.id.action_chat_re_translation:
                 translationMsg = message;
-                if (!TextUtils.isEmpty(getPreferredLanguageCode())){
+                if (!TextUtils.isEmpty(getPreferredLanguageCode())) {
                     boolean enable = DemoHelper.getInstance().getModel().getDemandTranslationEnable();
-                    if (enable){
-                        translationMessage(message,getPreferredLanguageCode());
+                    if (enable) {
+                        translationMessage(message, getPreferredLanguageCode());
                         break;
-                    }else {
+                    } else {
                         translationType = DemoConstant.TRANSLATION_DEMAND_ENABLE;
                     }
-                }else {
+                } else {
                     translationType = DemoConstant.TRANSLATION_NO_LANGUAGE;
                 }
                 showTranslationDialog();
+                break;
+            case R.id.action_chat_pin:
+                viewModel.pinMessage(message, message.pinnedInfo()==null||TextUtils.isEmpty(message.pinnedInfo().operatorId()));
                 break;
         }
         return super.onMenuItemClick(item, message);
@@ -334,17 +493,17 @@ public class CustomChatFragment extends EaseChatFragment {
                 }
                 break;
             case R.id.extend_item_picture:
-                if(!PermissionCompat.checkMediaPermission(mContext, requestImagePermission, Manifest.permission.READ_MEDIA_IMAGES)) {
+                if (!PermissionCompat.checkMediaPermission(mContext, requestImagePermission, Manifest.permission.READ_MEDIA_IMAGES)) {
                     return true;
                 }
                 break;
             case R.id.extend_item_video:
-                if(!PermissionCompat.checkMediaPermission(mContext, requestVideoPermission, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.CAMERA)) {
+                if (!PermissionCompat.checkMediaPermission(mContext, requestVideoPermission, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.CAMERA)) {
                     return true;
                 }
                 break;
             case R.id.extend_item_file:
-                if(!PermissionCompat.checkMediaPermission(mContext, requestFilePermission, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)) {
+                if (!PermissionCompat.checkMediaPermission(mContext, requestFilePermission, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)) {
                     return true;
                 }
                 break;
@@ -353,16 +512,16 @@ public class CustomChatFragment extends EaseChatFragment {
     }
 
     private void onRequestResult(Map<String, Boolean> result, int requestCode) {
-        if(result != null && result.size() > 0) {
+        if (result != null && result.size() > 0) {
             for (Map.Entry<String, Boolean> entry : result.entrySet()) {
                 EMLog.e("chat", "onRequestResult: " + entry.getKey() + "  " + entry.getValue());
             }
-            if(PermissionCompat.getMediaAccess(mContext) != PermissionCompat.StorageAccess.Denied) {
-                if(requestCode == REQUEST_CODE_STORAGE_PICTURE) {
+            if (PermissionCompat.getMediaAccess(mContext) != PermissionCompat.StorageAccess.Denied) {
+                if (requestCode == REQUEST_CODE_STORAGE_PICTURE) {
                     selectPicFromLocal();
-                }else if(requestCode == REQUEST_CODE_STORAGE_VIDEO) {
+                } else if (requestCode == REQUEST_CODE_STORAGE_VIDEO) {
                     selectVideoFromLocal();
-                }else if(requestCode == REQUEST_CODE_STORAGE_FILE) {
+                } else if (requestCode == REQUEST_CODE_STORAGE_FILE) {
                     selectFileFromLocal();
                 }
             }
@@ -378,9 +537,9 @@ public class CustomChatFragment extends EaseChatFragment {
         titleBar.getIcon().setVisibility(View.VISIBLE);
         titleBar.getLeftLayout().setVisibility(View.GONE);
         ViewParent parent = titleBar.getTitle().getParent();
-        if(parent instanceof ViewGroup) {
+        if (parent instanceof ViewGroup) {
             ViewGroup.LayoutParams params = ((ViewGroup) parent).getLayoutParams();
-            if(params instanceof RelativeLayout.LayoutParams) {
+            if (params instanceof RelativeLayout.LayoutParams) {
                 ((RelativeLayout.LayoutParams) params).leftMargin = (int) EaseUtils.dip2px(mContext, 12);
             }
         }
@@ -390,9 +549,9 @@ public class CustomChatFragment extends EaseChatFragment {
                 LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL).postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_NORMAL, EaseEvent.TYPE.NOTIFY));
             }
         });
-        if(chatType != SINGLE_CHAT) {
+        if (chatType != SINGLE_CHAT) {
             boolean hasProvided = DemoHelper.getInstance().setGroupInfo(mContext, conversationId, titleBar.getTitle(), titleBar.getIcon());
-            if(!hasProvided) {
+            if (!hasProvided) {
                 setGroupInfo();
             }
         } else {
@@ -404,16 +563,16 @@ public class CustomChatFragment extends EaseChatFragment {
 
     private void setGroupInfo() {
         String title = "";
-        if(chatType == EaseChatType.GROUP_CHAT) {
+        if (chatType == EaseChatType.GROUP_CHAT) {
             title = GroupHelper.getGroupName(conversationId);
             titleBar.getIcon().setImageResource(R.drawable.icon);
-        }else if(chatType == EaseChatType.CHATROOM) {
+        } else if (chatType == EaseChatType.CHATROOM) {
             titleBar.getIcon().setImageResource(R.drawable.icon);
             ChatRoom room = ChatClient.getInstance().chatroomManager().getChatRoom(conversationId);
-            if(room == null) {
+            if (room == null) {
                 return;
             }
-            title =  TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
+            title = TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
         }
         titleBar.getTitle().setText(title);
     }
@@ -500,22 +659,22 @@ public class CustomChatFragment extends EaseChatFragment {
     }
 
 
-    private void translationMessage(ChatMessage message,String language){
+    private void translationMessage(ChatMessage message, String language) {
         List<String> list = new ArrayList<>();
         list.add(language);
-        viewModel.translationMessage(message,list);
+        viewModel.translationMessage(message, list);
     }
 
     @Override
     public void addMsgAttrsBeforeSend(ChatMessage message) {
         super.addMsgAttrsBeforeSend(message);
         String[] autoLanguage = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_AUTO, conversationId);
-        if (!TextUtils.isEmpty(autoLanguage[0])){
-            translationMessage(message,autoLanguage[0]);
+        if (!TextUtils.isEmpty(autoLanguage[0])) {
+            translationMessage(message, autoLanguage[0]);
         }
     }
 
-    private void setPickAtContentStyle(Editable editable){
+    private void setPickAtContentStyle(Editable editable) {
         Pattern pattern = Pattern.compile("@([^\\s]+)");
         Matcher matcher = pattern.matcher(editable);
         while (matcher.find()) {
@@ -528,18 +687,18 @@ public class CustomChatFragment extends EaseChatFragment {
         }
     }
 
-    private boolean removePickAt(View v, int keyCode, KeyEvent event){
+    private boolean removePickAt(View v, int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN && v instanceof EditText) {
-            int selectionStart = ((EditText)v).getSelectionStart();
-            int selectionEnd = ((EditText)v).getSelectionEnd();
-            SpannableStringBuilder text = (SpannableStringBuilder) ((EditText)v).getText();
+            int selectionStart = ((EditText) v).getSelectionStart();
+            int selectionEnd = ((EditText) v).getSelectionEnd();
+            SpannableStringBuilder text = (SpannableStringBuilder) ((EditText) v).getText();
             ForegroundColorSpan[] spans = text.getSpans(0, text.length(), ForegroundColorSpan.class);
             for (ForegroundColorSpan span : spans) {
                 int spanStart = text.getSpanStart(span);
                 int spanEnd = text.getSpanEnd(span);
                 if (selectionStart >= spanStart && selectionEnd <= spanEnd) {
-                    if (spanStart != -1 && spanEnd != -1){
-                        text.delete(spanStart+1, spanEnd);
+                    if (spanStart != -1 && spanEnd != -1) {
+                        text.delete(spanStart + 1, spanEnd);
                     }
                 }
             }
@@ -547,14 +706,16 @@ public class CustomChatFragment extends EaseChatFragment {
         return false;
     }
 
-    private void showTranslationDialog(){
-        if (translationType == 0){ return;}
+    private void showTranslationDialog() {
+        if (translationType == 0) {
+            return;
+        }
         translationDialog = new AlertDialog.Builder(mContext)
                 .setContentView(R.layout.dialog_auto_translation)
                 .setText(R.id.tv_content,
                         translationType == DemoConstant.TRANSLATION_NO_LANGUAGE ?
                                 getString(R.string.translation_auto_about_info)
-                              : getString(R.string.translation_unable)
+                                : getString(R.string.translation_unable)
                 )
                 .setText(R.id.btn_ok, getString(R.string.translation_setting))
                 .setLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -564,11 +725,11 @@ public class CustomChatFragment extends EaseChatFragment {
                     @Override
                     public void onClick(View v) {
                         Intent starter;
-                        if (translationType == DemoConstant.TRANSLATION_NO_LANGUAGE){
+                        if (translationType == DemoConstant.TRANSLATION_NO_LANGUAGE) {
                             starter = new Intent(mContext, LanguageActivity.class);
                             starter.putExtra(DemoConstant.TRANSLATION_TYPE, DemoConstant.TRANSLATION_TYPE_MESSAGE);
                             starter.putExtra(DemoConstant.TRANSLATION_SELECT_MAX_COUNT, 1);
-                        }else {
+                        } else {
                             starter = new Intent(mContext, TranslationSettingsActivity.class);
                         }
                         launcher.launch(starter);
@@ -583,7 +744,7 @@ public class CustomChatFragment extends EaseChatFragment {
         translationDialog.show();
     }
 
-    private String getPreferredLanguageCode(){
+    private String getPreferredLanguageCode() {
         String[] language = TranslationHelper.getLanguageByType(DemoConstant.TRANSLATION_TYPE_MESSAGE, "");
         return language[0];
     }
@@ -597,8 +758,53 @@ public class CustomChatFragment extends EaseChatFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(mContext != null && mContext.isFinishing()) {
+        if (mContext != null && mContext.isFinishing()) {
             isDestroy = true;
         }
     }
+
+    /**
+     * Parse Resource<T>
+     *
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if (response == null) {
+            return;
+        }
+        if (response.status == Status.SUCCESS) {
+            callback.onHideLoading();
+            callback.onSuccess(response.data);
+        } else if (response.status == Status.ERROR) {
+            callback.onHideLoading();
+            callback.onError(response.errorCode, response.getMessage());
+        } else if (response.status == Status.LOADING) {
+            callback.onLoading(response.data);
+        }
+    }
+
+    @Override
+    public void onMessageReceived(List<ChatMessage> messages) {
+
+    }
+
+    @Override
+    public void onMessagePinChanged(String messageId, String conversationId, MessagePinInfo.PinOperation pinOperation, MessagePinInfo pinInfo) {
+        ChatMessage message = ChatClient.getInstance().chatManager().getMessage(messageId);
+        if(message!=null) {
+            updatePinMessage(message,pinInfo.operatorId());
+        }else{
+            viewModel.getPinnedMessagesFromServer(conversationId);
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ChatClient.getInstance().chatManager().removeMessageListener(this);
+    }
+
 }

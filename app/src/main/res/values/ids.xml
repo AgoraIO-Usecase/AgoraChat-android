@@ -15,4 +15,5 @@
     <!--translation-->
     <item name="action_chat_translation" type="id"/>
     <item name="action_chat_re_translation" type="id"/>
+    <item name="action_chat_pin" type="id"/>
 </resources>

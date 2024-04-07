@@ -403,6 +403,8 @@
     <string name="report_input_count">%d/10</string>
     <string name="report_input_hint_count">0/10</string>
     <string name="ease_action_report">Report</string>
+    <string name="ease_action_pin">Pin</string>
+    <string name="ease_action_unpin">UnPin</string>
     <string name="chat_delete_multi_messages_title">Delete %1$d messages</string>
 
     <string name="demo_my_alias_in_group">My Alias in Group</string>
@@ -444,5 +446,8 @@
     <string name="translation_failed">Translation failed Retry</string>
     <string name="translation_original_text">Translated by Agora Chat View Original Text</string>
     <string name="translation_view_translation">Translated by Agora Chat View Translation</string>
+    <string name="pin_info_view_text">Pin Message</string>
+    <string name="unpin_confirm_message">Confirm to remove pinned message?</string>
+    <string name="pin_skip_not_exist">The quoted message does not exist</string>
 
 </resources>

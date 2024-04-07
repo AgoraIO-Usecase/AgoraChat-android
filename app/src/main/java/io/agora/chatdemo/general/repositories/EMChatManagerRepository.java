@@ -277,4 +277,56 @@ public class EMChatManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    public LiveData<Resource<ChatMessage>> pinMessage(@NonNull ChatMessage message,boolean isPined) {
+        return new NetworkOnlyResource<ChatMessage>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<ChatMessage>> callBack) {
+                if(isPined) {
+                    getChatManager().asyncPinMessage(message.getMsgId(), new CallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(message));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+                    });
+                }else{
+                    getChatManager().asyncUnPinMessage(message.getMsgId(), new CallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(message));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+                    });
+                }
+
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<List<ChatMessage>>> getPinnedMessagesFromServer(String conversationId) {
+        return new NetworkOnlyResource<List<ChatMessage>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<ChatMessage>>> callBack) {
+                getChatManager().asyncGetPinnedMessagesFromServer(conversationId, new ValueCallBack<List<ChatMessage>>() {
+                    @Override
+                    public void onSuccess(List<ChatMessage> value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error,errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
 }

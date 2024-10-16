@@ -2,6 +2,7 @@ package io.agora.chatdemo.chat;
 
 import static io.agora.chat.uikit.menu.EaseChatType.SINGLE_CHAT;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,6 +71,8 @@ import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.interfaces.TranslationListener;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
+import io.agora.chatdemo.general.permission.PermissionCompat;
+import io.agora.chatdemo.general.permission.PermissionsManager;
 import io.agora.chatdemo.general.utils.RecyclerViewUtils;
 import io.agora.chatdemo.group.GroupHelper;
 import io.agora.chatdemo.group.model.MemberAttributeBean;
@@ -78,6 +83,9 @@ import io.agora.chatdemo.me.TranslationSettingsActivity;
 import io.agora.util.EMLog;
 
 public class CustomChatFragment extends EaseChatFragment {
+    private static final int REQUEST_CODE_STORAGE_PICTURE = 111;
+    private static final int REQUEST_CODE_STORAGE_VIDEO = 112;
+    private static final int REQUEST_CODE_STORAGE_FILE = 113;
     private boolean isFirstMeasure = true;
     private GroupDetailViewModel groupDetailViewModel;
     private ChatViewModel viewModel;
@@ -86,6 +94,12 @@ public class CustomChatFragment extends EaseChatFragment {
     private ChatMessage translationMsg;
     private ActivityResultLauncher<Intent> launcher;
     private boolean isDestroy = false;
+    private final ActivityResultLauncher<String[]> requestImagePermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_PICTURE));
+    private final ActivityResultLauncher<String[]> requestVideoPermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_VIDEO));
+    private final ActivityResultLauncher<String[]> requestFilePermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_FILE));
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -307,6 +321,52 @@ public class CustomChatFragment extends EaseChatFragment {
                 break;
         }
         return super.onMenuItemClick(item, message);
+    }
+
+    @Override
+    public boolean onChatExtendMenuItemClick(View view, int itemId) {
+        switch (itemId) {
+            case R.id.extend_item_take_picture:
+                if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
+                    PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
+                            , new String[]{Manifest.permission.CAMERA}, null);
+                    return true;
+                }
+                break;
+            case R.id.extend_item_picture:
+                if(!PermissionCompat.checkMediaPermission(mContext, requestImagePermission, Manifest.permission.READ_MEDIA_IMAGES)) {
+                    return true;
+                }
+                break;
+            case R.id.extend_item_video:
+                if(!PermissionCompat.checkMediaPermission(mContext, requestVideoPermission, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.CAMERA)) {
+                    return true;
+                }
+                break;
+            case R.id.extend_item_file:
+                if(!PermissionCompat.checkMediaPermission(mContext, requestFilePermission, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)) {
+                    return true;
+                }
+                break;
+        }
+        return super.onChatExtendMenuItemClick(view, itemId);
+    }
+
+    private void onRequestResult(Map<String, Boolean> result, int requestCode) {
+        if(result != null && result.size() > 0) {
+            for (Map.Entry<String, Boolean> entry : result.entrySet()) {
+                EMLog.e("chat", "onRequestResult: " + entry.getKey() + "  " + entry.getValue());
+            }
+            if(PermissionCompat.getMediaAccess(mContext) != PermissionCompat.StorageAccess.Denied) {
+                if(requestCode == REQUEST_CODE_STORAGE_PICTURE) {
+                    selectPicFromLocal();
+                }else if(requestCode == REQUEST_CODE_STORAGE_VIDEO) {
+                    selectVideoFromLocal();
+                }else if(requestCode == REQUEST_CODE_STORAGE_FILE) {
+                    selectFileFromLocal();
+                }
+            }
+        }
     }
 
     private void showSelectModelTitle() {

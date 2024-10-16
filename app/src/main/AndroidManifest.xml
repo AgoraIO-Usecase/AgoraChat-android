@@ -3,21 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.agora.chatdemo">
     <!-- IM SDK required start -->
-    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--Need to add after Android 12, apply for alarm clock timing permission -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <!-- IM SDK required end -->
+    <!-- IM app required start -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <!-- Android 13 to replace READ_EXTERNAL_STORAGE permission -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <!-- Android 14 is used to grant partial access to photos and videos -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"/>
+    <!-- IM app required end -->
     <!-- Remove unused permission in remote library start -->
     <uses-permission
         android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
@@ -53,7 +57,7 @@
             android:name="io.agora.chat.ChatJobService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <!-- SDK receiver -->
+
         <!-- IM SDK required end -->
         <!--Add FileProvider-->
         <provider
@@ -114,6 +118,7 @@
         <activity
             android:name=".chat.ChatActivity"
             android:exported="false"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- Group detail -->
@@ -166,14 +171,14 @@
             android:exported="false"
             android:screenOrientation="portrait" /> <!-- video call -->
         <activity
-            android:name=".av.CallSingleBaseActivity"
+            android:name=".av.SingleCallActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_video_call"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".av.CallMultipleBaseActivity"
+            android:name=".av.MultipleCallActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_multi_call"

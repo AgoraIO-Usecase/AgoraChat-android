@@ -4,10 +4,9 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.2.2"
+        classpath 'com.android.tools.build:gradle:7.4.2'
         // Crashlytics
         // Firebase
         classpath 'com.google.gms:google-services:4.3.10'
@@ -24,7 +23,6 @@ allprojects {
         google()
         maven { url 'https://jitpack.io' }
         mavenCentral()
-        jcenter()
     }
 }
 

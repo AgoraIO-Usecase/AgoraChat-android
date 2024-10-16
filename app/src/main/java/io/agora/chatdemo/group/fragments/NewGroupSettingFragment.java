@@ -90,39 +90,6 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
         });
         swToPublic.setOnCheckedChangeListener(this);
 
-        edtGroupNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (start >= 0) {
-                    try {
-                        int num = Integer.parseInt(s.toString());
-                        if (num > MAX_GROUP_USERS) {
-                            s = String.valueOf(MAX_GROUP_USERS);
-                            edtGroupNumber.setText(s);
-                            edtGroupNumber.setSelection(s.length());
-                            showToast(R.string.group_new_member_limit);
-                        } else if (num < MIN_GROUP_USERS) {
-                            s = String.valueOf(MIN_GROUP_USERS);
-                            edtGroupNumber.setText(s);
-                            edtGroupNumber.setSelection(s.length());
-                            showToast(R.string.group_new_member_limit);
-                        }
-                    } catch (NumberFormatException e) {
-                        EMLog.e("onTextChanged", "==" + e.toString());
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
     @Override
@@ -159,6 +126,10 @@ public class NewGroupSettingFragment extends BaseInitFragment implements BottomS
         }else {
             try {
                 maxUsers = Integer.parseInt(memberNumber);
+                if (maxUsers > MAX_GROUP_USERS || maxUsers < MIN_GROUP_USERS) {
+                    showToast(R.string.group_new_member_limit);
+                    return true;
+                }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }

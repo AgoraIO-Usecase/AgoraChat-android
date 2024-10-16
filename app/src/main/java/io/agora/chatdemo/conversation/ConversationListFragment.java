@@ -28,11 +28,9 @@ import io.agora.chat.ChatRoom;
 import io.agora.chat.Conversation;
 import io.agora.chat.Group;
 import io.agora.chat.Presence;
-import io.agora.chat.uikit.EaseUIKit;
 import io.agora.chat.uikit.conversation.EaseConversationListFragment;
 import io.agora.chat.uikit.conversation.adapter.EaseConversationListAdapter;
 import io.agora.chat.uikit.conversation.model.EaseConversationInfo;
-import io.agora.chat.uikit.interfaces.OnEaseChatConnectionListener;
 import io.agora.chat.uikit.models.EaseUser;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chat.uikit.widget.EaseImageView;
@@ -48,6 +46,7 @@ import io.agora.chatdemo.general.enums.Status;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
 import io.agora.chatdemo.general.models.PresenceData;
+import io.agora.chatdemo.general.utils.CommonUtils;
 import io.agora.chatdemo.general.utils.EasePresenceUtil;
 import io.agora.chatdemo.general.utils.UIUtils;
 import io.agora.chatdemo.general.widget.EasePresenceView;
@@ -219,6 +218,9 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         titleBarLayout.findViewById(R.id.right_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!CommonUtils.isCanClick()) {
+                    return;
+                }
                 new BottomSheetContainerFragment().show(getChildFragmentManager(), "ContainerFragment");
             }
         });

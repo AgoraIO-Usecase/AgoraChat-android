@@ -50,7 +50,7 @@ public class GeneralActivity extends BaseInitActivity implements EaseTitleBar.On
         mChatOptions = ChatClient.getInstance().getOptions();
 
         mBinding.itemSwitchShowTyping.getSwitch().setChecked(mSettingsModel.isShowMsgTyping());
-        mBinding.itemSwitchAddGroupRequest.getSwitch().setChecked(mSettingsModel.isAutoAcceptGroupInvitation());
+        mBinding.itemSwitchAddGroupRequest.getSwitch().setChecked(!mSettingsModel.isAutoAcceptGroupInvitation());
         mBinding.itemSwitchDeleteAfterLeavingGroup.getSwitch().setChecked(mSettingsModel.isDeleteMessagesAsExitGroup());
     }
 
@@ -67,8 +67,8 @@ public class GeneralActivity extends BaseInitActivity implements EaseTitleBar.On
                 mSettingsModel.showMsgTyping(isChecked);
                 break;
             case R.id.item_switch_add_group_request:
-                mSettingsModel.setAutoAcceptGroupInvitation(isChecked);
-                mChatOptions.setAutoAcceptGroupInvitation(isChecked);
+                mSettingsModel.setAutoAcceptGroupInvitation(!isChecked);
+                mChatOptions.setAutoAcceptGroupInvitation(!isChecked);
                 break;
             case R.id.item_switch_delete_after_leaving_group:
                 mSettingsModel.setDeleteMessagesAsExitGroup(isChecked);

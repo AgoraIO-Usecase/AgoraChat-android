@@ -63,10 +63,13 @@ public class DemoCallKitListener implements EaseCallKitListener {
             }
         }
     };
+    private SimpleDateFormat dateFormat;
 
     public DemoCallKitListener(Context context, UsersManager usersManager) {
         this.mContext = context;
         this.mUsersManager = usersManager;
+        dateFormat = new SimpleDateFormat("HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     @Override
@@ -95,10 +98,9 @@ public class DemoCallKitListener implements EaseCallKitListener {
     @Override
     public void onEndCallWithReason(EaseCallType callType, String channelName, EaseCallEndReason reason, long callTime) {
         EMLog.d(TAG, "onEndCallWithReason" + (callType != null ? callType.name() : " callType is null ") + " reason:" + reason + " time:" + callTime);
-        SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
-        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         String callString = mContext.getString(R.string.ease_call_duration);
-        callString += formatter.format(callTime);
+        callString += " "+dateFormat.format(callTime);
         Message message = handler.obtainMessage();
         switch (reason) {
             case EaseCallEndReasonHangup://Hang up normally

@@ -181,7 +181,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
     }
 
     private void initSelectDialogData() {
-        mSelectDialogItemBeans = new ArrayList<>(2);
+        mSelectDialogItemBeans = new ArrayList<>();
 
         SelectDialogItemBean bean;
         bean = new SelectDialogItemBean();
@@ -189,13 +189,6 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
         bean.setAlert(false);
         bean.setIcon(R.drawable.contact_unblock);
         bean.setId(MENU_UNBLOCK_CONTACT);
-        mSelectDialogItemBeans.add(bean);
-
-        bean = new SelectDialogItemBean();
-        bean.setTitle(this.getResources().getString(R.string.contact_detail_delete_contact));
-        bean.setAlert(true);
-        bean.setId(MENU_DELETE_CONTACT);
-        bean.setIcon(R.drawable.contact_delete);
         mSelectDialogItemBeans.add(bean);
     }
 
@@ -216,7 +209,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
             }
         });
         dialog.setData(mSelectDialogItemBeans);
-        dialog.setTitle(mSelectUser.getUsername());
+        dialog.setTitle(mSelectUser.getNickname());
         dialog.init();
         new EaseAlertDialog.Builder<SelectDialog>(mContext)
                 .setCustomDialog(dialog)

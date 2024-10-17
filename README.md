@@ -42,7 +42,7 @@ ChatClient.getInstance().init(applicationContext, options);
 For details, see the [prerequisites](https://docs.agora.io/en/agora-chat/get-started/get-started-sdk?platform=android) in Agora Chat SDK Guide.
 
 ## Precautions
- 1. Set the JDK version to 17.
+ 1. Set the JDK version to 11 or higher.
  2. Add the following fields in local.properties:
     ```
     AGORA_CHAT_APPKEY={Your AppKey} // Replace {Your AppKey} with your actual AppKey

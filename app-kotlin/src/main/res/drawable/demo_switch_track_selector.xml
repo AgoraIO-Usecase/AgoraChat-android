@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <size android:width="@dimen/ease_size_50" android:height="@dimen/ease_size_30"/>
+            <solid android:color="@color/ease_color_primary"/>
+            <corners android:radius="@dimen/ease_size_15"/>
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <size android:width="@dimen/ease_size_50" android:height="@dimen/ease_size_30"/>
+            <solid android:color="@color/ease_color_background_higher"/>
+            <corners android:radius="@dimen/ease_size_15"/>
+        </shape>
+    </item>
+
+</selector>

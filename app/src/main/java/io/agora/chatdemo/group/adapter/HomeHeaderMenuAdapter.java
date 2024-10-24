@@ -21,7 +21,7 @@ public class HomeHeaderMenuAdapter extends EaseBaseRecyclerViewAdapter<Pair<Inte
 
     @Override
     public int getEmptyLayoutId() {
-        return R.layout.ease_layout_no_data_show_nothing;
+        return io.agora.chat.uikit.R.layout.ease_layout_no_data_show_nothing;
     }
 
     private class HomeMenuViewHolder extends ViewHolder<Pair<Integer, Integer>> {

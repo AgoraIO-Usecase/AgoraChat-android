@@ -16,7 +16,7 @@ public interface BottomSheetChildHelper {
 
     default @StringRes
     int getTitleBarRightText() {
-        return R.string.ease_cancel;
+        return io.agora.chat.uikit.R.string.ease_cancel;
     }
 
     default @ColorRes

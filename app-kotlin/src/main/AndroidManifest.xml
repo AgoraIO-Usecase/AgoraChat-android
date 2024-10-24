@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- IM SDK required start -->
+    <!-- App required start -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <!-- App required end -->
+
+    <!-- IM SDK required start -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!--Need to add after Android 12, apply for alarm clock timing permission -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <!-- IM SDK required end -->
+    <!-- Read permissions from extended storage-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
+    <!-- Android 13 is used to replace the READ-EXTERNAL-STORAGE permission -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <!-- Android 14 is used to apply for partial permissions -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"/>
+    <!-- Android 13 Notification Runtime Permissions -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- RTC start -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <!-- For devices with Android 12.0 and above and integrated SDK v4.1.0 and below, the following permissions need to be added -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <!-- For Android 12.0 and above devices, the following permissions need to be added -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+    <!-- RTC end -->
+
+    <!-- Remove unused permission in remote library start -->
+    <uses-permission
+        android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
+        tools:node="remove"/>
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove"/>
+    <!-- Remove unused permission in remote library end -->
+
+    <application
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true"
+        android:icon="@mipmap/demo_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/demo_launcher"
+        android:supportsRtl="true"
+        android:name=".DemoApplication"
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/Theme.Easeui"
+        tools:targetApi="31">
+        <activity
+            android:name=".page.splash.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- FCM required start -->
+        <service android:name=".fcm.FCMMSGService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- Cancels automatic initialization -->
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+        <!-- FCM required end -->
+
+        <activity android:name=".page.login.LoginActivity"
+            android:exported="false"/>
+        <activity android:name=".MainActivity"
+            android:exported="false"/>
+        <activity android:name=".page.group.ChatCreateGroupActivity"
+            android:exported="false"/>
+        <activity android:name=".page.group.ChatGroupDetailActivity"
+            android:exported="false"/>
+        <activity android:name=".page.contact.ChatContactCheckActivity"
+            android:exported="false"/>
+        <activity android:name=".page.contact.ChatNewRequestsActivity"
+            android:exported="false"/>
+        <activity android:name=".page.contact.ChatContactDetailActivity"
+            android:exported="false"/>
+        <activity android:name=".page.chat.ChatActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.UserInformationActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.NotifyActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.WebViewActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.EditUserNicknameActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.AboutActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.CurrencyActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.FeaturesActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.LanguageSettingActivity"
+            android:exported="false"/>
+        <!-- crop activity -->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <!-- rtc -->
+        <activity android:name=".callkit.activity.CallSingleBaseActivity"
+            android:label="@string/demo_activity_label_video_call"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="false"
+            android:launchMode="singleInstance"
+            android:exported="false"/>
+        <activity android:name=".callkit.activity.CallMultipleBaseActivity"
+            android:label="@string/demo_activity_label_multi_call"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="false"
+            android:launchMode="singleInstance"
+            android:exported="false"/>
+        <activity android:name=".callkit.activity.CallMultipleInviteActivity"
+            android:exported="false"/>
+    </application>
+
+</manifest>

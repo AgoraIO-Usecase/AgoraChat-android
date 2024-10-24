@@ -99,7 +99,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
     public void onEndCallWithReason(EaseCallType callType, String channelName, EaseCallEndReason reason, long callTime) {
         EMLog.d(TAG, "onEndCallWithReason" + (callType != null ? callType.name() : " callType is null ") + " reason:" + reason + " time:" + callTime);
 
-        String callString = mContext.getString(R.string.ease_call_duration);
+        String callString = mContext.getString(io.agora.chat.callkit.R.string.ease_call_duration);
         callString += " "+dateFormat.format(callTime);
         Message message = handler.obtainMessage();
         switch (reason) {

@@ -106,7 +106,7 @@ public class BottomSheetMenuFragment extends ContactListFragment implements Bott
 
     @Override
     public int getTitleBarRightText() {
-        return R.string.ease_cancel;
+        return io.agora.chat.uikit.R.string.ease_cancel;
     }
 
     @Override

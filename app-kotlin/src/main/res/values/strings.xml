@@ -1,0 +1,154 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">Agora Chat</string>
+
+    <string name="cancel" translatable="false">Cancel</string>
+    <string name="confirm" translatable="false">OK</string>
+    <string name="loading" translatable="false">Loading&#8230;</string>
+    <string name="splash_title" translatable="false">Agora Chat</string>
+    <string name="splash_powered" translatable="false">Powered by Agora</string>
+
+    <string name="system_copy_success" translatable="false">Successfully copied to clipboard</string>
+    <string name="em_main_add_contact_success" translatable="false">Request sent.</string>
+    <string name="em_main_add_contact_not_found" translatable="false">User does not exist</string>
+
+    <string name="splash_not_appkey" translatable="false">Please set up the app key first.</string>
+    <string name="splash_not_init" translatable="false">Please initialize the Chat SDK first.</string>
+
+    <string name="demo_login_im" translatable="false">Login</string>
+    <string name="demo_login_username" translatable="false">Username</string>
+    <string name="demo_login_password" translatable="false">Password</string>
+    <string name="demo_login_btn" translatable="false">Log In</string>
+    <string name="demo_login_agreement" translatable="false">You will be registered as a new user \n upon your first login.</string>
+    <string name="demo_login_server_configure" translatable="false"><u>Server Configure</u></string>
+
+    <string name="em_login_btn_info_incomplete" translatable="false">Username or password cannot be empty.</string>
+    <string name="em_login_not_select_agreement" translatable="false">Please confirm Terms &amp; Policy</string>
+    <string name="demo_error_user_authentication_failed" translatable="false">Incorrect username or password</string>
+
+
+    <string name="server_close_develop_mode" translatable="false">Close develop mode?</string>
+    <string name="server_open_develop_mode" translatable="false">Open develop mode?</string>
+    <string name="server_set_title" translatable="false">Server settings</string>
+    <string name="server_set_appkey" translatable="false">Appkey</string>
+    <string name="server_set_apns_cert_name" translatable="false">APNs certificate name</string>
+    <string name="server_set_specify_server" translatable="false">Use private server:</string>
+    <string name="server_set_server_address" translatable="false">IM server address</string>
+    <string name="server_set_server_port" translatable="false">Port</string>
+    <string name="server_set_rest_server_address" translatable="false">RESTful server address</string>
+    <string name="em_login_server_configure" translatable="false"><u>Server Configure</u></string>
+
+    <string name="server_set_menu_save" translatable="false">Save</string>
+    <string name="server_set_dialog_title" translatable="false">Reset App</string>
+    <string name="server_set_dialog_content" translatable="false">The current server settings need to be restarted to take effect.Confirm restart?</string>
+    <string name="server_set_dialog_confirm_button_text" translatable="false">Reset</string>
+    <string name="server_set_illegal_appkey" translatable="false">You set a illegal appkey</string>
+
+    <string name="em_main_title_home" translatable="false">Chat</string>
+    <string name="em_main_title_friends" translatable="false">Contacts</string>
+    <string name="em_main_title_me" translatable="false">Me</string>
+
+    <string name="menu_voice_call" translatable="false">Voice</string>
+    <string name="menu_video_call" translatable="false">Video</string>
+    <string name="menu_member_call" translatable="false">Call(%1$d)</string>
+
+    <string name="about_logo" translatable="false">Agora Chat</string>
+    <string name="about_version" translatable="false">SDK Version %1$s</string>
+    <string name="about_uikit_version" translatable="false">UIKit Version %1$s</string>
+
+    <string name="main_about_me_information" translatable="false">Profile</string>
+    <string name="main_about_me_information_avatar" translatable="false">Avatar</string>
+    <string name="main_about_me_information_nick_name" translatable="false">Nickname</string>
+    <string name="main_about_me_information_camera" translatable="false">Camera</string>
+    <string name="main_about_me_information_picture" translatable="false">Picture</string>
+    <string name="main_about_me_information_edit_picture" translatable="false">Do you need to edit the Image?</string>
+    <string name="main_about_me_information_edit_nick_name" translatable="false">Nickname</string>
+    <string name="main_about_me_information_change_name_count" translatable="false">%1$d/32</string>
+    <string name="main_information_checked_model" translatable="false">Uploading avatars is not supported in this mode</string>
+
+    <string name="message_forward_success" translatable="false">Message forwarded successfully</string>
+    <string name="message_forward_fail" translatable="false">Message forwarding failed</string>
+    <string name="message_modify_fail" translatable="false">Message modifying failed</string>
+    <string name="message_combine_success" translatable="false">Combine Message successfully</string>
+    <string name="message_combine_fail" translatable="false">Combine Message failed</string>
+
+    <string name="main_about_me_currency" translatable="false">General</string>
+    <string name="main_about_me_privacy" translatable="false">Privacy</string>
+    <string name="main_about_me_about" translatable="false">About</string>
+    <string name="main_about_me_login" translatable="false">Account</string>
+    <string name="main_about_me_logout" translatable="false">Log Out</string>
+
+    <string name="main_about_me_id" translatable="false">ID: %1$s</string>
+    <string name="demo_login_out_hint" translatable="false">Log Out?</string>
+
+    <string name="main_about_me_notify" translatable="false">Message Notifications</string>
+    <string name="main_about_me_notify_title" translatable="false">Offline Message Push</string>
+    <string name="main_about_me_notify_describe" translatable="false">After turning on, you will no longer receive any message notifications except for messages where you are @mentioned in the group.</string>
+
+    <!--dialog-->
+    <string name="demo_login_dialog_content" translatable="false">Agora attaches great importance to protecting your privacy. Please read the following Service and Privacy Policy carefully. Please click "OK" button to agree, and click "Deny" to exit the app.</string>
+    <string name="demo_login_dialog_content_privacy" translatable="false">Read the complete Service and Privacy Policy for more details.</string>
+    <string name="demo_login_dialog_title" translatable="false">Service and Privacy Policy</string>
+    <string name="demo_login_dialog_confirm" translatable="false">OK</string>
+    <string name="demo_login_dialog_cancel" translatable="false">Deny</string>
+
+    <!-- callkit -->
+    <string name="call_duration" translatable="false">Call duration: %1$s</string>
+    <string name="video_call" translatable="false">Video Call</string>
+    <string name="voice_call" translatable="false">Voice Call</string>
+    <string name="demo_call_end_reason_refuse">Request declined</string>
+    <string name="demo_call_end_reason_busy">The line is busy</string>
+    <string name="demo_call_end_reason_busy_remote_no_response">No response</string>
+    <string name="demo_call_end_reason_other_device_refused">Other devices declined</string>
+    <string name="demo_call_end_reason_other_device_agreed">Other devices connected</string>
+    <string name="tips_select_contacts_first" translatable="false">Select a contact first</string>
+    <string name="group_call_title" translatable="false">Select Members</string>
+    <string name="demo_activity_label_video_call" translatable="false">video_call</string>
+    <string name="demo_activity_label_multi_call" translatable="false">multi_call</string>
+
+    <!-- contact detail -->
+    <string name="detail_item_audio" translatable="false">Audio</string>
+    <string name="detail_item_video" translatable="false">Video</string>
+    <string name="demo_contact_added_notify" translatable="false">You have added %1$s as a contact.</string>
+
+    <string name="main_about_me_setting" translatable="false">Settings</string>
+
+    <!--presence-->
+    <string name="presence_status" translatable="false">User Status</string>
+    <string name="ease_presence_online" translatable="false">Online</string>
+    <string name="ease_presence_busy" translatable="false">Busy</string>
+    <string name="ease_presence_do_not_disturb" translatable="false">Do not Disturb</string>
+    <string name="ease_presence_away" translatable="false">Away</string>
+    <string name="ease_presence_offline" translatable="false">Offline</string>
+    <string name="ease_presence_custom" translatable="false">Custom Status</string>
+    <string name="ease_presence_status" translatable="false">Status</string>
+    <string name="ease_presence_done" translatable="false">Done</string>
+    <string name="presence_dialog_title" translatable="false">Customize online status</string>
+    <string name="presence_dialog_input_hint" translatable="false">Please enter</string>
+
+    <string name="about_official_website" translatable="false">Agora Chat Documentation</string>
+    <string name="about_official_website_url" translatable="false">docs.agora.io/en/agora-chat</string>
+    <string name="about_sales_title" translatable="false">Contact sales</string>
+    <string name="about_sales_subtitle" translatable="false">agora.io/en/talk-to-us/</string>
+    <string name="about_demo_app_github_repo_title" translatable="false">Demo app github repo</string>
+    <string name="about_demo_app_github_repo_subtitle" translatable="false">github.com/AgoraIO/Agora-Chat-API-Examples</string>
+    <string name="about_more_title" translatable="false">More</string>
+    <string name="about_more_subtitle" translatable="false">agora.io</string>
+
+    <string name="main_about_me_currency_dark_model">Dark Mode</string>
+    <string name="main_about_me_currency_feature">Advanced Features</string>
+
+    <string name="currency_target_language">Target Language</string>
+    <string name="currency_language_zh_cn">Simplified Chinese</string>
+    <string name="currency_language_en">English</string>
+    <string name="currency_language_confirm">Done</string>
+
+    <string name="main_about_me_currency_typing">onTyping</string>
+    <string name="main_about_me_currency_typing_desc">After opening, the other party will see your input status</string>
+    <string name="currency_feature_translation">Translation</string>
+    <string name="currency_feature_translation_describe">Long press a message to translate it to the mobile system language</string>
+    <string name="currency_feature_topic">Thread</string>
+    <string name="currency_feature_topic_describe">Create a thread from a message within the group</string>
+    <string name="currency_feature_reaction">Emoji Reaction</string>
+    <string name="currency_feature_reaction_describe">Long press a message to add emoji reactions</string>
+
+</resources>

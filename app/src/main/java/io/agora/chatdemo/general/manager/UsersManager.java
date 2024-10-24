@@ -183,7 +183,7 @@ public class UsersManager {
 		}
 	}
 	public void setUserInfo(Context context, String username, TextView tvName, ImageView avatar) {
-		setUserInfo(context, username, R.drawable.ease_default_avatar, tvName, avatar);
+		setUserInfo(context, username, io.agora.chat.uikit.R.drawable.ease_default_avatar, tvName, avatar);
 	}
 
 	public void setUserInfo(Context context, String username, @DrawableRes int defaultAvatar, TextView tvName, ImageView avatar) {

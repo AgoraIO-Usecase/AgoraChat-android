@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/ease_color_on_background_high"/>
+    <corners android:topLeftRadius="@dimen/ease_corner_extra_small"
+        android:topRightRadius="@dimen/ease_corner_extra_small"
+        android:bottomLeftRadius="@dimen/ease_corner_extra_small"
+        android:bottomRightRadius="@dimen/ease_corner_extra_small"/>
+    <padding android:bottom="@dimen/ease_size_2" android:left="@dimen/ease_size_6"
+        android:right="@dimen/ease_size_6" android:top="@dimen/ease_size_2"/>
+</shape>

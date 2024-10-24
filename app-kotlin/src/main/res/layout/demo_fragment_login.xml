@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/iv_splash"
+        style="@style/splash_iv_bg_style" />
+
+    <TextView
+        android:id="@+id/tv_login_im"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/et_login_id"
+        app:layout_constraintBottom_toTopOf="@id/et_login_id"
+        android:layout_marginBottom="@dimen/ease_size_20"
+        android:layout_marginStart="16dp"
+        android:textSize="24sp"
+        android:textColor="@color/ease_color_primary"
+        android:textAppearance="@style/Ease.TextAppearance.Headline.Large"
+        android:text="@string/demo_login_im"/>
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/et_login_id"
+        app:layout_constraintTop_toTopOf="@id/tv_login_im"
+        android:layout_marginTop="@dimen/ease_size_4"
+        android:layout_marginEnd="16dp"
+        tools:text="V4.1.0"
+        android:textColor="@color/color_text_primary"
+        android:textAppearance="@style/Ease.TextAppearance.Label.ExtraSmall"
+        android:background="@drawable/demo_login_version_bg"/>
+
+    <EditText
+        android:id="@+id/et_login_id"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/ease_size_48"
+        android:hint="@string/demo_login_username"
+        style="@style/em_login_et_input"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/et_login_code"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_login_id"
+        app:layout_constraintBottom_toTopOf="@id/btn_login"
+        android:textColorHighlight="#FF0000"
+        android:layout_marginTop="@dimen/ease_size_24"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/ease_size_48"
+        android:hint="@string/demo_login_password"
+        android:textSize="@dimen/demo_login_text_size"
+        style="@style/em_login_et_input"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_login_code"
+        android:text="@string/demo_login_btn"
+        style="@style/em_login_btn"/>
+
+    <io.agora.uikit.widget.EaseImageView
+        android:id="@+id/cb_select"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:src="@drawable/icon_login_attention_line"
+        android:padding="3dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@id/btn_login"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_agreement"/>
+
+    <TextView
+        android:id="@+id/tv_agreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ease_size_20"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@id/btn_login"
+        app:layout_constraintStart_toEndOf="@id/cb_select"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:lineSpacingExtra="10dp"
+        android:textColorHighlight="@color/transparent"
+        android:textColor="@color/ease_color_on_background"
+        android:text="@string/demo_login_agreement"
+        android:textAppearance="@style/Ease.TextAppearance.Body.Small"/>
+
+    <TextView
+        android:id="@+id/tv_login_developer"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_agreement"
+        app:layout_constraintVertical_bias="1"
+        android:visibility="gone"
+        android:textAppearance="@style/Ease.TextAppearance.Body.Medium"
+        android:textColor="@color/ease_color_text_secondary"
+        android:text="@string/em_login_server_configure"
+        android:layout_marginBottom="@dimen/ease_size_65"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#ffe9e9e9</color>
+
+    <color name="transparent">@android:color/transparent</color>
+
+    <color name="em_toast_color_bg">#99000000</color>
+    <color name="em_toast_color_text">@color/white</color>
+
+    <color name="color_primary">@color/ease_color_primary</color>
+    <color name="color_text_primary">@color/ease_color_text_primary</color>
+    <color name="demo_title">@color/ease_color_on_background_low</color>
+    <color name="demo_desc_bg">@color/ease_color_spacing_view</color>
+    <color name="demo_subtitle">@color/ease_color_text_secondary_high</color>
+    <color name="demo_background">@color/ease_color_background</color>
+    <color name="demo_on_background_high">@color/ease_color_on_background_high</color>
+
+
+    <color name="demo_login_button_bg_start">#009EFF</color>
+    <color name="demo_login_button_bg_end">#334BFF</color>
+
+    <color name="em_main_color_tab_normal">@color/ease_color_on_background_high</color>
+    <color name="em_main_color_tab_selected">@color/ease_color_primary</color>
+
+
+</resources>

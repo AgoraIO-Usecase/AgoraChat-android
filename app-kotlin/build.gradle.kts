@@ -115,11 +115,11 @@ android {
     }
 
     //打开注释后，可以直接在studio里查看和编辑emclient-linux里的代码
-    externalNativeBuild {
-        ndkBuild {
-            path = File("jni/Android.mk")
-        }
-    }
+//    externalNativeBuild {
+//        ndkBuild {
+//            path = File("jni/Android.mk")
+//        }
+//    }
 }
 
 dependencies {
@@ -153,8 +153,8 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging")
     implementation("com.google.firebase:firebase-analytics")
 
-//    implementation("io.agora.rtc:chat-uikit:1.3.0")
-    implementation(project(mapOf("path" to ":chat-uikit")))
-//    implementation("io.agora.rtc:chat-callkit:1.3.0")
-    implementation(project(mapOf("path" to ":chat-callkit")))
+    implementation("io.agora.rtc:chat-uikit:1.3.0")
+//    implementation(project(mapOf("path" to ":chat-uikit")))
+    implementation("io.agora.rtc:chat-callkit:1.3.0")
+//    implementation(project(mapOf("path" to ":chat-callkit")))
 }

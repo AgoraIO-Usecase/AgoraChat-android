@@ -35,7 +35,7 @@ android {
         buildConfigField ("String", "APP_SERVER_URL", "\"/app/chat/user/login\"")
         buildConfigField ("String", "APP_SERVER_REGISTER", "\"/app/chat/user/register\"")
 
-        buildConfigField ("String", "Agora_AppId", properties.getProperty("AGORA_APPID", "******"))
+        buildConfigField ("String", "Agora_AppId", "\"${properties.getProperty("AGORA_APPID")}\"")
         manifestPlaceholders = [AGORA_CHAT_APPKEY: properties.getProperty("AGORA_CHAT_APPKEY", "******")]
 
 //        ndk {
@@ -91,6 +91,9 @@ android {
     viewBinding {
         enabled = true
     }
+    buildFeatures{
+        buildConfig = true
+    }
 //    externalNativeBuild {
 //        ndkBuild {
 //            path file('jni/Android.mk')
@@ -134,8 +137,8 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.6.2'
     // Agora Chat Uikit
-//    implementation 'io.agora.rtc:chat-uikit:1.2.0'
-//    implementation 'io.agora.rtc:chat-callkit:1.2.0'
+    implementation 'io.agora.rtc:chat-uikit:1.2.0'
+    implementation 'io.agora.rtc:chat-callkit:1.2.0'
 //    implementation project(path: ':chat-uikit')
 //    implementation project(path: ':chat-callkit')
     // url preview

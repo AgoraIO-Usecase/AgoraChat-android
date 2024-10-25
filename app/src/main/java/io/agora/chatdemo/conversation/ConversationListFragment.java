@@ -74,7 +74,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBarLayout = LayoutInflater.from(mContext).inflate(R.layout.layout_conversation_list_title_bar, null);
-        ViewGroup.LayoutParams titleBarParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.ease_common_title_bar_height));
+        ViewGroup.LayoutParams titleBarParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(io.agora.chat.uikit.R.dimen.ease_common_title_bar_height));
         titleBarLayout.setLayoutParams(titleBarParams);
         llRoot.addView(titleBarLayout, 0);
         ImageView rightIcon = titleBarLayout.findViewById(R.id.right_image);
@@ -114,7 +114,6 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         presenceView = titleBarLayout.findViewById(R.id.presence_view);
         if(presenceView != null) {
             presenceView.setVisibility(View.VISIBLE);
-            presenceView.setPresenceTextViewArrowVisible(true);
             presenceView.setNameTextViewVisibility(View.INVISIBLE);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) presenceView.getLayoutParams();
             params.setMargins(UIUtils.dp2px(mContext, 16), 0, 0, 0);
@@ -388,7 +387,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                                 viewModel.publishPresence(getString(PresenceData.LEAVE.getPresence()));
                                 break;
                         }
-                        customView.setText(R.string.ease_presence_custom);
+                        customView.setText(io.agora.chat.uikit.R.string.ease_presence_custom);
                         changePresenceDialog.dismiss();
                     }
                 })

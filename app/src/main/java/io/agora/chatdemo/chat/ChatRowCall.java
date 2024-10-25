@@ -67,20 +67,20 @@ public class ChatRowCall extends EaseChatRow {
         if (callAction == EaseCallAction.CALL_INVITE) {
             switch (callkitType) {
                 case SINGLE_VOICE_CALL:
-                    title.setText(context.getText(R.string.ease_call_single_audio_call));
-                    ivCall.setImageResource(R.drawable.call_voice_green);
+                    title.setText(context.getText(io.agora.chat.callkit.R.string.ease_call_single_audio_call));
+                    ivCall.setImageResource(io.agora.chat.callkit.R.drawable.call_voice_green);
                     break;
                 case CONFERENCE_VOICE_CALL:
-                    title.setText(context.getText(R.string.ease_call_group_audio_call));
-                    ivCall.setImageResource(R.drawable.call_voice_green);
+                    title.setText(context.getText(io.agora.chat.callkit.R.string.ease_call_group_audio_call));
+                    ivCall.setImageResource(io.agora.chat.callkit.R.drawable.call_voice_green);
                     break;
                 case SINGLE_VIDEO_CALL:
-                    title.setText(context.getText(R.string.ease_call_single_video_call));
-                    ivCall.setImageResource(R.drawable.call_video_green);
+                    title.setText(context.getText(io.agora.chat.callkit.R.string.ease_call_single_video_call));
+                    ivCall.setImageResource(io.agora.chat.callkit.R.drawable.call_video_green);
                     break;
                 case CONFERENCE_VIDEO_CALL:
-                    title.setText(context.getText(R.string.ease_call_group_video_call));
-                    ivCall.setImageResource(R.drawable.call_video_green);
+                    title.setText(context.getText(io.agora.chat.callkit.R.string.ease_call_group_video_call));
+                    ivCall.setImageResource(io.agora.chat.callkit.R.drawable.call_video_green);
                     break;
             }
             String str = dateFormat.format(new Date(time));
@@ -88,20 +88,20 @@ public class ChatRowCall extends EaseChatRow {
         }else if(callAction==EaseCallAction.CALL_CANCEL) {
             switch (callkitType) {
                 case SINGLE_VOICE_CALL:
-                    title.setText(context.getText(R.string.ease_call_audio_call_ended));
-                    ivCall.setImageResource(R.drawable.call_voice_gray);
+                    title.setText(context.getText(io.agora.chat.callkit.R.string.ease_call_audio_call_ended));
+                    ivCall.setImageResource(io.agora.chat.callkit.R.drawable.call_voice_gray);
                     break;
                 case CONFERENCE_VOICE_CALL:
-                    title.setText(context.getText(R.string.ease_call_audio_call_ended));
-                    ivCall.setImageResource(R.drawable.call_voice_gray);
+                    title.setText(context.getText(io.agora.chat.callkit.R.string.ease_call_audio_call_ended));
+                    ivCall.setImageResource(io.agora.chat.callkit.R.drawable.call_voice_gray);
                     break;
                 case SINGLE_VIDEO_CALL:
-                    title.setText(context.getText(R.string.ease_call_video_call_ended));
-                    ivCall.setImageResource(R.drawable.call_video_gray);
+                    title.setText(context.getText(io.agora.chat.callkit.R.string.ease_call_video_call_ended));
+                    ivCall.setImageResource(io.agora.chat.callkit.R.drawable.call_video_gray);
                     break;
                 case CONFERENCE_VIDEO_CALL:
-                    title.setText(context.getText(R.string.ease_call_video_call_ended));
-                    ivCall.setImageResource(R.drawable.call_video_gray);
+                    title.setText(context.getText(io.agora.chat.callkit.R.string.ease_call_video_call_ended));
+                    ivCall.setImageResource(io.agora.chat.callkit.R.drawable.call_video_gray);
                     break;
             }
             subtitle.setText(message.getStringAttribute(CALL_COST_TIME,"00:00"));

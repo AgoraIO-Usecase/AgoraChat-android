@@ -37,7 +37,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        listAdapter.setEmptyView(R.layout.ease_layout_no_data_show_nothing);
+        listAdapter.setEmptyView(io.agora.chat.uikit.R.layout.ease_layout_no_data_show_nothing);
         currentUserInfo = DemoHelper.getInstance().getUsersManager().getCurrentUserInfo();
         if (isPickAt){
             listAdapter.setShowInitials(true);
@@ -162,7 +162,7 @@ public class GroupAllMembersFragment extends GroupBaseManageFragment {
     public void addHeader(ConcatAdapter adapter) {
         managersAdapter = new ContactListAdapter();
         managersAdapter.setGroupId(groupId);
-        managersAdapter.setEmptyView(R.layout.ease_layout_no_data_show_nothing);
+        managersAdapter.setEmptyView(io.agora.chat.uikit.R.layout.ease_layout_no_data_show_nothing);
         adapter.addAdapter(managersAdapter);
     }
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="io.agora.chatdemo">
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- IM SDK required start -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -175,14 +174,18 @@
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_video_call"
+            android:taskAffinity=".SingleCallTask"
             android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".av.MultipleCallActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/demo_activity_label_multi_call"
+            android:taskAffinity=".MultipleCallTask"
             android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
         <!-- custom presence -->
         <activity

@@ -255,8 +255,8 @@ public class MeFragment extends BaseInitFragment implements View.OnClickListener
 
         if ((requestCode == REQUEST_CODE && resultCode == RESULT_OK)) {
             if (data != null) {
-                int headImg = data.getIntExtra("headImage", R.drawable.ease_default_avatar);
-                Glide.with(mContext).load(headImg).placeholder(R.drawable.ease_default_avatar).into(mBinding.layoutUserinfo.ivUserAvatar);
+                int headImg = data.getIntExtra("headImage", io.agora.chat.uikit.R.drawable.ease_default_avatar);
+                Glide.with(mContext).load(headImg).placeholder(io.agora.chat.uikit.R.drawable.ease_default_avatar).into(mBinding.layoutUserinfo.ivUserAvatar);
             }
         }
     }

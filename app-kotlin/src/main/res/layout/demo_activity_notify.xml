@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.agora.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_toolbar_height"
+        app:titleBarTitle="@string/main_about_me_notify"
+        app:titleBarMenuTitleColor="@color/ease_color_on_background_low"
+        app:titleBarTitleTextColor="@color/ease_color_on_background_low"
+        app:titleBarMenuIconTint="@color/ease_color_on_background_low"
+        app:titleBarSubtitleTextColor="@color/ease_color_text_secondary"
+        android:visibility="visible" />
+
+    <io.agora.uikit.widget.EaseSwitchItemView
+        android:id="@+id/switch_item_notify"
+        app:switchItemTitle="@string/main_about_me_notify_title"
+        style="@style/ease_contact_detail_switch_item"
+        app:switchItemClickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="54dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/main_about_me_feature_text_describe"
+        android:text="@string/main_about_me_notify_describe"
+        />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

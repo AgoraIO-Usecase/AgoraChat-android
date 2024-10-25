@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:scrollbars="none"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="50dp"
+        android:background="@color/ease_color_background"
+        android:orientation="vertical">
+
+        <io.agora.uikit.widget.EaseCustomAvatarView
+            android:id="@+id/ep_presence"
+            android:layout_marginTop="64dp"
+            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ic_notice"
+                android:id="@+id/tv_name"
+                style="@style/ease_detail_layout_title"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <io.agora.uikit.widget.EaseImageView
+                android:id="@+id/ic_notice"
+                android:visibility="gone"
+                android:src="@drawable/ease_do_not_disturb"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="@+id/tv_name"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_name"
+                android:layout_width="20dp"
+                android:layout_height="20dp"/>
+
+            <TextView
+                app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/tv_number"
+                android:padding="5dp"
+                style="@style/ease_detail_layout_subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:text="@string/main_about_me_setting"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="4dp"
+            android:textAppearance="@style/Ease.TextAppearance.Label.Medium"
+            android:textColor="@color/ease_details_subtitle2_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <io.agora.uikit.widget.EaseArrowItemView
+            android:id="@+id/item_presence"
+            app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
+            app:arrowItemTitle="@string/presence_status"
+            app:arrowItemAvatarSrc="@drawable/icon_presence"
+            style="@style/main_about_me_arrow_item"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"/>
+
+        <io.agora.uikit.widget.EaseArrowItemView
+            android:id="@+id/item_information"
+            app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
+            app:arrowItemTitle="@string/main_about_me_information"
+            app:arrowItemAvatarSrc="@drawable/icon_information"
+            style="@style/main_about_me_arrow_item"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"/>
+
+        <io.agora.uikit.widget.EaseArrowItemView
+            android:id="@+id/item_currency"
+            app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
+            app:arrowItemTitle="@string/main_about_me_currency"
+            app:arrowItemAvatarSrc="@drawable/icon_currency"
+            style="@style/main_about_me_arrow_item"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"/>
+
+        <io.agora.uikit.widget.EaseArrowItemView
+            android:id="@+id/item_notify"
+            app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
+            app:arrowItemTitle="@string/main_about_me_notify"
+            app:arrowItemAvatarSrc="@drawable/icon_notify"
+            style="@style/main_about_me_arrow_item"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"/>
+
+        <io.agora.uikit.widget.EaseArrowItemView
+            android:id="@+id/item_privacy"
+            app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
+            app:arrowItemTitle="@string/main_about_me_privacy"
+            app:arrowItemAvatarSrc="@drawable/icon_privacy"
+            style="@style/main_about_me_arrow_item"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"/>
+
+        <io.agora.uikit.widget.EaseArrowItemView
+            android:id="@+id/item_about"
+            app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
+            app:arrowItemTitle="@string/main_about_me_about"
+            app:arrowItemAvatarSrc="@drawable/icon_about"
+            style="@style/main_about_me_arrow_item"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"/>
+
+        <TextView
+            android:text="@string/main_about_me_login"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:textStyle="bold"
+            android:textAppearance="@style/Ease.TextAppearance.Label.Medium"
+            android:textColor="@color/ease_details_subtitle2_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <io.agora.uikit.widget.EaseArrowItemView
+            android:id="@+id/about_me_logout"
+            app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
+            app:arrowItemTitle="@string/main_about_me_logout"
+            style="@style/main_about_logout_arrow_item"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</ScrollView>

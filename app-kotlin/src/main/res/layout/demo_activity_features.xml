@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/ease_color_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.agora.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_toolbar_height"
+        app:titleBarTitle="@string/main_about_me_currency_feature"
+        app:titleBarMenuTitleColor="@color/ease_color_on_background_low"
+        app:titleBarTitleTextColor="@color/ease_color_on_background_low"
+        app:titleBarMenuIconTint="@color/ease_color_on_background_low"
+        app:titleBarSubtitleTextColor="@color/ease_color_text_secondary"
+        android:visibility="visible" />
+
+    <io.agora.uikit.widget.EaseSwitchItemView
+        android:id="@+id/switch_item_typing"
+        app:layout_constraintTop_toBottomOf="@+id/function_layout"
+        app:switchItemTitle="@string/main_about_me_currency_typing"
+        app:switchItemClickable="false"
+        style="@style/currency_switch_item_typing"
+        android:layout_width="match_parent"
+        android:layout_height="54dp" />
+
+    <TextView
+        style="@style/main_about_me_feature_text_describe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_about_me_currency_typing_desc"
+        />
+
+    <io.agora.uikit.widget.EaseSwitchItemView
+        android:id="@+id/switch_item_translation"
+        app:switchItemTitle="@string/currency_feature_translation"
+        style="@style/ease_contact_detail_switch_item"
+        app:switchItemClickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="54dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/main_about_me_feature_text_describe"
+        android:text="@string/currency_feature_translation_describe"
+        />
+
+    <io.agora.uikit.widget.EaseSwitchItemView
+        android:id="@+id/switch_item_topic"
+        app:switchItemTitle="@string/currency_feature_topic"
+        style="@style/ease_contact_detail_switch_item"
+        app:switchItemClickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="54dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/main_about_me_feature_text_describe"
+        android:text="@string/currency_feature_topic_describe"
+        />
+
+    <io.agora.uikit.widget.EaseSwitchItemView
+        android:id="@+id/switch_item_reaction"
+        app:switchItemTitle="@string/currency_feature_reaction"
+        style="@style/ease_contact_detail_switch_item"
+        app:switchItemClickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="54dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/main_about_me_feature_text_describe"
+        android:text="@string/currency_feature_reaction_describe"
+        />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

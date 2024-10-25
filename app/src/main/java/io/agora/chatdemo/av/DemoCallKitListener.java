@@ -99,7 +99,7 @@ public class DemoCallKitListener implements EaseCallKitListener {
     public void onEndCallWithReason(EaseCallType callType, String channelName, EaseCallEndReason reason, long callTime) {
         EMLog.d(TAG, "onEndCallWithReason" + (callType != null ? callType.name() : " callType is null ") + " reason:" + reason + " time:" + callTime);
 
-        String callString = mContext.getString(R.string.ease_call_duration);
+        String callString = mContext.getString(io.agora.chat.callkit.R.string.ease_call_duration);
         callString += " "+dateFormat.format(callTime);
         Message message = handler.obtainMessage();
         switch (reason) {
@@ -247,9 +247,9 @@ public class DemoCallKitListener implements EaseCallKitListener {
                                     String uIdStr = it.next().toString();
                                     int uid = Integer.valueOf(uIdStr).intValue();
                                     String username = resToken.optString(uIdStr);
-                                    if (uid == uId) {
+                                    if (uid == uId||uid==0) {
                                         //Obtain information such as userName, profile picture, and nickname of the current user
-                                        userAccount=new EaseUserAccount(uid, username);
+                                        userAccount=new EaseUserAccount(uId, username);
                                     }
                                 }
                                 callback.onUserAccount(userAccount);

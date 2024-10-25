@@ -51,16 +51,15 @@ public class ChatThreadFragment extends EaseChatThreadFragment {
         boolean isRecall = message.getBooleanAttribute(DemoConstant.MESSAGE_TYPE_RECALL, false);
         if(isRecall) {
             helper.showHeaderView(false);
-            helper.findItemVisible(R.id.action_chat_delete, true);
-            helper.findItemVisible(R.id.action_chat_unsent, false);
-            helper.findItemVisible(R.id.action_chat_recall, false);
-            helper.findItemVisible(R.id.action_chat_copy, false);
+            helper.findItemVisible(io.agora.chat.uikit.R.id.action_chat_delete, true);
+            helper.findItemVisible(io.agora.chat.uikit.R.id.action_chat_recall, false);
+            helper.findItemVisible(io.agora.chat.uikit.R.id.action_chat_copy, false);
         }
     }
 
     @Override
     public boolean onMenuItemClick(MenuItemBean item, ChatMessage message) {
-        if(item.getItemId() == R.id.action_chat_select) {
+        if(item.getItemId() == io.agora.chat.uikit.R.id.action_chat_select) {
             showSelectModelTitle();
         }
         return super.onMenuItemClick(item, message);
@@ -80,7 +79,7 @@ public class ChatThreadFragment extends EaseChatThreadFragment {
 
     private void showSelectModelTitle() {
         titleBar.setDisplayHomeAsUpEnabled(false);
-        titleBar.setRightTitle(getString(R.string.ease_cancel));
+        titleBar.setRightTitle(getString(io.agora.chat.uikit.R.string.ease_cancel));
         titleBar.getRightText().setTextColor(ContextCompat.getColor(mContext, R.color.color_action_text));
         titleBar.getRightText().setVisibility(View.VISIBLE);
         titleBar.getRightImage().setVisibility(View.GONE);

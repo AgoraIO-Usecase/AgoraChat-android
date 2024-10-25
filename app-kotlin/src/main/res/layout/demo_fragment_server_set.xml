@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <io.agora.uikit.widget.EaseTitleBar
+        android:id="@+id/toolbar_server"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/ease_toolbar_height"
+        android:layout_marginTop="@dimen/ease_size_44"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarTitle="@string/server_set_title"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_server"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/et_appkey"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_server_specify"
+                app:layout_constraintVertical_bias="0"
+                android:layout_marginTop="@dimen/ease_size_12"
+                android:hint="@string/server_set_appkey"
+                style="@style/em_login_et_input" />
+
+            <TextView
+                android:id="@+id/tv_server_specify"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_appkey"
+                app:layout_constraintBottom_toTopOf="@id/et_server_address"
+                android:layout_marginTop="@dimen/ease_size_12"
+                android:text="@string/server_set_specify_server"
+                style="@style/em_login_et_input"
+                android:paddingStart="@dimen/ease_size_0"
+                android:background="@null"/>
+
+            <Switch
+                android:id="@+id/switch_specify_server"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:track="@drawable/demo_switch_track_selector"
+                android:thumb="@drawable/demo_switch_thumb_selector"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_server_specify"
+                app:layout_constraintHorizontal_bias="1"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="40dp"/>
+
+            <EditText
+                android:id="@+id/et_server_address"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_server_specify"
+                app:layout_constraintBottom_toTopOf="@id/et_server_port"
+                android:layout_marginTop="@dimen/ease_size_12"
+                android:hint="@string/server_set_server_address"
+                style="@style/em_login_et_input" />
+
+            <EditText
+                android:id="@+id/et_server_port"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_server_address"
+                app:layout_constraintBottom_toTopOf="@id/et_server_rest"
+                android:layout_marginTop="@dimen/ease_size_12"
+                android:inputType="number"
+                android:hint="@string/server_set_server_port"
+                style="@style/em_login_et_input"/>
+
+            <EditText
+                android:id="@+id/et_server_rest"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_server_port"
+                android:layout_marginTop="@dimen/ease_size_12"
+                android:hint="@string/server_set_rest_server_address"
+                style="@style/em_login_et_input"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

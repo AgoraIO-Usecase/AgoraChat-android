@@ -163,15 +163,8 @@ public class DemoHelper {
     private boolean initSDK(Context context) {
         // Set Chat Options
         ChatOptions options = initChatOptions(context);
-        // Configure custom rest server and im server
 
-//        options.setRestServer("a1-hsb.easemob.com");
-//        options.setAppKey("easemob-demo#chatdemoui");
-//        options.setIMServer("106.75.100.247");
-//        options.setImPort(6717);
         options.setUsingHttpsOnly(true);
-        // Use fpa by default
-        options.setFpaEnable(true);
         boolean hasAppkey = checkAgoraChatAppKey(context, options);
         // You can set your AppKey by options.setAppKey(appkey)
         if (!hasAppkey) {

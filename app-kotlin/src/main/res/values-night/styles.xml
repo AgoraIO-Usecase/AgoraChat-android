@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="splash_iv_bg_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/splash_bg_dark</item>
+    </style>
+
+    <style name="splash_brand_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/ease_size_35</item>
+        <item name="android:textAppearance">@style/Ease.TextAppearance.Body.Large</item>
+        <item name="android:textColor">@color/ease_color_primary</item>
+    </style>
+
+    <style name="splash_powered_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom|center</item>
+        <item name="android:layout_marginBottom">60dp</item>
+        <item name="android:textColor">@color/ease_color_text_secondary</item>
+    </style>
+
+    <style name="em_login_btn">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/ease_size_24</item>
+        <item name="android:layout_marginLeft">@dimen/ease_size_30</item>
+        <item name="android:layout_marginRight">@dimen/ease_size_30</item>
+        <item name="android:background">@drawable/demo_login_btn_bg</item>
+        <item name="android:textColor">@color/ease_color_text_title</item>
+        <item name="android:enabled">false</item>
+        <item name="android:textAppearance">@style/Ease.TextAppearance.Headline.Small</item>
+    </style>
+
+</resources>

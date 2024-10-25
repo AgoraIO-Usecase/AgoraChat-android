@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.agora.uikit.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_toolbar_height"
+        app:titleBarTitle="@string/main_about_me_information"
+        app:titleBarMenuTitleColor="@color/ease_color_on_background_low"
+        app:titleBarTitleTextColor="@color/ease_color_on_background_low"
+        app:titleBarMenuIconTint="@color/ease_color_on_background_low"
+        app:titleBarSubtitleTextColor="@color/ease_color_text_secondary"
+        android:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/avatar_layout"
+        app:layout_constraintTop_toBottomOf="@+id/title_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="16dp"
+            style="@style/main_about_me_information_title"
+            android:text="@string/main_about_me_information_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <io.agora.uikit.widget.EaseImageView
+            android:id="@+id/iv_avatar"
+            app:layout_constraintTop_toTopOf="@+id/tv_avatar"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/iv_avatar_end"
+            android:src="@drawable/ease_default_avatar"
+            android:scaleType="fitCenter"
+            android:layout_marginEnd="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+        <io.agora.uikit.widget.EaseImageView
+            android:id="@+id/iv_avatar_end"
+            app:layout_constraintTop_toTopOf="@+id/tv_avatar"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/icon_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:id="@+id/view_avatar_divider"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            style="@style/ease_list_item_divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/nick_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title_nick_name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="16dp"
+            style="@style/main_about_me_information_title"
+            android:text="@string/main_about_me_information_nick_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_nick_name"
+            app:layout_constraintTop_toTopOf="@+id/title_nick_name"
+            app:layout_constraintBottom_toBottomOf="@+id/title_nick_name"
+            app:layout_constraintEnd_toStartOf="@+id/iv_name_end"
+            android:layout_marginEnd="10dp"
+            style="@style/main_about_me_information_subtitle"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <io.agora.uikit.widget.EaseImageView
+            android:id="@+id/iv_name_end"
+            app:layout_constraintTop_toTopOf="@+id/title_nick_name"
+            app:layout_constraintBottom_toBottomOf="@+id/title_nick_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/icon_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:id="@+id/view_name_divider"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            style="@style/ease_list_item_divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

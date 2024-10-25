@@ -7,12 +7,12 @@ import io.agora.chatdemo.R;
 
 
 public enum PresenceData {
-    ONLINE(R.string.ease_presence_online,R.drawable.ease_presence_online),
-    BUSY(R.string.ease_presence_busy,R.drawable.ease_presence_busy),
-    DO_NOT_DISTURB(R.string.ease_presence_do_not_disturb,R.drawable.ease_presence_do_not_disturb),
-    LEAVE(R.string.ease_presence_leave,R.drawable.ease_presence_leave),
-    OFFLINE(R.string.ease_presence_offline,R.drawable.ease_presence_offline),
-    CUSTOM(R.string.ease_presence_custom,R.drawable.ease_presence_custom)
+    ONLINE(io.agora.chat.uikit.R.string.ease_presence_online,R.drawable.ease_presence_online),
+    BUSY(io.agora.chat.uikit.R.string.ease_presence_busy,R.drawable.ease_presence_busy),
+    DO_NOT_DISTURB(io.agora.chat.uikit.R.string.ease_presence_do_not_disturb,R.drawable.ease_presence_do_not_disturb),
+    LEAVE(io.agora.chat.uikit.R.string.ease_presence_leave,R.drawable.ease_presence_leave),
+    OFFLINE(io.agora.chat.uikit.R.string.ease_presence_offline,R.drawable.ease_presence_offline),
+    CUSTOM(io.agora.chat.uikit.R.string.ease_presence_custom,R.drawable.ease_presence_custom)
     ;
 
     PresenceData(@StringRes int mPresence, @DrawableRes int mPresenceIcon) {

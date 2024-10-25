@@ -29,9 +29,11 @@ public class ChatViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Boolean>> makeConversationReadObservable;
     private SingleSourceLiveData<Resource< List<String>>> getNoPushUsersObservable;
     private SingleSourceLiveData<Resource<Boolean>> setNoPushUsersObservable;
-    private SingleSourceLiveData<Resource<Boolean>> chatManagerObservable;
+    private SingleSourceLiveData<Resource<Boolean>> reportMessageObservable;
     private SingleSourceLiveData<Resource<Boolean>> removeMessagesObservable;
     private SingleSourceLiveData<Resource<ChatMessage>> translationMessagesObservable;
+    private SingleSourceLiveData<Resource<ChatMessage>> pinMessageObservable;
+    private SingleSourceLiveData<Resource<List<ChatMessage>>> getPinMessageObservable;
 
     public ChatViewModel(@NonNull Application application) {
         super(application);
@@ -43,9 +45,11 @@ public class ChatViewModel extends AndroidViewModel {
         getNoPushUsersObservable = new SingleSourceLiveData<>();
         setNoPushUsersObservable = new SingleSourceLiveData<>();
         presenceObservable = new SingleSourceLiveData<>();
-        chatManagerObservable = new SingleSourceLiveData<>();
+        reportMessageObservable = new SingleSourceLiveData<>();
         removeMessagesObservable = new SingleSourceLiveData<>();
         translationMessagesObservable = new SingleSourceLiveData<>();
+        pinMessageObservable = new SingleSourceLiveData<>();
+        getPinMessageObservable = new SingleSourceLiveData<>();
     }
     public LiveData<Resource<List<Presence>>> getPresenceObservable(){
         return presenceObservable;
@@ -56,8 +60,8 @@ public class ChatViewModel extends AndroidViewModel {
     public LiveData<Resource<ChatRoom>> getChatRoomObservable() {
         return chatRoomObservable;
     }
-    public LiveData<Resource<Boolean>> getChatManagerObservable(){
-        return chatManagerObservable;
+    public LiveData<Resource<Boolean>> getReportMessageObservable(){
+        return reportMessageObservable;
     }
     public LiveData<Resource<List<String>>> getNoPushUsersObservable() {
         return getNoPushUsersObservable;
@@ -104,7 +108,7 @@ public class ChatViewModel extends AndroidViewModel {
     }
 
     public void reportMessage(String reportMsgId, String reportType, String reportReason ){
-        chatManagerObservable.setSource(chatManagerRepository.reportMessage(reportMsgId,reportType,reportReason));
+        reportMessageObservable.setSource(chatManagerRepository.reportMessage(reportMsgId,reportType,reportReason));
     }
 
     public LiveData<Resource<Boolean>> getRemoveMessagesObservable() {
@@ -128,5 +132,20 @@ public class ChatViewModel extends AndroidViewModel {
      */
     public void translationMessage(ChatMessage message,List<String> targetLanguage){
         translationMessagesObservable.setSource(chatManagerRepository.translationMessage(message,targetLanguage));
+    }
+
+    public void pinMessage(ChatMessage message,boolean isPinned) {
+        pinMessageObservable.setSource(chatManagerRepository.pinMessage(message,isPinned));
+    }
+
+    public LiveData<Resource<ChatMessage>> pinMessageObservable(){
+        return pinMessageObservable;
+    }
+
+    public void getPinnedMessagesFromServer(String conversationId) {
+        getPinMessageObservable.setSource(chatManagerRepository.getPinnedMessagesFromServer(conversationId));
+    }
+    public LiveData<Resource<List<ChatMessage>>> getPinMessageObservable(){
+        return getPinMessageObservable;
     }
 }

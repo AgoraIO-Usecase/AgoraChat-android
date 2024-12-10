@@ -41,6 +41,14 @@ ChatClient.getInstance().init(applicationContext, options);
 ```
 For details, see the [prerequisites](https://docs.agora.io/en/agora-chat/get-started/get-started-sdk?platform=android) in Agora Chat SDK Guide.
 
+## Precautions
+ 1. Set the JDK version to 11 or higher.
+ 2. Add the following fields in local.properties:
+    ```
+    AGORA_CHAT_APPKEY={Your AppKey} // Replace {Your AppKey} with your actual AppKey
+    AGORA_APPID=”{Your AppId}” // Make sure to include quotation marks, replace {Your AppId} with your actual AppId
+    ```
+
 ## Contact Us
 - You can find full API document at [Document Center](https://docs.agora.io/en/agora-chat/overview/product-overview?platform=android)
 - You can file bugs about this demo at [issue](https://github.com/AgoraIO-Usecase/AgoraChat-android/issues)

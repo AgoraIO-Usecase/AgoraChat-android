@@ -164,7 +164,7 @@ public class EMClientRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                ChatClient.getInstance().loginWithAgoraToken(userName, token, new DemoCallBack() {
+                ChatClient.getInstance().loginWithToken(userName, token, new DemoCallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));
@@ -317,7 +317,7 @@ public class EMClientRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(LoginBean value) {
                         if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
-                            ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
+                            ChatClient.getInstance().loginWithToken(username, value.getAccessToken(), new CallBack() {
                                 @Override
                                 public void onSuccess() {
                                     DemoHelper.getInstance().getUsersManager().setCurrentUser(username);
@@ -364,7 +364,7 @@ public class EMClientRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(LoginBean value) {
                         if(value != null && !TextUtils.isEmpty(value.getAccessToken())) {
-                            ChatClient.getInstance().loginWithAgoraToken(username, value.getAccessToken(), new CallBack() {
+                            ChatClient.getInstance().loginWithToken(username, value.getAccessToken(), new CallBack() {
                                 @Override
                                 public void onSuccess() {
                                     DemoHelper.getInstance().getUsersManager().setCurrentUser(username);

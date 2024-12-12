@@ -19,9 +19,9 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.lang.reflect.Field;
@@ -256,12 +256,12 @@ public class SimpleDialog extends BaseDialogFragment implements View.OnClickList
     }
 
     public static class Builder {
-        public AppCompatActivity context;
+        public FragmentActivity context;
         private OnConfirmClickListener listener;
         private onCancelClickListener cancelClickListener;
         protected Bundle bundle;
 
-        public Builder(AppCompatActivity context) {
+        public Builder(FragmentActivity context) {
             this.context = context;
             this.bundle = new Bundle();
         }

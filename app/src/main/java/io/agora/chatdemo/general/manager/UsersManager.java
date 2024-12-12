@@ -281,6 +281,7 @@ public class UsersManager {
 		Presence presence = DemoHelper.getInstance().getPresences().get(username);
 		if(presence!=null && presenceView != null) {
 			presenceView.setVisibility(View.VISIBLE);
+			presenceView.setPresenceTextViewArrowVisible(true);
 			presenceView.setPresenceData(getUserInfo(username).getAvatar(),presence);
 		}
 	}

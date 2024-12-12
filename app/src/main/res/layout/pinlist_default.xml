@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/shape_gray_ebebeb_corner_8"
+    android:paddingBottom="8dp"
+    android:paddingTop="6dp"
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_from"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="From"
+        android:maxLength="50"
+        android:textColor="@color/black"
+        android:ellipsize="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_from"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="Non sono sicuro, ma penso all’ una e mezza. Stevie, sai a che ora chiudono le banche?"
+        android:maxLength="50"
+        android:textColor="@color/color_light_gray_666666"
+        android:ellipsize="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="09:51"
+        android:textSize="12sp"
+        android:textColor="@color/color_light_gray_999999"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/iv_state"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/chat_pin_onlight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

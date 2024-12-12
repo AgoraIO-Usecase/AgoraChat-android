@@ -19,5 +19,6 @@ include $(CLEAR_VARS)
 PB_LITE=1
 ENABLE_CALL=0
 USE_SQLCIPHER=1
+ENABLE_AGORA=1
 #libhyphenate.so
 include $(LOCAL_PATH)/../../../emclient-linux/Android.mk

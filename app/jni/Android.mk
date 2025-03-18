@@ -20,5 +20,8 @@ PB_LITE=1
 ENABLE_CALL=0
 USE_SQLCIPHER=1
 ENABLE_AGORA=1
+# 获取当前时间戳
+BUILD_NO := $(shell date +%s)
+USE_SHENGWANG_DOMAIN=0
 #libhyphenate.so
 include $(LOCAL_PATH)/../../../emclient-linux/Android.mk

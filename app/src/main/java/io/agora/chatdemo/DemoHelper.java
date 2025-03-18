@@ -494,6 +494,11 @@ public class DemoHelper {
         if (EaseUIKit.getInstance().isMainProcess(context)) {
             PushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
+                public void onBindTokenSuccess(PushType pushType, String pushToken) {
+                    EMLog.d("PushClient", "Push client onBindTokenSuccess: " + pushType + " - " + pushToken);
+                }
+
+                @Override
                 public void onError(PushType pushType, long errorCode) {
                     EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
                 }

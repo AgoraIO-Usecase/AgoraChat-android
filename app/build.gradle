@@ -9,6 +9,7 @@ android {
     InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream() ;
     properties.load( inputStream )
 
+    namespace  "io.agora.chatdemo"
 
     compileSdk 34
 
@@ -28,10 +29,6 @@ android {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
-        }
-
-        dexOptions {
-            javaMaxHeapSize "4g"
         }
 
         // If you use your own Agora Chat appkey, you should deploy your own App Server.
@@ -94,14 +91,17 @@ android {
         abortOnError false
     }
     // use viewBinding
-    viewBinding {
-        enabled = true
+    buildFeatures{
+        viewBinding  true
+        buildConfig  true
     }
+
 //    externalNativeBuild {
 //        ndkBuild {
 //            path file('jni/Android.mk')
 //        }
 //    }
+//    ndkVersion = "29.0.14206865"
 }
 
 dependencies {

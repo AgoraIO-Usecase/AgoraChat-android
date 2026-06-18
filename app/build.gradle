@@ -10,13 +10,13 @@ android {
     properties.load( inputStream )
 
     namespace  "io.agora.chatdemo"
+    compileSdk 35
 
-    compileSdk 34
 
     defaultConfig {
         applicationId "io.agora.chatdemo"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdk 35
 
         versionCode 140
         versionName "1.4.0"
@@ -81,8 +81,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     lintOptions {
         checkReleaseBuilds false
@@ -96,12 +96,13 @@ android {
         buildConfig  true
     }
 
-//    externalNativeBuild {
-//        ndkBuild {
-//            path file('jni/Android.mk')
-//        }
-//    }
-//    ndkVersion = "29.0.14206865"
+    externalNativeBuild {
+        ndkBuild {
+            path file('jni/Android.mk')
+        }
+    }
+    ndkVersion = "29.0.14206865"
+    buildToolsVersion '35.0.0'
 }
 
 dependencies {

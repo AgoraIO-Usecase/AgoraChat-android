@@ -734,10 +734,10 @@ public class DemoHelper {
     public EaseUser getGroupUserInfo(String groupId,String username) {
         MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
         EaseUser user=getUsersManager().getUserInfo(username);
-        if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)
-         && groupBean.getNickName()!=null){
+        if (groupBean != null && !TextUtils.equals(groupBean.getNickname(),username)
+         && groupBean.getNickname()!=null){
             if (user != null){
-                user.setNickname(groupBean.getNickName());
+                user.setNickname(groupBean.getNickname());
             }
         }
         return user;

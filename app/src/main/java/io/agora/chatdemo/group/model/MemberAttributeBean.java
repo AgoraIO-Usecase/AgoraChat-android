@@ -10,7 +10,7 @@ public class MemberAttributeBean implements Serializable {
 
    private String nickName;
 
-   public String getNickName() {
+   public String getNickname() {
       return nickName;
    }
 

@@ -103,7 +103,7 @@ public class EmUserEntity extends EaseUser {
             String userId=it.next();
             UserInfo info = userInfos.get(userId);
             user = new EaseUser(info.getUserId());
-            user.setNickname(info.getNickName());
+            user.setNickname(info.getNickname());
             user.setAvatar(info.getAvatarUrl());
             user.setEmail(info.getEmail());
             user.setGender(info.getGender());

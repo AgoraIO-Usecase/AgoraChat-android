@@ -80,7 +80,7 @@ public class SearchContactFragment extends SearchFragment<String> implements Add
 
     @Override
     public int getTitleBarRightText() {
-        return R.string.ease_cancel;
+        return io.agora.chat.uikit.R.string.ease_cancel;
     }
 
     @Override

@@ -18,7 +18,7 @@ With this sample app, you can:
 * Make sure you have made the preparations mentioned in the [Agora Chat SDK quickstart](https://docs.agora.io/en/agora-chat/get-started/get-started-sdk?platform=android).
 * Prepare the development environment:
     * Java Development Kit (JDK)
-    * Android Studio 3.6 or later
+    * Android Studio 4.0 or later
 ## Run the sample project
 
 Follow these steps to run the sample project:\
@@ -30,11 +30,11 @@ Follow these steps to run the sample project:\
 ### 2. Open the Android project with Android Studio.
 
 ### 3. Configure keys.
-Set your appkey applied from [Agora Developer Console](https://console.agora.io/) before calling ChatClient#init().
+Set your appid applied from [Agora Developer Console](https://console.agora.io/) before calling ChatClient#init().
 ```java
 ChatOptions options = new ChatOptions();
-// Set your appkey
-options.setAppKey("Your appkey");
+// Set your appid
+options.setAppId("Your appid");
 ...
 //initialization
 ChatClient.getInstance().init(applicationContext, options);
@@ -45,8 +45,8 @@ For details, see the [prerequisites](https://docs.agora.io/en/agora-chat/get-sta
  1. Set the JDK version to 11 or higher.
  2. Add the following fields in local.properties:
     ```
-    AGORA_CHAT_APPKEY={Your AppKey} // Replace {Your AppKey} with your actual AppKey
-    AGORA_APPID=”{Your AppId}” // Make sure to include quotation marks, replace {Your AppId} with your actual AppId
+    AGORA_CHAT_APPID={Your Agora Chat AppId} // Replace {Your Agora Chat AppId} with your actual AppId
+    AGORA_RTC_APPID=”{Your Agora RTC AppId}” // Make sure to include quotation marks, replace {Your Agora RTC AppId} with your actual AppId
     ```
 
 ## Contact Us

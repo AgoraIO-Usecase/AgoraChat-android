@@ -96,12 +96,12 @@ android {
         buildConfig  true
     }
 
-    externalNativeBuild {
-        ndkBuild {
-            path file('jni/Android.mk')
-        }
-    }
-    ndkVersion = "29.0.14206865"
+//    externalNativeBuild {
+//        ndkBuild {
+//            path file('jni/Android.mk')
+//        }
+//    }
+//    ndkVersion = "29.0.14206865"
     buildToolsVersion '35.0.0'
 }
 
@@ -139,7 +139,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.6.2'
     // Agora Chat Uikit
     implementation 'io.agora.rtc:chat-uikit:1.4.0'
-    implementation 'io.agora.rtc:chat-callkit:1.3.0'
+    implementation 'io.agora.rtc:chat-callkit:1.4.0'
 //    implementation project(path: ':chat-uikit')
 //    implementation project(path: ':chat-callkit')
     // url preview

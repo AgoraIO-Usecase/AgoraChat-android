@@ -162,34 +162,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * Get chat do not disturb users
-     */
-    public LiveData<Resource<List<String>>> getNoPushUsers() {
-        return new NetworkOnlyResource<List<String>>() {
-            @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
-                runOnIOThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            getPushManager().getPushConfigsFromServer();
-                        } catch (ChatException e) {
-                            e.printStackTrace();
-                            callBack.onError(e.getErrorCode(), e.getDescription());
-                            return;
-                        }
-//                        List<String> noPushUsers = getPushManager().getNoPushUsers();
-                        List<String> noPushUsers = new ArrayList<>();
-                        if (noPushUsers != null && noPushUsers.size() != 0) {
-                            callBack.onSuccess(createLiveData(noPushUsers));
-                        }
-                    }
-                });
 
-            }
-        }.asLiveData();
-    }
 
     /**
      * Sets whether the specified group accepts offline message push
@@ -265,36 +238,6 @@ public class EMPushManagerRepository extends BaseEMRepository {
                     }
                 }
         );
-    }
-
-    /**
-     * Get the group list that disabled offline push
-     * Note: If you want to get the latest configs, you should call {@link PushManager#getPushConfigsFromServer()} first
-     */
-    public LiveData<Resource<List<String>>> getNoPushGroups() {
-        return new NetworkOnlyResource<List<String>>() {
-            @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
-                runOnIOThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            getPushManager().getPushConfigsFromServer();
-                        } catch (ChatException e) {
-                            e.printStackTrace();
-                            callBack.onError(e.getErrorCode(), e.getDescription());
-                            return;
-                        }
-//                        List<String> noPushGroups = getPushManager().getNoPushGroups();
-                        List<String> noPushGroups = new ArrayList<>();
-                        if (noPushGroups != null && noPushGroups.size() != 0) {
-                            callBack.onSuccess(createLiveData(noPushGroups));
-                        }
-                    }
-                });
-
-            }
-        }.asLiveData();
     }
 
     /**

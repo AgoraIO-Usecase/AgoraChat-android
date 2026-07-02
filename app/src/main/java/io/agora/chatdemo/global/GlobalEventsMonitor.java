@@ -36,6 +36,7 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.MucSharedFile;
 import io.agora.chat.Presence;
+import io.agora.chat.PushManager;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.UserInfo;
 import io.agora.chat.adapter.EMAChatRoomManagerListener;
@@ -268,12 +269,12 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         for (ChatMessage message : messages) {
             EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-            EMLog.d(TAG, "onMessageReceived: " + message.getType());
-            // If you set the group offline message do not disturb, no message notification will be made
-//            List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
-//            if(disabledIds != null && disabledIds.contains(message.conversationId())) {
-//                return;
-//            }
+            EMLog.d(TAG, "onMessageReceived type: " + message.getType());
+
+            Conversation conversation = DemoHelper.getInstance().getChatManager().getConversation(message.conversationId());
+            if(conversation!=null && conversation.pushRemindType()!= PushManager.PushRemindType.ALL){
+                return;
+            }
             // Not notify if message is chat thread message
             if(message.isChatThreadMessage()) {
                 return;

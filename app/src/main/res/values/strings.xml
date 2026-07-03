@@ -10,7 +10,7 @@
     <string name="user_not_exist">Username does not exist</string>
     <string name="username_too_long">Please choose a shorter username</string>
     <string name="search_text_hint">Search</string>
-    <string name="please_check">Key verification error! Please check the key settings in the AndroidManifest.xml file.</string>
+    <string name="please_check"> AppId verification error! Please check the appid settings in the local.properties file.</string>
     <string name="sign_agora_id">Agora ID</string>
     <string name="sign_password">Password</string>
     <string name="sign_confirm_pwd">Confirm Password</string>

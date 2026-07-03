@@ -166,7 +166,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         if(DemoHelper.getInstance().getUsersManager().isCurrentUserFromOtherDevice(user.getUsername())){
                             UserInfo selfInfo =  value.get(ChatClient.getInstance().getCurrentUser());
                             if(selfInfo != null){
-                                user.setNickname(selfInfo.getNickName());
+                                user.setNickname(selfInfo.getNickname());
                                 user.setAvatar(selfInfo.getAvatarUrl());
                                 user.setEmail(selfInfo.getEmail());
                                 user.setGender(selfInfo.getGender());
@@ -714,7 +714,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
         if(info != null){
             EaseUser userEntity = new EaseUser();
             userEntity.setUsername(info.getUserId());
-            userEntity.setNickname(info.getNickName());
+            userEntity.setNickname(info.getNickname());
             userEntity.setEmail(info.getEmail());
             userEntity.setAvatar(info.getAvatarUrl());
             userEntity.setBirth(info.getBirth());

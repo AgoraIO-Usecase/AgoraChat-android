@@ -95,11 +95,11 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         inflater.inflate(showSenderType
                         ? R.layout.layout_custom_content_fill_send
                         : R.layout.layout_custom_content_fill_received
-                        , findViewById(R.id.flContentFillArea), true);
+                        , findViewById(io.agora.chat.uikit.R.id.flContentFillArea), true);
         inflater.inflate(showSenderType
                         ? R.layout.layout_custom_bubble_bottom_fill_send
                         : R.layout.layout_custom_bubble_bottom_fill_received
-                        , findViewById(R.id.flBubbleBottomFillArea), true);
+                        , findViewById(io.agora.chat.uikit.R.id.flBubbleBottomFillArea), true);
 
         // flContentFillArea
         mTitle = findViewById(R.id.tv_title);
@@ -120,7 +120,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
         mDescribe.setVisibility(GONE);
         mTitle.setVisibility(GONE);
 
-        findViewById(R.id.flContentFillArea).setOnClickListener(new OnClickListener() {
+        findViewById(io.agora.chat.uikit.R.id.flContentFillArea).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (urlPreviewMap.containsKey(message.getMsgId())){
@@ -129,7 +129,7 @@ public class ChatRowCustomTextView extends EaseChatRowText {
             }
         });
 
-        findViewById(R.id.flContentFillArea).setOnLongClickListener(new OnLongClickListener() {
+        findViewById(io.agora.chat.uikit.R.id.flContentFillArea).setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (itemClickListener != null) {

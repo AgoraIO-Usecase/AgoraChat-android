@@ -154,7 +154,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     }
 
     private void skipToSetAlias() {
-        RemarkActivity.actionStart(mContext, REQUEST_CODE, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), groupId, memberAttributeBean != null ? memberAttributeBean.getNickName() : "");
+        RemarkActivity.actionStart(mContext, REQUEST_CODE, DemoHelper.getInstance().getUsersManager().getCurrentUserID(), groupId, memberAttributeBean != null ? memberAttributeBean.getNickname() : "");
     }
 
     @Override
@@ -293,7 +293,7 @@ public class GroupDetailActivity extends BaseInitActivity implements View.OnClic
     }
 
     private void setAlias(MemberAttributeBean memberAttributeBean) {
-        binding.itemGroupAlias.setContent(memberAttributeBean != null ? memberAttributeBean.getNickName() : "");
+        binding.itemGroupAlias.setContent(memberAttributeBean != null ? memberAttributeBean.getNickname() : "");
     }
 
     private void setGroupInfo() {

@@ -215,7 +215,7 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
     private void showDeleteDialog(List<String> deleteMsgIdList, View multiView) {
         new SimpleDialog.Builder(this)
                 .setTitle(getString(R.string.chat_delete_multi_messages_title, deleteMsgIdList.size()))
-                .setOnConfirmClickListener(R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
+                .setOnConfirmClickListener(io.agora.chat.uikit.R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
                         dismissMultiSelectView(multiView);
@@ -335,7 +335,7 @@ public class ChatThreadActivity extends EaseChatThreadActivity implements Messag
                 e.printStackTrace();
             }
             if(!TextUtils.isEmpty(to) && mForwardMsgIdList != null) {
-                ChatMessage chatMessage = ChatMessage.createCombinedSendMessage(getString(R.string.ease_combine_default)
+                ChatMessage chatMessage = ChatMessage.createCombinedSendMessage(getString(io.agora.chat.uikit.R.string.ease_combine_default)
                         , EaseChatMessageMultiSelectHelper.getCombineMessageSummary(mForwardMsgIdList)
                         , getString(R.string.forward_compatible_text), mForwardMsgIdList, to);
                 if(chatType == ChatMessage.ChatType.GroupChat) {

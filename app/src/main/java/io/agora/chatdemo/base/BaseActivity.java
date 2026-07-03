@@ -214,7 +214,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param colorId
      */
     public static void setToolbarCustomColor(AppCompatActivity mContext, int colorId) {
-        Drawable leftArrow = ContextCompat.getDrawable(mContext, R.drawable.abc_ic_ab_back_material);
+        Drawable leftArrow = ContextCompat.getDrawable(mContext, androidx.appcompat.R.drawable.abc_ic_ab_back_material);
         if(leftArrow != null) {
             leftArrow.setColorFilter(ContextCompat.getColor(mContext, colorId), PorterDuff.Mode.SRC_ATOP);
             if(mContext.getSupportActionBar() != null) {

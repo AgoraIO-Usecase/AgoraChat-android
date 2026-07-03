@@ -73,50 +73,9 @@ public class EMPushManagerRepository extends BaseEMRepository {
         return null;
     }
 
-    /**
-     * Set Do Not Disturb Time Period
-     * If end is less than start, then end is the hour of the next day
-     * @param start
-     * @param end
-     * @return
-     */
-    public LiveData<Resource<Boolean>> disableOfflinePush(int start, int end) {
-        return new NetworkOnlyResource<Boolean>() {
-            @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                EaseThreadManager.getInstance().runOnIOThread(()-> {
-                    try {
-                        ChatClient.getInstance().pushManager().disableOfflinePush(start, end);
-                        callBack.onSuccess(createLiveData(true));
-                    } catch (ChatException e) {
-                        e.printStackTrace();
-                        callBack.onError(e.getErrorCode(), e.getDescription());
-                    }
-                });
-            }
-        }.asLiveData();
-    }
 
-    /**
-     * Allow offline push
-     * @return
-     */
-    public LiveData<Resource<Boolean>> enableOfflinePush() {
-        return new NetworkOnlyResource<Boolean>() {
-            @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                EaseThreadManager.getInstance().runOnIOThread(()-> {
-                    try {
-                        ChatClient.getInstance().pushManager().enableOfflinePush();
-                        callBack.onSuccess(createLiveData(true));
-                    } catch (ChatException e) {
-                        e.printStackTrace();
-                        callBack.onError(e.getErrorCode(), e.getDescription());
-                    }
-                });
-            }
-        }.asLiveData();
-    }
+
+
 
     /**
      * Update push nickname
@@ -191,12 +150,10 @@ public class EMPushManagerRepository extends BaseEMRepository {
                     public void run() {
                         List<String> onPushList = new ArrayList<>();
                         onPushList.add(userId);
-                        try {
-                            getPushManager().updatePushServiceForUsers(onPushList, noPush);
-                            callBack.onSuccess(createLiveData(noPush));
-                        } catch (ChatException e) {
-                            e.printStackTrace();
-                            callBack.onError(e.getErrorCode(), e.getDescription());
+                        if(noPush){
+                            setSilentModeForConversation(userId,false,callBack);
+                        }else{
+                            clearSilentModeForConversation(userId,false,callBack);
                         }
                     }
                 });
@@ -205,33 +162,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * Get chat do not disturb users
-     */
-    public LiveData<Resource<List<String>>> getNoPushUsers() {
-        return new NetworkOnlyResource<List<String>>() {
-            @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
-                runOnIOThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            getPushManager().getPushConfigsFromServer();
-                        } catch (ChatException e) {
-                            e.printStackTrace();
-                            callBack.onError(e.getErrorCode(), e.getDescription());
-                            return;
-                        }
-                        List<String> noPushUsers = getPushManager().getNoPushUsers();
-                        if (noPushUsers != null && noPushUsers.size() != 0) {
-                            callBack.onSuccess(createLiveData(noPushUsers));
-                        }
-                    }
-                });
 
-            }
-        }.asLiveData();
-    }
 
     /**
      * Sets whether the specified group accepts offline message push
@@ -248,12 +179,10 @@ public class EMPushManagerRepository extends BaseEMRepository {
                     public void run() {
                         List<String> onPushList = new ArrayList<>();
                         onPushList.add(groupID);
-                        try {
-                            getPushManager().updatePushServiceForGroup(onPushList, noPush);
-                            callBack.onSuccess(createLiveData(noPush));
-                        } catch (ChatException e) {
-                            e.printStackTrace();
-                            callBack.onError(e.getErrorCode(), e.getDescription());
+                        if(noPush){
+                            setSilentModeForConversation(groupID,true,callBack);
+                        }else{
+                            clearSilentModeForConversation(groupID,true,callBack);
                         }
                     }
                 });
@@ -262,33 +191,53 @@ public class EMPushManagerRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    /**
-     * Get the group list that disabled offline push
-     * Note: If you want to get the latest configs, you should call {@link PushManager#getPushConfigsFromServer()} first
-     */
-    public LiveData<Resource<List<String>>> getNoPushGroups() {
-        return new NetworkOnlyResource<List<String>>() {
-            @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
-                runOnIOThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            getPushManager().getPushConfigsFromServer();
-                        } catch (ChatException e) {
-                            e.printStackTrace();
-                            callBack.onError(e.getErrorCode(), e.getDescription());
-                            return;
-                        }
-                        List<String> noPushGroups = getPushManager().getNoPushGroups();
-                        if (noPushGroups != null && noPushGroups.size() != 0) {
-                            callBack.onSuccess(createLiveData(noPushGroups));
-                        }
-                    }
-                });
+    public void setSilentModeForConversation(String conversationId, boolean isGroup,@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        Conversation.ConversationType conversationType = isGroup
+                ? Conversation.ConversationType.GroupChat
+                : Conversation.ConversationType.Chat;
 
-            }
-        }.asLiveData();
+        SilentModeParam param = new SilentModeParam(
+                SilentModeParam.SilentModeParamType.REMIND_TYPE
+        ).setRemindType(PushManager.PushRemindType.NONE);
+
+        ChatClient.getInstance().pushManager().setSilentModeForConversation(
+                conversationId,
+                conversationType,
+                param,
+                new ValueCallBack<SilentModeResult>() {
+                    @Override
+                    public void onSuccess(SilentModeResult result) {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                }
+        );
+    }
+
+    public void clearSilentModeForConversation(String conversationId, boolean isGroup,@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        Conversation.ConversationType conversationType = isGroup
+                ? Conversation.ConversationType.GroupChat
+                : Conversation.ConversationType.Chat;
+
+        ChatClient.getInstance().pushManager().clearRemindTypeForConversation(
+                conversationId,
+                conversationType,
+                new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(false));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                }
+        );
     }
 
     /**

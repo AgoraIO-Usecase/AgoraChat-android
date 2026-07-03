@@ -146,7 +146,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                 .useHeader(false)
                 .setCustomAdapter(new CustomMessageAdapter())
                 .setCustomFragment(customChatFragment)
-                .setEmptyLayout(R.layout.ease_layout_no_data_show_nothing)
+                .setEmptyLayout(io.agora.chat.uikit.R.layout.ease_layout_no_data_show_nothing)
                 .setOnChatInputChangeListener(new OnChatInputChangeListener() {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -281,7 +281,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
 
                     @Override
                     public void onModifyMessageFailure(String messageId, int code, String error) {
-                        ToastUtils.showFailToast(getString(R.string.ease_fail_to_edit));
+                        ToastUtils.showFailToast(getString(io.agora.chat.uikit.R.string.ease_fail_to_edit));
                     }
                 })
                 .hideSenderAvatar(true)
@@ -315,7 +315,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
     private void showDeleteDialog(List<String> deleteMsgIdList, View multiView) {
         new SimpleDialog.Builder(this)
                 .setTitle(getString(R.string.chat_delete_multi_messages_title, deleteMsgIdList.size()))
-                .setOnConfirmClickListener(R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
+                .setOnConfirmClickListener(io.agora.chat.uikit.R.string.ease_action_delete, new SimpleDialog.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
                         resetTitleBar(multiView);
@@ -487,7 +487,7 @@ public class ChatActivity extends BaseInitActivity implements EasePresenceView.O
                 e.printStackTrace();
             }
             if(!TextUtils.isEmpty(to) && mForwardMsgIdList != null) {
-                ChatMessage chatMessage = ChatMessage.createCombinedSendMessage(getString(R.string.ease_combine_default)
+                ChatMessage chatMessage = ChatMessage.createCombinedSendMessage(getString(io.agora.chat.uikit.R.string.ease_combine_default)
                         , EaseChatMessageMultiSelectHelper.getCombineMessageSummary(mForwardMsgIdList)
                         , getString(R.string.forward_compatible_text), mForwardMsgIdList, to);
                 if(chatType == ChatMessage.ChatType.GroupChat) {

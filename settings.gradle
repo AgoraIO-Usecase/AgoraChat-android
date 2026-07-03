@@ -1,3 +1,28 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url = uri("https://maven.aliyun.com/repository/public/")}
+        maven { url = uri("https://developer.huawei.com/repo/")}
+        maven { url = uri("https://developer.hihonor.com/repo")}
+        maven { url = uri("https://jitpack.io")}
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://maven.aliyun.com/repository/public/")}
+        maven { url = uri("https://developer.huawei.com/repo/")}
+        maven { url = uri("https://developer.hihonor.com/repo")}
+        maven { url = uri("https://jitpack.io")}
+    }
+}
+
+rootProject.name = "AgoraChat-android"
+
 include ':app'
 //include ':chat-uikit'
 //project(':chat-uikit').projectDir = new File('../AgoraChat-UIKit-android/chat-uikit')

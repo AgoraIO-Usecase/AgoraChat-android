@@ -10,7 +10,6 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 
 import io.agora.chat.ChatMessage;
-import io.agora.chat.uikit.activities.EaseChatThreadCreateActivity;
 import io.agora.chat.uikit.chat.interfaces.OnAddMsgAttrsBeforeSendEvent;
 import io.agora.chat.uikit.chat.interfaces.OnChatExtendMenuItemClickListener;
 import io.agora.chat.uikit.chat.interfaces.OnChatRecordTouchListener;
@@ -65,7 +64,7 @@ public class ChatThreadCreateActivity extends BaseInitActivity {
                         @Override
                         public boolean onChatExtendMenuItemClick(View view, int itemId) {
                             EMLog.e("TAG", "onChatExtendMenuItemClick");
-                            if (itemId == R.id.extend_item_take_picture) {
+                            if (itemId == io.agora.chat.uikit.R.id.extend_item_take_picture) {
                                 // check if has permissions
                                 if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
                                     PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
@@ -78,14 +77,14 @@ public class ChatThreadCreateActivity extends BaseInitActivity {
                                     return true;
                                 }
                                 return false;
-                            } else if (itemId == R.id.extend_item_picture || itemId == R.id.extend_item_file) {
+                            } else if (itemId == io.agora.chat.uikit.R.id.extend_item_picture || itemId == io.agora.chat.uikit.R.id.extend_item_file) {
                                 if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                                     PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
                                             , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, null);
                                     return true;
                                 }
                                 return false;
-                            } else if (itemId == R.id.extend_item_video) {
+                            } else if (itemId == io.agora.chat.uikit.R.id.extend_item_video) {
                                 if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
                                     PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
                                             , new String[]{Manifest.permission.CAMERA}, null);

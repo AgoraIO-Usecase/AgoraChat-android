@@ -3,7 +3,6 @@ package io.agora.chatdemo.chat;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.List;
-
 import io.agora.chat.ChatClient;
 import io.agora.chat.Conversation;
+import io.agora.chat.PushManager;
 import io.agora.chat.uikit.menu.EaseChatType;
 import io.agora.chat.uikit.utils.EaseUtils;
 import io.agora.chatdemo.R;
@@ -25,7 +23,6 @@ import io.agora.chatdemo.chat.viewmodel.ChatSettingsViewModel;
 import io.agora.chatdemo.databinding.FragmentChatSettingsBinding;
 import io.agora.chatdemo.general.callbacks.OnResourceParseCallback;
 import io.agora.chatdemo.general.constant.DemoConstant;
-import io.agora.chatdemo.general.dialog.AlertDialog;
 import io.agora.chatdemo.general.dialog.SimpleDialog;
 import io.agora.chatdemo.general.livedatas.EaseEvent;
 import io.agora.chatdemo.general.livedatas.LiveDataBus;
@@ -38,6 +35,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     private String conversationId;
     private ChatSettingsViewModel viewModel;
     private EaseChatType chatType;
+    private Conversation conversation;
 
     @Nullable
     @Override
@@ -59,7 +57,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
     @Override
     protected void initView() {
         super.initView();
-        Conversation conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
+        conversation = ChatClient.getInstance().chatManager().getConversation(conversationId);
         String extField = conversation.getExtField();
         binding.itemToTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseUtils.isTimestamp(extField));
         binding.itemMuteNotification.setVisibility(View.GONE);
@@ -123,29 +121,12 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
             });
         });
 
-        viewModel.getNoPushUsersObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
-                @Override
-                public void onSuccess(@Nullable List<String> data) {
-                    binding.itemMuteNotification.getSwitch().setChecked((data != null && data.contains(conversationId)));
-                }
-            });
-        });
 
         viewModel.getSetNoPushGroupsObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
                     binding.itemMuteNotification.getSwitch().setChecked(data);
-                }
-            });
-        });
-
-        viewModel.getNoPushGroupsObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<String>>() {
-                @Override
-                public void onSuccess(@Nullable List<String> data) {
-                    binding.itemMuteNotification.getSwitch().setChecked((data != null && data.contains(conversationId)));
                 }
             });
         });
@@ -159,12 +140,7 @@ public class ChatSettingsFragment extends BaseBottomSheetFragment implements Swi
                 }
             });
         });
-
-        if(chatType == EaseChatType.SINGLE_CHAT) {
-            viewModel.getNoPushUsers();
-        }else {
-            viewModel.getNoPushGroups();
-        }
+        binding.itemMuteNotification.getSwitch().setChecked(conversation.pushRemindType() != PushManager.PushRemindType.ALL);
     }
 
     @SuppressLint("NonConstantResourceId")

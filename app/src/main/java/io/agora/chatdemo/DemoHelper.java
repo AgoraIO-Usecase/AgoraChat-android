@@ -57,9 +57,9 @@ import io.agora.chat.uikit.provider.EaseGroupInfoProvider;
 import io.agora.chat.uikit.provider.EaseSettingsProvider;
 import io.agora.chat.uikit.provider.EaseUserProfileProvider;
 import io.agora.chat.uikit.utils.EaseCompat;
+import io.agora.chatdemo.av.DemoCallKitListener;
 import io.agora.chatdemo.av.MultipleCallActivity;
 import io.agora.chatdemo.av.SingleCallActivity;
-import io.agora.chatdemo.av.DemoCallKitListener;
 import io.agora.chatdemo.chat.UrlPreViewHelper;
 import io.agora.chatdemo.chat.models.UrlPreViewBean;
 import io.agora.chatdemo.chatthread.ChatThreadActivity;
@@ -165,9 +165,8 @@ public class DemoHelper {
         ChatOptions options = initChatOptions(context);
 
         options.setUsingHttpsOnly(true);
-        boolean hasAppkey = checkAgoraChatAppKey(context, options);
         // You can set your AppKey by options.setAppKey(appkey)
-        if (!hasAppkey) {
+        if (!checkAgoraChatAppKey(context, options) && !checkAppId(context, options)) {
             String error = context.getString(R.string.please_check);
             EMLog.e(TAG, error);
             Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -358,7 +357,7 @@ public class DemoHelper {
     private void InitCallKit(Context context) {
         EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
         callKitConfig.setCallTimeOut(30);
-        callKitConfig.setAgoraAppId(BuildConfig.Agora_AppId);
+        callKitConfig.setAgoraAppId(BuildConfig.AGORA_RTC_APPID);
         callKitConfig.setEnableRTCToken(true);
         callKitConfig.setDefaultHeadImage(getUsersManager().getCurrentUserInfo().getAvatar());
         EaseCallKit.getInstance().init(context, callKitConfig);
@@ -445,6 +444,8 @@ public class DemoHelper {
         // Set whether to automatically accept group invitations
         options.setAutoAcceptGroupInvitation(demoModel.isAutoAcceptGroupInvitation());
 
+        options.setAppId(BuildConfig.AGORA_CHAT_APPID);
+
 
         /**
          * NOTE:You need to set up your own account to use the three-way push function, see the integration documentation
@@ -485,6 +486,17 @@ public class DemoHelper {
             if (TextUtils.isEmpty(appKeyFromConfig) || !appKeyFromConfig.contains("#")) {
                 return false;
             }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkAppId(Context context, ChatOptions options){
+        if(options == null) {
+            return false;
+        }
+        String appId = options.getAppId();
+        if (!TextUtils.isEmpty(appId)) {
             return true;
         }
         return false;
@@ -734,10 +746,10 @@ public class DemoHelper {
     public EaseUser getGroupUserInfo(String groupId,String username) {
         MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
         EaseUser user=getUsersManager().getUserInfo(username);
-        if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)
-         && groupBean.getNickName()!=null){
+        if (groupBean != null && !TextUtils.equals(groupBean.getNickname(),username)
+         && groupBean.getNickname()!=null){
             if (user != null){
-                user.setNickname(groupBean.getNickName());
+                user.setNickname(groupBean.getNickname());
             }
         }
         return user;

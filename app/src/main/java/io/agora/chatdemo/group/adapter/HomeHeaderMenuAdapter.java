@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import io.agora.chat.uikit.adapter.EaseBaseRecyclerViewAdapter;
-import io.agora.chat.uikit.databinding.EaseItemRowThreadListBinding;
-import io.agora.chat.uikit.utils.EaseUserUtils;
-import io.agora.chatdemo.R;
 import io.agora.chatdemo.databinding.ItemHomeHeaderMenuBinding;
 
 public class HomeHeaderMenuAdapter extends EaseBaseRecyclerViewAdapter<Pair<Integer, Integer>> {
@@ -21,7 +18,7 @@ public class HomeHeaderMenuAdapter extends EaseBaseRecyclerViewAdapter<Pair<Inte
 
     @Override
     public int getEmptyLayoutId() {
-        return R.layout.ease_layout_no_data_show_nothing;
+        return io.agora.chat.uikit.R.layout.ease_layout_no_data_show_nothing;
     }
 
     private class HomeMenuViewHolder extends ViewHolder<Pair<Integer, Integer>> {

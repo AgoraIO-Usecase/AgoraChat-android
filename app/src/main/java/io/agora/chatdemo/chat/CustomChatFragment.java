@@ -429,7 +429,7 @@ public class CustomChatFragment extends EaseChatFragment implements MessageListe
         if (isRecallNote) {
             helper.setAllItemsVisible(false);
             helper.showHeaderView(false);
-            helper.findItemVisible(R.id.action_chat_delete, true);
+            helper.findItemVisible(io.agora.chat.uikit.R.id.action_chat_delete, true);
         }
 
         if (message.getBody() instanceof TextMessageBody) {
@@ -455,7 +455,7 @@ public class CustomChatFragment extends EaseChatFragment implements MessageListe
                 if (message.status() == ChatMessage.Status.SUCCESS)
                     ChatReportActivity.actionStart(getActivity(), message.getMsgId());
                 break;
-            case R.id.action_chat_select:
+            case io.agora.chat.uikit.R.id.action_chat_select:
                 showSelectModelTitle();
                 LiveDataBus.get().with(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT).postValue(EaseEvent.create(DemoConstant.EVENT_CHAT_MODEL_TO_SELECT, EaseEvent.TYPE.NOTIFY));
                 break;
@@ -485,24 +485,24 @@ public class CustomChatFragment extends EaseChatFragment implements MessageListe
     @Override
     public boolean onChatExtendMenuItemClick(View view, int itemId) {
         switch (itemId) {
-            case R.id.extend_item_take_picture:
+            case io.agora.chat.uikit.R.id.extend_item_take_picture:
                 if (!PermissionsManager.getInstance().hasPermission(mContext, Manifest.permission.CAMERA)) {
                     PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(mContext
                             , new String[]{Manifest.permission.CAMERA}, null);
                     return true;
                 }
                 break;
-            case R.id.extend_item_picture:
+            case io.agora.chat.uikit.R.id.extend_item_picture:
                 if (!PermissionCompat.checkMediaPermission(mContext, requestImagePermission, Manifest.permission.READ_MEDIA_IMAGES)) {
                     return true;
                 }
                 break;
-            case R.id.extend_item_video:
+            case io.agora.chat.uikit.R.id.extend_item_video:
                 if (!PermissionCompat.checkMediaPermission(mContext, requestVideoPermission, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.CAMERA)) {
                     return true;
                 }
                 break;
-            case R.id.extend_item_file:
+            case io.agora.chat.uikit.R.id.extend_item_file:
                 if (!PermissionCompat.checkMediaPermission(mContext, requestFilePermission, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)) {
                     return true;
                 }
@@ -532,7 +532,7 @@ public class CustomChatFragment extends EaseChatFragment implements MessageListe
         titleBar.setVisibility(View.VISIBLE);
         titleBar.setDisplayHomeAsUpEnabled(false);
         titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
-        titleBar.setRightTitle(getString(R.string.ease_cancel));
+        titleBar.setRightTitle(getString(io.agora.chat.uikit.R.string.ease_cancel));
         titleBar.getRightText().setTextColor(ContextCompat.getColor(mContext, R.color.color_action_text));
         titleBar.getIcon().setVisibility(View.VISIBLE);
         titleBar.getLeftLayout().setVisibility(View.GONE);

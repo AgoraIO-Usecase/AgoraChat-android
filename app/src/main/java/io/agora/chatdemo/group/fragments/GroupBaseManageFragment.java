@@ -260,7 +260,7 @@ public class GroupBaseManageFragment extends BaseContactListFragment<EaseUser> {
                     }
                 })
                 .setHint(getString(R.string.demo_admin_edit_alias_hint))
-                .setContent(memberAttributeBean==null?"":memberAttributeBean.getNickName())
+                .setContent(memberAttributeBean==null?"":memberAttributeBean.getNickname())
                 .setTitle(R.string.demo_admin_edit_alias_title)
                 .showCancelButton(true)
                 .hideConfirmButton(false)

@@ -53,8 +53,8 @@ public class SetPresenceFragment extends BaseInitFragment implements View.OnClic
         rbCustom = findViewById(R.id.rb_custom);
         titleBar = findViewById(R.id.title_bar);
         radioGroup = findViewById(R.id.rg_presence);
-        titleBar.setRightTitle(getString(R.string.ease_presence_done));
-        titleBar.setTitle(getString(R.string.ease_presence_custom));
+        titleBar.setRightTitle(getString(io.agora.chat.uikit.R.string.ease_presence_done));
+        titleBar.setTitle(getString(io.agora.chat.uikit.R.string.ease_presence_custom));
         titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
         titleBar.setRightTitleColor(R.color.group_blue_154dfe);
 
@@ -193,7 +193,7 @@ public class SetPresenceFragment extends BaseInitFragment implements View.OnClic
 
     @Override
     public void onRightClick(View view) {
-        if (!TextUtils.equals(rbCustom.getText(), getString(R.string.ease_presence_custom))&&currentSelectedId!=R.id.rb_custom) {
+        if (!TextUtils.equals(rbCustom.getText(), getString(io.agora.chat.uikit.R.string.ease_presence_custom))&&currentSelectedId!=R.id.rb_custom) {
             showDialog();
         } else {
             publishPresence();

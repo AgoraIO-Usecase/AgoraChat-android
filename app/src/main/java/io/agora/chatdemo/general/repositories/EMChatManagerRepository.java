@@ -15,6 +15,9 @@ import io.agora.chat.ChatClient;
 import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.Language;
+import io.agora.chat.PushManager;
+import io.agora.chat.SilentModeParam;
+import io.agora.chat.SilentModeResult;
 import io.agora.chat.uikit.conversation.model.EaseConversationInfo;
 import io.agora.chatdemo.general.callbacks.ResultCallBack;
 import io.agora.chatdemo.general.net.ErrorCode;
@@ -136,18 +139,65 @@ public class EMChatManagerRepository extends BaseEMRepository{
                     public void run() {
                         List<String> onPushList = new ArrayList<>();
                         onPushList.add(userId);
-                        try {
-                            getPushManager().updatePushServiceForUsers(onPushList, noPush);
-                            callBack.onSuccess(createLiveData(true));
-                        } catch (ChatException e) {
-                            e.printStackTrace();
-                            callBack.onError(e.getErrorCode(), e.getDescription());
+                        if(noPush){
+                            setSilentModeForConversation(userId,false,callBack);
+                        }else{
+                            clearSilentModeForConversation(userId,false,callBack);
                         }
                     }
                 });
 
             }
         }.asLiveData();
+    }
+
+    public void setSilentModeForConversation(String conversationId, boolean isGroup,@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        Conversation.ConversationType conversationType = isGroup
+                ? Conversation.ConversationType.GroupChat
+                : Conversation.ConversationType.Chat;
+
+        SilentModeParam param = new SilentModeParam(
+                SilentModeParam.SilentModeParamType.REMIND_TYPE
+        ).setRemindType(PushManager.PushRemindType.NONE);
+
+        ChatClient.getInstance().pushManager().setSilentModeForConversation(
+                conversationId,
+                conversationType,
+                param,
+                new ValueCallBack<SilentModeResult>() {
+                    @Override
+                    public void onSuccess(SilentModeResult result) {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                }
+        );
+    }
+
+    public void clearSilentModeForConversation(String conversationId, boolean isGroup,@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+        Conversation.ConversationType conversationType = isGroup
+                ? Conversation.ConversationType.GroupChat
+                : Conversation.ConversationType.Chat;
+
+        ChatClient.getInstance().pushManager().clearRemindTypeForConversation(
+                conversationId,
+                conversationType,
+                new CallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(false));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                }
+        );
     }
 
     /**
@@ -160,7 +210,8 @@ public class EMChatManagerRepository extends BaseEMRepository{
                 runOnIOThread(new Runnable() {
                     @Override
                     public void run() {
-                        List<String> noPushUsers = getPushManager().getNoPushUsers();
+//                        List<String> noPushUsers = getPushManager().getNoPushUsers();
+                        List<String> noPushUsers = new ArrayList<>();
                         if (noPushUsers != null && noPushUsers.size() != 0) {
                             callBack.onSuccess(createLiveData(noPushUsers));
                         }

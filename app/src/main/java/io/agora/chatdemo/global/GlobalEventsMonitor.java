@@ -36,11 +36,11 @@ import io.agora.chat.ChatMessage;
 import io.agora.chat.Conversation;
 import io.agora.chat.MucSharedFile;
 import io.agora.chat.Presence;
+import io.agora.chat.PushManager;
 import io.agora.chat.TextMessageBody;
 import io.agora.chat.UserInfo;
 import io.agora.chat.adapter.EMAChatRoomManagerListener;
 import io.agora.chat.uikit.interfaces.EaseGroupListener;
-import io.agora.chat.uikit.manager.EaseAtMessageHelper;
 import io.agora.chat.uikit.manager.EaseChatPresenter;
 import io.agora.chat.uikit.manager.EaseNotificationMsgManager;
 import io.agora.chatdemo.DemoApplication;
@@ -269,10 +269,10 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         for (ChatMessage message : messages) {
             EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-            EMLog.d(TAG, "onMessageReceived: " + message.getType());
-            // If you set the group offline message do not disturb, no message notification will be made
-            List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
-            if(disabledIds != null && disabledIds.contains(message.conversationId())) {
+            EMLog.d(TAG, "onMessageReceived type: " + message.getType());
+
+            Conversation conversation = DemoHelper.getInstance().getChatManager().getConversation(message.conversationId());
+            if(conversation!=null && conversation.pushRemindType()!= PushManager.PushRemindType.ALL){
                 return;
             }
             // Not notify if message is chat thread message
@@ -413,6 +413,15 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         @Override
         public void onTokenWillExpire() {
             new EMClientRepository().renewAgoraChatToken();
+        }
+
+        @Override
+        public void onOfflineMessageSyncStart() {
+            ConnectionListener.super.onOfflineMessageSyncStart();
+        }
+        @Override
+        public void onOfflineMessageSyncFinish() {
+            ConnectionListener.super.onOfflineMessageSyncFinish();
         }
     };
 
@@ -697,7 +706,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
             if ( attribute != null && attribute.size() > 0){
                 EMLog.d(TAG,"onGroupMemberAttributeChanged: " + groupId +" - "+ attribute.toString());
                 MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(attribute).toString(), MemberAttributeBean.class);
-                if (bean != null && bean.getNickName() != null){
+                if (bean != null && bean.getNickname() != null){
                     DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
                     LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
                 }
@@ -720,7 +729,7 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
                     EmUserEntity entity = new EmUserEntity();
                     entity.setUsername(username);
                     if(userInfo != null){
-                        entity.setNickname(userInfo.getNickName());
+                        entity.setNickname(userInfo.getNickname());
                         entity.setEmail(userInfo.getEmail());
                         entity.setAvatar(userInfo.getAvatarUrl());
                         entity.setBirth(userInfo.getBirth());

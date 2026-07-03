@@ -139,7 +139,7 @@ public class MultiplyVideoSelectMemberChildFragment extends NewGroupSelectContac
             }
         }
         if(finalUsers.size()>EaseCallKit.getInstance().getLargestNumInChannel()-1) {
-            ToastUtils.showToast(getString(R.string.ease_call_max_people_in_channel));
+            ToastUtils.showToast(getString(io.agora.chat.callkit.R.string.ease_call_max_people_in_channel));
             return true;
         }
         Map<String, Object> ext = new HashMap<>();

@@ -44,11 +44,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HyphenateDemoAndroid"
         android:usesCleartextTraffic="true">
-        <!-- IM SDK required start -->
-        <!-- Set your agora chat AppKey -->
-        <meta-data
-            android:name="EASEMOB_APPKEY"
-            android:value="${AGORA_CHAT_APPKEY}" />
+
         <!-- SDK service -->
         <service
             android:name="io.agora.chat.ChatService"

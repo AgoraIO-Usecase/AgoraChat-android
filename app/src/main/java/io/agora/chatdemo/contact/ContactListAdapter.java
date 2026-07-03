@@ -200,7 +200,7 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             }else {
                 if(!TextUtils.isEmpty(groupId)) {
                     MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
-                    if(groupBean!=null&&!TextUtils.isEmpty(groupBean.getNickName())) {
+                    if(groupBean!=null&&!TextUtils.isEmpty(groupBean.getNickname())) {
                         originNickName.setVisibility(View.VISIBLE);
                         EaseUserUtils.setUserAvatar(mContext, groupId, item.getUsername(), mAvatar);
                         EaseUserUtils.setUserNick(groupId,item.getUsername(), mName);

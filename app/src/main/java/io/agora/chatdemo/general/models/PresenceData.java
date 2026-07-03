@@ -3,7 +3,7 @@ package io.agora.chatdemo.general.models;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 
-import io.agora.chatdemo.R;
+import io.agora.chat.uikit.R;
 
 
 public enum PresenceData {

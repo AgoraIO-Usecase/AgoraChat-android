@@ -41,8 +41,8 @@ public class CustomPresenceActivity extends BaseInitActivity implements EaseTitl
         ivDelete = findViewById(R.id.iv_delete);
         tvCount = findViewById(R.id.tvCount);
 
-        titleBar.setRightTitle(getString(R.string.ease_presence_done));
-        titleBar.setTitle(getString(R.string.ease_presence_custom));
+        titleBar.setRightTitle(getString(io.agora.chat.uikit.R.string.ease_presence_done));
+        titleBar.setTitle(getString(io.agora.chat.uikit.R.string.ease_presence_custom));
         titleBar.setTitlePosition(EaseTitleBar.TitlePosition.Left);
         titleBar.setRightTitleColor(R.color.color_light_gray_999999);
     }

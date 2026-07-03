@@ -61,14 +61,14 @@ public class EasePresenceView extends ConstraintLayout {
                 int resourceId = Integer.parseInt(avatar);
                 Glide.with(this)
                         .load(resourceId)
-                        .placeholder(R.drawable.ease_default_avatar)
-                        .error(R.drawable.ease_default_avatar)
+                        .placeholder(io.agora.chat.uikit.R.drawable.ease_default_avatar)
+                        .error(io.agora.chat.uikit.R.drawable.ease_default_avatar)
                         .into(ivAvatar);
             } catch (NumberFormatException e) {
                 Glide.with(this)
                         .load(avatar)
-                        .placeholder(R.drawable.ease_default_avatar)
-                        .error(R.drawable.ease_default_avatar)
+                        .placeholder(io.agora.chat.uikit.R.drawable.ease_default_avatar)
+                        .error(io.agora.chat.uikit.R.drawable.ease_default_avatar)
                         .into(ivAvatar);
             }
         }

@@ -15,12 +15,10 @@ import androidx.recyclerview.widget.ConcatAdapter;
 import java.util.ArrayList;
 
 import io.agora.chat.uikit.interfaces.OnItemClickListener;
-import io.agora.chat.uikit.widget.EaseRecyclerView;
 import io.agora.chatdemo.R;
 import io.agora.chatdemo.contact.ContactListFragment;
 import io.agora.chatdemo.contact.SearchContactFragment;
 import io.agora.chatdemo.general.utils.UIUtils;
-import io.agora.chatdemo.general.widget.ArrowItemView;
 import io.agora.chatdemo.global.BottomSheetChildHelper;
 import io.agora.chatdemo.group.adapter.HomeHeaderMenuAdapter;
 
@@ -106,7 +104,7 @@ public class BottomSheetMenuFragment extends ContactListFragment implements Bott
 
     @Override
     public int getTitleBarRightText() {
-        return R.string.ease_cancel;
+        return io.agora.chat.uikit.R.string.ease_cancel;
     }
 
     @Override

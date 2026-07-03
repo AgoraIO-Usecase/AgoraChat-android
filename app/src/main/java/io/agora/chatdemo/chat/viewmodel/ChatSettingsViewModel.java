@@ -47,12 +47,7 @@ public class ChatSettingsViewModel extends AndroidViewModel {
         return setNoPushUsersObservable;
     }
 
-    /**
-     * Get no push user list
-     */
-    public void getNoPushUsers() {
-        getNoPushUsersObservable.setSource(repository.getNoPushUsers());
-    }
+
 
     public LiveData<Resource<List<String>>> getNoPushUsersObservable() {
         return getNoPushUsersObservable;
@@ -72,12 +67,7 @@ public class ChatSettingsViewModel extends AndroidViewModel {
         return setNoPushGroupsObservable;
     }
 
-    /**
-     * Get no push group list
-     */
-    public void getNoPushGroups() {
-        getNoPushGroupsObservable.setSource(repository.getNoPushGroups());
-    }
+
 
     public LiveData<Resource<List<String>>> getNoPushGroupsObservable() {
         return getNoPushGroupsObservable;

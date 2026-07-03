@@ -76,7 +76,7 @@ public class ChatRowSystemNotification extends EaseChatRowText {
 
     public SpannableStringBuilder getStrAfter(int start,int end){
         SpannableStringBuilder builder = new SpannableStringBuilder(tv_chatcontent.getText().toString());
-        ForegroundColorSpan graySpan = new ForegroundColorSpan(getResources().getColor(R.color.blue));
+        ForegroundColorSpan graySpan = new ForegroundColorSpan(getResources().getColor(io.agora.chat.uikit.R.color.blue));
         StyleSpan styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
         builder.setSpan(styleSpan,start,end,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return builder;

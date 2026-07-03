@@ -414,6 +414,15 @@ public class GlobalEventsMonitor extends EaseChatPresenter {
         public void onTokenWillExpire() {
             new EMClientRepository().renewAgoraChatToken();
         }
+
+        @Override
+        public void onOfflineMessageSyncStart() {
+            ConnectionListener.super.onOfflineMessageSyncStart();
+        }
+        @Override
+        public void onOfflineMessageSyncFinish() {
+            ConnectionListener.super.onOfflineMessageSyncFinish();
+        }
     };
 
 

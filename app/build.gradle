@@ -11,6 +11,7 @@ android {
 
     namespace  "io.agora.chatdemo"
     compileSdk 35
+    buildToolsVersion '35.0.0'
 
 
     defaultConfig {
@@ -96,13 +97,19 @@ android {
         buildConfig  true
     }
 
+    packagingOptions {
+        jniLibs {
+            pickFirsts += ["lib/**/libaosl.so"]
+        }
+    }
+
 //    externalNativeBuild {
 //        ndkBuild {
 //            path file('jni/Android.mk')
 //        }
 //    }
 //    ndkVersion = "29.0.14206865"
-    buildToolsVersion '35.0.0'
+
 }
 
 dependencies {

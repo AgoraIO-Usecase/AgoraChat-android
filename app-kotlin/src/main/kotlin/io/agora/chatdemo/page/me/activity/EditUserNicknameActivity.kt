@@ -8,12 +8,12 @@ import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
 import io.agora.chatdemo.R
 import io.agora.chatdemo.databinding.DemoActivityMeInformationEditBinding
-import io.agora.uikit.EaseIM
-import io.agora.uikit.base.EaseBaseActivity
-import io.agora.uikit.model.EaseProfile
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.base.ChatUIKitBaseActivity
+import io.agora.chat.uikit.model.ChatUIKitProfile
 
-open class EditUserNicknameActivity: EaseBaseActivity<DemoActivityMeInformationEditBinding>() {
-    var selfProfile: EaseProfile? = null
+open class EditUserNicknameActivity: ChatUIKitBaseActivity<DemoActivityMeInformationEditBinding>() {
+    var selfProfile: ChatUIKitProfile? = null
     private var newName:String = ""
 
     companion object{
@@ -26,7 +26,7 @@ open class EditUserNicknameActivity: EaseBaseActivity<DemoActivityMeInformationE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        selfProfile = EaseIM.getCurrentUser()
+        selfProfile = ChatUIKitClient.getCurrentUser()
         initTitle()
         initListener()
         showKeyboard(binding.etName)
@@ -72,7 +72,7 @@ open class EditUserNicknameActivity: EaseBaseActivity<DemoActivityMeInformationE
         })
         binding.titleBar.setOnMenuItemClickListener { item ->
             when (item?.itemId) {
-                io.agora.uikit.R.id.action_save -> {
+                io.agora.chat.uikit.R.id.action_save -> {
                     updateUserInfo()
                 }
 

@@ -21,7 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import io.agora.chatdemo.R
 import io.agora.chatdemo.base.BaseDialogFragment
-import io.agora.uikit.common.extensions.dpToPx
+import io.agora.chat.uikit.common.extensions.dpToPx
 
 open class DemoDialogFragment : BaseDialogFragment(), View.OnClickListener {
     var mTvDialogTitle: TextView? = null

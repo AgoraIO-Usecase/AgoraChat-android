@@ -12,10 +12,10 @@ import io.agora.chatdemo.common.dialog.SimpleDialog
 import io.agora.chatdemo.common.extensions.internal.addDefaultTextChangedListener
 import io.agora.chatdemo.common.helper.DeveloperModeHelper
 import io.agora.chatdemo.databinding.DemoFragmentServerSetBinding
-import io.agora.uikit.base.EaseBaseFragment
+import io.agora.chat.uikit.base.ChatUIKitBaseFragment
 import kotlin.system.exitProcess
 
-class ServerSetFragment: EaseBaseFragment<DemoFragmentServerSetBinding>() {
+class ServerSetFragment: ChatUIKitBaseFragment<DemoFragmentServerSetBinding>() {
 
     private val changeArray = BooleanArray(4)
     private var isEnableCustomServer = false

@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import io.agora.chatdemo.DemoHelper
 import io.agora.chatdemo.repository.ProfileInfoRepository
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatUserInfoType
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatUserInfoType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
@@ -18,10 +18,10 @@ class ProfileInfoViewModel(application: Application) : AndroidViewModel(applicat
         flow {
             emit(mRepository.uploadAvatar(filePath))
         }.flatMapConcat { result ->
-            EaseIM.getCurrentUser()?.let {
+            ChatUIKitClient.getCurrentUser()?.let {
                 it.avatar = result
                 DemoHelper.getInstance().getDataModel().insertUser(it)
-                EaseIM.updateCurrentUser(it)
+                ChatUIKitClient.updateCurrentUser(it)
             }
             flow {
                 emit(mRepository.uploadAvatarToChatServer(result))

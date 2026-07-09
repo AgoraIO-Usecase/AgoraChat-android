@@ -5,7 +5,7 @@ import android.text.TextUtils
 import androidx.annotation.DrawableRes
 import io.agora.chatdemo.bean.PresenceData
 import io.agora.chatdemo.common.DemoConstant
-import io.agora.uikit.common.ChatPresence
+import io.agora.chat.uikit.common.ChatPresence
 
 object EasePresenceUtil {
 

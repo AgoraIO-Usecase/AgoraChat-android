@@ -13,7 +13,7 @@
         android:background="@color/ease_color_background"
         android:orientation="vertical">
 
-        <io.agora.uikit.widget.EaseCustomAvatarView
+        <io.agora.chat.uikit.widget.ChatUIKitCustomAvatarView
             android:id="@+id/ep_presence"
             android:layout_marginTop="64dp"
             android:layout_gravity="center"
@@ -35,10 +35,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <io.agora.uikit.widget.EaseImageView
+            <io.agora.chat.uikit.widget.ChatUIKitImageView
                 android:id="@+id/ic_notice"
                 android:visibility="gone"
-                android:src="@drawable/ease_do_not_disturb"
+                android:src="@drawable/uikit_do_not_disturb"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="@+id/tv_name"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_name"
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <io.agora.uikit.widget.EaseArrowItemView
+        <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
             android:id="@+id/item_presence"
             app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
             app:arrowItemTitle="@string/presence_status"
@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"/>
 
-        <io.agora.uikit.widget.EaseArrowItemView
+        <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
             android:id="@+id/item_information"
             app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
             app:arrowItemTitle="@string/main_about_me_information"
@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"/>
 
-        <io.agora.uikit.widget.EaseArrowItemView
+        <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
             android:id="@+id/item_currency"
             app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
             app:arrowItemTitle="@string/main_about_me_currency"
@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"/>
 
-        <io.agora.uikit.widget.EaseArrowItemView
+        <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
             android:id="@+id/item_notify"
             app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
             app:arrowItemTitle="@string/main_about_me_notify"
@@ -105,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"/>
 
-        <io.agora.uikit.widget.EaseArrowItemView
+        <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
             android:id="@+id/item_privacy"
             app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
             app:arrowItemTitle="@string/main_about_me_privacy"
@@ -114,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"/>
 
-        <io.agora.uikit.widget.EaseArrowItemView
+        <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
             android:id="@+id/item_about"
             app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
             app:arrowItemTitle="@string/main_about_me_about"
@@ -133,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <io.agora.uikit.widget.EaseArrowItemView
+        <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
             android:id="@+id/about_me_logout"
             app:layout_constraintTop_toBottomOf="@+id/sw_item_black"
             app:arrowItemTitle="@string/main_about_me_logout"

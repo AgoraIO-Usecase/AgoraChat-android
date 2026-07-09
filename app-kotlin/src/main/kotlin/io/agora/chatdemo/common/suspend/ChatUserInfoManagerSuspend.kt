@@ -1,11 +1,11 @@
 package io.agora.chatdemo.common.suspend
 
-import io.agora.uikit.common.ChatError
-import io.agora.uikit.common.ChatException
-import io.agora.uikit.common.ChatUserInfo
-import io.agora.uikit.common.ChatUserInfoManager
-import io.agora.uikit.common.ChatUserInfoType
-import io.agora.uikit.common.impl.ValueCallbackImpl
+import io.agora.chat.uikit.common.ChatError
+import io.agora.chat.uikit.common.ChatException
+import io.agora.chat.uikit.common.ChatUserInfo
+import io.agora.chat.uikit.common.ChatUserInfoManager
+import io.agora.chat.uikit.common.ChatUserInfoType
+import io.agora.chat.uikit.common.impl.ValueCallbackImpl
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

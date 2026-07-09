@@ -1,3 +1,5 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
 pluginManagement {
     repositories {
         google()
@@ -18,17 +20,17 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AgoraChat-android"
-include(":app")
+//include(":app")
 //include(":chat-uikit")
 //project(":chat-uikit").projectDir = File("../AgoraChat-UIKit-android/chat-uikit")
 
 // app-kotlin
-//include(":app-kotlin")
-//include(":chat-uikit")
-//project(":chat-uikit").projectDir = File("../AgoraChat-UIKit-android/ease-im-kit")
+include(":app-kotlin")
+include(":chat-uikit")
+project(":chat-uikit").projectDir = File("../AgoraChat-UIKit-android/ease-im-kit")
 
-//include(":chat-callkit")
-//project(":chat-callkit").projectDir = File("../AgoraChat-CallKit-android/chat-callkit")
+include(":chat-callkit")
+project(":chat-callkit").projectDir = File("../AgoraChat-CallKit-android/chat-callkit")
 
 //include(":hyphenatechatsdk")
 //project(":hyphenatechatsdk").projectDir = File("../emclient-android/hyphenatechatsdk")

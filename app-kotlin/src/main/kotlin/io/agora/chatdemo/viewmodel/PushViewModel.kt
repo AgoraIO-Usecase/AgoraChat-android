@@ -2,9 +2,9 @@ package io.agora.chatdemo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import io.agora.chatdemo.repository.PushRepository
-import io.agora.uikit.common.ChatPushRemindType
-import io.agora.uikit.common.ChatSilentModeParam
-import io.agora.uikit.common.ChatSilentModelType
+import io.agora.chat.uikit.common.ChatPushRemindType
+import io.agora.chat.uikit.common.ChatSilentModeParam
+import io.agora.chat.uikit.common.ChatSilentModelType
 import kotlinx.coroutines.flow.flow
 
 class PushViewModel: ViewModel() {

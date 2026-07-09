@@ -1,6 +1,6 @@
 package io.agora.chatdemo.common
 
-import io.agora.uikit.common.ChatError
+import io.agora.chat.uikit.common.ChatError
 
 
 /**

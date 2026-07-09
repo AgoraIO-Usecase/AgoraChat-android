@@ -1,6 +1,6 @@
 package io.agora.chatdemo.interfaces
 
-import io.agora.uikit.common.interfaces.IControlDataView
+import io.agora.chat.uikit.common.interfaces.IControlDataView
 
 
 interface IAttachView {

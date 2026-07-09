@@ -10,25 +10,25 @@ enum class PresenceData(
     @param:DrawableRes var presenceIcon: Int
 ) {
     ONLINE(
-        R.string.ease_presence_online,
-        R.drawable.ease_presence_online
+        R.string.uikit_presence_online,
+        R.drawable.uikit_presence_online
     ),
     BUSY(
-        R.string.ease_presence_busy,
-        R.drawable.ease_presence_busy
+        R.string.uikit_presence_busy,
+        R.drawable.uikit_presence_busy
     ),
     DO_NOT_DISTURB(
-        R.string.ease_presence_do_not_disturb,
-        R.drawable.ease_presence_do_not_disturb
+        R.string.uikit_presence_do_not_disturb,
+        R.drawable.uikit_presence_do_not_disturb
     ),
     AWAY(
         R.string.ease_presence_away,
         R.drawable.ease_presence_away
     ),
     OFFLINE(
-        R.string.ease_presence_offline,
-        R.drawable.ease_presence_offline
+        R.string.uikit_presence_offline,
+        R.drawable.uikit_presence_offline
     ),
-    CUSTOM(R.string.ease_presence_custom, R.drawable.ease_presence_custom)
+    CUSTOM(R.string.uikit_presence_custom, R.drawable.uikit_presence_custom)
 
 }

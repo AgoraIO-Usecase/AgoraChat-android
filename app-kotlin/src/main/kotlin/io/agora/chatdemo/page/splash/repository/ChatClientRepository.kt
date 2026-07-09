@@ -8,15 +8,15 @@ import io.agora.chatdemo.bean.LoginResult
 import io.agora.chatdemo.common.ErrorCode
 import io.agora.chatdemo.common.helper.DeveloperModeHelper
 import io.agora.cloud.HttpClientManager
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatError
-import io.agora.uikit.common.ChatException
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatValueCallback
-import io.agora.uikit.feature.invitation.helper.EaseNotificationMsgManager
-import io.agora.uikit.model.EaseProfile
-import io.agora.uikit.model.EaseUser
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatError
+import io.agora.chat.uikit.common.ChatException
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatValueCallback
+import io.agora.chat.uikit.feature.invitation.helper.ChatUIKitNotificationMsgManager
+import io.agora.chat.uikit.model.ChatUIKitProfile
+import io.agora.chat.uikit.model.ChatUIKitUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONException
@@ -34,7 +34,7 @@ class ChatClientRepository: BaseRepository() {
 
     companion object {
         private const val LOGIN_URL = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN +
-                BuildConfig.APP_SERVER_URL
+                BuildConfig.APP_SERVER_LOGIN
     }
 
     /**
@@ -81,7 +81,7 @@ class ChatClientRepository: BaseRepository() {
     suspend fun logout(unbindDeviceToken: Boolean): Int =
         withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
-                EaseIM.logout(unbindDeviceToken, onSuccess = {
+                ChatUIKitClient.logout(unbindDeviceToken, onSuccess = {
                     continuation.resume(ChatError.EM_NO_ERROR)
                 }, onError = { code, error ->
                     continuation.resumeWithException(ChatException(code, error))
@@ -94,7 +94,7 @@ class ChatClientRepository: BaseRepository() {
      */
     suspend fun getAllUnreadMessageCount(): Int =
         withContext(Dispatchers.IO) {
-            val systemConversation = EaseNotificationMsgManager.getInstance().getConversation()
+            val systemConversation = ChatUIKitNotificationMsgManager.getInstance().getConversation()
             val systemUnread = systemConversation.unreadMsgCount
             val allUnread = ChatClient.getInstance().chatManager().unreadMessageCount
             ChatLog.d("ChatClientRepository","getAllUnreadMessageCount ${allUnread - systemUnread}")
@@ -106,7 +106,7 @@ class ChatClientRepository: BaseRepository() {
      */
     suspend fun getRequestUnreadCount():Int =
         withContext(Dispatchers.IO) {
-            val systemConversation = EaseNotificationMsgManager.getInstance().getConversation()
+            val systemConversation = ChatUIKitNotificationMsgManager.getInstance().getConversation()
             ChatLog.d("ChatClientRepository","getRequestUnreadCount ${systemConversation.unreadMsgCount}")
             systemConversation.unreadMsgCount
         }
@@ -120,11 +120,11 @@ class ChatClientRepository: BaseRepository() {
         ChatClient.getInstance().groupManager().loadAllGroups()
     }
 
-    private fun successForCallBack(agoraUid: Int,continuation: Continuation<EaseUser>) {
+    private fun successForCallBack(agoraUid: Int,continuation: Continuation<ChatUIKitUser>) {
         DemoHelper.getInstance().getDataModel().setCurrentUserAgoraUid(agoraUid)
         // get current user id
         val currentUser = ChatClient.getInstance().currentUser
-        val user = EaseUser(currentUser)
+        val user = ChatUIKitUser(currentUser)
         continuation.resume(user)
 
         // ** manually load all local groups and conversation
@@ -218,33 +218,18 @@ class ChatClientRepository: BaseRepository() {
         pwd: String,
         agoraUid:Int,
         isTokenFlag: Boolean
-    ): EaseUser =
+    ): ChatUIKitUser =
         withContext(Dispatchers.IO) {
             suspendCoroutine { continuation ->
-                if (ChatClient.getInstance().isLoggedIn.not()) {
-                    if (DeveloperModeHelper.isCustomSetEnable()) {
-                        DemoHelper.getInstance().getDataModel().getCustomAppKey().let {
-                            if (it.isNotEmpty()) {
-                                ChatClient.getInstance().changeAppkey(it)
-                            }else{
-                                ChatClient.getInstance().options.enableDNSConfig(true)
-                                ChatClient.getInstance().changeAppkey(BuildConfig.AGORA_CHAT_APPKEY)
-                            }
-                        }
-                    } else {
-                        ChatClient.getInstance().options.enableDNSConfig(true)
-                        ChatClient.getInstance().changeAppkey(BuildConfig.AGORA_CHAT_APPKEY)
-                    }
-                }
                 if (isTokenFlag) {
-                    EaseIM.login(EaseProfile(userName), pwd, onSuccess = {
+                    ChatUIKitClient.login(ChatUIKitProfile(userName), pwd, onSuccess = {
                         successForCallBack(agoraUid,continuation)
                     }, onError = { code, error ->
                         if(code == ChatError.USER_ALREADY_LOGIN){
-                            if (EaseIM.getCurrentUser()?.id == userName){
+                            if (ChatUIKitClient.getCurrentUser()?.id == userName){
                                 successForCallBack(agoraUid,continuation)
                             }else{
-                                EaseIM.logout(true)
+                                ChatUIKitClient.logout(true)
                                 continuation.resumeWithException(ChatException(code, error))
                             }
                         }else{
@@ -252,7 +237,7 @@ class ChatClientRepository: BaseRepository() {
                         }
                     })
                 } else {
-                    EaseIM.login(userName, pwd, onSuccess = {
+                    ChatUIKitClient.login(userName, pwd, onSuccess = {
                         successForCallBack(agoraUid,continuation)
                     }, onError = { code, error ->
                         continuation.resumeWithException(ChatException(code, error))

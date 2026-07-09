@@ -35,19 +35,19 @@ import io.agora.chatdemo.common.helper.DeveloperModeHelper
 import io.agora.chatdemo.databinding.DemoFragmentLoginBinding
 import io.agora.chatdemo.page.login.viewModel.LoginViewModel
 import io.agora.chatdemo.utils.ToastUtils.showToast
-import io.agora.uikit.base.EaseBaseFragment
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatError
-import io.agora.uikit.common.bus.EaseFlowBus
-import io.agora.uikit.common.extensions.catchChatException
-import io.agora.uikit.common.extensions.hideSoftKeyboard
+import io.agora.chat.uikit.base.ChatUIKitBaseFragment
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatError
+import io.agora.chat.uikit.common.bus.ChatUIKitFlowBus
+import io.agora.chat.uikit.common.extensions.catchChatException
+import io.agora.chat.uikit.common.extensions.hideSoftKeyboard
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class LoginFragment : EaseBaseFragment<DemoFragmentLoginBinding>(),
+class LoginFragment : ChatUIKitBaseFragment<DemoFragmentLoginBinding>(),
     View.OnClickListener, TextWatcher,OnEditorActionListener {
     private var mUserId: String? = null
     private var mCode: String? = null
@@ -132,7 +132,7 @@ class LoginFragment : EaseBaseFragment<DemoFragmentLoginBinding>(),
                 loginToServer()
             }
             R.id.tv_login_developer -> {
-                EaseFlowBus.with<String>(DemoConstant.SKIP_DEVELOPER_CONFIG).post(lifecycleScope, LoginFragment::class.java.simpleName)
+                ChatUIKitFlowBus.with<String>(DemoConstant.SKIP_DEVELOPER_CONFIG).post(lifecycleScope, LoginFragment::class.java.simpleName)
             }
 
         }

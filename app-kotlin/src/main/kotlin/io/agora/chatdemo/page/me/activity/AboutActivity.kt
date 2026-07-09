@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import io.agora.chatdemo.R
 import io.agora.chatdemo.databinding.DemoActivityAboutBinding
-import io.agora.uikit.EaseIM
-import io.agora.uikit.base.EaseBaseActivity
-import io.agora.uikit.common.ChatClient
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.base.ChatUIKitBaseActivity
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chatdemo.BuildConfig
 
-class AboutActivity: EaseBaseActivity<DemoActivityAboutBinding>(), View.OnClickListener {
+class AboutActivity: ChatUIKitBaseActivity<DemoActivityAboutBinding>(), View.OnClickListener {
     companion object{
         const val Documentation = "https://"
         const val Platform = "/overview/product-overview?platform=web"
@@ -28,7 +29,7 @@ class AboutActivity: EaseBaseActivity<DemoActivityAboutBinding>(), View.OnClickL
     private fun initView(){
         binding.let {
             it.tvVersion.text = getString(R.string.about_version, ChatClient.VERSION)
-            it.tvKitVersion.text = getString(R.string.about_uikit_version,EaseIM.version)
+            it.tvKitVersion.text = getString(R.string.about_uikit_version, BuildConfig.VERSION_NAME)
         }
     }
 

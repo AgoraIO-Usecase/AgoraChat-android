@@ -2,7 +2,7 @@ package io.agora.chatdemo.common.extensions.internal
 
 import android.content.Context
 import android.content.pm.PackageManager
-import io.agora.uikit.common.ChatOptions
+import io.agora.chat.uikit.common.ChatOptions
 
 /**
  * Check if set the app key.

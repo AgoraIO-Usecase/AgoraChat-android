@@ -7,13 +7,13 @@ import androidx.lifecycle.lifecycleScope
 import io.agora.chatdemo.DemoHelper
 import io.agora.chatdemo.databinding.DemoActivityNotifyBinding
 import io.agora.chatdemo.viewmodel.PushViewModel
-import io.agora.uikit.base.EaseBaseActivity
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatPushRemindType
-import io.agora.uikit.common.extensions.catchChatException
+import io.agora.chat.uikit.base.ChatUIKitBaseActivity
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatPushRemindType
+import io.agora.chat.uikit.common.extensions.catchChatException
 import kotlinx.coroutines.launch
 
-class NotifyActivity: EaseBaseActivity<DemoActivityNotifyBinding>() {
+class NotifyActivity: ChatUIKitBaseActivity<DemoActivityNotifyBinding>() {
 
     private  var pushViewModel: PushViewModel? = null
 
@@ -56,8 +56,8 @@ class NotifyActivity: EaseBaseActivity<DemoActivityNotifyBinding>() {
     }
 
     private fun initSwitch(){
-//        binding.switchItemNotify.setSwitchTarckDrawable(com.hyphenate.easeui.R.drawable.ease_switch_track_selector)
-//        binding.switchItemNotify.setSwitchThumbDrawable(com.hyphenate.easeui.R.drawable.ease_switch_thumb_selector)
+//        binding.switchItemNotify.setSwitchTarckDrawable(com.hyphenate.easeui.R.drawable.uikit_switch_track_selector)
+//        binding.switchItemNotify.setSwitchThumbDrawable(com.hyphenate.easeui.R.drawable.uikit_switch_thumb_selector)
     }
 
     private fun initListener(){

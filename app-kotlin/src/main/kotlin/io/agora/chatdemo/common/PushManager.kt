@@ -7,13 +7,14 @@ import com.google.android.gms.common.GoogleApiAvailabilityLight
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
 import io.agora.chatdemo.DemoHelper
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatPushHelper
-import io.agora.uikit.common.ChatPushListener
-import io.agora.uikit.common.ChatPushType
-import io.agora.uikit.common.PushConfig
-import io.agora.uikit.common.extensions.isMainProcess
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatPushHelper
+import io.agora.chat.uikit.common.ChatPushListener
+import io.agora.chat.uikit.common.ChatPushType
+import io.agora.chat.uikit.common.PushConfig
+import io.agora.chat.uikit.common.extensions.isMainProcess
+import io.agora.push.PushType
 
 object PushManager {
 
@@ -26,6 +27,9 @@ object PushManager {
             (context.applicationContext as? Application)?.registerActivityLifecycleCallbacks(PushActivityLifecycleCallback())
             // Set pushListener to control the push type.
             ChatPushHelper.getInstance().setPushListener(object : ChatPushListener() {
+                override fun onBindTokenSuccess(p0: PushType?, p1: String?) {
+                    ChatLog.d("PushManager", "onBindTokenSuccess: pushType: $p0, token: $p1")
+                }
 
                 override fun onError(pushType: ChatPushType?, errorCode: Long) {
                     // 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。

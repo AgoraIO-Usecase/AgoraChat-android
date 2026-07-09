@@ -12,7 +12,7 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import io.agora.chatdemo.R
-import io.agora.uikit.common.utils.StatusBarCompat
+import io.agora.chat.uikit.common.utils.StatusBarCompat
 
 /**
  * Check if the current activity is the target activity.
@@ -31,7 +31,7 @@ internal fun Activity.isTargetActivity(): Boolean {
  * @param fitSystemForTheme
  */
 internal fun Activity.setFitSystemForTheme(fitSystemForTheme: Boolean) {
-    val colorResource = ContextCompat.getColor(this, io.agora.uikit.R.color.ease_color_background)
+    val colorResource = ContextCompat.getColor(this, io.agora.chat.uikit.R.color.ease_color_background)
     val isDark = AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES
     setFitSystemForTheme(fitSystemForTheme, colorResource, isDark)
 }

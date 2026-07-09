@@ -9,8 +9,8 @@ import android.os.Build
 import android.os.Environment
 import android.os.Environment.DIRECTORY_PICTURES
 import android.provider.MediaStore
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatPathUtils
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatPathUtils
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date

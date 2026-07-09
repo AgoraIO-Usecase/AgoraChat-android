@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import io.agora.chatdemo.interfaces.IMainRequest
 import io.agora.chatdemo.interfaces.IMainResultView
 import io.agora.chatdemo.page.splash.repository.ChatClientRepository
-import io.agora.uikit.viewmodel.EaseBaseViewModel
+import io.agora.chat.uikit.viewmodel.ChatUIKitBaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class MainViewModel: EaseBaseViewModel<IMainResultView>(), IMainRequest {
+class MainViewModel: ChatUIKitBaseViewModel<IMainResultView>(), IMainRequest {
     private val chatRepository by lazy { ChatClientRepository() }
     override fun getUnreadMessageCount() {
         viewModelScope.launch {

@@ -27,23 +27,23 @@ import io.agora.chatdemo.page.me.activity.AboutActivity
 import io.agora.chatdemo.page.me.activity.CurrencyActivity
 import io.agora.chatdemo.page.me.activity.NotifyActivity
 import io.agora.chatdemo.page.me.activity.UserInformationActivity
-import io.agora.uikit.EaseIM
-import io.agora.uikit.base.EaseBaseFragment
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatPresence
-import io.agora.uikit.common.bus.EaseFlowBus
-import io.agora.uikit.common.dialog.CustomDialog
-import io.agora.uikit.common.extensions.catchChatException
-import io.agora.uikit.common.extensions.dpToPx
-import io.agora.uikit.configs.setStatusStyle
-import io.agora.uikit.feature.contact.EaseBlockListActivity
-import io.agora.uikit.model.EaseEvent
-import io.agora.uikit.widget.EaseCustomAvatarView
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.base.ChatUIKitBaseFragment
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatPresence
+import io.agora.chat.uikit.common.bus.ChatUIKitFlowBus
+import io.agora.chat.uikit.common.dialog.CustomDialog
+import io.agora.chat.uikit.common.extensions.catchChatException
+import io.agora.chat.uikit.common.extensions.dpToPx
+import io.agora.chat.uikit.configs.setStatusStyle
+import io.agora.chat.uikit.feature.contact.ChatUIKitBlockListActivity
+import io.agora.chat.uikit.model.ChatUIKitEvent
+import io.agora.chat.uikit.widget.ChatUIKitCustomAvatarView
 import kotlinx.coroutines.launch
 
-class AboutMeFragment: EaseBaseFragment<DemoFragmentAboutMeBinding>(), View.OnClickListener,
-    EaseCustomAvatarView.OnPresenceClickListener, IPresenceResultView {
+class AboutMeFragment: ChatUIKitBaseFragment<DemoFragmentAboutMeBinding>(), View.OnClickListener,
+    ChatUIKitCustomAvatarView.OnPresenceClickListener, IPresenceResultView {
 
     /**
      * The clipboard manager.
@@ -103,13 +103,13 @@ class AboutMeFragment: EaseBaseFragment<DemoFragmentAboutMeBinding>(), View.OnCl
     }
 
     private fun initEvent() {
-        EaseFlowBus.with<EaseEvent>(EaseEvent.EVENT.UPDATE.name).register(this) {
-            if (it.isPresenceChange && it.message.equals(EaseIM.getCurrentUser()?.id) ) {
+        ChatUIKitFlowBus.with<ChatUIKitEvent>(ChatUIKitEvent.EVENT.UPDATE.name).register(this) {
+            if (it.isPresenceChange && it.message.equals(ChatUIKitClient.getCurrentUser()?.id) ) {
                 updatePresence()
             }
         }
 
-        EaseFlowBus.with<EaseEvent>(EaseEvent.EVENT.UPDATE + EaseEvent.TYPE.CONTACT).register(this) {
+        ChatUIKitFlowBus.with<ChatUIKitEvent>(ChatUIKitEvent.EVENT.UPDATE + ChatUIKitEvent.TYPE.CONTACT).register(this) {
             if (it.isContactChange && it.event == DemoConstant.EVENT_UPDATE_SELF) {
                 updatePresence(true)
             }
@@ -120,17 +120,17 @@ class AboutMeFragment: EaseBaseFragment<DemoFragmentAboutMeBinding>(), View.OnCl
         binding?.run {
             var name:String? = ChatClient.getInstance().currentUser
             val id = getString(R.string.main_about_me_id,ChatClient.getInstance().currentUser?:"")
-            EaseIM.getConfig()?.avatarConfig?.setStatusStyle(epPresence.getStatusView(),4.dpToPx(mContext),
+            ChatUIKitClient.getConfig()?.avatarConfig?.setStatusStyle(epPresence.getStatusView(),4.dpToPx(mContext),
                 ContextCompat.getColor(mContext, R.color.demo_background))
             epPresence.setPresenceStatusMargin(end = -4, bottom = -4)
-            epPresence.setPresenceStatusSize(resources.getDimensionPixelSize(io.agora.uikit.R.dimen.ease_contact_status_icon_size))
+            epPresence.setPresenceStatusSize(resources.getDimensionPixelSize(io.agora.chat.uikit.R.dimen.ease_contact_status_icon_size))
 
             val layoutParams = epPresence.getUserAvatar().layoutParams
             layoutParams.width = 100.dpToPx(mContext)
             layoutParams.height = 100.dpToPx(mContext)
             epPresence.getUserAvatar().layoutParams = layoutParams
 
-            EaseIM.getCurrentUser()?.let {
+            ChatUIKitClient.getCurrentUser()?.let {
                 epPresence.setUserAvatarData(it)
                 name = it.getRemarkOrName()
             }
@@ -140,7 +140,7 @@ class AboutMeFragment: EaseBaseFragment<DemoFragmentAboutMeBinding>(), View.OnCl
     }
 
     private fun updatePresence(isRefreshAvatar:Boolean = false){
-        EaseIM.getCurrentUser()?.let { user->
+        ChatUIKitClient.getCurrentUser()?.let { user->
             val presence = PresenceCache.getUserPresence(user.id)
             presence?.let {
                 if (isRefreshAvatar){
@@ -159,7 +159,7 @@ class AboutMeFragment: EaseBaseFragment<DemoFragmentAboutMeBinding>(), View.OnCl
     }
 
     private fun initStatus(){
-        val isSilent = EaseIM.checkMutedConversationList(ChatClient.getInstance().currentUser)
+        val isSilent = ChatUIKitClient.checkMutedConversationList(ChatClient.getInstance().currentUser)
         if (isSilent) {
             binding?.icNotice?.visibility = View.VISIBLE
         }else{
@@ -194,7 +194,7 @@ class AboutMeFragment: EaseBaseFragment<DemoFragmentAboutMeBinding>(), View.OnCl
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.item_presence -> {
-                EaseIM.getCurrentUser()?.id?.let {
+                ChatUIKitClient.getCurrentUser()?.id?.let {
                     presenceController.showPresenceStatusDialog(PresenceCache.getUserPresence(it))
                 }
             }
@@ -208,7 +208,7 @@ class AboutMeFragment: EaseBaseFragment<DemoFragmentAboutMeBinding>(), View.OnCl
                 startActivity(Intent(mContext, NotifyActivity::class.java))
             }
             R.id.item_privacy -> {
-                startActivity(Intent(mContext, EaseBlockListActivity::class.java))
+                startActivity(Intent(mContext, ChatUIKitBlockListActivity::class.java))
             }
             R.id.item_about -> {
                 startActivity(Intent(mContext, AboutActivity::class.java))

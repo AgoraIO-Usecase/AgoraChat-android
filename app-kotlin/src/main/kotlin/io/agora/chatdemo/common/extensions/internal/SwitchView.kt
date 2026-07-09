@@ -1,9 +1,9 @@
 package io.agora.chatdemo.common.extensions.internal
 
-import io.agora.uikit.widget.EaseSwitchItemView
+import io.agora.chat.uikit.widget.ChatUIKitSwitchItemView
 
 
-internal fun EaseSwitchItemView.setSwitchDefaultStyle(){
-    setSwitchTarckDrawable(io.agora.uikit.R.drawable.ease_switch_track_selector)
-    setSwitchThumbDrawable(io.agora.uikit.R.drawable.ease_switch_thumb_selector)
+internal fun ChatUIKitSwitchItemView.setSwitchDefaultStyle(){
+    setSwitchTarckDrawable(io.agora.chat.uikit.R.drawable.uikit_switch_track_selector)
+    setSwitchThumbDrawable(io.agora.chat.uikit.R.drawable.uikit_switch_thumb_selector)
 }

@@ -5,8 +5,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.TextView
 import io.agora.chatdemo.R
-import io.agora.uikit.common.ChatTextMessageBody
-import io.agora.uikit.widget.chatrow.EaseChatRow
+import io.agora.chat.uikit.common.ChatTextMessageBody
+import io.agora.chat.uikit.widget.chatrow.ChatUIKitRow
 
 @SuppressLint("ViewConstructor")
 class ChatRowConferenceInvite @JvmOverloads constructor(
@@ -14,7 +14,7 @@ class ChatRowConferenceInvite @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     isSender: Boolean
-) : EaseChatRow(context, attrs, defStyleAttr, isSender) {
+) : ChatUIKitRow(context, attrs, defStyleAttr, isSender) {
     protected val contentView: TextView? by lazy { findViewById(R.id.tv_chatcontent) }
     override fun onInflateView() {
         inflater.inflate(

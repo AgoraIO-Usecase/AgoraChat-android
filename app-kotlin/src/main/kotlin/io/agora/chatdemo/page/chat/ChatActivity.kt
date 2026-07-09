@@ -1,18 +1,18 @@
 package io.agora.chatdemo.page.chat
 
 import io.agora.chatdemo.R
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatMessage
-import io.agora.uikit.common.extensions.showToast
-import io.agora.uikit.feature.chat.EaseChatFragment
-import io.agora.uikit.feature.chat.activities.EaseChatActivity
-import io.agora.uikit.feature.chat.interfaces.OnMessageForwardCallback
-import io.agora.uikit.feature.chat.interfaces.OnModifyMessageListener
-import io.agora.uikit.feature.chat.interfaces.OnSendCombineMessageCallback
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatMessage
+import io.agora.chat.uikit.common.extensions.showToast
+import io.agora.chat.uikit.feature.chat.UIKitChatFragment
+import io.agora.chat.uikit.feature.chat.activities.UIKitChatActivity
+import io.agora.chat.uikit.feature.chat.interfaces.OnMessageForwardCallback
+import io.agora.chat.uikit.feature.chat.interfaces.OnModifyMessageListener
+import io.agora.chat.uikit.feature.chat.interfaces.OnSendCombineMessageCallback
 
-class ChatActivity: EaseChatActivity() {
+class ChatActivity: UIKitChatActivity() {
 
-    override fun setChildSettings(builder: EaseChatFragment.Builder) {
+    override fun setChildSettings(builder: UIKitChatFragment.Builder) {
         super.setChildSettings(builder)
         builder.setOnMessageForwardCallback(object : OnMessageForwardCallback {
             override fun onForwardSuccess(message: ChatMessage?) {
@@ -41,7 +41,7 @@ class ChatActivity: EaseChatActivity() {
                 mContext.showToast(R.string.message_modify_fail)
             }
         })
-        builder.turnOnTypingMonitor(EaseIM.getConfig()?.chatConfig?.enableChatTyping?:true)
+        builder.turnOnTypingMonitor(ChatUIKitClient.getConfig()?.chatConfig?.enableChatTyping?:true)
         builder.setCustomFragment(ChatFragment())
             .setCustomAdapter(CustomMessagesAdapter())
     }

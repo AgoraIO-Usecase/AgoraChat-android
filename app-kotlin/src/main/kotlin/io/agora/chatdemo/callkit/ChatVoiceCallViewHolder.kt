@@ -5,11 +5,11 @@ import io.agora.chat.callkit.EaseCallKit
 import io.agora.chat.callkit.general.EaseCallType
 import io.agora.chat.callkit.utils.EaseCallMsgUtils
 import io.agora.chatdemo.callkit.activity.CallSingleBaseActivity
-import io.agora.uikit.common.ChatMessage
-import io.agora.uikit.common.ChatMessageDirection
-import io.agora.uikit.feature.chat.viewholders.EaseChatRowViewHolder
+import io.agora.chat.uikit.common.ChatMessage
+import io.agora.chat.uikit.common.ChatMessageDirection
+import io.agora.chat.uikit.feature.chat.viewholders.ChatUIKitRowViewHolder
 
-class ChatVoiceCallViewHolder(itemView: View): EaseChatRowViewHolder(itemView) {
+class ChatVoiceCallViewHolder(itemView: View): ChatUIKitRowViewHolder(itemView) {
 
     override fun onBubbleClick(message: ChatMessage?) {
         super.onBubbleClick(message)

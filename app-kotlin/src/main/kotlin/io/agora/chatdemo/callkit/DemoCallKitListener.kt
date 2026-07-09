@@ -21,12 +21,12 @@ import io.agora.chatdemo.R
 import io.agora.chatdemo.callkit.activity.CallMultipleInviteActivity
 import io.agora.chatdemo.common.DemoConstant
 import io.agora.chatdemo.utils.ToastUtils.showToast
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.bus.EaseFlowBus
-import io.agora.uikit.common.extensions.mainScope
-import io.agora.uikit.model.EaseEvent
-import io.agora.uikit.provider.getSyncUser
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.bus.ChatUIKitFlowBus
+import io.agora.chat.uikit.common.extensions.mainScope
+import io.agora.chat.uikit.model.ChatUIKitEvent
+import io.agora.chat.uikit.provider.getSyncUser
 import io.agora.util.EMLog
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -131,7 +131,7 @@ class DemoCallKitListener(val mContext: Context): EaseCallKitListener {
         } ?: kotlin.run {
             CallKitManager.currentCallGroupId = null
             CallUserInfo(fromUserId).apply {
-                EaseIM.getUserProvider()?.getSyncUser(userId)?.let { user ->
+                ChatUIKitClient.getUserProvider()?.getSyncUser(userId)?.let { user ->
                     this.nickName = user.getNotEmptyName()
                     this.headImage = user.avatar
                 }
@@ -149,8 +149,8 @@ class DemoCallKitListener(val mContext: Context): EaseCallKitListener {
 
     override fun onInViteCallMessageSent() {
         if (ChatClient.getInstance().options.isIncludeSendMessageInMessageListener.not()) {
-            EaseFlowBus.with<EaseEvent>(EaseEvent.EVENT.ADD + EaseEvent.TYPE.MESSAGE)
-                .post(DemoHelper.getInstance().context.mainScope(), EaseEvent(DemoConstant.CALL_INVITE_MESSAGE, EaseEvent.TYPE.MESSAGE))
+            ChatUIKitFlowBus.with<ChatUIKitEvent>(ChatUIKitEvent.EVENT.ADD + ChatUIKitEvent.TYPE.MESSAGE)
+                .post(DemoHelper.getInstance().context.mainScope(), ChatUIKitEvent(DemoConstant.CALL_INVITE_MESSAGE, ChatUIKitEvent.TYPE.MESSAGE))
         }
     }
 

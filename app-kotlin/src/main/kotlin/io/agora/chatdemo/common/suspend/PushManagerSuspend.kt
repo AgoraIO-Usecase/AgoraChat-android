@@ -1,10 +1,10 @@
 package io.agora.chatdemo.common.suspend
 
-import io.agora.uikit.common.ChatException
-import io.agora.uikit.common.ChatPushManager
-import io.agora.uikit.common.ChatSilentModeParam
-import io.agora.uikit.common.ChatSilentModeResult
-import io.agora.uikit.common.impl.ValueCallbackImpl
+import io.agora.chat.uikit.common.ChatException
+import io.agora.chat.uikit.common.ChatPushManager
+import io.agora.chat.uikit.common.ChatSilentModeParam
+import io.agora.chat.uikit.common.ChatSilentModeResult
+import io.agora.chat.uikit.common.impl.ValueCallbackImpl
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

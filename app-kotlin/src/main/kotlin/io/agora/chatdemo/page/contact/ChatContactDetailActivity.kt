@@ -15,20 +15,20 @@ import io.agora.chatdemo.feature.presence.interfaces.IPresenceResultView
 import io.agora.chatdemo.feature.presence.utils.EasePresenceUtil
 import io.agora.chatdemo.feature.presence.viewmodel.PresenceViewModel
 import io.agora.chatdemo.viewmodel.ProfileInfoViewModel
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatPresence
-import io.agora.uikit.common.ChatUserInfoType
-import io.agora.uikit.common.bus.EaseFlowBus
-import io.agora.uikit.common.extensions.catchChatException
-import io.agora.uikit.common.extensions.toProfile
-import io.agora.uikit.feature.contact.EaseContactDetailsActivity
-import io.agora.uikit.model.EaseEvent
-import io.agora.uikit.model.EaseMenuItem
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatPresence
+import io.agora.chat.uikit.common.ChatUserInfoType
+import io.agora.chat.uikit.common.bus.ChatUIKitFlowBus
+import io.agora.chat.uikit.common.extensions.catchChatException
+import io.agora.chat.uikit.common.extensions.toProfile
+import io.agora.chat.uikit.feature.contact.ChatUIKitContactDetailsActivity
+import io.agora.chat.uikit.model.ChatUIKitEvent
+import io.agora.chat.uikit.model.ChatUIKitMenuItem
 import kotlinx.coroutines.launch
 
 
-class ChatContactDetailActivity: EaseContactDetailsActivity(), IPresenceResultView {
+class ChatContactDetailActivity: ChatUIKitContactDetailsActivity(), IPresenceResultView {
     private lateinit var model: ProfileInfoViewModel
     private lateinit var presenceModel: PresenceViewModel
 
@@ -46,7 +46,7 @@ class ChatContactDetailActivity: EaseContactDetailsActivity(), IPresenceResultVi
 
     override fun initEvent() {
         super.initEvent()
-        EaseFlowBus.with<EaseEvent>(EaseEvent.EVENT.UPDATE.name).register(this) {
+        ChatUIKitFlowBus.with<ChatUIKitEvent>(ChatUIKitEvent.EVENT.UPDATE.name).register(this) {
             if (it.isPresenceChange ) {
                 updatePresence()
             }
@@ -67,7 +67,7 @@ class ChatContactDetailActivity: EaseContactDetailsActivity(), IPresenceResultVi
                     .collect {
                         it[user.userId]?.parseToDbBean()?.let {u->
                             u.parse().apply {
-                                EaseIM.updateUsersInfo(mutableListOf(this))
+                                ChatUIKitClient.updateUsersInfo(mutableListOf(this))
                                 DemoHelper.getInstance().getDataModel().insertUser(this)
                             }
                             updateUserInfo()
@@ -86,19 +86,19 @@ class ChatContactDetailActivity: EaseContactDetailsActivity(), IPresenceResultVi
         }
     }
 
-    override fun getDetailItem(): MutableList<EaseMenuItem>? {
+    override fun getDetailItem(): MutableList<ChatUIKitMenuItem>? {
         val list = super.getDetailItem()
-        val audioItem = EaseMenuItem(
+        val audioItem = ChatUIKitMenuItem(
             title = getString(R.string.detail_item_audio),
-            resourceId = io.agora.uikit.R.drawable.ease_phone_pick,
+            resourceId = io.agora.chat.uikit.R.drawable.uikit_phone_pick,
             menuId = R.id.contact_item_audio_call,
             titleColor = ContextCompat.getColor(this, R.color.color_primary),
             order = 2
         )
 
-        val videoItem = EaseMenuItem(
+        val videoItem = ChatUIKitMenuItem(
             title = getString(R.string.detail_item_video),
-            resourceId = io.agora.uikit.R.drawable.ease_video_camera,
+            resourceId = io.agora.chat.uikit.R.drawable.uikit_video_camera,
             menuId = R.id.contact_item_video_call,
             titleColor = ContextCompat.getColor(this, R.color.color_primary),
             order = 3
@@ -108,7 +108,7 @@ class ChatContactDetailActivity: EaseContactDetailsActivity(), IPresenceResultVi
         return list
     }
 
-    override fun onMenuItemClick(item: EaseMenuItem?, position: Int): Boolean {
+    override fun onMenuItemClick(item: ChatUIKitMenuItem?, position: Int): Boolean {
         item?.let {
             when(item.menuId){
                 R.id.contact_item_audio_call -> {
@@ -129,8 +129,8 @@ class ChatContactDetailActivity: EaseContactDetailsActivity(), IPresenceResultVi
 
 
     private fun notifyUpdateRemarkEvent() {
-        EaseFlowBus.with<EaseEvent>(EaseEvent.EVENT.UPDATE + EaseEvent.TYPE.CONTACT + DemoConstant.EVENT_UPDATE_USER_SUFFIX)
-            .post(lifecycleScope, EaseEvent(DemoConstant.EVENT_UPDATE_USER_SUFFIX, EaseEvent.TYPE.CONTACT, user?.userId))
+        ChatUIKitFlowBus.with<ChatUIKitEvent>(ChatUIKitEvent.EVENT.UPDATE + ChatUIKitEvent.TYPE.CONTACT + DemoConstant.EVENT_UPDATE_USER_SUFFIX)
+            .post(lifecycleScope, ChatUIKitEvent(DemoConstant.EVENT_UPDATE_USER_SUFFIX, ChatUIKitEvent.TYPE.CONTACT, user?.userId))
     }
 
     private fun updatePresence(){
@@ -139,7 +139,7 @@ class ChatContactDetailActivity: EaseContactDetailsActivity(), IPresenceResultVi
             map.let {
                 binding.epPresence.getStatusView().visibility = View.VISIBLE
                 binding.epPresence.setUserAvatarData(user.toProfile(),
-                    EasePresenceUtil.getPresenceIcon(mContext,it[user.userId]))
+                    EasePresenceUtil.getPresenceString(mContext,it[user.userId]))
             }
         }
     }

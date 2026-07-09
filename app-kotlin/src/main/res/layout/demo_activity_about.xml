@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <io.agora.uikit.widget.EaseTitleBar
+    <io.agora.chat.uikit.widget.ChatUIKitTitleBar
         android:id="@+id/title_bar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,11 +19,11 @@
         app:titleBarSubtitleTextColor="@color/ease_color_text_secondary"
         android:visibility="visible" />
 
-    <io.agora.uikit.widget.EaseImageView
+    <io.agora.chat.uikit.widget.ChatUIKitImageView
         android:id="@+id/iv_logo"
         android:layout_marginTop="20dp"
         android:src="@mipmap/demo_launcher"
-        app:ease_shape_type="rectangle"
+        app:image_shape_type="rectangle"
         app:ease_radius="18dp"
         app:layout_constraintTop_toBottomOf="@+id/title_bar"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <io.agora.uikit.widget.EaseArrowItemView
+    <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
         android:id="@+id/arrow_item_documentation"
         app:layout_constraintTop_toBottomOf="@+id/tv_kit_version"
         app:arrowItemTitle="@string/about_official_website"
@@ -79,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="54dp"/>
 
-    <io.agora.uikit.widget.EaseArrowItemView
+    <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
         android:id="@+id/arrow_item_sales"
         app:layout_constraintTop_toBottomOf="@+id/arrow_item_documentation"
         app:arrowItemTitle="@string/about_sales_title"
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="54dp"/>
 
-    <io.agora.uikit.widget.EaseArrowItemView
+    <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
         android:id="@+id/arrow_item_demo_repo"
         app:layout_constraintTop_toBottomOf="@+id/arrow_item_sales"
         app:arrowItemTitle="@string/about_demo_app_github_repo_title"
@@ -103,7 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="54dp"/>
 
-    <io.agora.uikit.widget.EaseArrowItemView
+    <io.agora.chat.uikit.widget.ChatUIKitArrowItemView
         android:id="@+id/arrow_item_more"
         app:layout_constraintTop_toBottomOf="@+id/arrow_item_demo_repo"
         app:arrowItemTitle="@string/about_more_title"

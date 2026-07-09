@@ -9,16 +9,16 @@ import io.agora.chatdemo.common.suspend.fetUserInfo
 import io.agora.chatdemo.common.suspend.updateOwnAttribute
 import io.agora.cloud.HttpCallback
 import io.agora.cloud.HttpClientManager
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatError
-import io.agora.uikit.common.ChatException
-import io.agora.uikit.common.ChatHttpClientManagerBuilder
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatUserInfo
-import io.agora.uikit.common.ChatUserInfoType
-import io.agora.uikit.common.ChatValueCallback
-import io.agora.uikit.model.EaseProfile
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatError
+import io.agora.chat.uikit.common.ChatException
+import io.agora.chat.uikit.common.ChatHttpClientManagerBuilder
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatUserInfo
+import io.agora.chat.uikit.common.ChatUserInfoType
+import io.agora.chat.uikit.common.ChatValueCallback
+import io.agora.chat.uikit.model.ChatUIKitProfile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONException
@@ -41,9 +41,9 @@ class ProfileInfoRepository: BaseRepository()  {
             ChatClient.getInstance().userInfoManager().fetUserInfo(userIds,attributes)
         }
 
-    suspend fun synchronizeProfile(isSyncFromServer:Boolean): EaseProfile? =
+    suspend fun synchronizeProfile(isSyncFromServer:Boolean): ChatUIKitProfile? =
         withContext(Dispatchers.IO) {
-            val currentProfile = EaseIM.getCurrentUser()?:EaseProfile(ChatClient.getInstance().currentUser)
+            val currentProfile = ChatUIKitClient.getCurrentUser()?:ChatUIKitProfile(ChatClient.getInstance().currentUser)
             val user = DemoHelper.getInstance().getDataModel().getUser(currentProfile.id)
             ChatLog.e("ProfileInfoRepository","synchronizeProfile $user $isSyncFromServer - $currentProfile")
             suspendCoroutine { continuation ->
@@ -61,7 +61,7 @@ class ProfileInfoRepository: BaseRepository()  {
                                             profile.name = it.nickname
                                             profile.avatar = it.avatarUrl
                                             DemoHelper.getInstance().getDataModel().insertUser(profile)
-                                            EaseIM.updateUsersInfo(mutableListOf(profile))
+                                            ChatUIKitClient.updateUsersInfo(mutableListOf(profile))
                                             continuation.resume(profile)
                                         }
                                     }
@@ -79,7 +79,7 @@ class ProfileInfoRepository: BaseRepository()  {
                     currentProfile.let {
                         it.name = user.name
                         it.avatar = user.avatar
-                        EaseIM.updateUsersInfo(mutableListOf(it))
+                        ChatUIKitClient.updateUsersInfo(mutableListOf(it))
                     }
                     continuation.resume(currentProfile)
                 }

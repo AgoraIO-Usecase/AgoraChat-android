@@ -1,10 +1,10 @@
 package io.agora.chatdemo.page.group.repository
 
 import io.agora.chatdemo.base.BaseRepository
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatException
-import io.agora.uikit.common.ChatGroup
-import io.agora.uikit.common.ChatValueCallback
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatException
+import io.agora.chat.uikit.common.ChatGroup
+import io.agora.chat.uikit.common.ChatValueCallback
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

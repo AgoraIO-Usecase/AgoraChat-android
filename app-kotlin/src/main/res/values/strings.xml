@@ -114,12 +114,12 @@
 
     <!--presence-->
     <string name="presence_status" translatable="false">User Status</string>
-    <string name="ease_presence_online" translatable="false">Online</string>
-    <string name="ease_presence_busy" translatable="false">Busy</string>
-    <string name="ease_presence_do_not_disturb" translatable="false">Do not Disturb</string>
+    <string name="uikit_presence_online" translatable="false">Online</string>
+    <string name="uikit_presence_busy" translatable="false">Busy</string>
+    <string name="uikit_presence_do_not_disturb" translatable="false">Do not Disturb</string>
     <string name="ease_presence_away" translatable="false">Away</string>
-    <string name="ease_presence_offline" translatable="false">Offline</string>
-    <string name="ease_presence_custom" translatable="false">Custom Status</string>
+    <string name="uikit_presence_offline" translatable="false">Offline</string>
+    <string name="uikit_presence_custom" translatable="false">Custom Status</string>
     <string name="ease_presence_status" translatable="false">Status</string>
     <string name="ease_presence_done" translatable="false">Done</string>
     <string name="presence_dialog_title" translatable="false">Customize online status</string>

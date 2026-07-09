@@ -1,10 +1,10 @@
 package io.agora.chatdemo.common.extensions.internal
 
-import io.agora.uikit.common.ChatUserInfo
-import io.agora.uikit.model.EaseProfile
+import io.agora.chat.uikit.common.ChatUserInfo
+import io.agora.chat.uikit.model.ChatUIKitProfile
 
-internal fun ChatUserInfo.toProfile(): EaseProfile {
-    return EaseProfile(
+internal fun ChatUserInfo.toProfile(): ChatUIKitProfile {
+    return ChatUIKitProfile(
         id = userId,
         name = nickname,
         avatar = avatarUrl

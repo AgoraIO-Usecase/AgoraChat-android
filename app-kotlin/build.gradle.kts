@@ -1,3 +1,4 @@
+import org.gradle.api.JavaVersion
 import java.util.Properties
 plugins {
     id("com.android.application")
@@ -28,7 +29,7 @@ android {
         // Set app server info from local.properties
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
         buildConfigField ("String", "APP_SERVER_DOMAIN", "\"${properties.getProperty("APP_SERVER_DOMAIN")}\"")
-        buildConfigField ("String", "APP_SERVER_URL", "\"${properties.getProperty("APP_SERVER_URL")}\"")
+        buildConfigField ("String", "APP_SERVER_LOGIN", "\"${properties.getProperty("APP_SERVER_LOGIN")}\"")
         buildConfigField ("String", "APP_SERVER_REGISTER", "\"${properties.getProperty("APP_SERVER_REGISTER")}\"")
         buildConfigField ("String", "APP_BASE_USER", "\"${properties.getProperty("APP_BASE_USER")}\"")
         buildConfigField ("String", "APP_UPLOAD_AVATAR", "\"${properties.getProperty("APP_UPLOAD_AVATAR")}\"")
@@ -37,12 +38,12 @@ android {
         buildConfigField ("String", "APP_RTC_TOKEN_URL", "\"${properties.getProperty("APP_RTC_TOKEN_URL")}\"")
         buildConfigField ("String", "APP_RTC_CHANNEL_MAPPER_URL", "\"${properties.getProperty("APP_RTC_CHANNEL_MAPPER_URL")}\"")
 
-        // Set appkey from local.properties
-        buildConfigField("String", "AGORA_CHAT_APPKEY", "\"${properties.getProperty("AGORA_CHAT_APPKEY")}\"")
+        // Set RTC appId from local.properties
+        buildConfigField ("String", "AGORA_RTC_APPID", properties.getProperty("AGORA_RTC_APPID", "******"))
+        buildConfigField ("String", "AGORA_CHAT_APPID", properties.getProperty("AGORA_CHAT_APPID", "******"))
+
         // Set push info from local.properties
         buildConfigField("String", "FCM_SENDERID", "\"${properties.getProperty("FCM_SENDERID")}\"")
-        // Set RTC appId from local.properties
-        buildConfigField("String", "AGORA_APPID", "\"${properties.getProperty("AGORA_APPID")}\"")
 
         //指定room.schemaLocation生成的文件路径  处理Room 警告 Schema export Error
         javaCompileOptions {
@@ -114,6 +115,14 @@ android {
         jvmToolchain(8)
     }
 
+    packagingOptions {
+        jniLibs {
+            pickFirsts += "lib/**/libaosl.so"      // 添加单个
+            // 或者添加多个（与 Groovy 写法更接近）：
+            // pickFirsts += listOf("lib/**/libaosl.so")
+        }
+    }
+
     //打开注释后，可以直接在studio里查看和编辑emclient-linux里的代码
 //    externalNativeBuild {
 //        ndkBuild {
@@ -153,8 +162,8 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging")
     implementation("com.google.firebase:firebase-analytics")
 
-    implementation("io.agora.rtc:chat-uikit:1.3.0")
-//    implementation(project(mapOf("path" to ":chat-uikit")))
-    implementation("io.agora.rtc:chat-callkit:1.3.0")
-//    implementation(project(mapOf("path" to ":chat-callkit")))
+//    implementation("io.agora.rtc:chat-uikit:1.3.0")
+    implementation(project(mapOf("path" to ":chat-uikit")))
+//    implementation("io.agora.rtc:chat-callkit:1.3.0")
+    implementation(project(mapOf("path" to ":chat-callkit")))
 }

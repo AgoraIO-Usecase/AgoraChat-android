@@ -8,7 +8,7 @@
         android:id="@+id/cl_bubble_out"
         style="@style/ease_chat_row_bubble_out_style" >
 
-        <io.agora.uikit.widget.EaseImageView
+        <io.agora.chat.uikit.widget.ChatUIKitImageView
             android:id="@+id/iv_userhead"
             app:layout_constraintBottom_toBottomOf="@id/bubble"
             app:layout_constraintEnd_toEndOf="parent"

@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.ColorInt
-import io.agora.uikit.databinding.EaseLayoutCustomDialogBinding
+import io.agora.chat.uikit.databinding.UikitLayoutCustomDialogBinding
 
 class SimpleDialog(
     context: Context,
@@ -30,7 +30,7 @@ class SimpleDialog(
     private var mNegativeButtonText: String? = null
     private var showCancelButton: Boolean = true
     private var showConfirmButton: Boolean = true
-    private val binding by lazy { EaseLayoutCustomDialogBinding.inflate(LayoutInflater.from(context)) }
+    private val binding by lazy { UikitLayoutCustomDialogBinding.inflate(LayoutInflater.from(context)) }
 
     init {
         setContentView(binding.root)

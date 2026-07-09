@@ -7,7 +7,7 @@ import io.agora.chatdemo.bean.LanguageType
 import io.agora.chatdemo.common.DemoConstant
 import io.agora.chatdemo.common.PreferenceManager
 import io.agora.chatdemo.utils.LanguageUtil
-import io.agora.uikit.EaseIM
+import io.agora.chat.uikit.ChatUIKitClient
 
 class DemoApplication: Application() {
 
@@ -46,12 +46,12 @@ class DemoApplication: Application() {
         val enableReaction = DemoHelper.getInstance().getDataModel().getBoolean(DemoConstant.FEATURES_REACTION,true)
         val enableTyping = DemoHelper.getInstance().getDataModel().getBoolean(DemoConstant.IS_TYPING_ON,false)
         val targetLanguage = PreferenceManager.getValue(DemoConstant.TARGET_LANGUAGE, LanguageType.EN.value)
-        EaseIM.getConfig()?.chatConfig?.targetTranslationLanguage = targetLanguage
+        ChatUIKitClient.getConfig()?.chatConfig?.targetTranslationLanguage = targetLanguage
         LanguageUtil.changeLanguage("en")
 
-        EaseIM.getConfig()?.chatConfig?.enableTranslationMessage = enableTranslation
-        EaseIM.getConfig()?.chatConfig?.enableChatThreadMessage = enableThread
-        EaseIM.getConfig()?.chatConfig?.enableMessageReaction = enableReaction
-        EaseIM.getConfig()?.chatConfig?.enableChatTyping = enableTyping
+        ChatUIKitClient.getConfig()?.chatConfig?.enableTranslationMessage = enableTranslation
+        ChatUIKitClient.getConfig()?.chatConfig?.enableChatThreadMessage = enableThread
+        ChatUIKitClient.getConfig()?.chatConfig?.enableMessageReaction = enableReaction
+        ChatUIKitClient.getConfig()?.chatConfig?.enableChatTyping = enableTyping
     }
 }

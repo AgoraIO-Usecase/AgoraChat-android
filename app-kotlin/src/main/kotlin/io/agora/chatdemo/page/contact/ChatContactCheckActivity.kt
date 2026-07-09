@@ -9,17 +9,17 @@ import io.agora.chatdemo.common.DemoConstant
 import io.agora.chatdemo.common.room.entity.parse
 import io.agora.chatdemo.common.room.extensions.parseToDbBean
 import io.agora.chatdemo.viewmodel.ProfileInfoViewModel
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatUserInfoType
-import io.agora.uikit.common.bus.EaseFlowBus
-import io.agora.uikit.common.extensions.catchChatException
-import io.agora.uikit.feature.contact.EaseContactCheckActivity
-import io.agora.uikit.model.EaseEvent
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatUserInfoType
+import io.agora.chat.uikit.common.bus.ChatUIKitFlowBus
+import io.agora.chat.uikit.common.extensions.catchChatException
+import io.agora.chat.uikit.feature.contact.ChatUIKitContactCheckActivity
+import io.agora.chat.uikit.model.ChatUIKitEvent
 import kotlinx.coroutines.launch
 
-class ChatContactCheckActivity: EaseContactCheckActivity() {
+class ChatContactCheckActivity: ChatUIKitContactCheckActivity() {
     private lateinit var model: ProfileInfoViewModel
 
     override fun initData() {
@@ -34,7 +34,7 @@ class ChatContactCheckActivity: EaseContactCheckActivity() {
                     .collect {
                         it[user.userId]?.parseToDbBean()?.let { u->
                             u.parse().apply {
-                                EaseIM.updateUsersInfo(mutableListOf(this))
+                                ChatUIKitClient.updateUsersInfo(mutableListOf(this))
                                 DemoHelper.getInstance().getDataModel().insertUser(this)
                             }
                             updateUserInfo()
@@ -46,8 +46,8 @@ class ChatContactCheckActivity: EaseContactCheckActivity() {
 
     private fun updateUserInfo() {
         DemoHelper.getInstance().getDataModel().getUser(user?.userId)?.let {
-            val ph = AppCompatResources.getDrawable(this, io.agora.uikit.R.drawable.ease_default_avatar)
-            val ep = AppCompatResources.getDrawable(this, io.agora.uikit.R.drawable.ease_default_avatar)
+            val ph = AppCompatResources.getDrawable(this, io.agora.chat.uikit.R.drawable.uikit_default_avatar)
+            val ep = AppCompatResources.getDrawable(this, io.agora.chat.uikit.R.drawable.uikit_default_avatar)
             binding.ivAvatar.load(it.parse().avatar ?: ph) {
                 placeholder(ph)
                 error(ep)

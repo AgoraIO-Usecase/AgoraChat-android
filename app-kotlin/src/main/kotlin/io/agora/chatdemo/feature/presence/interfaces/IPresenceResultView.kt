@@ -1,7 +1,7 @@
 package io.agora.chatdemo.feature.presence.interfaces
 
-import io.agora.uikit.common.ChatPresence
-import io.agora.uikit.common.interfaces.IControlDataView
+import io.agora.chat.uikit.common.ChatPresence
+import io.agora.chat.uikit.common.interfaces.IControlDataView
 
 interface IPresenceResultView: IControlDataView {
 

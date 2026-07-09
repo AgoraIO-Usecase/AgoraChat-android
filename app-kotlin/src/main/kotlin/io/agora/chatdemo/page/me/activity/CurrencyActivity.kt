@@ -18,10 +18,10 @@ import io.agora.chatdemo.common.DemoConstant
 import io.agora.chatdemo.common.PreferenceManager
 import io.agora.chatdemo.common.extensions.internal.setSwitchDefaultStyle
 import io.agora.chatdemo.databinding.DemoActivityCurrencyBinding
-import io.agora.uikit.EaseIM
-import io.agora.uikit.base.EaseBaseActivity
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.base.ChatUIKitBaseActivity
 
-class CurrencyActivity: EaseBaseActivity<DemoActivityCurrencyBinding>(),View.OnClickListener {
+class CurrencyActivity: ChatUIKitBaseActivity<DemoActivityCurrencyBinding>(),View.OnClickListener {
     private var targetLanguage:String? = ""
     override fun getViewBinding(inflater: LayoutInflater): DemoActivityCurrencyBinding {
         return DemoActivityCurrencyBinding.inflate(inflater)
@@ -94,7 +94,7 @@ class CurrencyActivity: EaseBaseActivity<DemoActivityCurrencyBinding>(),View.OnC
                             targetLanguage = tag
                             code?.let { languageCode->
                                 PreferenceManager.putValue(DemoConstant.TARGET_LANGUAGE, languageCode)
-                                EaseIM.getConfig()?.chatConfig?.targetTranslationLanguage = languageCode
+                                ChatUIKitClient.getConfig()?.chatConfig?.targetTranslationLanguage = languageCode
                             }
                         }
                         else -> {}

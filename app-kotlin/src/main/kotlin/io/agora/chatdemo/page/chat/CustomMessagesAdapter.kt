@@ -8,11 +8,11 @@ import io.agora.chatdemo.callkit.MultipleInviteViewHolder
 import io.agora.chatdemo.callkit.ChatVoiceCallViewHolder
 import io.agora.chatdemo.callkit.views.ChatRowConferenceInvite
 import io.agora.chatdemo.callkit.views.ChatRowVoiceCall
-import io.agora.uikit.common.ChatMessage
-import io.agora.uikit.common.ChatMessageDirection
-import io.agora.uikit.feature.chat.adapter.EaseMessagesAdapter
+import io.agora.chat.uikit.common.ChatMessage
+import io.agora.chat.uikit.common.ChatMessageDirection
+import io.agora.chat.uikit.feature.chat.adapter.ChatUIKitMessagesAdapter
 
-class CustomMessagesAdapter: EaseMessagesAdapter() {
+class CustomMessagesAdapter: ChatUIKitMessagesAdapter() {
 
     companion object {
         const val VIEW_TYPE_MESSAGE_CALL_SEND = 1000

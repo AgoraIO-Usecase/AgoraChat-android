@@ -2,9 +2,9 @@ package io.agora.chatdemo.callkit
 
 import android.util.Log
 import io.agora.chat.callkit.bean.EaseCallUserInfo
-import io.agora.uikit.EaseIM
-import io.agora.uikit.model.EaseProfile
-import io.agora.uikit.provider.getSyncUser
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.model.ChatUIKitProfile
+import io.agora.chat.uikit.provider.getSyncUser
 
 
 data class CallUserInfo(
@@ -15,13 +15,13 @@ data class CallUserInfo(
 
 internal fun CallUserInfo.getUserInfo(groupId: String?): CallUserInfo {
     return if (!groupId.isNullOrEmpty()) {
-        EaseProfile.getGroupMember(groupId, this.userId)?.let {
+        ChatUIKitProfile.getGroupMember(groupId, this.userId)?.let {
             this.nickName = it.getNotEmptyName()
             this.headImage = it.avatar
         }
         this
     } else {
-        EaseIM.getUserProvider()?.getSyncUser(this.userId)?.let {
+        ChatUIKitClient.getUserProvider()?.getSyncUser(this.userId)?.let {
             this.nickName = it.getNotEmptyName()
             this.headImage = it.avatar
         }

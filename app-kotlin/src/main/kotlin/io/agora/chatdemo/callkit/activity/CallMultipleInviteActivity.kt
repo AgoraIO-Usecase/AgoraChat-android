@@ -18,10 +18,10 @@ import io.agora.chatdemo.callkit.CallKitManager
 import io.agora.chatdemo.callkit.fragment.ConferenceInviteFragment
 import io.agora.chatdemo.databinding.DemoActivityConferenceInviteBinding
 import io.agora.chatdemo.utils.ToastUtils.showToast
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.interfaces.OnContactSelectedListener
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.interfaces.OnContactSelectedListener
 
 class CallMultipleInviteActivity: BaseInitActivity<DemoActivityConferenceInviteBinding>() {
     private val existMembers = mutableListOf<String>()
@@ -46,7 +46,7 @@ class CallMultipleInviteActivity: BaseInitActivity<DemoActivityConferenceInviteB
                 if (members.isNotEmpty()) {
                     existMembers.addAll(members)
                 }
-                if (!existMembers.contains(EaseIM.getCurrentUser()?.id)){
+                if (!existMembers.contains(ChatUIKitClient.getCurrentUser()?.id)){
                     existMembers.add(ChatClient.getInstance().currentUser)
                 }
             }?: kotlin.run {

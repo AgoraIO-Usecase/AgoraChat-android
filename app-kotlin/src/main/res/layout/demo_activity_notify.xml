@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <io.agora.uikit.widget.EaseTitleBar
+    <io.agora.chat.uikit.widget.ChatUIKitTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ease_toolbar_height"
@@ -17,7 +17,7 @@
         app:titleBarSubtitleTextColor="@color/ease_color_text_secondary"
         android:visibility="visible" />
 
-    <io.agora.uikit.widget.EaseSwitchItemView
+    <io.agora.chat.uikit.widget.ChatUIKitSwitchItemView
         android:id="@+id/switch_item_notify"
         app:switchItemTitle="@string/main_about_me_notify_title"
         style="@style/ease_contact_detail_switch_item"

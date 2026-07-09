@@ -1,6 +1,6 @@
 package io.agora.chatdemo.common
 
-import io.agora.uikit.common.ChatPresence
+import io.agora.chat.uikit.common.ChatPresence
 import java.util.concurrent.ConcurrentHashMap
 
 object PresenceCache {

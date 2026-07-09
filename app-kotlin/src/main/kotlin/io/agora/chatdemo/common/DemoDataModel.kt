@@ -10,16 +10,16 @@ import io.agora.chatdemo.common.room.dao.DemoUserDao
 import io.agora.chatdemo.common.room.entity.DemoUser
 import io.agora.chatdemo.common.room.entity.parse
 import io.agora.chatdemo.common.room.extensions.parseToDbBean
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatContact
-import io.agora.uikit.common.ChatException
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.ChatValueCallback
-import io.agora.uikit.common.extensions.toProfile
-import io.agora.uikit.common.extensions.toUser
-import io.agora.uikit.model.EaseProfile
-import io.agora.uikit.model.EaseUser
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatContact
+import io.agora.chat.uikit.common.ChatException
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.ChatValueCallback
+import io.agora.chat.uikit.common.extensions.toProfile
+import io.agora.chat.uikit.common.extensions.toUser
+import io.agora.chat.uikit.model.ChatUIKitProfile
+import io.agora.chat.uikit.model.ChatUIKitUser
 import java.util.concurrent.ConcurrentHashMap
 
 class DemoDataModel(private val context: Context) {
@@ -37,15 +37,15 @@ class DemoDataModel(private val context: Context) {
      * Initialize the local database.
      */
     fun initDb() {
-        if (EaseIM.isInited().not()) {
-            throw IllegalStateException("EaseIM SDK must be inited before using.")
+        if (ChatUIKitClient.isInited().not()) {
+            throw IllegalStateException("ChatUIKitClient SDK must be inited before using.")
         }
         database
         resetUsersTimes()
         contactList.clear()
         val data = getAllContacts().values.map { it.toProfile() }
         if (data.isNotEmpty()){
-            EaseIM.updateUsersInfo(data)
+            ChatUIKitClient.updateUsersInfo(data)
             data.map { CallKitManager.setEaseCallKitUserInfo(it.id)}
         }
     }
@@ -54,8 +54,8 @@ class DemoDataModel(private val context: Context) {
      * Get the user data access object.
      */
     fun getUserDao(): DemoUserDao {
-        if (EaseIM.isInited().not()) {
-            throw IllegalStateException("EaseIM SDK must be inited before using.")
+        if (ChatUIKitClient.isInited().not()) {
+            throw IllegalStateException("ChatUIKitClient SDK must be inited before using.")
         }
         return database.userDao()
     }
@@ -63,7 +63,7 @@ class DemoDataModel(private val context: Context) {
     /**
      * Get all contacts from cache.
      */
-    fun getAllContacts(): Map<String, EaseUser> {
+    fun getAllContacts(): Map<String, ChatUIKitUser> {
         if (contactList.isEmpty()) {
             loadContactFromDb()
         }
@@ -103,7 +103,7 @@ class DemoDataModel(private val context: Context) {
     /**
      * Insert user to local db.
      */
-    fun insertUser(user: EaseProfile,isInsertDb:Boolean = true) {
+    fun insertUser(user: ChatUIKitProfile,isInsertDb:Boolean = true) {
         if (isInsertDb){
             getUserDao().insertUser(user.parseToDbBean())
         }
@@ -113,7 +113,7 @@ class DemoDataModel(private val context: Context) {
     /**
      * Insert users to local db.
      */
-    fun insertUsers(users: List<EaseProfile>) {
+    fun insertUsers(users: List<ChatUIKitProfile>) {
         getUserDao().insertUsers(users.map { it.parseToDbBean() })
         users.forEach {
             contactList[it.id] = it.parseToDbBean()
@@ -123,7 +123,7 @@ class DemoDataModel(private val context: Context) {
     /**
      * Update user update times.
      */
-    fun updateUsersTimes(userIds: List<EaseProfile>) {
+    fun updateUsersTimes(userIds: List<ChatUIKitProfile>) {
         if (userIds.isNotEmpty()) {
             userIds?.map { it.id }?.let { userIds ->
                 getUserDao().updateUsersTimes(userIds)
@@ -148,7 +148,7 @@ class DemoDataModel(private val context: Context) {
             return
         }
         val user = contactList[userId]?.parse() ?: return
-        EaseIM.updateUsersInfo(mutableListOf(user))
+        ChatUIKitClient.updateUsersInfo(mutableListOf(user))
     }
 
 
@@ -294,11 +294,11 @@ class DemoDataModel(private val context: Context) {
     }
 
     fun setCurrentUserAgoraUid(agoraUid:Int){
-        PreferenceManager.putValue("${BuildConfig.AGORA_CHAT_APPKEY}$SHARED_KEY_CURRENTUSER_AGORAUID",agoraUid)
+        PreferenceManager.putValue("${BuildConfig.AGORA_RTC_APPID}$SHARED_KEY_CURRENTUSER_AGORAUID",agoraUid)
     }
 
     fun getCurrentUserAgoraUid():Int{
-        return PreferenceManager.getValue("${BuildConfig.AGORA_CHAT_APPKEY}$SHARED_KEY_CURRENTUSER_AGORAUID",0)
+        return PreferenceManager.getValue("${BuildConfig.AGORA_RTC_APPID}$SHARED_KEY_CURRENTUSER_AGORAUID",0)
     }
 
     fun putBoolean(key: String, value: Boolean){

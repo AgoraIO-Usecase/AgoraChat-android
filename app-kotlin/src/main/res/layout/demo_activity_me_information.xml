@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <io.agora.uikit.widget.EaseTitleBar
+    <io.agora.chat.uikit.widget.ChatUIKitTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ease_toolbar_height"
@@ -34,18 +34,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <io.agora.uikit.widget.EaseImageView
+        <io.agora.chat.uikit.widget.ChatUIKitImageView
             android:id="@+id/iv_avatar"
             app:layout_constraintTop_toTopOf="@+id/tv_avatar"
             app:layout_constraintBottom_toBottomOf="@+id/tv_avatar"
             app:layout_constraintEnd_toStartOf="@+id/iv_avatar_end"
-            android:src="@drawable/ease_default_avatar"
+            android:src="@drawable/uikit_default_avatar"
             android:scaleType="fitCenter"
             android:layout_marginEnd="10dp"
             android:layout_width="40dp"
             android:layout_height="40dp"/>
 
-        <io.agora.uikit.widget.EaseImageView
+        <io.agora.chat.uikit.widget.ChatUIKitImageView
             android:id="@+id/iv_avatar_end"
             app:layout_constraintTop_toTopOf="@+id/tv_avatar"
             app:layout_constraintBottom_toBottomOf="@+id/tv_avatar"
@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <io.agora.uikit.widget.EaseImageView
+        <io.agora.chat.uikit.widget.ChatUIKitImageView
             android:id="@+id/iv_name_end"
             app:layout_constraintTop_toTopOf="@+id/title_nick_name"
             app:layout_constraintBottom_toBottomOf="@+id/title_nick_name"

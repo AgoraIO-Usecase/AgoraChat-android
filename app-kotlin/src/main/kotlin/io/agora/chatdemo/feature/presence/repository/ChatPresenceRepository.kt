@@ -4,8 +4,8 @@ import io.agora.chatdemo.common.suspend.fetchUserPresenceStatus
 import io.agora.chatdemo.common.suspend.publishExtPresence
 import io.agora.chatdemo.common.suspend.subscribeUsersPresence
 import io.agora.chatdemo.common.suspend.unSubscribeUsersPresence
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatPresenceManager
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatPresenceManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

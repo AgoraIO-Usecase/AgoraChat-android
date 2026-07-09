@@ -17,9 +17,9 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import io.agora.chatdemo.DemoApplication
 import io.agora.chatdemo.R
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.extensions.dpToPx
-import io.agora.uikit.common.extensions.mainScope
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.extensions.dpToPx
+import io.agora.chat.uikit.common.extensions.mainScope
 import kotlinx.coroutines.launch
 
 /**
@@ -217,7 +217,7 @@ object ToastUtils {
         if (TextUtils.isEmpty(message)) {
             return
         }
-        showToast(EaseIM.getContext(), title, message, type, duration, Gravity.CENTER)
+        showToast(ChatUIKitClient.getContext(), title, message, type, duration, Gravity.CENTER)
     }
 
     /**

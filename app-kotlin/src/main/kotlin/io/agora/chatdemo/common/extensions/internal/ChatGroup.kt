@@ -1,8 +1,8 @@
 package io.agora.chatdemo.common.extensions.internal
 
-import io.agora.uikit.common.ChatGroup
-import io.agora.uikit.model.EaseGroupProfile
+import io.agora.chat.uikit.common.ChatGroup
+import io.agora.chat.uikit.model.ChatUIKitGroupProfile
 
-internal fun ChatGroup.parse(): EaseGroupProfile {
-    return EaseGroupProfile(groupId, groupName, extension)
+internal fun ChatGroup.parse(): ChatUIKitGroupProfile {
+    return ChatUIKitGroupProfile(groupId, groupName, extension)
 }

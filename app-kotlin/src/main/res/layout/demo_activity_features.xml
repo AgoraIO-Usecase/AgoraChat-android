@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <io.agora.uikit.widget.EaseTitleBar
+    <io.agora.chat.uikit.widget.ChatUIKitTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ease_toolbar_height"
@@ -18,7 +18,7 @@
         app:titleBarSubtitleTextColor="@color/ease_color_text_secondary"
         android:visibility="visible" />
 
-    <io.agora.uikit.widget.EaseSwitchItemView
+    <io.agora.chat.uikit.widget.ChatUIKitSwitchItemView
         android:id="@+id/switch_item_typing"
         app:layout_constraintTop_toBottomOf="@+id/function_layout"
         app:switchItemTitle="@string/main_about_me_currency_typing"
@@ -34,7 +34,7 @@
         android:text="@string/main_about_me_currency_typing_desc"
         />
 
-    <io.agora.uikit.widget.EaseSwitchItemView
+    <io.agora.chat.uikit.widget.ChatUIKitSwitchItemView
         android:id="@+id/switch_item_translation"
         app:switchItemTitle="@string/currency_feature_translation"
         style="@style/ease_contact_detail_switch_item"
@@ -49,7 +49,7 @@
         android:text="@string/currency_feature_translation_describe"
         />
 
-    <io.agora.uikit.widget.EaseSwitchItemView
+    <io.agora.chat.uikit.widget.ChatUIKitSwitchItemView
         android:id="@+id/switch_item_topic"
         app:switchItemTitle="@string/currency_feature_topic"
         style="@style/ease_contact_detail_switch_item"
@@ -64,7 +64,7 @@
         android:text="@string/currency_feature_topic_describe"
         />
 
-    <io.agora.uikit.widget.EaseSwitchItemView
+    <io.agora.chat.uikit.widget.ChatUIKitSwitchItemView
         android:id="@+id/switch_item_reaction"
         app:switchItemTitle="@string/currency_feature_reaction"
         style="@style/ease_contact_detail_switch_item"

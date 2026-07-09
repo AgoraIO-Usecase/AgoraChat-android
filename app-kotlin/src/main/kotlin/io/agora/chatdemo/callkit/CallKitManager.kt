@@ -17,20 +17,20 @@ import io.agora.chatdemo.R
 import io.agora.chatdemo.callkit.activity.CallMultipleBaseActivity
 import io.agora.chatdemo.callkit.activity.CallSingleBaseActivity
 import io.agora.chatdemo.callkit.activity.CallMultipleInviteActivity
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatError
-import io.agora.uikit.common.ChatHttpClientManagerBuilder
-import io.agora.uikit.common.ChatHttpResponse
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.dialog.SimpleListSheetDialog
-import io.agora.uikit.common.dialog.SimpleSheetType
-import io.agora.uikit.common.extensions.toUser
-import io.agora.uikit.feature.chat.enums.EaseChatType
-import io.agora.uikit.interfaces.SimpleListSheetItemClickListener
-import io.agora.uikit.model.EaseMenuItem
-import io.agora.uikit.model.EaseUser
-import io.agora.uikit.model.getNickname
-import io.agora.uikit.provider.getSyncUser
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatError
+import io.agora.chat.uikit.common.ChatHttpClientManagerBuilder
+import io.agora.chat.uikit.common.ChatHttpResponse
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.dialog.SimpleListSheetDialog
+import io.agora.chat.uikit.common.dialog.SimpleSheetType
+import io.agora.chat.uikit.common.extensions.toUser
+import io.agora.chat.uikit.feature.chat.enums.ChatUIKitType
+import io.agora.chat.uikit.interfaces.SimpleListSheetItemClickListener
+import io.agora.chat.uikit.model.ChatUIKitMenuItem
+import io.agora.chat.uikit.model.ChatUIKitUser
+import io.agora.chat.uikit.model.getNickname
+import io.agora.chat.uikit.provider.getSyncUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,9 +69,9 @@ object CallKitManager {
     fun init(context: Context) {
         EaseCallKitConfig().apply {
             callTimeOut = 30
-            agoraAppId = BuildConfig.AGORA_APPID
+            agoraAppId = BuildConfig.AGORA_RTC_APPID
             isEnableRTCToken = true
-            defaultHeadImage = EaseIM.getCurrentUser()?.avatar
+            defaultHeadImage = ChatUIKitClient.getCurrentUser()?.avatar
             EaseCallKit.getInstance().init(context,this)
         }
         (context.applicationContext as Application).registerActivityLifecycleCallbacks(CallKitActivityLifecycleCallback())
@@ -85,17 +85,17 @@ object CallKitManager {
     /**
      * Show single chat video call dialog.
      */
-    fun showSelectDialog(type: EaseChatType?, context: Context, conversationId: String?) {
+    fun showSelectDialog(type: ChatUIKitType?, context: Context, conversationId: String?) {
         val context = (context as FragmentActivity)
         val mutableListOf = mutableListOf(
-            EaseMenuItem(
+            ChatUIKitMenuItem(
                 menuId = R.id.chat_video_call_voice,
                 title = context.getString(R.string.voice_call),
                 resourceId = R.drawable.phone_pick,
                 titleColor = ContextCompat.getColor(context, R.color.color_primary),
                 resourceTintColor = ContextCompat.getColor(context, R.color.color_primary)
             ),
-            EaseMenuItem(
+            ChatUIKitMenuItem(
                 menuId = R.id.chat_video_call_video,
                 title = context.getString(R.string.video_call),
                 resourceId =  R.drawable.video_camera,
@@ -108,12 +108,12 @@ object CallKitManager {
             itemList = mutableListOf,
             type = SimpleSheetType.ITEM_LAYOUT_DIRECTION_START)
         dialog.setSimpleListSheetItemClickListener(object : SimpleListSheetItemClickListener {
-            override fun onItemClickListener(position: Int, menu: EaseMenuItem) {
+            override fun onItemClickListener(position: Int, menu: ChatUIKitMenuItem) {
                 dialog.dismiss()
                 when(menu.menuId){
                     R.id.chat_video_call_voice -> {
                         type?.let {
-                            if (it == EaseChatType.SINGLE_CHAT){
+                            if (it == ChatUIKitType.SINGLE_CHAT){
                                 startSingleAudioCall(conversationId)
                             }else{
                                 startConferenceCall(EaseCallType.CONFERENCE_VOICE_CALL,context, conversationId)
@@ -122,7 +122,7 @@ object CallKitManager {
                     }
                     R.id.chat_video_call_video -> {
                         type?.let {
-                            if (it == EaseChatType.SINGLE_CHAT){
+                            if (it == ChatUIKitType.SINGLE_CHAT){
                                 startSingleVideoCall(conversationId)
                             }else{
                                 startConferenceCall(EaseCallType.CONFERENCE_VIDEO_CALL, context, conversationId)
@@ -215,7 +215,7 @@ object CallKitManager {
                             val result = JSONObject(body)
                             val token = result.getString(RESULT_PARAM_TOKEN)
                             val uid = result.getInt(RESULT_PARAM_UID)
-                            EaseIM.getCurrentUser()?.let { profile->
+                            ChatUIKitClient.getCurrentUser()?.let { profile->
                                 setEaseCallKitUserInfo(profile.id)
                             }
                             callback?.onSetToken(token, uid)
@@ -287,10 +287,10 @@ object CallKitManager {
     }
 
     fun setEaseCallKitUserInfo(userName: String) {
-        val user: EaseUser? = EaseIM.getUserProvider()?.getSyncUser(userName)?.toUser()
+        val user: ChatUIKitUser? = ChatUIKitClient.getUserProvider()?.getSyncUser(userName)?.toUser()
         val userInfo = EaseCallUserInfo()
         user?.let {
-            userInfo.nickName = user.getNickname()?:userName
+            userInfo.setNickName(user.getNickname()?:userName)
             userInfo.headImage = user.avatar
         }
         EaseCallKit.getInstance().callKitConfig.setUserInfo(userName, userInfo)

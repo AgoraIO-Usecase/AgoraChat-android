@@ -12,7 +12,7 @@ import io.agora.chatdemo.common.DemoConstant
 import io.agora.chatdemo.databinding.DemoActivityLoginBinding
 import io.agora.chatdemo.page.login.fragment.LoginFragment
 import io.agora.chatdemo.page.login.fragment.ServerSetFragment
-import io.agora.uikit.common.bus.EaseFlowBus
+import io.agora.chat.uikit.common.bus.ChatUIKitFlowBus
 
 class LoginActivity : BaseInitActivity<DemoActivityLoginBinding>() {
 
@@ -36,7 +36,7 @@ class LoginActivity : BaseInitActivity<DemoActivityLoginBinding>() {
     }
 
     private fun initEvent() {
-        EaseFlowBus.with<String>(DemoConstant.SKIP_DEVELOPER_CONFIG).register(this) {
+        ChatUIKitFlowBus.with<String>(DemoConstant.SKIP_DEVELOPER_CONFIG).register(this) {
             if (it == LoginFragment::class.java.simpleName) {
                 replace(ServerSetFragment())
             }

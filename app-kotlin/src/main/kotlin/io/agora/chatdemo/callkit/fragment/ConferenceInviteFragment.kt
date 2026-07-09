@@ -4,19 +4,19 @@ import android.os.Bundle
 import android.view.View
 import io.agora.chatdemo.callkit.CallKitManager
 import io.agora.chatdemo.callkit.adapter.ConferenceInviteAdapter
-import io.agora.uikit.base.EaseBaseRecyclerViewAdapter
-import io.agora.uikit.common.EaseConstant
-import io.agora.uikit.feature.group.fragments.EaseGroupMemberFragment
-import io.agora.uikit.feature.search.interfaces.OnContactSelectListener
-import io.agora.uikit.interfaces.OnContactSelectedListener
-import io.agora.uikit.model.EaseUser
+import io.agora.chat.uikit.base.ChatUIKitBaseRecyclerViewAdapter
+import io.agora.chat.uikit.common.ChatUIKitConstant
+import io.agora.chat.uikit.feature.group.fragments.ChatUIKitGroupMemberFragment
+import io.agora.chat.uikit.feature.search.interfaces.OnContactSelectListener
+import io.agora.chat.uikit.interfaces.OnContactSelectedListener
+import io.agora.chat.uikit.model.ChatUIKitUser
 
-class ConferenceInviteFragment: EaseGroupMemberFragment() {
+class ConferenceInviteFragment: ChatUIKitGroupMemberFragment() {
     companion object {
         fun newInstance(groupId: String, existMembers: MutableList<String>): ConferenceInviteFragment {
             val fragment = ConferenceInviteFragment()
             val bundle = Bundle()
-            bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, groupId)
+            bundle.putString(ChatUIKitConstant.EXTRA_CONVERSATION_ID, groupId)
             bundle.putStringArrayList(CallKitManager.EXTRA_CONFERENCE_GROUP_EXIT_MEMBERS, ArrayList(existMembers))
             fragment.arguments = bundle
             return fragment
@@ -27,7 +27,7 @@ class ConferenceInviteFragment: EaseGroupMemberFragment() {
     private var selectedMembers:MutableList<String> = mutableListOf()
     private var contactSelectedListener: OnContactSelectedListener? = null
 
-    override fun initAdapter(): EaseBaseRecyclerViewAdapter<EaseUser> {
+    override fun initAdapter(): ChatUIKitBaseRecyclerViewAdapter<ChatUIKitUser> {
         return ConferenceInviteAdapter(groupId)
     }
 

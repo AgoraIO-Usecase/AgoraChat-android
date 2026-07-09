@@ -1,6 +1,7 @@
 package io.agora.chatdemo
 
 import android.content.Context
+import android.text.TextUtils
 import android.util.Log
 import io.agora.chatdemo.callkit.CallKitManager
 import io.agora.chatdemo.common.DemoDataModel
@@ -8,15 +9,15 @@ import io.agora.chatdemo.common.ListenersWrapper
 import io.agora.chatdemo.common.PushManager
 import io.agora.chatdemo.common.extensions.internal.checkAppKey
 import io.agora.chatdemo.uikit.UIKitManager
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatOptions
-import io.agora.uikit.common.PushConfigBuilder
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatOptions
+import io.agora.chat.uikit.common.PushConfigBuilder
 
 class DemoHelper private constructor(){
 
     private lateinit var dataModel: DemoDataModel
-    var hasAppKey = false
+    var hasAppId = false
     lateinit var context: Context
 
     @Synchronized
@@ -34,7 +35,7 @@ class DemoHelper private constructor(){
      * Check if the SDK has been initialized.
      */
     fun isSDKInited(): Boolean {
-        return EaseIM.isInited()
+        return ChatUIKitClient.isInited()
     }
 
     /**
@@ -47,16 +48,16 @@ class DemoHelper private constructor(){
             return
         }
         initChatOptions(context).apply {
-            hasAppKey = checkAppKey(context)
-            if (!hasAppKey) {
-                Log.e(TAG, "App key is null or empty.")
+            hasAppId = checkAppId(context, this)
+            if (!hasAppId) {
+                Log.e(TAG, "AppId is null or empty.")
                 return
             }
             // Register necessary listeners
             ListenersWrapper.registerListeners()
             isLoadEmptyConversations = true
-            EaseIM.init(context, this)
-            if (EaseIM.isInited()) {
+            ChatUIKitClient.init(context, this)
+            if (ChatUIKitClient.isInited()) {
                 // debug mode, you'd better set it to false, if you want release your App officially.
                 ChatClient.getInstance().setDebugMode(true)
                 // Initialize push.
@@ -67,6 +68,17 @@ class DemoHelper private constructor(){
                 initCallKit()
             }
         }
+    }
+
+    private fun checkAppId(context: Context?, options: ChatOptions?): Boolean {
+        if (options == null) {
+            return false
+        }
+        val appId: String? = options?.getAppId()
+        if (!TextUtils.isEmpty(appId)) {
+            return true
+        }
+        return false
     }
 
     private fun addUIKitSettings() {
@@ -80,7 +92,7 @@ class DemoHelper private constructor(){
     /**
      * Get the notifier.
      */
-    fun getNotifier() = EaseIM.getNotifier()
+    fun getNotifier() = ChatUIKitClient.getNotifier()
 
     private fun initCallKit() {
         CallKitManager.init(context)
@@ -93,7 +105,7 @@ class DemoHelper private constructor(){
     private fun initChatOptions(context: Context): ChatOptions {
         return ChatOptions().apply {
             // set the appkey
-            appKey = BuildConfig.AGORA_CHAT_APPKEY
+            appId = BuildConfig.AGORA_CHAT_APPID
             // set if accept the invitation automatically, default true
             acceptInvitationAlways = false
             // set if you need read ack

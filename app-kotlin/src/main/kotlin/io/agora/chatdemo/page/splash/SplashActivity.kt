@@ -19,8 +19,8 @@ import io.agora.chatdemo.common.dialog.fragment.DemoDialogFragment
 import io.agora.chatdemo.databinding.DemoSplashActivityBinding
 import io.agora.chatdemo.page.login.LoginActivity
 import io.agora.chatdemo.page.splash.viewModel.SplashViewModel
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.extensions.catchChatException
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.extensions.catchChatException
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -64,7 +64,7 @@ class SplashActivity : BaseInitActivity<DemoSplashActivityBinding>() {
     }
 
     private fun checkSDKValid() {
-        if (DemoHelper.getInstance().hasAppKey.not()) {
+        if (DemoHelper.getInstance().hasAppId.not()) {
             showAlertDialog(R.string.splash_not_appkey)
         } else {
             if (DemoHelper.getInstance().isSDKInited().not()) {

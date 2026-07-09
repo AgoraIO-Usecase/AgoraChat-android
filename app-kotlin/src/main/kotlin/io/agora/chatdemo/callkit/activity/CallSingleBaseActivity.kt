@@ -6,7 +6,7 @@ import io.agora.chat.callkit.general.EaseCallType
 import io.agora.chat.callkit.ui.EaseCallSingleBaseActivity
 import io.agora.chat.callkit.R
 import io.agora.chatdemo.callkit.extensions.setFitSystemForTheme
-import io.agora.uikit.common.utils.StatusBarCompat
+import io.agora.chat.uikit.common.utils.StatusBarCompat
 
 class CallSingleBaseActivity: EaseCallSingleBaseActivity() {
     override fun initView() {
@@ -18,7 +18,7 @@ class CallSingleBaseActivity: EaseCallSingleBaseActivity() {
         }
         super.initView()
         val rootLayout = findViewById<ConstraintLayout>(R.id.root_layout)
-        rootLayout.setBackgroundColor(resources.getColor(io.agora.uikit.R.color.ease_neutral_10))
+        rootLayout.setBackgroundColor(resources.getColor(io.agora.chat.uikit.R.color.ease_neutral_10))
     }
 
 }

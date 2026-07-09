@@ -8,9 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.webkit.WebViewClient
 import io.agora.chatdemo.databinding.DemoActivityWebviewBinding
-import io.agora.uikit.base.EaseBaseActivity
+import io.agora.chat.uikit.base.ChatUIKitBaseActivity
 
-class WebViewActivity : EaseBaseActivity<DemoActivityWebviewBinding>() {
+class WebViewActivity : ChatUIKitBaseActivity<DemoActivityWebviewBinding>() {
     private var url = "https://www.agora.io/en/"
 
     override fun getViewBinding(inflater: LayoutInflater): DemoActivityWebviewBinding? {

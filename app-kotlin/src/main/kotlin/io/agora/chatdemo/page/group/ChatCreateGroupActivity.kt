@@ -4,14 +4,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import io.agora.chatdemo.utils.ToastUtils.showToast
 import io.agora.chatdemo.viewmodel.ProfileInfoViewModel
-import io.agora.uikit.common.ChatGroup
-import io.agora.uikit.common.extensions.catchChatException
-import io.agora.uikit.feature.group.EaseCreateGroupActivity
+import io.agora.chat.uikit.common.ChatGroup
+import io.agora.chat.uikit.common.extensions.catchChatException
+import io.agora.chat.uikit.feature.group.ChatUIKitCreateGroupActivity
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class ChatCreateGroupActivity: EaseCreateGroupActivity() {
+class ChatCreateGroupActivity: ChatUIKitCreateGroupActivity() {
     private val profileViewModel by lazy { ViewModelProvider(this)[ProfileInfoViewModel::class.java] }
 
     override fun createGroupSuccess(group: ChatGroup) {

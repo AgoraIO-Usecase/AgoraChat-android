@@ -25,7 +25,7 @@ abstract class AppDatabase: RoomDatabase() {
         // 可以采用addMigrations()的方式，进行数据库的升级
         fun getDatabase(context: Context, userId: String): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val dbName = (BuildConfig.AGORA_CHAT_APPKEY + userId).MD5()
+                val dbName = (BuildConfig.AGORA_RTC_APPID + userId).MD5()
                 val instance = Room.databaseBuilder(
                         context.applicationContext,
                         AppDatabase::class.java,

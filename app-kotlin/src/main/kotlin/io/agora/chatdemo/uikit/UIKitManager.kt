@@ -12,25 +12,25 @@ import io.agora.chatdemo.page.contact.ChatNewRequestsActivity
 import io.agora.chatdemo.page.group.ChatCreateGroupActivity
 import io.agora.chatdemo.page.group.ChatGroupDetailActivity
 import io.agora.chatdemo.repository.ProfileInfoRepository
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatClient
-import io.agora.uikit.common.ChatMessage
-import io.agora.uikit.common.ChatUserInfoType
-import io.agora.uikit.common.extensions.toProfile
-import io.agora.uikit.common.impl.OnValueSuccess
-import io.agora.uikit.feature.chat.activities.EaseChatActivity
-import io.agora.uikit.feature.contact.EaseContactCheckActivity
-import io.agora.uikit.feature.contact.EaseContactDetailsActivity
-import io.agora.uikit.feature.group.EaseCreateGroupActivity
-import io.agora.uikit.feature.group.EaseGroupDetailActivity
-import io.agora.uikit.feature.invitation.EaseNewRequestsActivity
-import io.agora.uikit.model.EaseGroupProfile
-import io.agora.uikit.model.EaseProfile
-import io.agora.uikit.provider.EaseCustomActivityRoute
-import io.agora.uikit.provider.EaseGroupProfileProvider
-import io.agora.uikit.provider.EaseSettingsProvider
-import io.agora.uikit.provider.EaseUserProfileProvider
-import io.agora.uikit.widget.EaseImageView
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatClient
+import io.agora.chat.uikit.common.ChatMessage
+import io.agora.chat.uikit.common.ChatUserInfoType
+import io.agora.chat.uikit.common.extensions.toProfile
+import io.agora.chat.uikit.common.impl.OnValueSuccess
+import io.agora.chat.uikit.feature.chat.activities.UIKitChatActivity
+import io.agora.chat.uikit.feature.contact.ChatUIKitContactCheckActivity
+import io.agora.chat.uikit.feature.contact.ChatUIKitContactDetailsActivity
+import io.agora.chat.uikit.feature.group.ChatUIKitCreateGroupActivity
+import io.agora.chat.uikit.feature.group.ChatUIKitGroupDetailActivity
+import io.agora.chat.uikit.feature.invitation.ChatUIKitNewRequestsActivity
+import io.agora.chat.uikit.model.ChatUIKitGroupProfile
+import io.agora.chat.uikit.model.ChatUIKitProfile
+import io.agora.chat.uikit.provider.ChatUIKitCustomActivityRoute
+import io.agora.chat.uikit.provider.ChatUIKitGroupProfileProvider
+import io.agora.chat.uikit.provider.ChatUIKitSettingsProvider
+import io.agora.chat.uikit.provider.ChatUIKitUserProfileProvider
+import io.agora.chat.uikit.widget.ChatUIKitImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,14 +43,14 @@ object UIKitManager {
     }
 
     fun addProviders(context: Context) {
-        EaseIM.setUserProfileProvider(object : EaseUserProfileProvider {
-                override fun getUser(userId: String?): EaseProfile? {
+        ChatUIKitClient.setUserProfileProvider(object : ChatUIKitUserProfileProvider {
+                override fun getUser(userId: String?): ChatUIKitProfile? {
                     return DemoHelper.getInstance().getDataModel().getAllContacts()[userId]?.toProfile()
                 }
 
                 override fun fetchUsers(
                     userIds: List<String>,
-                    onValueSuccess: OnValueSuccess<List<EaseProfile>>
+                    onValueSuccess: OnValueSuccess<List<ChatUIKitProfile>>
                 ) {
                     // fetch users from server and call call onValueSuccess.onSuccess(users) after successfully getting users
                     CoroutineScope(Dispatchers.IO).launch {
@@ -63,7 +63,7 @@ object UIKitManager {
                         if (callbackList.isNotEmpty()) {
                             DemoHelper.getInstance().getDataModel().insertUsers(callbackList)
                             DemoHelper.getInstance().getDataModel().updateUsersTimes(callbackList)
-//                            EaseIM.updateUsersInfo(callbackList)
+//                            ChatUIKitClient.updateUsersInfo(callbackList)
                             callbackList.map {
                                 DemoHelper.getInstance().getDataModel().updateUserCache(it.id)
                                 CallKitManager.setEaseCallKitUserInfo(it.id)
@@ -73,23 +73,23 @@ object UIKitManager {
                     }
                 }
             })
-            .setGroupProfileProvider(object : EaseGroupProfileProvider {
+            .setGroupProfileProvider(object : ChatUIKitGroupProfileProvider {
 
-                override fun getGroup(id: String?): EaseGroupProfile? {
+                override fun getGroup(id: String?): ChatUIKitGroupProfile? {
                     ChatClient.getInstance().groupManager().getGroup(id)?.let {
-                        return EaseGroupProfile(it.groupId, it.groupName, it.extension)
+                        return ChatUIKitGroupProfile(it.groupId, it.groupName, it.extension)
                     }
                     return null
                 }
 
                 override fun fetchGroups(
                     groupIds: List<String>,
-                    onValueSuccess: OnValueSuccess<List<EaseGroupProfile>>
+                    onValueSuccess: OnValueSuccess<List<ChatUIKitGroupProfile>>
                 ) {
 
                 }
             })
-            .setSettingsProvider(object : EaseSettingsProvider {
+            .setSettingsProvider(object : ChatUIKitSettingsProvider {
                 override fun isMsgNotifyAllowed(message: ChatMessage?): Boolean {
                     return true
                 }
@@ -106,26 +106,26 @@ object UIKitManager {
                     get() = true
 
             })
-            .setCustomActivityRoute(object : EaseCustomActivityRoute {
+            .setCustomActivityRoute(object : ChatUIKitCustomActivityRoute {
                 override fun getActivityRoute(intent: Intent): Intent? {
                     intent.component?.className?.let {
                         when(it) {
-                            EaseChatActivity::class.java.name -> {
+                            UIKitChatActivity::class.java.name -> {
                                 intent.setClass(context, ChatActivity::class.java)
                             }
-                            EaseGroupDetailActivity::class.java.name -> {
+                            ChatUIKitGroupDetailActivity::class.java.name -> {
                                 intent.setClass(context, ChatGroupDetailActivity::class.java)
                             }
-                            EaseContactDetailsActivity::class.java.name -> {
+                            ChatUIKitContactDetailsActivity::class.java.name -> {
                                 intent.setClass(context, ChatContactDetailActivity::class.java)
                             }
-                            EaseCreateGroupActivity::class.java.name -> {
+                            ChatUIKitCreateGroupActivity::class.java.name -> {
                                 intent.setClass(context, ChatCreateGroupActivity::class.java)
                             }
-                            EaseContactCheckActivity::class.java.name ->{
+                            ChatUIKitContactCheckActivity::class.java.name ->{
                                 intent.setClass(context, ChatContactCheckActivity::class.java)
                             }
-                            EaseNewRequestsActivity::class.java.name -> {
+                            ChatUIKitNewRequestsActivity::class.java.name -> {
                                 intent.setClass(context, ChatNewRequestsActivity::class.java)
                             }
                             else -> {
@@ -140,9 +140,9 @@ object UIKitManager {
     }
 
     fun setUIKitConfigs(context: Context) {
-        EaseIM.getConfig()?.avatarConfig?.let {
-            it.avatarShape = EaseImageView.ShapeType.ROUND
-            it.avatarRadius = context.resources.getDimensionPixelSize(io.agora.uikit.R.dimen.ease_corner_extra_small)
+        ChatUIKitClient.getConfig()?.avatarConfig?.let {
+            it.avatarShape = ChatUIKitImageView.ShapeType.ROUND
+            it.avatarRadius = context.resources.getDimensionPixelSize(io.agora.chat.uikit.R.dimen.ease_corner_extra_small)
         }
     }
 }

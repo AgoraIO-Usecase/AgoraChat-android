@@ -4,12 +4,12 @@ import androidx.lifecycle.viewModelScope
 import io.agora.chatdemo.feature.presence.interfaces.IPresenceRequest
 import io.agora.chatdemo.feature.presence.interfaces.IPresenceResultView
 import io.agora.chatdemo.feature.presence.repository.ChatPresenceRepository
-import io.agora.uikit.common.extensions.catchChatException
-import io.agora.uikit.viewmodel.EaseBaseViewModel
+import io.agora.chat.uikit.common.extensions.catchChatException
+import io.agora.chat.uikit.viewmodel.ChatUIKitBaseViewModel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-class PresenceViewModel: EaseBaseViewModel<IPresenceResultView>(), IPresenceRequest {
+class PresenceViewModel: ChatUIKitBaseViewModel<IPresenceResultView>(), IPresenceRequest {
 
     private val presenceRepository by lazy { ChatPresenceRepository() }
     private val expiryTime = (7 * 24 * 60 * 60).toLong()

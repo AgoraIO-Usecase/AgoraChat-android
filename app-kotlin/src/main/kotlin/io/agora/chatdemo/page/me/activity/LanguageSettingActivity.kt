@@ -21,9 +21,9 @@ import io.agora.chatdemo.common.DemoConstant
 import io.agora.chatdemo.common.PreferenceManager
 import io.agora.chatdemo.databinding.DemoActivityLanguageBinding
 import io.agora.chatdemo.interfaces.LanguageListItemSelectListener
-import io.agora.uikit.base.EaseBaseActivity
+import io.agora.chat.uikit.base.ChatUIKitBaseActivity
 
-class LanguageSettingActivity: EaseBaseActivity<DemoActivityLanguageBinding>() {
+class LanguageSettingActivity: ChatUIKitBaseActivity<DemoActivityLanguageBinding>() {
     private var tagList:MutableList<Language> = mutableListOf()
     private var languageAdapter:LanguageAdapter? = null
     private var languageTag:String = ""

@@ -13,9 +13,9 @@ import androidx.core.content.FileProvider
 import com.yalantis.ucrop.UCrop
 import io.agora.chatdemo.BuildConfig
 import io.agora.chatdemo.utils.CameraAndCropFileUtils
-import io.agora.uikit.common.ChatImageUtils
-import io.agora.uikit.common.ChatLog
-import io.agora.uikit.common.extensions.isSdcardExist
+import io.agora.chat.uikit.common.ChatImageUtils
+import io.agora.chat.uikit.common.ChatLog
+import io.agora.chat.uikit.common.extensions.isSdcardExist
 import java.io.File
 
 class CameraAndCroppingController(

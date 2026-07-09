@@ -2,12 +2,12 @@ package io.agora.chatdemo.common.helper
 
 import android.text.TextUtils
 import io.agora.chat.callkit.utils.EaseCallMsgUtils
-import io.agora.uikit.common.ChatMessage
-import io.agora.uikit.common.ChatMessageType
-import io.agora.uikit.menu.chat.EaseChatMenuHelper
+import io.agora.chat.uikit.common.ChatMessage
+import io.agora.chat.uikit.common.ChatMessageType
+import io.agora.chat.uikit.menu.chat.ChatUIKitChatMenuHelper
 
 object MenuFilterHelper {
-    fun filterMenu(helper: EaseChatMenuHelper?, message: ChatMessage?){
+    fun filterMenu(helper: ChatUIKitChatMenuHelper?, message: ChatMessage?){
         message?.let {
             when(it.type){
                 ChatMessageType.TXT ->{
@@ -16,7 +16,7 @@ object MenuFilterHelper {
                         if (TextUtils.equals(msgType, EaseCallMsgUtils.CALL_MSG_INFO)) {
                             helper?.setAllItemsVisible(false)
                             helper?.clearTopView()
-                            helper?.findItemVisible(io.agora.uikit.R.id.action_chat_delete,true)
+                            helper?.findItemVisible(io.agora.chat.uikit.R.id.action_chat_delete,true)
                         }
                     }
                 }

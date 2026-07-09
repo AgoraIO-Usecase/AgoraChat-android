@@ -5,26 +5,26 @@ import io.agora.chat.callkit.general.EaseCallType
 import io.agora.chatdemo.R
 import io.agora.chatdemo.callkit.CallKitManager
 import io.agora.chatdemo.common.extensions.internal.parse
-import io.agora.uikit.EaseIM
-import io.agora.uikit.common.ChatGroup
-import io.agora.uikit.feature.group.EaseGroupDetailActivity
-import io.agora.uikit.model.EaseMenuItem
+import io.agora.chat.uikit.ChatUIKitClient
+import io.agora.chat.uikit.common.ChatGroup
+import io.agora.chat.uikit.feature.group.ChatUIKitGroupDetailActivity
+import io.agora.chat.uikit.model.ChatUIKitMenuItem
 
-class ChatGroupDetailActivity : EaseGroupDetailActivity(){
+class ChatGroupDetailActivity : ChatUIKitGroupDetailActivity(){
 
-    override fun getDetailItem(): MutableList<EaseMenuItem>? {
+    override fun getDetailItem(): MutableList<ChatUIKitMenuItem>? {
         val list = super.getDetailItem()
-        val voiceItem = EaseMenuItem(
+        val voiceItem = ChatUIKitMenuItem(
             title = getString(R.string.menu_voice_call),
-            resourceId = io.agora.uikit.R.drawable.ease_phone_pick,
+            resourceId = io.agora.chat.uikit.R.drawable.uikit_phone_pick,
             menuId = R.id.group_item_voice_call,
             titleColor = ContextCompat.getColor(this, R.color.color_primary),
             order = 2,
             resourceTintColor = ContextCompat.getColor(this, R.color.color_primary)
         )
-        val videoItem = EaseMenuItem(
+        val videoItem = ChatUIKitMenuItem(
             title = getString(R.string.menu_video_call),
-            resourceId = io.agora.uikit.R.drawable.ease_video_camera,
+            resourceId = io.agora.chat.uikit.R.drawable.uikit_video_camera,
             menuId = R.id.group_item_video_call,
             titleColor = ContextCompat.getColor(this, R.color.color_primary),
             order = 2,
@@ -35,7 +35,7 @@ class ChatGroupDetailActivity : EaseGroupDetailActivity(){
         return list
     }
 
-    override fun onMenuItemClick(item: EaseMenuItem?, position: Int): Boolean {
+    override fun onMenuItemClick(item: ChatUIKitMenuItem?, position: Int): Boolean {
         item?.let {menu->
             return when(menu.menuId){
                 R.id.group_item_video_call -> {
@@ -55,7 +55,7 @@ class ChatGroupDetailActivity : EaseGroupDetailActivity(){
     }
 
     override fun fetchGroupDetailSuccess(group: ChatGroup) {
-        EaseIM.updateGroupInfo(listOf(group.parse()))
+        ChatUIKitClient.updateGroupInfo(listOf(group.parse()))
         super.fetchGroupDetailSuccess(group)
     }
 }

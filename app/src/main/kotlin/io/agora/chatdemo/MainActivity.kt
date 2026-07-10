@@ -1,5 +1,6 @@
 package io.agora.chatdemo
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -210,6 +211,7 @@ class MainActivity : BaseInitActivity<ActivityMainLayoutBinding>(), NavigationBa
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private fun addTabBadge() {
         (binding.navView.getChildAt(0) as? BottomNavigationMenuView)?.let { menuView->
             val childCount = menuView.childCount

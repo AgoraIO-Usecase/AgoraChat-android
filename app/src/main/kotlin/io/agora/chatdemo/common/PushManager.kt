@@ -61,7 +61,7 @@ object PushManager {
      */
     fun getPushTokenAndSend(context: Context) {
         // Get FCM push token.
-        getFCMTokenAndSend(context)
+//        getFCMTokenAndSend(context)
     }
 
     /**

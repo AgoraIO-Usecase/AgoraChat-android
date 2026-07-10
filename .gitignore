@@ -31,3 +31,5 @@ projectFilesBackup/
 
 #*.properties
 .DS_Store
+.superpowers
+docs/superpowers

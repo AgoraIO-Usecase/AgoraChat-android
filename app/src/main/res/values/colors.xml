@@ -1,79 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#ffe9e9e9</color>
 
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#FFFFFF</color>
-    <color name="colorTextPrimary">#ffffff</color>
+    <color name="transparent">@android:color/transparent</color>
 
-    <color name="color_main_blue">#005FFF</color>
-    <color name="color_main_text">#0D0D0D</color>
-    <color name="color_second_text">#666666</color>
-    <color name="color_selected_text">@color/color_main_blue</color>
-    <color name="color_action_text">#114EFF</color>
-    <color name="color_title_text">#000000</color>
-    <color name="color_alert">#FF14CC</color>
-    <color name="color_search_bg">#F2F2F2</color>
-    <color name="color_text_hint">#ffcccccc</color>
-    <color name="color_window_bg">@color/white</color>
-    <color name="color_divider">#fff2f2f2</color>
-    <color name="color_text_cursor">#114eff</color>
-    <color name="color_light_gray_999999">#999999</color>
-    <color name="color_light_gray_666666">#666666</color>
-    <color name="color_light_gray_88111111">#88111111</color>
-    <color name="color_light_gray_cccccc">#cccccc</color>
-    <color name="color_black_333333">#333333</color>
+    <color name="em_toast_color_bg">#99000000</color>
+    <color name="em_toast_color_text">@color/white</color>
 
-    <color name="tab_indicator">#ffffff</color>
-
-    <color name="sign_edit_text_bg">#F2F2F2</color>
-    <color name="sign_btn_bg">#FF114EFF</color>
-    <color name="sign_btn_unable_bg">#88114EFF</color>
-
-    <color name="main_title_color">@color/color_main_blue</color>
-    <color name="main_color_tab_normal">#ff000000</color>
-    <color name="main_color_tab_selected">@color/color_main_blue</color>
-
-    <color name="contact_color_item_header">#ff333333</color>
-    <color name="contact_color_item_header_bg">#fff2f2f2</color>
-    <color name="contact_color_item_title">#ff333333</color>
-    <color name="contact_base_color_divider">#fff2f2f2</color>
-    <color name="contact_color_block">@color/color_alert</color>
-
-    <color name="group_blue_154dfe">#154dfe</color>
-    <color name="contacts_blue_005fff">#005fff</color>
-    <color name="group_blue_20154dfe">#20154dfe</color>
-
-    <color name="dialog_color_btn_bg_normal">@color/white</color>
-    <color name="dialog_color_btn_bg_select">@color/ease_toolbar_color_sub_title</color>
-    <color name="dialog_color_btn_stroke">@color/gray</color>
-    <color name="dialog_color_title">#ff424242</color>
-    <color name="dialog_color_normal">@color/color_main_blue</color>
-    <color name="dialog_color_btn_brand">@color/ease_color_brand</color>
-    <color name="dialog_color_btn_warning">@color/white</color>
-    <color name="dialog_edit_color_bg">#ddF2F2F2</color>
-
-    <color name="dialog_change_nickname_bg">#F2F2F2</color>
-    <color name="dialog_change_nickname_divider">#363c3c43</color>
-
-    <color name="layout_empty_content">#979797</color>
-    <color name="list_delete_bg">#FF14CC</color>
-    <color name="report_dialog_item_bg">#CCFFFFFF</color>
-    <color name="report_line">#E6E6E6</color>
-    <color name="report_content">#979797</color>
-    <color name="report_username">#999999</color>
-    <color name="thread_edit_line_color">#E6E6E6</color>
-    <color name="pin_message_head_bg">#F5F5F5</color>
-    <color name="pin_message_head_bg_back">#EbEbEb</color>
+    <color name="color_primary">@color/ease_color_primary</color>
+    <color name="color_text_primary">@color/ease_color_text_primary</color>
+    <color name="demo_title">@color/ease_color_on_background_low</color>
+    <color name="demo_desc_bg">@color/ease_color_spacing_view</color>
+    <color name="demo_subtitle">@color/ease_color_text_secondary_high</color>
+    <color name="demo_background">@color/ease_color_background</color>
+    <color name="demo_on_background_high">@color/ease_color_on_background_high</color>
 
 
-    <color name="url_preview_icon_bg">#EBF2FF</color>
+    <color name="demo_login_button_bg_start">#009EFF</color>
+    <color name="demo_login_button_bg_end">#334BFF</color>
+
+    <color name="em_main_color_tab_normal">@color/ease_color_on_background_high</color>
+    <color name="em_main_color_tab_selected">@color/ease_color_primary</color>
+
 
 </resources>

@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!-- IM SDK required start -->
+    <!-- App required start -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <!-- App required end -->
+
+    <!-- IM SDK required start -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--Need to add after Android 12, apply for alarm clock timing permission -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <!-- IM SDK required end -->
-    <!-- IM app required start -->
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <!-- Android 13 to replace READ_EXTERNAL_STORAGE permission -->
+    <!-- Read permissions from extended storage-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
+    <!-- Android 13 is used to replace the READ-EXTERNAL-STORAGE permission -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-    <!-- Android 14 is used to grant partial access to photos and videos -->
+    <!-- Android 14 is used to apply for partial permissions -->
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"/>
-    <!-- IM app required end -->
+    <!-- Android 13 Notification Runtime Permissions -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- RTC start -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <!-- For devices with Android 12.0 and above and integrated SDK v4.1.0 and below, the following permissions need to be added -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <!-- For Android 12.0 and above devices, the following permissions need to be added -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+    <!-- RTC end -->
+
     <!-- Remove unused permission in remote library start -->
     <uses-permission
         android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
@@ -30,44 +59,26 @@
         tools:node="remove"/>
     <!-- Remove unused permission in remote library end -->
 
-    <uses-sdk tools:overrideLibrary="androidx.security"/>
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
     <application
-        android:name=".DemoApplication"
-        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true"
+        android:icon="@mipmap/demo_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/demo_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HyphenateDemoAndroid"
-        android:usesCleartextTraffic="true">
-        <!-- IM SDK required start -->
-        <!-- Set your agora chat AppKey -->
-        <meta-data
-            android:name="EASEMOB_APPKEY"
-            android:value="${AGORA_CHAT_APPKEY}" />
-        <!-- SDK service -->
-        <service
-            android:name="io.agora.chat.ChatService"
-            android:exported="false" />
-        <service
-            android:name="io.agora.chat.ChatJobService"
-            android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+        android:name=".DemoApplication"
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/Theme.Easeui"
+        tools:targetApi="31">
+        <activity
+            android:name=".page.splash.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <!-- IM SDK required end -->
-        <!--Add FileProvider-->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- FCM required start -->
         <service android:name=".fcm.FCMMSGService"
@@ -85,183 +96,59 @@
             android:value="false" />
         <!-- FCM required end -->
 
-        <!--Splash-->
-        <activity
-            android:name=".sign.SplashActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <!-- Sign in -->
-        <activity
-            android:name=".sign.SignInActivity"
-            android:exported="false"
+        <activity android:name=".page.login.LoginActivity"
+            android:exported="false"/>
+        <activity android:name=".MainActivity"
+            android:exported="false"/>
+        <activity android:name=".page.group.ChatCreateGroupActivity"
+            android:exported="false"/>
+        <activity android:name=".page.group.ChatGroupDetailActivity"
+            android:exported="false"/>
+        <activity android:name=".page.contact.ChatContactCheckActivity"
+            android:exported="false"/>
+        <activity android:name=".page.contact.ChatNewRequestsActivity"
+            android:exported="false"/>
+        <activity android:name=".page.contact.ChatContactDetailActivity"
+            android:exported="false"/>
+        <activity android:name=".page.chat.ChatActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <!--Main-->
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.UserInformationActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.NotifyActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.WebViewActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.EditUserNicknameActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.AboutActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.CurrencyActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.FeaturesActivity"
+            android:exported="false"/>
+        <activity android:name=".page.me.activity.LanguageSettingActivity"
+            android:exported="false"/>
+        <!-- crop activity -->
         <activity
-            android:name=".main.MainActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-        <!--Chat-->
-        <activity
-            android:name=".chat.ChatActivity"
-            android:exported="false"
-            android:launchMode="singleTop"
+            android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <!-- Group detail -->
-        <activity android:name=".group.activities.GroupDetailActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <!-- Group members -->
-        <activity android:name=".group.activities.GroupMembersActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <!-- Group notice -->
-        <activity android:name=".group.activities.GroupNoticeActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <!-- Group files -->
-        <activity android:name=".group.activities.GroupFilesActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <!-- Transfer group owner -->
-        <activity android:name=".group.activities.GroupTransferActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <!--General-->
-        <activity android:name=".me.GeneralActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <!--Notification-->
-        <activity android:name=".me.NotificationActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <!--Privacy-->
-        <activity android:name=".me.PrivacyActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <!--Contact Black List-->
-        <activity android:name=".me.ContactBlackListActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <!--About-->
-        <activity android:name=".me.AboutActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <!--Replace avatar-->
-        <activity android:name=".me.UserAvatarSelectActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <!-- Contact detail -->
-        <activity
-            android:name=".contact.ContactDetailActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" /> <!-- video call -->
-        <activity
-            android:name=".av.SingleCallActivity"
-            android:exported="false"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <!-- rtc -->
+        <activity android:name=".callkit.activity.CallSingleBaseActivity"
             android:label="@string/demo_activity_label_video_call"
-            android:taskAffinity=".SingleCallTask"
-            android:launchMode="singleInstance"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".av.MultipleCallActivity"
-            android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/demo_activity_label_multi_call"
-            android:taskAffinity=".MultipleCallTask"
+            android:excludeFromRecents="false"
             android:launchMode="singleInstance"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait" />
-        <!-- custom presence -->
-        <activity
-            android:name=".me.CustomPresenceActivity"
-            android:exported="false" />
-        <!-- set presence -->
-        <activity
-            android:name=".me.SetPresenceActivity"
-            android:exported="false" />
-        <!-- Thread member list -->
-        <activity
-            android:name=".chatthread.ChatThreadMembersActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <!-- Thread edit -->
-        <activity
-            android:name=".chatthread.ChatThreadEditActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <!-- Thread chat -->
-        <activity
-            android:name=".chatthread.ChatThreadActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".chat.SearchMessageActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".chat.SearchActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <!-- Do not disturb activity -->
-        <activity android:name=".me.DoNotDisturbActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <!-- create chat thread -->
-        <activity
-            android:name=".chatthread.ChatThreadCreateActivity"
             android:exported="false"/>
-        <activity
-            android:name=".av.CallInviteUsersActivity"
-            android:exported="false"
-            android:launchMode="singleInstance" />
-        <activity
-            android:name=".chat.ChatReportActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".chat.ChatReportCompleteActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <!-- chat history -->
-        <activity
-            android:name=".chat.ChatHistoryActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-
-        <activity
-            android:name=".me.LanguageActivity"
-            android:screenOrientation="portrait"
+        <activity android:name=".callkit.activity.CallMultipleBaseActivity"
+            android:label="@string/demo_activity_label_multi_call"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="false"
+            android:launchMode="singleInstance"
             android:exported="false"/>
-
-        <activity
-            android:name=".me.TranslationSettingsActivity"
-            android:screenOrientation="portrait"
+        <activity android:name=".callkit.activity.CallMultipleInviteActivity"
             android:exported="false"/>
-        <activity
-            android:name=".group.activities.RemarkActivity"
-            android:exported="false" />
-
     </application>
 
 </manifest>

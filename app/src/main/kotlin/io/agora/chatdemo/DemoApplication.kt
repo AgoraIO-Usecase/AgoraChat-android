@@ -53,5 +53,7 @@ class DemoApplication: Application() {
         ChatUIKitClient.getConfig()?.chatConfig?.enableChatThreadMessage = enableThread
         ChatUIKitClient.getConfig()?.chatConfig?.enableMessageReaction = enableReaction
         ChatUIKitClient.getConfig()?.chatConfig?.enableChatTyping = enableTyping
+        ChatUIKitClient.getConfig()?.chatConfig?.enableWxMessageStyle = false
+        ChatUIKitClient.getConfig()?.chatConfig?.enableWxExtendStyle = false
     }
 }
